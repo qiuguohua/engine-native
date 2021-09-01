@@ -416,6 +416,10 @@ It should work same as apples CFSwapInt32LittleToHost(..)
     cls(cls &&)  = delete;          \
     cls &operator=(cls &&) = delete;
 
+#define DISABLE_COPY_AND_MOVE(cls) \
+  DISABLE_COPY_SEMANTICS(cls)         \
+  DISABLE_MOVE_SEMANTICS(cls)
+
 #if (CC_COMPILER == CC_COMPILER_MSVC)
     #define CC_ALIGN(N)        __declspec(align(N))
     #define CC_CACHE_ALIGN     __declspec(align(CC_CACHELINE_SIZE))

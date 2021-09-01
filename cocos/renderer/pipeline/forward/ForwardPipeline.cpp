@@ -35,7 +35,6 @@
 #include "gfx-base/GFXRenderPass.h"
 #include "gfx-base/GFXSampler.h"
 #include "gfx-base/GFXTexture.h"
-#include "platform/Application.h"
 #include "scene/RenderScene.h"
 
 namespace cc {

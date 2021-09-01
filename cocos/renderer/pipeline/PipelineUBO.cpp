@@ -27,7 +27,7 @@
 #include "RenderPipeline.h"
 #include "SceneCulling.h"
 #include "gfx-base/GFXDevice.h"
-#include "platform/Application.h"
+#include "engine/EngineManager.h"
 #include "scene/RenderScene.h"
 
 namespace cc {
@@ -57,7 +57,7 @@ void PipelineUBO::updateGlobalUBOView(const RenderPipeline * /*pipeline*/, std::
     // update UBOGlobal
     uboGlobalView[UBOGlobal::TIME_OFFSET + 0] = root->cumulativeTime;
     uboGlobalView[UBOGlobal::TIME_OFFSET + 1] = root->frameTime;
-    uboGlobalView[UBOGlobal::TIME_OFFSET + 2] = static_cast<float>(Application::getInstance()->getTotalFrames());
+    uboGlobalView[UBOGlobal::TIME_OFFSET + 2] = static_cast<float>(CURRENT_ENGINE()->getTotalFrames());
 
     uboGlobalView[UBOGlobal::SCREEN_SIZE_OFFSET + 0] = static_cast<float>(device->getWidth());
     uboGlobalView[UBOGlobal::SCREEN_SIZE_OFFSET + 1] = static_cast<float>(device->getHeight());

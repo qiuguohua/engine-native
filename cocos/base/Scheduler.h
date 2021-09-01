@@ -36,13 +36,11 @@
 #include <vector>
 
 #include "base/Ref.h"
-//#include "base/Vector.h"
+#include "engine/EngineScheduler.h"
 
 namespace cc {
 
 class Scheduler;
-
-using ccSchedulerFunc = std::function<void(float)>;
 
 /**
  * @cond
@@ -119,7 +117,7 @@ There are 2 different types of callbacks (selectors):
 The 'custom selectors' should be avoided when possible. It is faster, and consumes less memory to use the 'update selector'.
 
 */
-class CC_DLL Scheduler final {
+class CC_DLL Scheduler : public EngineScheduler {
 public:
     /**
      * Constructor
@@ -140,7 +138,7 @@ public:
      * You should NEVER call this method, unless you know what you are doing.
      * @lua NA
      */
-    void update(float dt);
+    void update(float dt) override;
 
     /////////////////////////////////////
 
@@ -162,7 +160,7 @@ public:
      @param key The key to identify the callback function, because there is not way to identify a std::function<>.
      @since v3.0
      */
-    void schedule(const ccSchedulerFunc &callback, void *target, float interval, unsigned int repeat, float delay, bool paused, const std::string &key);
+    void schedule(const ccSchedulerFunc &callback, void *target, float interval, unsigned int repeat, float delay, bool paused, const std::string &key) override;
 
     /** The scheduled method will be called every 'interval' seconds for ever.
      @param callback The callback function.
@@ -172,7 +170,7 @@ public:
      @param key The key to identify the callback function, because there is not way to identify a std::function<>.
      @since v3.0
      */
-    void schedule(const ccSchedulerFunc &callback, void *target, float interval, bool paused, const std::string &key);
+    void schedule(const ccSchedulerFunc &callback, void *target, float interval, bool paused, const std::string &key) override;
 
     /////////////////////////////////////
 
@@ -184,7 +182,7 @@ public:
      @param target The target to be unscheduled.
      @since v3.0
      */
-    void unschedule(const std::string &key, void *target);
+    void unschedule(const std::string &key, void *target) override;
 
     /** Unschedules all selectors for a given target.
      This also includes the "update" selector.
@@ -192,13 +190,13 @@ public:
      @since v0.99.3
      @lua NA
      */
-    void unscheduleAllForTarget(void *target);
+    void unscheduleAllForTarget(void *target) override;
 
     /** Unschedules all selectors from all targets.
      You should NEVER call this method, unless you know what you are doing.
      @since v0.99.3
      */
-    void unscheduleAll();
+    void unscheduleAll() override;
 
     /** Unschedules all selectors from all targets with a minimum priority.
      You should only call this with `PRIORITY_NON_SYSTEM_MIN` or higher.
@@ -228,7 +226,7 @@ public:
      @param target The target to be paused.
      @since v0.99.3
      */
-    void pauseTarget(void *target);
+    void pauseTarget(void *target) override;
 
     /** Resumes the target.
      The 'target' will be unpaused, so all schedule selectors/update will be 'ticked' again.
@@ -236,7 +234,7 @@ public:
      @param target The target to be resumed.
      @since v0.99.3
      */
-    void resumeTarget(void *target);
+    void resumeTarget(void *target) override;
 
     /** Returns whether or not the target is paused.
      * @param target The target to be checked.
@@ -260,7 +258,7 @@ public:
      @since v3.0
      @js NA
      */
-    void performFunctionInCocosThread(const std::function<void()> &function);
+    void performFunctionInCocosThread(const std::function<void()> &function) override;
 
     /**
      * Remove all pending functions queued to be performed with Scheduler::performFunctionInCocosThread

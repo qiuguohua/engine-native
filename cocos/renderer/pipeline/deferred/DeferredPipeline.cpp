@@ -37,7 +37,6 @@
 #include "gfx-base/GFXRenderPass.h"
 #include "gfx-base/GFXSampler.h"
 #include "gfx-base/GFXTexture.h"
-#include "platform/Application.h"
 
 namespace cc {
 namespace pipeline {

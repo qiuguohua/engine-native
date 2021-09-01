@@ -40,7 +40,7 @@
 #include "audio/include/AudioEngine.h"
 #include "audio/oalsoft/AudioDecoderManager.h"
 #include "base/Scheduler.h"
-#include "platform/Application.h"
+#include "engine/EngineManager.h"
 #include "platform/FileUtils.h"
 
 #if CC_PLATFORM == CC_PLATFORM_WINDOWS
@@ -161,7 +161,7 @@ bool AudioEngineImpl::init() {
                 _alSourceUsed[src] = false;
             }
 
-            _scheduler = Application::getInstance()->getScheduler();
+            _scheduler = CURRENT_ENGINE()->getEngineScheduler();
             ret        = AudioDecoderManager::init();
             CC_LOG_DEBUG("OpenAL was initialized successfully!");
         }

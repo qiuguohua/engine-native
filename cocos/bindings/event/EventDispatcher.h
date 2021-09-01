@@ -36,9 +36,38 @@ class Value;
 
 namespace cc {
 
+enum class OSEventType {
+    KEYBOARD_OSEVENT = 0,
+    TOUCH_OSEVENT    = 1,
+    MOUSE_OSEVENT    = 2,
+    CUSTOM_OSEVENT   = 3,
+    WINDOW_OSEVENT   = 4
+};
+
+class OSEvent {
+  virtual void EventName() {
+
+   }
+};
+
+struct WindowEven : public OSEvent {
+    enum class Type {
+        WINDOWEVENT_QUIT = 0,
+        WINDOWEVENT_SHOW,
+        WINDOWEVENT_RESTORED,
+        WINDOWEVENT_SIZE_CHANGED,
+        WINDOWEVENT_RESIZED,
+        WINDOWEVENT_HIDDEN,
+        WINDOWEVENT_MINIMIZED,
+        WINDOWEVENT_CLOSE,
+    };
+    Type type;
+    int  width;
+    int  height;
+};
 // Touch event related
 
-struct TouchInfo {
+struct TouchInfo : public OSEvent {
     float x     = 0;
     float y     = 0;
     int   index = 0;
@@ -49,7 +78,7 @@ struct TouchInfo {
       index(index) {}
 };
 
-struct TouchEvent {
+struct TouchEvent : public OSEvent {
     enum class Type {
         BEGAN,
         MOVED,
@@ -62,7 +91,7 @@ struct TouchEvent {
     Type                   type = Type::UNKNOWN;
 };
 
-struct MouseEvent {
+struct MouseEvent : public OSEvent {
     enum class Type {
         DOWN,
         UP,
@@ -138,7 +167,7 @@ enum class KeyCode {
     NUMPAD_9        = 10057
 };
 
-struct KeyboardEvent {
+struct KeyboardEvent : public OSEvent {
     enum class Action {
         PRESS,
         RELEASE,
@@ -155,7 +184,7 @@ struct KeyboardEvent {
     // TODO(mingo): support caps lock?
 };
 
-class CustomEvent {
+class CustomEvent : public OSEvent {
 public:
     std::string name;
     union {
