@@ -24,6 +24,7 @@
 ****************************************************************************/
 
 #include "jsb_global.h"
+#include "base/AutoreleasePool.h"
 #include "base/CoreStd.h"
 #include "base/Scheduler.h"
 #include "base/ThreadPool.h"
@@ -32,10 +33,13 @@
 #include "gfx-base/GFXDef.h"
 #include "jsb_conversions.h"
 #include "network/HttpClient.h"
-#include "platform/Application.h"
 #include "platform/Image.h"
 #include "ui/edit-box/EditBox.h"
 #include "xxtea/xxtea.h"
+#include "engine/EngineManager.h"
+#include "bindings/jswrapper/v8/ScriptEngine.h"
+#include "platformex/os-interfaces/interfaces/SystemInterface.h"
+#include "platformex/os-interfaces/interfaces/SystemWindowUI.h"
 
 #if CC_PLATFORM == CC_PLATFORM_ANDROID
     #include "platform/java/jni/JniImp.h"
@@ -309,8 +313,10 @@ static bool jsc_dumpRoot(se::State &s) { //NOLINT
 SE_BIND_FUNC(jsc_dumpRoot)
 
 static bool JSBCore_platform(se::State &s) { //NOLINT
-    Application::Platform platform = Application::getInstance()->getPlatform();
-    s.rval().setInt32(static_cast<int32_t>(platform));
+    //Application::Platform platform = CURRENT_ENGINE()->getPlatform();
+    cc::AbstratctPlatform::OSType type = 
+      cc::AbstratctPlatform::GetPlatform()->getOSType();
+    s.rval().setInt32(static_cast<int32_t>(type));
     return true;
 }
 SE_BIND_FUNC(JSBCore_platform)
@@ -339,84 +345,24 @@ static bool JSBCore_os(se::State &s) { //NOLINT
 SE_BIND_FUNC(JSBCore_os)
 
 static bool JSBCore_getCurrentLanguage(se::State &s) { //NOLINT
-    std::string               languageStr;
-    Application::LanguageType language = Application::getInstance()->getCurrentLanguage();
-    switch (language) {
-        case Application::LanguageType::ENGLISH:
-            languageStr = "en";
-            break;
-        case Application::LanguageType::CHINESE:
-            languageStr = "zh";
-            break;
-        case Application::LanguageType::FRENCH:
-            languageStr = "fr";
-            break;
-        case Application::LanguageType::ITALIAN:
-            languageStr = "it";
-            break;
-        case Application::LanguageType::GERMAN:
-            languageStr = "de";
-            break;
-        case Application::LanguageType::SPANISH:
-            languageStr = "es";
-            break;
-        case Application::LanguageType::DUTCH:
-            languageStr = "du";
-            break;
-        case Application::LanguageType::RUSSIAN:
-            languageStr = "ru";
-            break;
-        case Application::LanguageType::KOREAN:
-            languageStr = "ko";
-            break;
-        case Application::LanguageType::JAPANESE:
-            languageStr = "ja";
-            break;
-        case Application::LanguageType::HUNGARIAN:
-            languageStr = "hu";
-            break;
-        case Application::LanguageType::PORTUGUESE:
-            languageStr = "pt";
-            break;
-        case Application::LanguageType::ARABIC:
-            languageStr = "ar";
-            break;
-        case Application::LanguageType::NORWEGIAN:
-            languageStr = "no";
-            break;
-        case Application::LanguageType::POLISH:
-            languageStr = "pl";
-            break;
-        case Application::LanguageType::TURKISH:
-            languageStr = "tr";
-            break;
-        case Application::LanguageType::UKRAINIAN:
-            languageStr = "uk";
-            break;
-        case Application::LanguageType::ROMANIAN:
-            languageStr = "ro";
-            break;
-        case Application::LanguageType::BULGARIAN:
-            languageStr = "bg";
-            break;
-        default:
-            languageStr = "unknown";
-            break;
-    }
+    SystemInterface *platform    = GET_PLATFORM_INTERFACE(SystemInterface);
+    std::string     languageStr = platform->getCurrentLanguageToString();
     s.rval().setString(languageStr);
     return true;
 }
 SE_BIND_FUNC(JSBCore_getCurrentLanguage)
 
 static bool JSBCore_getCurrentLanguageCode(se::State &s) { //NOLINT
-    std::string language = Application::getInstance()->getCurrentLanguageCode();
+    SystemInterface *platform = GET_PLATFORM_INTERFACE(SystemInterface);
+    std::string     language = platform->getCurrentLanguageCode();
     s.rval().setString(language);
     return true;
 }
 SE_BIND_FUNC(JSBCore_getCurrentLanguageCode)
 
 static bool JSB_getOSVersion(se::State &s) { //NOLINT
-    std::string systemVersion = Application::getInstance()->getSystemVersion();
+    SystemInterface *platform      = GET_PLATFORM_INTERFACE(SystemInterface);
+    std::string     systemVersion = platform->getSystemVersion();
     s.rval().setString(systemVersion);
     return true;
 }
@@ -424,13 +370,13 @@ SE_BIND_FUNC(JSB_getOSVersion)
 
 static bool JSB_core_restartVM(se::State &s) { //NOLINT
     //REFINE: release AudioEngine, waiting HttpClient & WebSocket threads to exit.
-    Application::getInstance()->restart();
+    CURRENT_ENGINE()->restart();
     return true;
 }
 SE_BIND_FUNC(JSB_core_restartVM)
 
 static bool JSB_closeWindow(se::State &s) {
-    Application::getInstance()->close();
+    CURRENT_ENGINE()->close();
     return true;
 }
 SE_BIND_FUNC(JSB_closeWindow)
@@ -459,7 +405,8 @@ static bool JSB_setCursorEnabled(se::State &s) { //NOLINT
     ok &= seval_to_boolean(args[0], &value);
     SE_PRECONDITION2(ok, false, "Error processing arguments");
 
-    Application::getInstance()->setCursorEnabled(value);
+    SystemWindowUI *platform = GET_PLATFORM_INTERFACE(SystemWindowUI);
+    platform->setCursorEnabled(value);
     return true;
 }
 SE_BIND_FUNC(JSB_setCursorEnabled)
@@ -625,7 +572,7 @@ bool jsb_global_load_image(const std::string &path, const se::Value &callbackVal
                 imgInfo = createImageInfo(img);
             }
 
-            Application::getInstance()->getScheduler()->performFunctionInCocosThread([=]() {
+            CURRENT_ENGINE()->getEngineScheduler()->performFunctionInCocosThread([=]() {
                 se::AutoHandleScope hs;
                 se::ValueArray      seArgs;
                 se::Value           dataVal;
@@ -722,7 +669,8 @@ static bool JSB_openURL(se::State &s) { //NOLINT
         std::string url;
         ok = seval_to_std_string(args[0], &url);
         SE_PRECONDITION2(ok, false, "url is invalid!");
-        Application::getInstance()->openURL(url);
+        SystemInterface *platform = GET_PLATFORM_INTERFACE(SystemInterface);
+        platform->openURL(url);
         return true;
     }
 
@@ -739,7 +687,8 @@ static bool JSB_copyTextToClipboard(se::State &s) { //NOLINT
         std::string text;
         ok = seval_to_std_string(args[0], &text);
         SE_PRECONDITION2(ok, false, "text is invalid!");
-        Application::getInstance()->copyTextToClipboard(text);
+        SystemWindowUI *platform = GET_PLATFORM_INTERFACE(SystemWindowUI);
+        platform->copyTextToClipboard(text);
         return true;
     }
 
@@ -757,7 +706,7 @@ static bool JSB_setPreferredFramesPerSecond(se::State &s) { //NOLINT
         ok = seval_to_int32(args[0], &fps);
         SE_PRECONDITION2(ok, false, "fps is invalid!");
         // cc::log("EMPTY IMPLEMENTATION OF jsb.setPreferredFramesPerSecond");
-        Application::getInstance()->setPreferredFramesPerSecond(fps);
+        CURRENT_ENGINE()->setPreferredFramesPerSecond(fps);
         return true;
     }
 

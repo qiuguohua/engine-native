@@ -31,7 +31,7 @@
 
 #include "cocos/network/SocketIO.h"
 #include "base/UTF8.h"
-#include "platform/Application.h"
+#include "engine/EngineManager.h"
 
 using namespace cc;
 using namespace cc::network;
@@ -88,7 +88,7 @@ public:
         se::ScriptEngine::getInstance()->clearException();
         se::AutoHandleScope hs;
 
-        if (cc::Application::getInstance() == nullptr)
+        if (CURRENT_ENGINE() == nullptr)
             return;
 
         auto iter = se::NativePtrToObjectMap::find(client); //IDEA: client probably be a new value with the same address as the old one, it may cause undefined result.

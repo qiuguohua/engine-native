@@ -2,8 +2,8 @@
 #include "cocos/bindings/manual/jsb_conversions.h"
 #include "cocos/bindings/manual/jsb_global.h"
 #include "platform/FileUtils.h"
-#include "platform/CanvasRenderingContext2D.h"
-#include "platform/Device.h"
+#include "platformex/os-interfaces/interfaces/Device.h"
+
 #include "platform/SAXParser.h"
 
 #ifndef JSB_ALLOC
@@ -1017,7 +1017,7 @@ static bool js_engine_CanvasRenderingContext2D_createLinearGradient(se::State& s
         ok &= sevalue_to_native(args[2], &arg2, s.thisObject());
         ok &= sevalue_to_native(args[3], &arg3, s.thisObject());
         SE_PRECONDITION2(ok, false, "js_engine_CanvasRenderingContext2D_createLinearGradient : Error processing arguments");
-        cc::CanvasGradient* result = cobj->createLinearGradient(arg0.value(), arg1.value(), arg2.value(), arg3.value());
+        cc::CanvasGradientInterface* result = cobj->createLinearGradient(arg0.value(), arg1.value(), arg2.value(), arg3.value());
         ok &= nativevalue_to_se(result, s.rval(), nullptr /*ctx*/);
         SE_PRECONDITION2(ok, false, "js_engine_CanvasRenderingContext2D_createLinearGradient : Error processing arguments");
         SE_HOLD_RETURN_VALUE(result, s.thisObject(), s.rval());

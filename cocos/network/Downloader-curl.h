@@ -29,7 +29,7 @@
 #include "network/DownloaderImpl.h"
 
 namespace cc {
-class Scheduler;
+class EngineScheduler;
 }
 
 namespace cc {
@@ -57,7 +57,7 @@ protected:
     // scheduler for update processing and finished task in main schedule
     void _onSchedule(float);
     std::string _schedulerKey;
-    std::weak_ptr<Scheduler> _scheduler;
+    std::weak_ptr<EngineScheduler> _scheduler;
 };
 
 } // namespace network

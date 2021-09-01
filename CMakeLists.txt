@@ -305,6 +305,93 @@ cocos_source_files(
     cocos/base/Vector.h
 )
 
+############ application
+cocos_source_files(
+    cocos/application/AbstractApplication.h
+    cocos/application/CocosApplication.h
+    cocos/application/CocosApplication.cpp
+)
+
+############ engine
+cocos_source_files(
+    cocos/engine/AbstractEngine.cpp
+    cocos/engine/AbstractEngine.h
+    cocos/engine/Engine.cpp
+    cocos/engine/Engine.h
+    cocos/engine/EngineManager.cpp
+    cocos/engine/EngineManager.h
+    cocos/engine/EngineScheduler.h
+)
+
+############ main
+cocos_source_files(
+    cocos/main/main.cpp
+)
+
+############ platformex
+cocos_source_files(
+    cocos/platformex/AbstractPlatform.cpp
+    cocos/platformex/AbstractPlatform.h
+    cocos/platformex/BasePlatform.cpp
+    cocos/platformex/BasePlatform.h
+    cocos/platformex/EventDispathchInterface.h
+    cocos/platformex/WindowPlatform.cpp
+    cocos/platformex/WindowPlatform.h
+)
+
+############ platformex : abstract interfaces
+cocos_source_files(
+    cocos/platformex/os-interfaces/OSAbstractInterface.cpp
+    cocos/platformex/os-interfaces/OSAbstractInterface.h
+    cocos/platformex/os-interfaces/OSInterfaceManager.cpp
+    cocos/platformex/os-interfaces/OSInterfaceManager.h
+)
+
+############ platformex : Interface implementation
+cocos_source_files(
+    cocos/platformex/os-interfaces/interfaces/Device.cpp
+    cocos/platformex/os-interfaces/interfaces/Device.h
+    cocos/platformex/os-interfaces/interfaces/AccelerometerInterface.h
+    cocos/platformex/os-interfaces/interfaces/BatteryInterface.cpp
+    cocos/platformex/os-interfaces/interfaces/BatteryInterface.h
+    cocos/platformex/os-interfaces/interfaces/CanvasRenderingContext2D.cpp
+    cocos/platformex/os-interfaces/interfaces/CanvasRenderingContext2D.h
+    cocos/platformex/os-interfaces/interfaces/CanvasRenderingContext2DInterface.cpp
+    cocos/platformex/os-interfaces/interfaces/CanvasRenderingContext2DInterface.h
+    cocos/platformex/os-interfaces/interfaces/DeviceInterface.cpp
+    cocos/platformex/os-interfaces/interfaces/DeviceInterface.h
+    cocos/platformex/os-interfaces/interfaces/MonitorInterface.cpp
+    cocos/platformex/os-interfaces/interfaces/MonitorInterface.h
+    cocos/platformex/os-interfaces/interfaces/NetworkInterface.cpp
+    cocos/platformex/os-interfaces/interfaces/NetworkInterface.h
+    cocos/platformex/os-interfaces/interfaces/SystemInterface.cpp
+    cocos/platformex/os-interfaces/interfaces/SystemInterface.h
+    cocos/platformex/os-interfaces/interfaces/SystemWindowUI.cpp
+    cocos/platformex/os-interfaces/interfaces/SystemWindowUI.h
+    cocos/platformex/os-interfaces/interfaces/VibrateInterface.cpp
+    cocos/platformex/os-interfaces/interfaces/VibrateInterface.h
+)
+
+############ platformex : Interface implementation
+cocos_source_files(
+    cocos/platformex/os-interfaces/interfaces/windows/Accelerometer.cpp
+    cocos/platformex/os-interfaces/interfaces/windows/Accelerometer.h
+    cocos/platformex/os-interfaces/interfaces/windows/Battery.cpp
+    cocos/platformex/os-interfaces/interfaces/windows/Battery.h
+    cocos/platformex/os-interfaces/interfaces/windows/CanvasRenderingContext2DDelegateImp.cpp
+    cocos/platformex/os-interfaces/interfaces/windows/CanvasRenderingContext2DDelegateImp.h
+    cocos/platformex/os-interfaces/interfaces/windows/Monitor.cpp
+    cocos/platformex/os-interfaces/interfaces/windows/Monitor.h
+    cocos/platformex/os-interfaces/interfaces/windows/Network.cpp
+    cocos/platformex/os-interfaces/interfaces/windows/Network.h
+    cocos/platformex/os-interfaces/interfaces/windows/Vibrate.cpp
+    cocos/platformex/os-interfaces/interfaces/windows/Vibrate.h
+    cocos/platformex/os-interfaces/interfaces/windows/WindowsSystem.cpp
+    cocos/platformex/os-interfaces/interfaces/windows/WindowsSystem.h
+    cocos/platformex/os-interfaces/interfaces/windows/WindowUI.cpp
+    cocos/platformex/os-interfaces/interfaces/windows/WindowUI.h
+)
+
 ############ module log
 cocos_source_files(MODULE cclog
     cocos/base/Log.cpp
@@ -500,10 +587,10 @@ endif()
 
 ##### platform
 cocos_source_files(
-    cocos/platform/Application.h
-    cocos/platform/Application.cpp
-    cocos/platform/CanvasRenderingContext2D.h
-    cocos/platform/Device.h
+    #cocos/platform/Application.h
+    #cocos/platform/Application.cpp
+    #cocos/platform/CanvasRenderingContext2D.h
+    #cocos/platform/Device.h
     cocos/platform/Image.cpp
     cocos/platform/Image.h
     cocos/platform/StdC.h
@@ -538,11 +625,11 @@ endif()
 
 if(WINDOWS)
     cocos_source_files(
-        NO_WERROR    cocos/platform/win32/Application-win32.cpp
-        NO_WERROR    cocos/platform/win32/CanvasRenderingContext2D-win32.cpp
-                     cocos/platform/win32/Device-win32.cpp
-                     cocos/platform/win32/View-win32.cpp
-                     cocos/platform/win32/View-win32.h
+#        NO_WERROR    cocos/platform/win32/Application-win32.cpp
+#        NO_WERROR    cocos/platform/win32/CanvasRenderingContext2D-win32.cpp
+#                     cocos/platform/win32/Device-win32.cpp
+#                     cocos/platform/win32/View-win32.cpp
+#                     cocos/platform/win32/View-win32.h
                      cocos/platform/win32/compat
                      cocos/platform/win32/compat/stdint.h
                      cocos/platform/win32/inet_pton_mingw.cpp

@@ -54,7 +54,8 @@
 #include "base/Scheduler.h"
 #include "network/Uri.h"
 #include "network/WebSocket.h"
-#include "platform/Application.h"
+#include "engine/EngineManager.h"
+
 #include "platform/FileUtils.h"
 #include "platform/StdC.h"
 
@@ -512,7 +513,7 @@ void WsThreadHelper::wsThreadEntryFunc() const {
 }
 
 void WsThreadHelper::sendMessageToCocosThread(const std::function<void()> &cb) {
-    cc::Application::getInstance()->getScheduler()->performFunctionInCocosThread(cb);
+    CURRENT_ENGINE()->getEngineScheduler()->performFunctionInCocosThread(cb);
 }
 
 void WsThreadHelper::sendMessageToWebSocketThread(WsMessage *msg) {

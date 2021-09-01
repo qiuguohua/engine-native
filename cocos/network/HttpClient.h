@@ -35,7 +35,6 @@
 #include "network/HttpRequest.h"
 #include "network/HttpResponse.h"
 #include "network/HttpCookie.h"
-#include "base/Scheduler.h"
 
 /**
  * @addtogroup network
@@ -43,7 +42,7 @@
  */
 
 namespace cc {
-
+class EngineScheduler;
 namespace network {
 
 /** Singleton that handles asynchronous http requests.
@@ -184,7 +183,7 @@ private:
     int _threadCount;
     std::mutex _threadCountMutex;
 
-    std::weak_ptr<Scheduler> _scheduler;
+    std::weak_ptr<EngineScheduler> _scheduler;
     std::mutex _schedulerMutex;
 
     Vector<HttpRequest *> _requestQueue;
