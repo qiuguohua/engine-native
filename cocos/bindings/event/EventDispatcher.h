@@ -41,29 +41,43 @@ enum class OSEventType {
     TOUCH_OSEVENT    = 1,
     MOUSE_OSEVENT    = 2,
     CUSTOM_OSEVENT   = 3,
-    WINDOW_OSEVENT   = 4
+    WINDOW_OSEVENT   = 4,
+    APP_OSEVENT      = 5,
+    UNKNOWN_OSEVENT  = 6
 };
 
 class OSEvent {
-  virtual void EventName() {
-
-   }
+    virtual OSEventType EventTtpe() {
+        return OSEventType::UNKNOWN_OSEVENT;
+    }
 };
 
-struct WindowEven : public OSEvent {
+struct AppEvent : public OSEvent {
     enum class Type {
-        WINDOWEVENT_QUIT = 0,
-        WINDOWEVENT_SHOW,
-        WINDOWEVENT_RESTORED,
-        WINDOWEVENT_SIZE_CHANGED,
-        WINDOWEVENT_RESIZED,
-        WINDOWEVENT_HIDDEN,
-        WINDOWEVENT_MINIMIZED,
-        WINDOWEVENT_CLOSE,
+        RUN = 0,
+        PAUSE,
+        RESUME,
+        CLOSE,
+        UNKNOWN,
     };
-    Type type;
-    int  width;
-    int  height;
+    Type type = Type::UNKNOWN;
+};
+
+struct WindowEvent : public OSEvent {
+    enum class Type {
+        QUIT    = 0,
+        SHOW,
+        RESTORED,
+        SIZE_CHANGED,
+        RESIZED,
+        HIDDEN,
+        MINIMIZED,
+        CLOSE,
+        UNKNOWN,
+    };
+    Type type   = Type::UNKNOWN;
+    int  width  = 0;
+    int  height = 0;
 };
 // Touch event related
 
@@ -199,6 +213,14 @@ public:
     CustomEvent()          = default;
     virtual ~CustomEvent() = default;
 };
+
+template <typename T>
+std::enable_if_t<std::is_base_of<cc::OSEvent, T>::value, const T &>
+EventCast(const cc::OSEvent &ev) {
+    const T &ev_detail = dynamic_cast<const T &>(ev);
+    //CC_ASSERT(ev_detail);
+    return std::move(ev_detail);
+}
 
 class EventDispatcher {
 public:

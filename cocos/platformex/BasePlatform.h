@@ -1,4 +1,5 @@
 /****************************************************************************
+ Copyright (c) 2013-2016 Chukong Technologies Inc.
  Copyright (c) 2017-2021 Xiamen Yaji Software Co., Ltd.
 
  http://www.cocos.com
@@ -25,57 +26,111 @@
 
 #pragma once
 
-#include "platformex/AbstractPlatform.h"
-#include "platformex/EventDispathchInterface.h"
+#include "base/Log.h"
+#include "base/Macros.h"
+
+#include "bindings/event/EventDispatcher.h"
+#include "platformex/os-interfaces/modules/ISystem.h"
+
+#include <vector>
 
 namespace cc {
-class BasePlatform : public AbstratctPlatform, public EventDispatchInterface {
+
+class OSInterface;
+
+class BasePlatform {
 public:
     /**
-     *@bref Implement basic platform initialization.
+     @brief Destructor of AbstratctPlatform.
      */
-    int init() override;
+    virtual ~BasePlatform();
     /**
-     *@bref Start base platform initialization.
+     @brief Get default system platform.
      */
-    int start(int argc, char** argv) override;
+    static BasePlatform* GetPlatform();
     /**
-     *@bref Implement the main logic of the base platform.
+     @brief Initialize system platform.
      */
-    int run(int argc, char** argv) override;
+    virtual int32_t init() = 0;
     /**
-     *@bref Implement the destruction of the base platform.
+     @brief Run system platform.
      */
-    void destory() override;
+    virtual int32_t run(int argc, char** argv) = 0;
     /**
-     *@bref Get targe platform type.
+     @brief Main logic.
      */
-    OSType getOSType() override;
+    virtual int32_t main(int argc, char** argv) = 0;
     /**
-     *@bref Set the event handling callback.
+     @brief Destory system platform.
      */
-    void setEventHandleCallback(EventHandleCallback cb) override;
+    virtual void destory() = 0;
     /**
-     *@bref Set the event to handle callbacks by default.
+     @brief Get target system type.
      */
-    void setDefaultEventHandleCallback(EventHandleCallback cb) override;
+    using OSType = ISystem::OSType;
+
+    virtual OSType getOSType() = 0;
+
     /**
-     *@bref Implement dispatch event interface.
+     @brief Set event handling callback function.
      */
-    void dispatchEvent(OSEventType type, const OSEvent& ev) override;
+    using EventHandleCallback = std::function<bool(OSEventType, const OSEvent&)>;
+
+    virtual void setEventHandleCallback(EventHandleCallback cb) = 0;
+
     /**
-     *@bref Implement dispatch event interface.
+     @brief Set default event handling callback function.
      */
-    void dispatchTouchEvent(const OSEvent& ev) override;
+    virtual void setDefaultEventHandleCallback(EventHandleCallback cb) = 0;
     /**
-     *@bref Implement dispatch event interface.
+     @brief Default event handling.
      */
-    void defaultEventHandle(OSEventType type, const OSEvent& ev) override;
+    virtual void defaultEventHandle(OSEventType type, const OSEvent& ev) = 0;
+
+    /**
+     @brief Get target system interface.
+     @ Non thread safe.
+     */
+    template <class T>
+    std::enable_if_t<std::is_base_of<OSInterface, T>::value, T*>
+    getOSInterface() {
+        for (auto it : _osInterfaces) {
+            T* intf = dynamic_cast<T*>(it.get());
+            if (intf) {
+                return intf;
+            }
+        }
+        CC_ASSERT(false);
+        return nullptr;
+    }
+
+    /**
+     @brief Registration system interface.
+     */
+    bool registerOSInterface(OSInterface::Ptr os_interface) {
+        CC_ASSERT(os_interface != nullptr);
+        auto it = std::find(_osInterfaces.begin(), _osInterfaces.end(), os_interface);
+        if (it != _osInterfaces.end()) {
+            CC_LOG_WARNING("Duplicate registration interface");
+            return false;
+        }
+        _osInterfaces.push_back(os_interface);
+        return true;
+    }
+    /**
+     @brief Unregistration system interface.
+     */
+    void unRegisterOSInterface(OSInterface::Ptr os_interface) {
+        CC_ASSERT(os_interface != nullptr);
+        auto it = std::find(_osInterfaces.begin(), _osInterfaces.end(), os_interface);
+        if (it != _osInterfaces.end()) {
+            CC_LOG_WARNING("Interface is not registrated");
+            return;
+        }
+        _osInterfaces.erase(it);
+    }
 
 private:
-    EventHandleCallback _eventHandleCallback;
-    EventHandleCallback _eventDefaultHandleCallback;
-
+    std::vector<OSInterface::Ptr> _osInterfaces;
 };
-
 } // namespace cc

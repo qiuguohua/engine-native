@@ -29,18 +29,17 @@
 #include "math/Vec2.h"
 
 #include "bindings/event/EventDispatcher.h"
-#include "engine/AbstractEngine.h"
+#include "engine/BaseEngine.h"
 
 #include <map>
 #include <memory>
 
 namespace cc {
-class Scheduler;
 
 #define NANOSECONDS_PER_SECOND 1000000000
 #define NANOSECONDS_60FPS      16666667L
 
-class Engine : public AbstractEngine {
+class Engine : public BaseEngine {
 public:
     /**
      @brief Constructor of Engine.
@@ -53,11 +52,11 @@ public:
     /**
      @brief Implement initialization engine.
      */
-    int init() override;
+    int32_t init() override;
     /**
      @brief Implement the main logic of the running engine.
      */
-    int run() override;
+    int32_t run() override;
     /**
      @brief Implement pause engine running.
      */
@@ -100,15 +99,20 @@ public:
      @param evtype:event information.
      @return whether it's been handled.
      */
-    bool EventHandle(OSEventType type, const OSEvent& ev);
+    bool eventHandle(OSEventType type, const OSEvent& ev);
     /**
      @brief Get engine scheduler.
      */
-    EngineScheduler::Ptr getEngineScheduler() override;
+    SchedulerPtr getEngineScheduler() override;
 
 private:
     void tick();
     void restartVM();
+    bool handleWindowEvent(const WindowEvent& ev);
+    bool dispatchEventToApp(OSEventType type, const OSEvent& ev);
+    void onPause();
+    void onResume();
+    void onClose();
 
 private:
     bool                           _quit{false};

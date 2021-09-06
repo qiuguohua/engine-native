@@ -37,6 +37,7 @@
 #include "platform/android/FileUtils-android.h"
 #include "platform/android/View.h"
 #include "platform/java/jni/JniHelper.h"
+#include "platformex/AbstractPlatform.h"
 
 #define LOGV(...) __android_log_print(ANDROID_LOG_INFO, "CocosActivity JNI", __VA_ARGS__)
 
@@ -204,13 +205,19 @@ JNIEXPORT void JNICALL Java_com_cocos_lib_CocosActivity_onCreateNative(JNIEnv *e
         LOGV("Can not make pipe read to non blocking mode.");
     }
 
-    std::thread glThread(glThreadEntry);
-    glThread.detach();
-
-    std::unique_lock<std::mutex> lk(cc::cocosApp.mutex);
-    while (!cc::cocosApp.running) {
-        cc::cocosApp.cond.wait(lk);
+    cc::AbstratctPlatform* platform = cc::AbstratctPlatform::GetPlatform();
+    if (platform->init()) {
+        LOGV("Platform initialization failed");
     }
+    platform->start(0, nullptr);
+
+    //std::thread glThread(glThreadEntry);
+    //glThread.detach();
+
+    //std::unique_lock<std::mutex> lk(cc::cocosApp.mutex);
+    //while (!cc::cocosApp.running) {
+    //    cc::cocosApp.cond.wait(lk);
+    //}
 }
 //NOLINTNEXTLINE
 JNIEXPORT void JNICALL Java_com_cocos_lib_CocosActivity_onSurfaceCreatedNative(JNIEnv *env, jobject obj, jobject surface) {

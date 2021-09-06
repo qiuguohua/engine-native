@@ -1,5 +1,5 @@
 /****************************************************************************
- Copyright (c) 2018-2021 Xiamen Yaji Software Co., Ltd.
+ Copyright (c) 2017-2021 Xiamen Yaji Software Co., Ltd.
 
  http://www.cocos.com
 
@@ -24,78 +24,16 @@
 ****************************************************************************/
 
 #include "platformex/BasePlatform.h"
-#include "platformex/os-interfaces/OSAbstractInterface.h"
-#include "platformex/os-interfaces/interfaces/BatteryInterface.h"
-#include "platformex/os-interfaces/interfaces/CanvasRenderingContext2DInterface.h"
-#include "platformex/os-interfaces/interfaces/MonitorInterface.h"
-#include "platformex/os-interfaces/interfaces/NetworkInterface.h"
-#include "platformex/os-interfaces/interfaces/SystemInterface.h"
-#include "platformex/os-interfaces/interfaces/SystemWindowUI.h"
-#include "platformex/os-interfaces/interfaces/SystemInterface.h"
-#include "platformex/os-interfaces/interfaces/VibrateInterface.h"
-
-extern int cocos_main(int argc, char** argv);
+#include "platformex/WindowsPlatform.h"
 
 namespace cc {
-BasePlatform::OSType BasePlatform::getOSType() {
-    return getOSInterface<SystemInterface>()->getOSType();
+
+BasePlatform::~BasePlatform() {
+    _osInterfaces.clear();
 }
 
-void BasePlatform::dispatchEvent(OSEventType type, const OSEvent& ev) {
-    bool is_handled = false;
-    if (_eventHandleCallback) {
-        is_handled = (_eventHandleCallback)(type, ev);
-    }
-    if (is_handled) {
-        return;
-    }
-    if (_eventDefaultHandleCallback) {
-        is_handled = (_eventDefaultHandleCallback)(type, ev);
-    }
-    if (!is_handled)
-        defaultEventHandle(type, ev);
+BasePlatform* BasePlatform::GetPlatform() {
+    static WindowsPlatform platform;
+    return &platform;
 }
-
-void BasePlatform::dispatchTouchEvent(const OSEvent& ev) {
-}
-
-void BasePlatform::defaultEventHandle(OSEventType type, const OSEvent& ev) {
-    // To do :
-}
-
-void BasePlatform::setEventHandleCallback(EventHandleCallback cb) {
-    _eventHandleCallback = cb;
-}
-
-void BasePlatform::setDefaultEventHandleCallback(EventHandleCallback cb) {
-    _eventDefaultHandleCallback = cb;
-}
-
-int BasePlatform::init() {
-    registerOSInterface(SystemWindowUI::GetSystemWindowUI(this));
-    registerOSInterface(SystemInterface::getSystemInterface());
-    registerOSInterface(NetworkInterface::getNetworkInterface());
-    registerOSInterface(MonitorInterface::getMonitorInterface());
-    registerOSInterface(BatteryInterface::getBatteryInterface());
-    registerOSInterface(VibrateInterface::getVibrateInterface());
-    registerOSInterface(CanvasRenderingContext2DInterface::getInterface());
-    //OSAbstractInterface::OSAbstractInterfaces intfs =
-    //    OSAbstractInterface::getSystemSupportInterfaces(this);
-    //for (auto it : intfs) {
-    //    registerOSInterface(it);
-    //}
-    return 0;
-}
-
-int BasePlatform::start(int argc, char** argv) {
-    return run(argc, argv);
-}
-
-int BasePlatform::run(int argc, char** argv) {
-    return cocos_main(0, nullptr);
-}
-
-void BasePlatform::destory() {
-}
-
 } // namespace cc

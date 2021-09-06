@@ -307,90 +307,105 @@ cocos_source_files(
 
 ############ application
 cocos_source_files(
-    cocos/application/AbstractApplication.h
+    cocos/application/BaseApplication.h
     cocos/application/CocosApplication.h
     cocos/application/CocosApplication.cpp
 )
 
 ############ engine
 cocos_source_files(
-    cocos/engine/AbstractEngine.cpp
-    cocos/engine/AbstractEngine.h
+    cocos/engine/BaseEngine.cpp
+    cocos/engine/BaseEngine.h
     cocos/engine/Engine.cpp
     cocos/engine/Engine.h
     cocos/engine/EngineManager.cpp
     cocos/engine/EngineManager.h
-    cocos/engine/EngineScheduler.h
 )
 
 ############ main
+if(WINDOWS)
 cocos_source_files(
     cocos/main/main.cpp
 )
+else()
+
+endif()
 
 ############ platformex
 cocos_source_files(
-    cocos/platformex/AbstractPlatform.cpp
-    cocos/platformex/AbstractPlatform.h
+    cocos/platformex/IEventDispathch.h
     cocos/platformex/BasePlatform.cpp
     cocos/platformex/BasePlatform.h
-    cocos/platformex/EventDispathchInterface.h
-    cocos/platformex/WindowPlatform.cpp
-    cocos/platformex/WindowPlatform.h
+    cocos/platformex/UniversalPlatform.cpp
+    cocos/platformex/UniversalPlatform.h
+    cocos/platformex/WindowsPlatform.cpp
+    cocos/platformex/WindowsPlatform.h
 )
 
-############ platformex : abstract interfaces
+############ platformex : Abstract interface
 cocos_source_files(
-    cocos/platformex/os-interfaces/OSAbstractInterface.cpp
-    cocos/platformex/os-interfaces/OSAbstractInterface.h
+    cocos/platformex/os-interfaces/OSInterface.cpp
+    cocos/platformex/os-interfaces/OSInterface.h
     cocos/platformex/os-interfaces/OSInterfaceManager.cpp
     cocos/platformex/os-interfaces/OSInterfaceManager.h
 )
 
-############ platformex : Interface implementation
+############ platformex : Interface definition
 cocos_source_files(
-    cocos/platformex/os-interfaces/interfaces/Device.cpp
-    cocos/platformex/os-interfaces/interfaces/Device.h
-    cocos/platformex/os-interfaces/interfaces/AccelerometerInterface.h
-    cocos/platformex/os-interfaces/interfaces/BatteryInterface.cpp
-    cocos/platformex/os-interfaces/interfaces/BatteryInterface.h
-    cocos/platformex/os-interfaces/interfaces/CanvasRenderingContext2D.cpp
-    cocos/platformex/os-interfaces/interfaces/CanvasRenderingContext2D.h
-    cocos/platformex/os-interfaces/interfaces/CanvasRenderingContext2DInterface.cpp
-    cocos/platformex/os-interfaces/interfaces/CanvasRenderingContext2DInterface.h
+    cocos/platformex/os-interfaces/modules/Device.cpp
+    cocos/platformex/os-interfaces/modules/Device.h
+	cocos/platformex/os-interfaces/modules/IAccelerometer.cpp
+    cocos/platformex/os-interfaces/modules/IAccelerometer.h
+    cocos/platformex/os-interfaces/modules/IBattery.cpp
+    cocos/platformex/os-interfaces/modules/IBattery.h
     #cocos/platformex/os-interfaces/interfaces/DeviceInterface.cpp
     #cocos/platformex/os-interfaces/interfaces/DeviceInterface.h
-    cocos/platformex/os-interfaces/interfaces/MonitorInterface.cpp
-    cocos/platformex/os-interfaces/interfaces/MonitorInterface.h
-    cocos/platformex/os-interfaces/interfaces/NetworkInterface.cpp
-    cocos/platformex/os-interfaces/interfaces/NetworkInterface.h
-    cocos/platformex/os-interfaces/interfaces/SystemInterface.cpp
-    cocos/platformex/os-interfaces/interfaces/SystemInterface.h
-    cocos/platformex/os-interfaces/interfaces/SystemWindowUI.cpp
-    cocos/platformex/os-interfaces/interfaces/SystemWindowUI.h
-    cocos/platformex/os-interfaces/interfaces/VibrateInterface.cpp
-    cocos/platformex/os-interfaces/interfaces/VibrateInterface.h
+    cocos/platformex/os-interfaces/modules/IScreen.cpp
+    cocos/platformex/os-interfaces/modules/IScreen.h
+    cocos/platformex/os-interfaces/modules/INetwork.cpp
+    cocos/platformex/os-interfaces/modules/INetwork.h
+    cocos/platformex/os-interfaces/modules/ISystem.cpp
+    cocos/platformex/os-interfaces/modules/ISystem.h
+    cocos/platformex/os-interfaces/modules/ISystemWindow.cpp
+    cocos/platformex/os-interfaces/modules/ISystemWindow.h
+    cocos/platformex/os-interfaces/modules/IVibrate.cpp
+    cocos/platformex/os-interfaces/modules/IVibrate.h
 )
 
-############ platformex : Interface implementation
 cocos_source_files(
-    cocos/platformex/os-interfaces/interfaces/windows/Accelerometer.cpp
-    cocos/platformex/os-interfaces/interfaces/windows/Accelerometer.h
-    cocos/platformex/os-interfaces/interfaces/windows/Battery.cpp
-    cocos/platformex/os-interfaces/interfaces/windows/Battery.h
-    cocos/platformex/os-interfaces/interfaces/windows/CanvasRenderingContext2DDelegateImp.cpp
-    cocos/platformex/os-interfaces/interfaces/windows/CanvasRenderingContext2DDelegateImp.h
-    cocos/platformex/os-interfaces/interfaces/windows/Monitor.cpp
-    cocos/platformex/os-interfaces/interfaces/windows/Monitor.h
-    cocos/platformex/os-interfaces/interfaces/windows/Network.cpp
-    cocos/platformex/os-interfaces/interfaces/windows/Network.h
-    cocos/platformex/os-interfaces/interfaces/windows/Vibrate.cpp
-    cocos/platformex/os-interfaces/interfaces/windows/Vibrate.h
-    cocos/platformex/os-interfaces/interfaces/windows/WindowsSystem.cpp
-    cocos/platformex/os-interfaces/interfaces/windows/WindowsSystem.h
-    cocos/platformex/os-interfaces/interfaces/windows/WindowUI.cpp
-    cocos/platformex/os-interfaces/interfaces/windows/WindowUI.h
+    cocos/platformex/os-interfaces/modules/canvas/CanvasRenderingContext2D.cpp
+    cocos/platformex/os-interfaces/modules/canvas/CanvasRenderingContext2D.h
+    cocos/platformex/os-interfaces/modules/canvas/ICanvasRenderingContext2D.cpp
+	cocos/platformex/os-interfaces/modules/canvas/ICanvasRenderingContext2D.h
 )
+if(WINDOWS)
+cocos_source_files(
+	cocos/platformex/os-interfaces/modules/canvas/CanvasRenderingContext2DDelegate-win32.cpp
+	cocos/platformex/os-interfaces/modules/canvas/CanvasRenderingContext2DDelegate-win32.h)
+else(ANDROID)
+
+endif()
+
+############ platformex : Interface implementation of windows
+if(WINDOWS)
+cocos_source_files(
+    cocos/platformex/os-interfaces/modules/windows/Accelerometer.cpp
+    cocos/platformex/os-interfaces/modules/windows/Accelerometer.h
+    cocos/platformex/os-interfaces/modules/windows/Battery.cpp
+    cocos/platformex/os-interfaces/modules/windows/Battery.h
+    cocos/platformex/os-interfaces/modules/windows/Screen.cpp
+    cocos/platformex/os-interfaces/modules/windows/Screen.h
+    cocos/platformex/os-interfaces/modules/windows/Network.cpp
+    cocos/platformex/os-interfaces/modules/windows/Network.h
+    cocos/platformex/os-interfaces/modules/windows/Vibrate.cpp
+    cocos/platformex/os-interfaces/modules/windows/Vibrate.h
+    cocos/platformex/os-interfaces/modules/windows/System.cpp
+    cocos/platformex/os-interfaces/modules/windows/System.h
+    cocos/platformex/os-interfaces/modules/windows/SystemWindow.cpp
+    cocos/platformex/os-interfaces/modules/windows/SystemWindow.h
+)
+else(ANDROID)
+endif()
 
 ############ module log
 cocos_source_files(MODULE cclog

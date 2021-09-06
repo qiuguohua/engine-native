@@ -34,7 +34,7 @@
 
 namespace cc {
 
-class EngineScheduler;
+class Scheduler;
 
 #define MAX_AUDIOINSTANCES 32
 
@@ -81,6 +81,6 @@ private:
     bool _lazyInitLoop;
 
     int                      _currentAudioID;
-    std::weak_ptr<EngineScheduler> _scheduler;
+    std::weak_ptr<Scheduler> _scheduler;
 };
 } // namespace cc

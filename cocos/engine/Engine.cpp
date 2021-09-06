@@ -26,7 +26,7 @@
 #include "engine/Engine.h"
 #include "base/AutoreleasePool.h"
 #include "base/Macros.h"
-#include "platformex/AbstractPlatform.h"
+#include "platformex/BasePlatform.h"
 
 #include "cocos/bindings/jswrapper/SeApi.h"
 #include "cocos/renderer/GFXDeviceManager.h"
@@ -45,18 +45,17 @@
 #include "base/Scheduler.h"
 #include "cocos/network/HttpClient.h"
 #include "engine/EngineManager.h"
-#include "platformex/os-interfaces/interfaces/SystemWindowUI.h"
-#include "sdl2/SDL_events.h"
+#include "platformex/os-interfaces/modules/ISystemWindow.h"
 
 namespace {
 
 bool setCanvasCallback(se::Object* global) {
-    std::stringstream   ss;
-    se::ScriptEngine*   se              = se::ScriptEngine::getInstance();
-    cc::SystemWindowUI* window          = CURRENT_ENGINE()->GetOSInterface<cc::SystemWindowUI>();
-    auto                handler         = window->getWindowHandler();
-    auto                viewSize        = window->getViewSize();
-    char                commandBuf[200] = {0};
+    std::stringstream  ss;
+    se::ScriptEngine*  se              = se::ScriptEngine::getInstance();
+    cc::ISystemWindow* window          = CURRENT_ENGINE()->GetOSInterface<cc::ISystemWindow>();
+    auto               handler         = window->getWindowHandler();
+    auto               viewSize        = window->getViewSize();
+    char               commandBuf[200] = {0};
     ss << "window.innerWidth = " << viewSize[0] << "; "
        << "window.innerHeight = " << viewSize[1] << "; "
        << "window.windowHandler = "
@@ -67,13 +66,7 @@ bool setCanvasCallback(se::Object* global) {
     return true;
 }
 
-template <typename T>
-std::enable_if_t<std::is_base_of<cc::OSEvent, T>::value, const T&>
-EventCast(const cc::OSEvent& ev) {
-    const T& ev_detail = dynamic_cast<const T&>(ev);
-    //CC_ASSERT(ev_detail);
-    return std::move(ev_detail);
-}
+
 
 } // namespace
 
@@ -95,7 +88,7 @@ Engine::~Engine() {
     gfx::DeviceManager::destroy();
 }
 
-int Engine::init() {
+int32_t Engine::init() {
     _scheduler = std::make_shared<Scheduler>();
     FileUtils::getInstance()->addSearchPath("Resources", true);
 
@@ -103,17 +96,17 @@ int Engine::init() {
 
     EngineManager::getInstance()->setCurrentEngine(shared_from_this());
 
-    AbstratctPlatform* platform = AbstratctPlatform::GetPlatform();
+    BasePlatform* platform = BasePlatform::GetPlatform();
     platform->setEventHandleCallback(
-        std::bind(&Engine::EventHandle,
+        std::bind(&Engine::eventHandle,
                   this, std::placeholders::_1, std::placeholders::_2));
 
     se::ScriptEngine::getInstance()->addPermanentRegisterCallback(setCanvasCallback);
     return 0;
 }
 
-int Engine::run() {
-    SystemWindowUI* pevent = GetOSInterface<SystemWindowUI>();
+int32_t Engine::run() {
+    ISystemWindow* pevent = GetOSInterface<ISystemWindow>();
     while (!_quit) {
         tick();
         pevent->pollEvent();
@@ -122,11 +115,11 @@ int Engine::run() {
 }
 
 void Engine::pause() {
-    cc::EventDispatcher::dispatchEnterBackgroundEvent();
+    // to do:
 }
 
 void Engine::resume() {
-    cc::EventDispatcher::dispatchEnterForegroundEvent();
+    // to do:
 }
 
 int Engine::restart() {
@@ -173,10 +166,6 @@ void Engine::setPreferredFramesPerSecond(int fps) {
     _prefererredNanosecondsPerFrame = static_cast<long>(1.0 / _fps * NANOSECONDS_PER_SECOND); //NOLINT(google-runtime-int)
 }
 
-EngineScheduler::Ptr Engine::getEngineScheduler() {
-    return _scheduler;
-}
-
 void Engine::addEvent(OSEventType evtype, EventCb cb) {
     _eventCallbacks.insert(std::make_pair(evtype, cb));
 }
@@ -186,7 +175,7 @@ void Engine::removeEvent(OSEventType evtype) {
     if (it != _eventCallbacks.end()) {
         _eventCallbacks.erase(it);
     }
-    // debug;
+    // For debugging.
     CC_ASSERT(false);
 }
 
@@ -213,10 +202,35 @@ void Engine::restartVM() {
     cc::EventDispatcher::destroy();
 
     // start
-
     cc::EventDispatcher::init();
     init();
     cc::gfx::DeviceManager::addCustomEvent();
+}
+
+bool Engine::eventHandle(OSEventType type, const OSEvent& ev) {
+    if (type == OSEventType::TOUCH_OSEVENT) {
+        cc::EventDispatcher::dispatchTouchEvent(EventCast<TouchEvent>(ev));
+        return true;
+    } else if (type == OSEventType::MOUSE_OSEVENT) {
+        cc::EventDispatcher::dispatchMouseEvent(EventCast<MouseEvent>(ev));
+        return true;
+    } else if (type == OSEventType::KEYBOARD_OSEVENT) {
+        cc::EventDispatcher::dispatchKeyboardEvent(EventCast<KeyboardEvent>(ev));
+        return true;
+    } else if (type == OSEventType::CUSTOM_OSEVENT) {
+        cc::EventDispatcher::dispatchCustomEvent(EventCast<CustomEvent>(ev));
+        return true;
+    } else if (type == OSEventType::WINDOW_OSEVENT) {
+        return handleWindowEvent(EventCast<WindowEvent>(ev));
+    }
+    if (dispatchEventToApp(type, ev)) {
+        return true;
+    }
+    return false;
+}
+
+Engine::SchedulerPtr Engine::getEngineScheduler() {
+    return _scheduler;
 }
 
 void Engine::tick() {
@@ -256,43 +270,61 @@ void Engine::tick() {
     dt   = static_cast<float>(dtNS) / NANOSECONDS_PER_SECOND;
 }
 
-bool Engine::EventHandle(OSEventType type, const OSEvent& ev) {
-    if (type == OSEventType::KEYBOARD_OSEVENT) {
-        cc::EventDispatcher::dispatchKeyboardEvent(EventCast<KeyboardEvent>(ev));
+bool Engine::handleWindowEvent(const WindowEvent& ev) {
+    if (ev.type == WindowEvent::Type::SHOW ||
+        ev.type == WindowEvent::Type::RESTORED) {
+        onResume();
         return true;
-    } else if (type == OSEventType::KEYBOARD_OSEVENT) {
-        cc::EventDispatcher::dispatchCustomEvent(EventCast<CustomEvent>(ev));
+    } else if (ev.type == WindowEvent::Type::SIZE_CHANGED ||
+               ev.type == WindowEvent::Type::RESIZED) {
+        cc::EventDispatcher::dispatchResizeEvent(ev.width, ev.height);
         return true;
-    } else if (type == OSEventType::MOUSE_OSEVENT) {
-        cc::EventDispatcher::dispatchMouseEvent(EventCast<MouseEvent>(ev));
+    } else if (ev.type == WindowEvent::Type::HIDDEN ||
+               ev.type == WindowEvent::Type::MINIMIZED) {
+        onPause();
         return true;
-    } else if (type == OSEventType::TOUCH_OSEVENT) {
-        cc::EventDispatcher::dispatchTouchEvent(EventCast<TouchEvent>(ev));
+    } else if (ev.type == WindowEvent::Type::CLOSE) {
+        onClose();
         return true;
-    } else if (type == OSEventType::WINDOW_OSEVENT) {
-        const WindowEven& wev = EventCast<WindowEven>(ev);
-        if (wev.type == WindowEven::Type::WINDOWEVENT_SHOW ||
-            wev.type == WindowEven::Type::WINDOWEVENT_RESTORED) {
-            resume();
-        } else if (wev.type == WindowEven::Type::WINDOWEVENT_SIZE_CHANGED ||
-                   wev.type == WindowEven::Type::WINDOWEVENT_RESIZED) {
-            cc::EventDispatcher::dispatchResizeEvent(wev.width, wev.height);
-        } else if (wev.type == WindowEven::Type::WINDOWEVENT_HIDDEN ||
-                   wev.type == WindowEven::Type::WINDOWEVENT_MINIMIZED) {
-            pause();
-        } else if (wev.type == WindowEven::Type::WINDOWEVENT_CLOSE) {
-            cc::EventDispatcher::dispatchCloseEvent();
-        } else if (wev.type == WindowEven::Type::WINDOWEVENT_QUIT) {
-            _quit = true;
-        }
+    } else if (ev.type == WindowEvent::Type::QUIT) {
+        _quit = true;
+        onClose();
         return true;
-    }
-    for (auto it : _eventCallbacks) {
-        if (type == it.first) {
-            it.second(ev);
-            break;
-        }
     }
     return false;
 }
+
+bool Engine::dispatchEventToApp(OSEventType type, const OSEvent& ev) {
+    auto it = _eventCallbacks.find(type);
+    if (it != _eventCallbacks.end()) {
+        it->second(ev);
+        return true;
+    }
+    return false;
+}
+
+void Engine::onPause() {
+    AppEvent appEv;
+    appEv.type = AppEvent::Type::PAUSE;
+    dispatchEventToApp(OSEventType::APP_OSEVENT, appEv);
+
+    cc::EventDispatcher::dispatchEnterBackgroundEvent();
+}
+
+void Engine::onResume() {
+    AppEvent appEv;
+    appEv.type = AppEvent::Type::RESUME;
+    dispatchEventToApp(OSEventType::APP_OSEVENT, appEv);
+
+    cc::EventDispatcher::dispatchEnterForegroundEvent();
+}
+
+void Engine::onClose() {
+    AppEvent appEv;
+    appEv.type = AppEvent::Type::CLOSE;
+    dispatchEventToApp(OSEventType::APP_OSEVENT, appEv);
+
+    cc::EventDispatcher::dispatchCloseEvent();
+}
+
 } // namespace cc
