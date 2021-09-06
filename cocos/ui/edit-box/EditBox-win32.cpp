@@ -27,7 +27,7 @@
 #include "cocos/bindings/jswrapper/SeApi.h"
 #include "cocos/bindings/manual/jsb_global.h"
 #include "cocos/engine/EngineManager.h"
-#include "cocos/platformex/os-interfaces/interfaces/SystemWindowUI.h"
+#include "cocos/platformex/os-interfaces/modules/ISystemWindow.h"
 
 #include <windows.h>
 #include <locale>
@@ -53,7 +53,7 @@ HWND getCurrentWindowHwnd() {
     if (CURRENT_ENGINE()) {
         return nullptr;
     }
-    SystemWindowUI *intf = GET_PLATFORM_INTERFACE(SystemWindowUI);
+    ISystemWindow *intf = GET_PLATFORM_INTERFACE(ISystemWindow);
     if (!intf) {
         return nullptr;
     }

@@ -25,7 +25,8 @@
 
 #pragma once
 
-#include "engine/AbstractEngine.h"
+#include "base/Macros.h"
+#include "engine/BaseEngine.h"
 
 namespace cc {
 
@@ -39,18 +40,18 @@ public:
      @bref Get engine manager instance.
      @return current running engine
      */
-    std::shared_ptr<AbstractEngine> getCurrentEngine();
+    std::shared_ptr<BaseEngine> getCurrentEngine();
     /*
      @bref Sets the currently running engine.
      @engine current running engine
      */
-    void setCurrentEngine(const AbstractEngine::Ptr& engine);
+    void setCurrentEngine(const BaseEngine::Ptr& engine);
 
 private:
     EngineManager();
 
 private:
-    std::weak_ptr<AbstractEngine> _currentEngine;
+    std::weak_ptr<BaseEngine> _currentEngine;
     DISABLE_COPY_AND_MOVE(EngineManager);
 };
 

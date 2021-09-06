@@ -38,8 +38,8 @@
 #include "xxtea/xxtea.h"
 #include "engine/EngineManager.h"
 #include "bindings/jswrapper/v8/ScriptEngine.h"
-#include "platformex/os-interfaces/interfaces/SystemInterface.h"
-#include "platformex/os-interfaces/interfaces/SystemWindowUI.h"
+#include "platformex/os-interfaces/modules/ISystem.h"
+#include "platformex/os-interfaces/modules/ISystemWindow.h"
 
 #if CC_PLATFORM == CC_PLATFORM_ANDROID
     #include "platform/java/jni/JniImp.h"
@@ -314,8 +314,8 @@ SE_BIND_FUNC(jsc_dumpRoot)
 
 static bool JSBCore_platform(se::State &s) { //NOLINT
     //Application::Platform platform = CURRENT_ENGINE()->getPlatform();
-    cc::AbstratctPlatform::OSType type = 
-      cc::AbstratctPlatform::GetPlatform()->getOSType();
+    cc::BasePlatform::OSType type = 
+      cc::BasePlatform::GetPlatform()->getOSType();
     s.rval().setInt32(static_cast<int32_t>(type));
     return true;
 }
@@ -345,7 +345,7 @@ static bool JSBCore_os(se::State &s) { //NOLINT
 SE_BIND_FUNC(JSBCore_os)
 
 static bool JSBCore_getCurrentLanguage(se::State &s) { //NOLINT
-    SystemInterface *platform    = GET_PLATFORM_INTERFACE(SystemInterface);
+    ISystem *   platform    = GET_PLATFORM_INTERFACE(ISystem);
     std::string     languageStr = platform->getCurrentLanguageToString();
     s.rval().setString(languageStr);
     return true;
@@ -353,7 +353,7 @@ static bool JSBCore_getCurrentLanguage(se::State &s) { //NOLINT
 SE_BIND_FUNC(JSBCore_getCurrentLanguage)
 
 static bool JSBCore_getCurrentLanguageCode(se::State &s) { //NOLINT
-    SystemInterface *platform = GET_PLATFORM_INTERFACE(SystemInterface);
+    ISystem *   platform = GET_PLATFORM_INTERFACE(ISystem);
     std::string     language = platform->getCurrentLanguageCode();
     s.rval().setString(language);
     return true;
@@ -361,7 +361,7 @@ static bool JSBCore_getCurrentLanguageCode(se::State &s) { //NOLINT
 SE_BIND_FUNC(JSBCore_getCurrentLanguageCode)
 
 static bool JSB_getOSVersion(se::State &s) { //NOLINT
-    SystemInterface *platform      = GET_PLATFORM_INTERFACE(SystemInterface);
+    ISystem *   platform      = GET_PLATFORM_INTERFACE(ISystem);
     std::string     systemVersion = platform->getSystemVersion();
     s.rval().setString(systemVersion);
     return true;
@@ -405,7 +405,7 @@ static bool JSB_setCursorEnabled(se::State &s) { //NOLINT
     ok &= seval_to_boolean(args[0], &value);
     SE_PRECONDITION2(ok, false, "Error processing arguments");
 
-    SystemWindowUI *platform = GET_PLATFORM_INTERFACE(SystemWindowUI);
+    ISystemWindow *platform = GET_PLATFORM_INTERFACE(ISystemWindow);
     platform->setCursorEnabled(value);
     return true;
 }
@@ -669,7 +669,7 @@ static bool JSB_openURL(se::State &s) { //NOLINT
         std::string url;
         ok = seval_to_std_string(args[0], &url);
         SE_PRECONDITION2(ok, false, "url is invalid!");
-        SystemInterface *platform = GET_PLATFORM_INTERFACE(SystemInterface);
+        ISystem *platform = GET_PLATFORM_INTERFACE(ISystem);
         platform->openURL(url);
         return true;
     }
@@ -687,7 +687,7 @@ static bool JSB_copyTextToClipboard(se::State &s) { //NOLINT
         std::string text;
         ok = seval_to_std_string(args[0], &text);
         SE_PRECONDITION2(ok, false, "text is invalid!");
-        SystemWindowUI *platform = GET_PLATFORM_INTERFACE(SystemWindowUI);
+        ISystemWindow *platform = GET_PLATFORM_INTERFACE(ISystemWindow);
         platform->copyTextToClipboard(text);
         return true;
     }

@@ -31,51 +31,39 @@
 #include "cocos/bindings/manual/jsb_classtype.h"
 #include "cocos/bindings/manual/jsb_global.h"
 #include "cocos/bindings/manual/jsb_module_register.h"
-
-#include "cocos/engine/AbstractEngine.h"
-
-#include "cocos/platformex/os-interfaces/interfaces/SystemWindowUI.h"
+#include "cocos/engine/BaseEngine.h"
 
 namespace cc {
 
-CocoApplication::CocoApplication() {
-    engine_ = AbstractEngine::createEngine();
+//const char *kDefaultWindowTitle = "cocos application demo";
+
+CocosApplication::CocosApplication() {
+    _engine      = BaseEngine::createEngine();
+    _systemWidow = _engine->GetOSInterface<ISystemWindow>();
+    CC_ASSERT(_systemWidow != nullptr);
 }
 
-CocoApplication::~CocoApplication() {
+CocosApplication::~CocosApplication() {
 }
 
-int CocoApplication::init() {
-    if (engine_->init()) {
+int CocosApplication::init() {
+    if (_engine->init()) {
         return -1;
     }
-
-    SystemWindowUI *system_widow = engine_->GetOSInterface<SystemWindowUI>();
-    CC_ASSERT(system_widow != nullptr);
-    system_widow->createWindow("cocos application demo", 0, 0, 800, 600, 0x00000004 | 0x00000020 | 0x00000200);
+    _engine->addEvent(OSEventType::APP_OSEVENT,
+                      std::bind(&CocosApplication::AppEventHandle, this, std::placeholders::_1));
 
     se::ScriptEngine *se = se::ScriptEngine::getInstance();
 
-    jsb_set_xxtea_key("");
     jsb_init_file_operation_delegate();
 
-#if defined(CC_DEBUG) && (CC_DEBUG > 0)
-    // Enable debugger here
-    jsb_enable_debugger("0.0.0.0", 6086, false);
-#endif
-
-    se->setExceptionCallback([](const char *location, const char *message, const char *stack) {
-        // Send exception information to server like Tencent Bugly.
-        CC_LOG_ERROR("\nUncaught Exception:\n - location :  %s\n - msg : %s\n - detail : \n      %s\n", location, message, stack);
-    });
+    se->setExceptionCallback(
+        std::bind(&CocosApplication::ExceptionHandle, this,
+                  std::placeholders::_1, std::placeholders::_2, std::placeholders::_3));
 
     jsb_register_all_modules();
 
     se->start();
-
-    se::AutoHandleScope hs;
-    jsb_run_script("jsb-adapter/jsb-builtin.js");
-    jsb_run_script("main.js");
 
 #if (CC_PLATFORM == CC_PLATFORM_MAC_IOS)
     cc::Vec2 logicSize  = getViewLogicalSize();
@@ -85,25 +73,76 @@ int CocoApplication::init() {
     return 0;
 }
 
-int CocoApplication::run(int argc, char **argv) {
-    return engine_->run();
+int CocosApplication::run(int argc, char **argv) {
+    return _engine->run();
 }
 
-void CocoApplication::stop() {
+void CocosApplication::pause() {
+    _engine->pause();
 }
 
-void CocoApplication::restart() {
+void CocosApplication::resume() {
+    _engine->resume();
 }
 
-void CocoApplication::destory() {
+void CocosApplication::restart() {
+    _engine->restart();
 }
 
-void CocoApplication::onPause() {
+void CocosApplication::close() {
+    _engine->close();
 }
 
-void CocoApplication::onResume() {
+void CocosApplication::onPause() {
 }
 
-void CocoApplication::onClose() {
+void CocosApplication::onResume() {
 }
+
+void CocosApplication::onClose() {
+}
+
+void CocosApplication::SetDebugIpAndPort(const std::string &serverAddr, uint32_t port, bool isWaitForConnect) {
+#if defined(CC_DEBUG) && (CC_DEBUG > 0)
+    // Enable debugger here
+    jsb_enable_debugger(serverAddr, port, isWaitForConnect);
+#endif
+}
+
+void CocosApplication::JsRunScript(const std::string &filePath) {
+    jsb_run_script(filePath);
+}
+
+void CocosApplication::ExceptionHandle(const char *location, const char *message, const char *stack) {
+    // Send exception information to server like Tencent Bugly.
+    CC_LOG_ERROR("\nUncaught Exception:\n - location :  %s\n - msg : %s\n - detail : \n      %s\n", location, message, stack);
+}
+
+void CocosApplication::SetXXTeaKey(const std::string &key) {
+    jsb_set_xxtea_key(key);
+}
+
+void CocosApplication::CreateWindow(const char *title,
+                                    int32_t x, int32_t y, int32_t w,
+                                    int32_t h, int32_t flags) {
+    _systemWidow->createWindow(title, x, y, w, h, flags);
+}
+
+void CocosApplication::AppEventHandle(const OSEvent &ev) {
+    const AppEvent &appEv = EventCast<AppEvent>(ev);
+    switch (appEv.type) {
+        case AppEvent::Type::RESUME:
+            onResume();
+            break;
+        case AppEvent::Type::PAUSE:
+            onPause();
+            break;
+        case AppEvent::Type::CLOSE:
+            onClose();
+            break;
+        default:
+            break;
+    }
+}
+
 } // namespace cc

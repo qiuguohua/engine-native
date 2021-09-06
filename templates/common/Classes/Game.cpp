@@ -34,53 +34,24 @@
     #include "platform/Device.h"
 #endif
 
-Game::Game(int width, int height) : cc::Application(width, height) {}
+ Game::Game(int width, int height) : cc::CocoApplication() {
+}
 
-bool Game::init() {
-    cc::Application::init();
-
-    se::ScriptEngine *se = se::ScriptEngine::getInstance();
-
-    jsb_set_xxtea_key("");
-    jsb_init_file_operation_delegate();
-
-#if defined(CC_DEBUG) && (CC_DEBUG > 0)
-    // Enable debugger here
-    jsb_enable_debugger("0.0.0.0", 6086, false);
-#endif
-
-    se->setExceptionCallback([](const char *location, const char *message, const char *stack) {
-        // Send exception information to server like Tencent Bugly.
-        CC_LOG_ERROR("\nUncaught Exception:\n - location :  %s\n - msg : %s\n - detail : \n      %s\n", location, message, stack);
-    });
-
-    jsb_register_all_modules();
-
-    se->start();
-
-    se::AutoHandleScope hs;
-    jsb_run_script("jsb-adapter/jsb-builtin.js");
-    jsb_run_script("main.js");
-
-#if (CC_PLATFORM == CC_PLATFORM_MAC_IOS)
-    cc::Vec2 logicSize  = getViewLogicalSize();
-    float    pixelRatio = cc::Device::getDevicePixelRatio();
-    cc::EventDispatcher::dispatchResizeEvent(logicSize.x * pixelRatio, logicSize.y * pixelRatio);
-#endif
-    return true;
+int Game::init() { 
+  return cc::CocoApplication::init(); 
 }
 
 void Game::onPause() {
-    cc::Application::onPause();
-    cc::EventDispatcher::dispatchEnterBackgroundEvent();
+//    //cc::Application::onPause();
+//    cc::EventDispatcher::dispatchEnterBackgroundEvent();
 }
-
+//
 void Game::onResume() {
-    cc::Application::onResume();
-    cc::EventDispatcher::dispatchEnterForegroundEvent();
+//    //cc::Application::onResume();
+//    cc::EventDispatcher::dispatchEnterForegroundEvent();
 }
-
+//
 void Game::onClose() {
-    cc::Application::onClose();
-    cc::EventDispatcher::dispatchCloseEvent();
+//    //cc::Application::onClose();
+//    cc::EventDispatcher::dispatchCloseEvent();
 }

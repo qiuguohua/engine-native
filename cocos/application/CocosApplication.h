@@ -25,26 +25,94 @@
 
 #pragma once
 
-#include "application/AbstractApplication.h"
+#include <iostream>
+#include "application/BaseApplication.h"
+#include "cocos/platformex/os-interfaces/modules/ISystemWindow.h"
 
 namespace cc {
-class AbstractEngine;
+class BaseEngine;
 
-class CocoApplication : public AbstractApplication {
+class CocosApplication : public BaseApplication {
 public:
-    CocoApplication();
-    ~CocoApplication() override;
-    int  init() override;
-    int  run(int argc, char** argv) override;
-    void stop() override;
-    void restart() override;
-    void destory() override;
+    CocosApplication();
+    ~CocosApplication() override;
 
+    /*
+     *@bref Application initialization.
+     */
+    int32_t init() override;
+    /*
+     *@bref Application main business logic.
+     */
+    int32_t run(int argc, char** argv) override;
+    /*
+     *@bref Pause the application.
+     */
+    void pause() override;
+    /*
+     *@bref Resume the application.
+     */
+    void resume() override;
+    /*
+     *@bref Restart the application.
+     */
+    void restart() override;
+    /*
+     *@bref Close the application.
+     */
+    void close() override;
+
+    /*
+     *@bref Stop application event.
+     */
     virtual void onPause();
+    /*
+     *@bref Resume application event.
+     */
     virtual void onResume();
+    /*
+     *@bref Close application event.
+     */
     virtual void onClose();
 
+    /*
+     *@bref Create window.
+     *@param title: Window title
+     *@param x: x-axis coordinate
+     *@param y: y-axis coordinate
+     *@param w: Window width
+     *@param h: Window height
+     *@param flags: Window flag
+     */
+    virtual void CreateWindow(const char* title,
+                              int32_t x, int32_t y, int32_t w,
+                              int32_t h, int32_t flags);
+    /*
+     *@bref Set the js debugging server Addr and port
+     *@param serverAddr:Server address.
+     *@param port:Server port.
+     *@param isWaitForConnect:Is Wait for connect.
+     */
+    virtual void SetDebugIpAndPort(const std::string& serverAddr, uint32_t port, bool isWaitForConnect);
+    /*
+     @bref Run the js code file
+     @param filePath:Js file path.
+     */
+    virtual void JsRunScript(const std::string& filePath);
+    /*
+     @bref Js exception handling
+     @param location,Exception location
+     @param message,Exception message
+     @param stack,Exception stack
+     */
+    virtual void ExceptionHandle(const char* location, const char* message, const char* stack);
+    virtual void SetXXTeaKey(const std::string& key);
+
 private:
-    std::shared_ptr<AbstractEngine> engine_;
+    void AppEventHandle(const OSEvent& ev);
+
+private:
+    ISystemWindow*              _systemWidow;
+    std::shared_ptr<BaseEngine> _engine;
 };
 } // namespace cc

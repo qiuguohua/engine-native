@@ -31,12 +31,12 @@ namespace cc {
 EngineManager::EngineManager() {
 }
 
-void EngineManager::setCurrentEngine(const AbstractEngine::Ptr& engine) {
+void EngineManager::setCurrentEngine(const BaseEngine::Ptr& engine) {
     CC_ASSERT(engine != nullptr);
     _currentEngine = engine;
 }
 
-std::shared_ptr<AbstractEngine> EngineManager::getCurrentEngine() {
+std::shared_ptr<BaseEngine> EngineManager::getCurrentEngine() {
     if (_currentEngine.expired())
         return nullptr;
     return _currentEngine.lock();

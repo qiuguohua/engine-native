@@ -42,7 +42,7 @@
  */
 
 namespace cc {
-class EngineScheduler;
+class Scheduler;
 namespace network {
 
 /** Singleton that handles asynchronous http requests.
@@ -183,7 +183,7 @@ private:
     int _threadCount;
     std::mutex _threadCountMutex;
 
-    std::weak_ptr<EngineScheduler> _scheduler;
+    std::weak_ptr<Scheduler> _scheduler;
     std::mutex _schedulerMutex;
 
     Vector<HttpRequest *> _requestQueue;

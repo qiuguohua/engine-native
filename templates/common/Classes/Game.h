@@ -24,20 +24,24 @@
  ****************************************************************************/
 #pragma once
 
-#include "platform/Application.h"
+#include "cocos/application/CocosApplication.h"
 /**
  @brief    The cocos2d Application.
  
  The reason for implement as private inheritance is to hide some interface call by Director.
  */
-class Game : public cc::Application {
-public:
+class Game : public cc::CocoApplication {
+ public:
+    Game() = default;
     /**
      * width and height in logical pixel unit
      */
     Game(int width, int height);
-    bool init() override;
+    int init() override;
+    //bool init() override;
     void onPause() override;
     void onResume() override;
     void onClose() override;
 };
+
+COCOS_START_APPLICATION_MAIN(Game);

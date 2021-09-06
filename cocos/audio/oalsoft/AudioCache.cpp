@@ -318,7 +318,7 @@ void AudioCache::invokingLoadCallbacks() {
 
     auto isDestroyed = _isDestroyed;
 
-    EngineScheduler::Ptr scheduler = CURRENT_ENGINE()->getEngineScheduler();
+    BaseEngine::SchedulerPtr scheduler = CURRENT_ENGINE()->getEngineScheduler();
     CC_ASSERT(scheduler != nullptr);
 
     scheduler->performFunctionInCocosThread([&, isDestroyed]() {

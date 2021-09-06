@@ -25,8 +25,8 @@
 
 #pragma once
 
-#include <iostream>
 #include <functional>
+#include <iostream>
 
 namespace cc {
 
@@ -44,14 +44,14 @@ public:
      * You should NEVER call this method, unless you know what you are doing.
      * @lua NA
      */
-    virtual void update(float dt)                                                                                                                               = 0;
+    virtual void update(float dt) = 0;
     /** Pauses the target.
      All scheduled selectors/update for a given target won't be 'ticked' until the target is resumed.
      If the target is not present, nothing happens.
      @param target The target to be paused.
      @since v0.99.3
      */
-    virtual void pauseTarget(void *target)                                                                                                                      = 0;
+    virtual void pauseTarget(void *target) = 0;
     /** The scheduled method will be called every 'interval' seconds.
      If paused is true, then it won't be called until it is resumed.
      If 'interval' is 0, it will be called every frame, but if so, it's recommended to use 'scheduleUpdate' instead.
@@ -77,42 +77,49 @@ public:
      @param key The key to identify the callback function, because there is not way to identify a std::function<>.
      @since v3.0
      */
-    virtual void schedule(const ccSchedulerFunc &callback, void *target, float interval, bool paused, const std::string &key)                                   = 0;
+    virtual void schedule(const ccSchedulerFunc &callback, void *target, float interval, bool paused, const std::string &key) = 0;
     /** Unschedules a callback for a key and a given target.
      If you want to unschedule the 'callbackPerFrame', use unscheduleUpdate.
      @param key The key to identify the callback function, because there is not way to identify a std::function<>.
      @param target The target to be unscheduled.
      @since v3.0
      */
-    virtual void unschedule(const std::string &key, void *target)                                                                                               = 0;
+    virtual void unschedule(const std::string &key, void *target) = 0;
     /** Unschedules all selectors from all targets.
      You should NEVER call this method, unless you know what you are doing.
      @since v0.99.3
      */
-    virtual void unscheduleAll()                                                                                                                                = 0;
+    virtual void unscheduleAll() = 0;
     /** Resumes the target.
      The 'target' will be unpaused, so all schedule selectors/update will be 'ticked' again.
      If the target is not present, nothing happens.
      @param target The target to be resumed.
      @since v0.99.3
      */
-    virtual void resumeTarget(void *target)                                                                                                                     = 0;
+    virtual void resumeTarget(void *target) = 0;
     /** Unschedules all selectors for a given target.
      This also includes the "update" selector.
      @param target The target to be unscheduled.
      @since v0.99.3
      @lua NA
      */
-    virtual void unscheduleAllForTarget(void *target)                                                                                                = 0;
+    virtual void unscheduleAllForTarget(void *target) = 0;
     /** Calls a function on the cocos2d thread. Useful when you need to call a cocos2d function from another thread.
      This function is thread safe.
      @param function The function to be run in cocos2d thread.
      @since v3.0
      @js NA
      */
-    virtual void performFunctionInCocosThread(const std::function<void()> &function)                                                                            = 0;
+    virtual void performFunctionInCocosThread(const std::function<void()> &function) = 0;
+
+    /**
+     * Remove all pending functions queued to be performed with Scheduler::performFunctionInCocosThread
+     * Functions unscheduled in this manner will not be executed
+     * This function is thread safe
+     * @since v3.14
+     * @js NA
+     */
+    virtual void removeAllFunctionsToBePerformedInCocosThread()                      = 0;
 };
 
-
-
-}
+} // namespace cc
