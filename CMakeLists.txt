@@ -354,7 +354,7 @@ cocos_source_files(
 cocos_source_files(
     cocos/platformex/os-interfaces/modules/Device.cpp
     cocos/platformex/os-interfaces/modules/Device.h
-	cocos/platformex/os-interfaces/modules/IAccelerometer.cpp
+    cocos/platformex/os-interfaces/modules/IAccelerometer.cpp
     cocos/platformex/os-interfaces/modules/IAccelerometer.h
     cocos/platformex/os-interfaces/modules/IBattery.cpp
     cocos/platformex/os-interfaces/modules/IBattery.h
@@ -376,12 +376,12 @@ cocos_source_files(
     cocos/platformex/os-interfaces/modules/canvas/CanvasRenderingContext2D.cpp
     cocos/platformex/os-interfaces/modules/canvas/CanvasRenderingContext2D.h
     cocos/platformex/os-interfaces/modules/canvas/ICanvasRenderingContext2D.cpp
-	cocos/platformex/os-interfaces/modules/canvas/ICanvasRenderingContext2D.h
+    cocos/platformex/os-interfaces/modules/canvas/ICanvasRenderingContext2D.h
 )
 if(WINDOWS)
 cocos_source_files(
-	cocos/platformex/os-interfaces/modules/canvas/CanvasRenderingContext2DDelegate-win32.cpp
-	cocos/platformex/os-interfaces/modules/canvas/CanvasRenderingContext2DDelegate-win32.h)
+    cocos/platformex/os-interfaces/modules/canvas/CanvasRenderingContext2DDelegate-win32.cpp
+    cocos/platformex/os-interfaces/modules/canvas/CanvasRenderingContext2DDelegate-win32.h)
 else(ANDROID)
 
 endif()

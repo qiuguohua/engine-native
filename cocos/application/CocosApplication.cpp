@@ -73,7 +73,7 @@ int CocosApplication::init() {
     return 0;
 }
 
-int CocosApplication::run(int argc, char **argv) {
+int32_t CocosApplication::run(int argc, char **argv) {
     return _engine->run();
 }
 
