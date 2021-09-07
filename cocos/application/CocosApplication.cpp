@@ -130,7 +130,7 @@ void CocosApplication::createWindow(const char *title,
 }
 
 void CocosApplication::appEventHandle(const OSEvent &ev) {
-    const AppEvent &appEv = EventCast<AppEvent>(ev);
+    const AppEvent &appEv = eventCast<AppEvent>(ev);
     switch (appEv.type) {
         case AppEvent::Type::RESUME:
             onResume();

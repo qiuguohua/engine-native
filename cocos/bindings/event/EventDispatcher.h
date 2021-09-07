@@ -47,7 +47,7 @@ enum class OSEventType {
 };
 
 class OSEvent {
-    virtual OSEventType EventTtpe() {
+    virtual OSEventType eventType() {
         return OSEventType::UNKNOWN_OSEVENT;
     }
 };
@@ -216,10 +216,9 @@ public:
 
 template <typename T>
 std::enable_if_t<std::is_base_of<cc::OSEvent, T>::value, const T &>
-EventCast(const cc::OSEvent &ev) {
-    const T &ev_detail = dynamic_cast<const T &>(ev);
-    //CC_ASSERT(ev_detail);
-    return std::move(ev_detail);
+eventCast(const cc::OSEvent &ev) {
+    const T &evDetail = dynamic_cast<const T &>(ev);
+    return std::move(evDetail);
 }
 
 class EventDispatcher {

@@ -210,19 +210,19 @@ void Engine::restartVM() {
 bool Engine::eventHandle(OSEventType type, const OSEvent& ev) {
     bool isHandled = false;
     if (type == OSEventType::TOUCH_OSEVENT) {
-        cc::EventDispatcher::dispatchTouchEvent(EventCast<TouchEvent>(ev));
+        cc::EventDispatcher::dispatchTouchEvent(eventCast<TouchEvent>(ev));
         isHandled = true;
     } else if (type == OSEventType::MOUSE_OSEVENT) {
-        cc::EventDispatcher::dispatchMouseEvent(EventCast<MouseEvent>(ev));
+        cc::EventDispatcher::dispatchMouseEvent(eventCast<MouseEvent>(ev));
         isHandled = true;
     } else if (type == OSEventType::KEYBOARD_OSEVENT) {
-        cc::EventDispatcher::dispatchKeyboardEvent(EventCast<KeyboardEvent>(ev));
+        cc::EventDispatcher::dispatchKeyboardEvent(eventCast<KeyboardEvent>(ev));
         isHandled = true;
     } else if (type == OSEventType::CUSTOM_OSEVENT) {
-        cc::EventDispatcher::dispatchCustomEvent(EventCast<CustomEvent>(ev));
+        cc::EventDispatcher::dispatchCustomEvent(eventCast<CustomEvent>(ev));
         isHandled = true;
     } else if (type == OSEventType::WINDOW_OSEVENT) {
-        isHandled = dispatchWindowEvent(EventCast<WindowEvent>(ev));
+        isHandled = dispatchWindowEvent(eventCast<WindowEvent>(ev));
     }
     isHandled = dispatchEventToApp(type, ev);
     return isHandled;
