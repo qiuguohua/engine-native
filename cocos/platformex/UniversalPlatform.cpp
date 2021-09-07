@@ -27,7 +27,6 @@
 
 #include "platformex/os-interfaces/OSInterface.h"
 
-#include "platformex/os-interfaces/modules/CanvasRenderingContext2DInterface.h"
 #include "platformex/os-interfaces/modules/IAccelerometer.h"
 #include "platformex/os-interfaces/modules/IBattery.h"
 #include "platformex/os-interfaces/modules/INetwork.h"

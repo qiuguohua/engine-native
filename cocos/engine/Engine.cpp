@@ -106,10 +106,10 @@ int32_t Engine::init() {
 }
 
 int32_t Engine::run() {
-    ISystemWindow* pevent = GetOSInterface<ISystemWindow>();
+    ISystemWindow* systemWindow = GetOSInterface<ISystemWindow>();
     while (!_quit) {
         tick();
-        pevent->pollEvent();
+        systemWindow->pollEvent();
     }
     return 0;
 }
@@ -166,12 +166,12 @@ void Engine::setPreferredFramesPerSecond(int fps) {
     _prefererredNanosecondsPerFrame = static_cast<long>(1.0 / _fps * NANOSECONDS_PER_SECOND); //NOLINT(google-runtime-int)
 }
 
-void Engine::addEvent(OSEventType evtype, EventCb cb) {
-    _eventCallbacks.insert(std::make_pair(evtype, cb));
+void Engine::addEvent(OSEventType evType, EventCb cb) {
+    _eventCallbacks.insert(std::make_pair(evType, cb));
 }
 
-void Engine::removeEvent(OSEventType evtype) {
-    auto it = _eventCallbacks.find(evtype);
+void Engine::removeEvent(OSEventType evType) {
+    auto it = _eventCallbacks.find(evType);
     if (it != _eventCallbacks.end()) {
         _eventCallbacks.erase(it);
     }
@@ -221,7 +221,7 @@ bool Engine::eventHandle(OSEventType type, const OSEvent& ev) {
         cc::EventDispatcher::dispatchCustomEvent(EventCast<CustomEvent>(ev));
         return true;
     } else if (type == OSEventType::WINDOW_OSEVENT) {
-        return handleWindowEvent(EventCast<WindowEvent>(ev));
+        return dispatchWindowEvent(EventCast<WindowEvent>(ev));
     }
     if (dispatchEventToApp(type, ev)) {
         return true;
@@ -270,7 +270,7 @@ void Engine::tick() {
     dt   = static_cast<float>(dtNS) / NANOSECONDS_PER_SECOND;
 }
 
-bool Engine::handleWindowEvent(const WindowEvent& ev) {
+bool Engine::dispatchWindowEvent(const WindowEvent& ev) {
     if (ev.type == WindowEvent::Type::SHOW ||
         ev.type == WindowEvent::Type::RESTORED) {
         onResume();

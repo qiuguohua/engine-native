@@ -37,7 +37,7 @@
 Game::Game() : cc::CocosApplication() {}
 
 int Game::init() {
-  CreateWindow("My game", 0, 0, 800, 600,
+  createWindow("My game", 0, 0, 800, 600,
                cc::ISystemWindow::CC_WINDOW_SHOWN |
                    cc::ISystemWindow::CC_WINDOW_RESIZABLE |
                    cc::ISystemWindow::CC_WINDOW_INPUT_FOCUS);
@@ -46,11 +46,11 @@ int Game::init() {
     return ret;
   }
 
-  SetXXTeaKey("");
-  SetDebugIpAndPort("0.0.0.0", 6086, false);
+  setXXTeaKey("");
+  setJsDebugIpAndPort("0.0.0.0", 6086, false);
 
-  JsRunScript("jsb-adapter/jsb-builtin.js");
-  JsRunScript("main.js");
+  jsRunScript("jsb-adapter/jsb-builtin.js");
+  jsRunScript("main.js");
   return 0;
 }
 

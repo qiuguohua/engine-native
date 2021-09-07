@@ -51,14 +51,14 @@ int CocosApplication::init() {
         return -1;
     }
     _engine->addEvent(OSEventType::APP_OSEVENT,
-                      std::bind(&CocosApplication::AppEventHandle, this, std::placeholders::_1));
+                      std::bind(&CocosApplication::appEventHandle, this, std::placeholders::_1));
 
     se::ScriptEngine *se = se::ScriptEngine::getInstance();
 
     jsb_init_file_operation_delegate();
 
     se->setExceptionCallback(
-        std::bind(&CocosApplication::ExceptionHandle, this,
+        std::bind(&CocosApplication::exceptionHandle, this,
                   std::placeholders::_1, std::placeholders::_2, std::placeholders::_3));
 
     jsb_register_all_modules();
@@ -73,7 +73,7 @@ int CocosApplication::init() {
     return 0;
 }
 
-int CocosApplication::run(int argc, char **argv) {
+int32_t CocosApplication::run(int argc, char **argv) {
     return _engine->run();
 }
 
@@ -102,33 +102,33 @@ void CocosApplication::onResume() {
 void CocosApplication::onClose() {
 }
 
-void CocosApplication::SetDebugIpAndPort(const std::string &serverAddr, uint32_t port, bool isWaitForConnect) {
+void CocosApplication::setJsDebugIpAndPort(const std::string &serverAddr, uint32_t port, bool isWaitForConnect) {
 #if defined(CC_DEBUG) && (CC_DEBUG > 0)
     // Enable debugger here
     jsb_enable_debugger(serverAddr, port, isWaitForConnect);
 #endif
 }
 
-void CocosApplication::JsRunScript(const std::string &filePath) {
+void CocosApplication::jsRunScript(const std::string &filePath) {
     jsb_run_script(filePath);
 }
 
-void CocosApplication::ExceptionHandle(const char *location, const char *message, const char *stack) {
+void CocosApplication::exceptionHandle(const char *location, const char *message, const char *stack) {
     // Send exception information to server like Tencent Bugly.
     CC_LOG_ERROR("\nUncaught Exception:\n - location :  %s\n - msg : %s\n - detail : \n      %s\n", location, message, stack);
 }
 
-void CocosApplication::SetXXTeaKey(const std::string &key) {
+void CocosApplication::setXXTeaKey(const std::string &key) {
     jsb_set_xxtea_key(key);
 }
 
-void CocosApplication::CreateWindow(const char *title,
+void CocosApplication::createWindow(const char *title,
                                     int32_t x, int32_t y, int32_t w,
                                     int32_t h, int32_t flags) {
     _systemWidow->createWindow(title, x, y, w, h, flags);
 }
 
-void CocosApplication::AppEventHandle(const OSEvent &ev) {
+void CocosApplication::appEventHandle(const OSEvent &ev) {
     const AppEvent &appEv = EventCast<AppEvent>(ev);
     switch (appEv.type) {
         case AppEvent::Type::RESUME:

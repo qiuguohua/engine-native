@@ -84,7 +84,7 @@ public:
      *@param h: Window height
      *@param flags: Window flag
      */
-    virtual void CreateWindow(const char* title,
+    virtual void createWindow(const char* title,
                               int32_t x, int32_t y, int32_t w,
                               int32_t h, int32_t flags);
     /*
@@ -93,23 +93,23 @@ public:
      *@param port:Server port.
      *@param isWaitForConnect:Is Wait for connect.
      */
-    virtual void SetDebugIpAndPort(const std::string& serverAddr, uint32_t port, bool isWaitForConnect);
+    virtual void setJsDebugIpAndPort(const std::string& serverAddr, uint32_t port, bool isWaitForConnect);
     /*
      @bref Run the js code file
      @param filePath:Js file path.
      */
-    virtual void JsRunScript(const std::string& filePath);
+    virtual void jsRunScript(const std::string& filePath);
     /*
      @bref Js exception handling
      @param location,Exception location
      @param message,Exception message
      @param stack,Exception stack
      */
-    virtual void ExceptionHandle(const char* location, const char* message, const char* stack);
-    virtual void SetXXTeaKey(const std::string& key);
+    virtual void exceptionHandle(const char* location, const char* message, const char* stack);
+    virtual void setXXTeaKey(const std::string& key);
 
 private:
-    void AppEventHandle(const OSEvent& ev);
+    void appEventHandle(const OSEvent& ev);
 
 private:
     ISystemWindow*              _systemWidow;

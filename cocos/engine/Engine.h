@@ -108,7 +108,7 @@ public:
 private:
     void tick();
     void restartVM();
-    bool handleWindowEvent(const WindowEvent& ev);
+    bool dispatchWindowEvent(const WindowEvent& ev);
     bool dispatchEventToApp(OSEventType type, const OSEvent& ev);
     void onPause();
     void onResume();
