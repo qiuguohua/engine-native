@@ -34,8 +34,7 @@
 #include "platform/Device.h"
 #endif
 
-Game::Game(int width, int height)
-    : cc::CocosApplication() {}
+Game::Game() : cc::CocosApplication() {}
 
 int Game::init() {
   CreateWindow("My game", 0, 0, 800, 600,
