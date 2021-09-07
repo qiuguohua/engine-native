@@ -208,25 +208,24 @@ void Engine::restartVM() {
 }
 
 bool Engine::eventHandle(OSEventType type, const OSEvent& ev) {
+    bool isHandled = false;
     if (type == OSEventType::TOUCH_OSEVENT) {
         cc::EventDispatcher::dispatchTouchEvent(EventCast<TouchEvent>(ev));
-        return true;
+        isHandled = true;
     } else if (type == OSEventType::MOUSE_OSEVENT) {
         cc::EventDispatcher::dispatchMouseEvent(EventCast<MouseEvent>(ev));
-        return true;
+        isHandled = true;
     } else if (type == OSEventType::KEYBOARD_OSEVENT) {
         cc::EventDispatcher::dispatchKeyboardEvent(EventCast<KeyboardEvent>(ev));
-        return true;
+        isHandled = true;
     } else if (type == OSEventType::CUSTOM_OSEVENT) {
         cc::EventDispatcher::dispatchCustomEvent(EventCast<CustomEvent>(ev));
-        return true;
+        isHandled = true;
     } else if (type == OSEventType::WINDOW_OSEVENT) {
-        return dispatchWindowEvent(EventCast<WindowEvent>(ev));
+        isHandled = dispatchWindowEvent(EventCast<WindowEvent>(ev));
     }
-    if (dispatchEventToApp(type, ev)) {
-        return true;
-    }
-    return false;
+    isHandled = dispatchEventToApp(type, ev);
+    return isHandled;
 }
 
 Engine::SchedulerPtr Engine::getEngineScheduler() {

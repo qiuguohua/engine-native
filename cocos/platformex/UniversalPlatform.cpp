@@ -43,17 +43,17 @@ UniversalPlatform::OSType UniversalPlatform::getOSType() {
 }
 
 void UniversalPlatform::dispatchEvent(OSEventType type, const OSEvent& ev) {
-    bool is_handled = false;
+    bool isHandled = false;
     if (_eventHandleCallback) {
-        is_handled = (_eventHandleCallback)(type, ev);
+        isHandled = (_eventHandleCallback)(type, ev);
     }
-    if (is_handled) {
+    if (isHandled) {
         return;
     }
     if (_eventDefaultHandleCallback) {
-        is_handled = (_eventDefaultHandleCallback)(type, ev);
+        isHandled = (_eventDefaultHandleCallback)(type, ev);
     }
-    if (!is_handled)
+    if (!isHandled)
         defaultEventHandle(type, ev);
 }
 

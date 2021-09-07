@@ -43,8 +43,8 @@ std::shared_ptr<BaseEngine> EngineManager::getCurrentEngine() {
 }
 
 EngineManager* EngineManager::getInstance() {
-    static EngineManager _engine_manager;
-    return &_engine_manager;
+    static EngineManager engineManager;
+    return &engineManager;
 }
 
 } // namespace cc

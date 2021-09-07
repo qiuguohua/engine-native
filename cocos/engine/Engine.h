@@ -87,12 +87,12 @@ public:
      @param evtype:event type.
      @param cb:event callback.
      */
-    void addEvent(OSEventType evtype, EventCb cb);
+    void addEvent(OSEventType evtype, EventCb cb) override;
     /**
      @brief Remove Event Listening.
      @param evtype:event type.
      */
-    void removeEvent(OSEventType evtype);
+    void removeEvent(OSEventType evtype) override;
     /**
      @brief Event handling callback.
      @param evtype:event type.

@@ -38,11 +38,11 @@ public:
     /**
      @brief Constructor of OSAbstractInterface.
      */
-    OSInterface();
+    explicit OSInterface();
     /**
      @brief Constructor of OSAbstractInterface.
      */
-    OSInterface(IEventDispatch*);
+    explicit OSInterface(IEventDispatch*);
     /**
      @brief Destructor of OSAbstractInterface.
      */

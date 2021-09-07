@@ -35,7 +35,7 @@ class BaseEngine;
 class CocosApplication : public BaseApplication {
 public:
     CocosApplication();
-    ~CocosApplication() override;
+    ~CocosApplication() override = default;
 
     /*
      *@bref Application initialization.

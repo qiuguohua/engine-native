@@ -25,6 +25,8 @@
 
 #include "application/CocosApplication.h"
 
+#include "base/Macros.h"
+
 #include "cocos/bindings/event/CustomEventTypes.h"
 #include "cocos/bindings/event/EventDispatcher.h"
 #include "cocos/bindings/jswrapper/SeApi.h"
@@ -41,9 +43,6 @@ CocosApplication::CocosApplication() {
     _engine      = BaseEngine::createEngine();
     _systemWidow = _engine->GetOSInterface<ISystemWindow>();
     CC_ASSERT(_systemWidow != nullptr);
-}
-
-CocosApplication::~CocosApplication() {
 }
 
 int CocosApplication::init() {
@@ -74,6 +73,8 @@ int CocosApplication::init() {
 }
 
 int32_t CocosApplication::run(int argc, char **argv) {
+    CC_UNUSED(argc);
+    CC_UNUSED(argv);
     return _engine->run();
 }
 
