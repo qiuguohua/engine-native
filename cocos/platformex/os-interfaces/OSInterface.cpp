@@ -23,7 +23,7 @@
  THE SOFTWARE.
 ****************************************************************************/
 #include "platformex/os-interfaces/OSInterface.h"
-#include "platformex/IEventDispathch.h"
+#include "platformex/IEventDispatch.h"
 
 namespace cc {
 

@@ -28,7 +28,7 @@
 #include "base/Log.h"
 // SDL headers
 #include "bindings/event/EventDispatcher.h"
-#include "platformex/IEventDispathch.h"
+#include "platformex/IEventDispatch.h"
 #include "sdl2/SDL.h"
 #include "sdl2/SDL_main.h"
 #include "sdl2/SDL_syswm.h"
@@ -162,8 +162,8 @@ SystemWindow::~SystemWindow() {
     }
 }
 
-void SystemWindow::HandleWindowEvent(SDL_WindowEvent &wevent) {
-    static WindowEvent ev;
+void SystemWindow::handleWindowEvent(SDL_WindowEvent &wevent) {
+    WindowEvent ev;
     switch (wevent.event) {
         case SDL_WINDOWEVENT_SHOWN: {
             ev.type = WindowEvent::Type::SHOW;
@@ -229,7 +229,7 @@ void SystemWindow::pollEvent() {
             break;
         }
         case SDL_WINDOWEVENT: {
-            HandleWindowEvent(sdlEvent.window);
+            handleWindowEvent(sdlEvent.window);
             break;
         }
         case SDL_MOUSEBUTTONDOWN: {

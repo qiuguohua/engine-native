@@ -26,7 +26,7 @@
 #pragma once
 
 #include "platformex/BasePlatform.h"
-#include "platformex/IEventDispathch.h"
+#include "platformex/IEventDispatch.h"
 
 namespace cc {
 class UniversalPlatform : public BasePlatform, public IEventDispatch {

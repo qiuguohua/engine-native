@@ -53,7 +53,7 @@ public:
     void copyTextToClipboard(const std::string& text) override;
 
 private:
-    void HandleWindowEvent(SDL_WindowEvent& wevent);
+    void handleWindowEvent(SDL_WindowEvent& wevent);
 
 private:
     bool               _inited = false;
