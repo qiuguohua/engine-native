@@ -2,10 +2,10 @@
 #include "cocos/bindings/manual/jsb_conversions.h"
 #include "cocos/bindings/manual/jsb_global.h"
 
-#include "cocos/platformex/os-interfaces/modules/canvas/CanvasRenderingContext2D.h"
+#include "cocos/platform/os-interfaces/modules/canvas/CanvasRenderingContext2D.h"
 
 #include "platform/FileUtils.h"
-#include "platformex/os-interfaces/modules/Device.h"
+#include "platform/os-interfaces/modules/Device.h"
 #include "platform/SAXParser.h"
 
 #ifndef JSB_ALLOC

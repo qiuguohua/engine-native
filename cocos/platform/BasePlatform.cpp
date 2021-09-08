@@ -23,15 +23,17 @@
  THE SOFTWARE.
 ****************************************************************************/
 
-#include "cocos/engine/BaseEngine.h"
-#include "cocos/engine/Engine.h"
-#include "cocos/platform/BasePlatform.h"
-#include "cocos/platform/os-interfaces/modules/ISystemWindow.h"
+#include "platform/BasePlatform.h"
+#include "platform/WindowsPlatform.h"
 
 namespace cc {
-// static
-BaseEngine::Ptr BaseEngine::createEngine() {
-    return std::make_shared<Engine>();
+
+BasePlatform::~BasePlatform() {
+    _osInterfaces.clear();
 }
 
+BasePlatform* BasePlatform::GetPlatform() {
+    static WindowsPlatform platform;
+    return &platform;
+}
 } // namespace cc

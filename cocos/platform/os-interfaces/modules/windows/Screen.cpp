@@ -23,15 +23,39 @@
  THE SOFTWARE.
 ****************************************************************************/
 
-#include "cocos/engine/BaseEngine.h"
-#include "cocos/engine/Engine.h"
-#include "cocos/platform/BasePlatform.h"
-#include "cocos/platform/os-interfaces/modules/ISystemWindow.h"
+#include "platform/os-interfaces/modules/windows/Screen.h"
+#include "base/Macros.h"
+
+#include <Windows.h>
 
 namespace cc {
-// static
-BaseEngine::Ptr BaseEngine::createEngine() {
-    return std::make_shared<Engine>();
+
+int Screen::getDPI() {
+    static int dpi = -1;
+    if (dpi == -1) {
+        HDC hScreenDC = GetDC(nullptr);
+        int PixelsX   = GetDeviceCaps(hScreenDC, HORZRES);
+        int MMX       = GetDeviceCaps(hScreenDC, HORZSIZE);
+        ReleaseDC(nullptr, hScreenDC);
+        dpi = static_cast<int>(254.0f * PixelsX / MMX / 10);
+    }
+    return dpi;
+}
+
+float Screen::getDevicePixelRatio() {
+    return 1;
+}
+
+void Screen::setKeepScreenOn(bool value) {
+    CC_UNUSED_PARAM(value);
+}
+
+Screen::Orientation Screen::getDeviceOrientation() {
+    return Orientation::LANDSCAPE_RIGHT;
+}
+
+Vec4 Screen::getSafeAreaEdge() {
+    return cc::Vec4();
 }
 
 } // namespace cc

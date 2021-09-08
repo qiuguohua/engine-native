@@ -23,15 +23,43 @@
  THE SOFTWARE.
 ****************************************************************************/
 
-#include "cocos/engine/BaseEngine.h"
-#include "cocos/engine/Engine.h"
-#include "cocos/platform/BasePlatform.h"
-#include "cocos/platform/os-interfaces/modules/ISystemWindow.h"
+#pragma once
+
+#include "platform/os-interfaces/modules/ISystem.h"
 
 namespace cc {
-// static
-BaseEngine::Ptr BaseEngine::createEngine() {
-    return std::make_shared<Engine>();
-}
+
+class System : public ISystem {
+public:
+    /**
+     @brief Get target system type.
+     */
+    virtual OSType getOSType() const override;
+    /**
+     @brief Get target device model.
+     */
+    virtual std::string getDeviceModel() override;
+    /**
+     @brief Get current language config.
+     @return Current language config.
+     */
+    LanguageType getCurrentLanguage() override;
+    /**
+     @brief Get current language iso 639-1 code.
+     @return Current language iso 639-1 code.
+     */
+    std::string getCurrentLanguageCode() const override;
+    /**
+     @brief Get system version.
+     @return system version.
+     */
+    std::string getSystemVersion() override;
+    /**
+     @brief Open url in default browser.
+     @param String with url to open.
+     @return True if the resource located by the URL was successfully opened; otherwise false.
+     */
+    bool openURL(const std::string& url) override;
+};
 
 } // namespace cc

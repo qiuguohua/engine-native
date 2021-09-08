@@ -26,7 +26,7 @@
 #include "engine/Engine.h"
 #include "base/AutoreleasePool.h"
 #include "base/Macros.h"
-#include "platformex/BasePlatform.h"
+#include "platform/BasePlatform.h"
 
 #include "cocos/bindings/jswrapper/SeApi.h"
 #include "cocos/renderer/GFXDeviceManager.h"
@@ -45,7 +45,7 @@
 #include "base/Scheduler.h"
 #include "cocos/network/HttpClient.h"
 #include "engine/EngineManager.h"
-#include "platformex/os-interfaces/modules/ISystemWindow.h"
+#include "platform/os-interfaces/modules/ISystemWindow.h"
 
 namespace {
 
@@ -210,19 +210,19 @@ void Engine::restartVM() {
 bool Engine::eventHandle(OSEventType type, const OSEvent& ev) {
     bool isHandled = false;
     if (type == OSEventType::TOUCH_OSEVENT) {
-        cc::EventDispatcher::dispatchTouchEvent(EventCast<TouchEvent>(ev));
+        cc::EventDispatcher::dispatchTouchEvent(eventCast<TouchEvent>(ev));
         isHandled = true;
     } else if (type == OSEventType::MOUSE_OSEVENT) {
-        cc::EventDispatcher::dispatchMouseEvent(EventCast<MouseEvent>(ev));
+        cc::EventDispatcher::dispatchMouseEvent(eventCast<MouseEvent>(ev));
         isHandled = true;
     } else if (type == OSEventType::KEYBOARD_OSEVENT) {
-        cc::EventDispatcher::dispatchKeyboardEvent(EventCast<KeyboardEvent>(ev));
+        cc::EventDispatcher::dispatchKeyboardEvent(eventCast<KeyboardEvent>(ev));
         isHandled = true;
     } else if (type == OSEventType::CUSTOM_OSEVENT) {
-        cc::EventDispatcher::dispatchCustomEvent(EventCast<CustomEvent>(ev));
+        cc::EventDispatcher::dispatchCustomEvent(eventCast<CustomEvent>(ev));
         isHandled = true;
     } else if (type == OSEventType::WINDOW_OSEVENT) {
-        isHandled = dispatchWindowEvent(EventCast<WindowEvent>(ev));
+        isHandled = dispatchWindowEvent(eventCast<WindowEvent>(ev));
     }
     isHandled = dispatchEventToApp(type, ev);
     return isHandled;

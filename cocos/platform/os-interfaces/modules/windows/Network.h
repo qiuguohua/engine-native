@@ -23,15 +23,15 @@
  THE SOFTWARE.
 ****************************************************************************/
 
-#include "cocos/engine/BaseEngine.h"
-#include "cocos/engine/Engine.h"
-#include "cocos/platform/BasePlatform.h"
-#include "cocos/platform/os-interfaces/modules/ISystemWindow.h"
+#pragma once
+
+#include "platform/os-interfaces/modules/INetwork.h"
 
 namespace cc {
-// static
-BaseEngine::Ptr BaseEngine::createEngine() {
-    return std::make_shared<Engine>();
-}
+
+class Network : public INetwork {
+public:
+    NetworkType getNetworkType() override;
+};
 
 } // namespace cc

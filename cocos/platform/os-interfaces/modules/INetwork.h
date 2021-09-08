@@ -23,15 +23,27 @@
  THE SOFTWARE.
 ****************************************************************************/
 
-#include "cocos/engine/BaseEngine.h"
-#include "cocos/engine/Engine.h"
-#include "cocos/platform/BasePlatform.h"
-#include "cocos/platform/os-interfaces/modules/ISystemWindow.h"
+#pragma once
+
+#include "platform/os-interfaces/OSInterface.h"
 
 namespace cc {
-// static
-BaseEngine::Ptr BaseEngine::createEngine() {
-    return std::make_shared<Engine>();
-}
+
+class INetwork : public OSInterface {
+public:
+    enum class NetworkType {
+        NONE,
+        LAN,
+        WWAN
+    };
+    virtual NetworkType getNetworkType() = 0;
+    /**
+     @brief Create default network interface.
+     @return network interface.
+     */
+    static OSInterface::Ptr createNetworkInterface();
+
+private:
+};
 
 } // namespace cc

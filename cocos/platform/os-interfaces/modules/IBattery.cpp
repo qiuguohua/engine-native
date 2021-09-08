@@ -23,15 +23,14 @@
  THE SOFTWARE.
 ****************************************************************************/
 
-#include "cocos/engine/BaseEngine.h"
-#include "cocos/engine/Engine.h"
-#include "cocos/platform/BasePlatform.h"
-#include "cocos/platform/os-interfaces/modules/ISystemWindow.h"
+#include "platform/os-interfaces/modules/IBattery.h"
+#include "platform/os-interfaces/modules/windows/Battery.h"
 
 namespace cc {
+
 // static
-BaseEngine::Ptr BaseEngine::createEngine() {
-    return std::make_shared<Engine>();
+OSInterface::Ptr IBattery::createBatteryInterface() {
+    return std::make_shared<Battery>();
 }
 
 } // namespace cc

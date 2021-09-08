@@ -23,15 +23,19 @@
  THE SOFTWARE.
 ****************************************************************************/
 
-#include "cocos/engine/BaseEngine.h"
-#include "cocos/engine/Engine.h"
-#include "cocos/platform/BasePlatform.h"
-#include "cocos/platform/os-interfaces/modules/ISystemWindow.h"
+#pragma once
+
+#include "platform/os-interfaces/modules/IScreen.h"
 
 namespace cc {
-// static
-BaseEngine::Ptr BaseEngine::createEngine() {
-    return std::make_shared<Engine>();
-}
+
+class Screen : public IScreen {
+public:
+    int         getDPI() override;
+    float       getDevicePixelRatio() override;
+    void        setKeepScreenOn(bool value) override;
+    Orientation getDeviceOrientation() override;
+    Vec4        getSafeAreaEdge() override;
+};
 
 } // namespace cc

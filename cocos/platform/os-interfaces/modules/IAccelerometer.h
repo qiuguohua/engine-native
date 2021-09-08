@@ -23,15 +23,48 @@
  THE SOFTWARE.
 ****************************************************************************/
 
-#include "cocos/engine/BaseEngine.h"
-#include "cocos/engine/Engine.h"
-#include "cocos/platform/BasePlatform.h"
-#include "cocos/platform/os-interfaces/modules/ISystemWindow.h"
+#pragma once
+
+#include "platform/os-interfaces/OSInterface.h"
 
 namespace cc {
-// static
-BaseEngine::Ptr BaseEngine::createEngine() {
-    return std::make_shared<Engine>();
-}
+
+class IAccelerometer : public OSInterface {
+public:
+    struct MotionValue {
+        float accelerationX = 0.0F;
+        float accelerationY = 0.0F;
+        float accelerationZ = 0.0F;
+
+        float accelerationIncludingGravityX = 0.0F;
+        float accelerationIncludingGravityY = 0.0F;
+        float accelerationIncludingGravityZ = 0.0F;
+
+        float rotationRateAlpha = 0.0F;
+        float rotationRateBeta  = 0.0F;
+        float rotationRateGamma = 0.0F;
+    };
+
+    /**
+     * To enable or disable accelerometer.
+     */
+    virtual void setAccelerometerEnabled(bool isEnabled) = 0;
+
+    /**
+     *  Sets the interval of accelerometer.
+     */
+    virtual void setAccelerometerInterval(float interval) = 0;
+
+    /**
+     *  Gets the motion value of current device.
+     */
+    virtual const MotionValue &getDeviceMotionValue() = 0;
+    /**
+     @brief Create default accelerometer interface.
+     @return accelerometer interface.
+     */
+    static OSInterface::Ptr createAccelerometerInterface();
+private:
+};
 
 } // namespace cc

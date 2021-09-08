@@ -23,15 +23,32 @@
  THE SOFTWARE.
 ****************************************************************************/
 
-#include "cocos/engine/BaseEngine.h"
-#include "cocos/engine/Engine.h"
-#include "cocos/platform/BasePlatform.h"
-#include "cocos/platform/os-interfaces/modules/ISystemWindow.h"
+#pragma once
+
+#include "platform/UniversalPlatform.h"
 
 namespace cc {
-// static
-BaseEngine::Ptr BaseEngine::createEngine() {
-    return std::make_shared<Engine>();
-}
+
+class WindowsPlatform : public UniversalPlatform {
+public:
+    WindowsPlatform() = default;
+    /**
+     * Destructor of WindowPlatform.
+     */
+    ~WindowsPlatform() override;
+    /**
+     * Implementation of Windows platform initialization.
+     */
+    int32_t init() override;
+    /**
+     * Implementation of Windows platform destory.
+     */
+    void destory() override;
+
+private:
+};
 
 } // namespace cc
+
+
+

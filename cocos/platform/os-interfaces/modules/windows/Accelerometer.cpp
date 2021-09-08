@@ -23,15 +23,18 @@
  THE SOFTWARE.
 ****************************************************************************/
 
-#include "cocos/engine/BaseEngine.h"
-#include "cocos/engine/Engine.h"
-#include "cocos/platform/BasePlatform.h"
-#include "cocos/platform/os-interfaces/modules/ISystemWindow.h"
+#include "platform/os-interfaces/modules/windows/Accelerometer.h"
 
 namespace cc {
-// static
-BaseEngine::Ptr BaseEngine::createEngine() {
-    return std::make_shared<Engine>();
+void Accelerometer::setAccelerometerEnabled(bool isEnabled) {
+}
+
+void Accelerometer::setAccelerometerInterval(float interval) {
+}
+
+const Accelerometer::MotionValue& Accelerometer::getDeviceMotionValue() {
+    static MotionValue __motionValue;
+    return __motionValue;
 }
 
 } // namespace cc

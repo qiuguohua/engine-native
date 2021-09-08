@@ -38,8 +38,8 @@
 #include "xxtea/xxtea.h"
 #include "engine/EngineManager.h"
 #include "bindings/jswrapper/v8/ScriptEngine.h"
-#include "platformex/os-interfaces/modules/ISystem.h"
-#include "platformex/os-interfaces/modules/ISystemWindow.h"
+#include "platform/os-interfaces/modules/ISystem.h"
+#include "platform/os-interfaces/modules/ISystemWindow.h"
 
 #if CC_PLATFORM == CC_PLATFORM_ANDROID
     #include "platform/java/jni/JniImp.h"

@@ -29,7 +29,7 @@
 
 #include "base/Scheduler.h"
 #include "base/TypeDef.h"
-#include "platformex/BasePlatform.h"
+#include "platform/BasePlatform.h"
 
 namespace cc {
 

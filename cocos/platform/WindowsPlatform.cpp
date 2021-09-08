@@ -23,15 +23,31 @@
  THE SOFTWARE.
 ****************************************************************************/
 
-#include "cocos/engine/BaseEngine.h"
-#include "cocos/engine/Engine.h"
-#include "cocos/platform/BasePlatform.h"
-#include "cocos/platform/os-interfaces/modules/ISystemWindow.h"
+#include "platform/WindowsPlatform.h"
+#include "platform/os-interfaces/OSInterface.h"
 
 namespace cc {
-// static
-BaseEngine::Ptr BaseEngine::createEngine() {
-    return std::make_shared<Engine>();
+
+WindowsPlatform::~WindowsPlatform() {
+    destory();
+}
+
+void WindowsPlatform::destory() {
+#ifdef USE_WIN32_CONSOLE
+    FreeConsole();
+#endif
+}
+
+int32_t WindowsPlatform::init() {
+    UniversalPlatform::init();
+#ifdef USE_WIN32_CONSOLE
+    AllocConsole();
+    freopen("CONIN$", "r", stdin);
+    freopen("CONOUT$", "w", stdout);
+    freopen("CONOUT$", "w", stderr);
+#endif
+    //registerOSInterface();
+    return 0;
 }
 
 } // namespace cc

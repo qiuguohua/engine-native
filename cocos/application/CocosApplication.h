@@ -27,7 +27,7 @@
 
 #include <iostream>
 #include "application/BaseApplication.h"
-#include "cocos/platformex/os-interfaces/modules/ISystemWindow.h"
+#include "cocos/platform/os-interfaces/modules/ISystemWindow.h"
 
 namespace cc {
 class BaseEngine;
@@ -36,7 +36,6 @@ class CocosApplication : public BaseApplication {
 public:
     CocosApplication();
     ~CocosApplication() override = default;
-
     /*
      *@bref Application initialization.
      */

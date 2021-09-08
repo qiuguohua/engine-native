@@ -23,15 +23,28 @@
  THE SOFTWARE.
 ****************************************************************************/
 
-#include "cocos/engine/BaseEngine.h"
-#include "cocos/engine/Engine.h"
-#include "cocos/platform/BasePlatform.h"
-#include "cocos/platform/os-interfaces/modules/ISystemWindow.h"
+#pragma once
+
+#include "platform/os-interfaces/modules/IAccelerometer.h"
 
 namespace cc {
-// static
-BaseEngine::Ptr BaseEngine::createEngine() {
-    return std::make_shared<Engine>();
-}
+
+class Accelerometer : public IAccelerometer {
+public:
+    /**
+     * To enable or disable accelerometer.
+     */
+    void setAccelerometerEnabled(bool isEnabled) override;
+
+    /**
+     *  Sets the interval of accelerometer.
+     */
+    void setAccelerometerInterval(float interval) override;
+
+    /**
+     *  Gets the motion value of current device.
+     */
+    const MotionValue &getDeviceMotionValue() override;
+};
 
 } // namespace cc

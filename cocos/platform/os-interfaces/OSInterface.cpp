@@ -22,16 +22,29 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  THE SOFTWARE.
 ****************************************************************************/
-
-#include "cocos/engine/BaseEngine.h"
-#include "cocos/engine/Engine.h"
-#include "cocos/platform/BasePlatform.h"
-#include "cocos/platform/os-interfaces/modules/ISystemWindow.h"
+#include "platform/os-interfaces/OSInterface.h"
+#include "platform/IEventDispathch.h"
 
 namespace cc {
-// static
-BaseEngine::Ptr BaseEngine::createEngine() {
-    return std::make_shared<Engine>();
+
+OSInterface::OSInterface()
+: OSInterface(nullptr) {
+}
+
+OSInterface::OSInterface(IEventDispatch* evDispatchInterface)
+: _evDispatchInterface(evDispatchInterface) {
+}
+
+void OSInterface::dispatchEvent(OSEventType type, const OSEvent& ev) {
+    if (_evDispatchInterface) {
+        _evDispatchInterface->dispatchEvent(type, ev);
+    }
+}
+
+void OSInterface::dispatchTouchEvent(const OSEvent& ev) {
+    if (_evDispatchInterface) {
+        _evDispatchInterface->dispatchTouchEvent(ev);
+    }
 }
 
 } // namespace cc

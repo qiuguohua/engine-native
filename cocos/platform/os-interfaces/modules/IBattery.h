@@ -23,15 +23,26 @@
  THE SOFTWARE.
 ****************************************************************************/
 
-#include "cocos/engine/BaseEngine.h"
-#include "cocos/engine/Engine.h"
-#include "cocos/platform/BasePlatform.h"
-#include "cocos/platform/os-interfaces/modules/ISystemWindow.h"
+#pragma once
+
+#include "platform/os-interfaces/OSInterface.h"
 
 namespace cc {
-// static
-BaseEngine::Ptr BaseEngine::createEngine() {
-    return std::make_shared<Engine>();
-}
+
+class IBattery : public OSInterface {
+public:
+    /**
+     * Gets battery level, only avaiable on iOS and Android.
+     * @return 0.0 ~ 1.0
+     */
+    virtual float getBatteryLevel() = 0;
+    /**
+     @brief Create default battery interface.
+     @return battery interface.
+     */
+    static OSInterface::Ptr createBatteryInterface();
+
+private:
+};
 
 } // namespace cc

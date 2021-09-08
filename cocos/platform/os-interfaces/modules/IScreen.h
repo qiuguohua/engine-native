@@ -23,15 +23,40 @@
  THE SOFTWARE.
 ****************************************************************************/
 
-#include "cocos/engine/BaseEngine.h"
-#include "cocos/engine/Engine.h"
-#include "cocos/platform/BasePlatform.h"
-#include "cocos/platform/os-interfaces/modules/ISystemWindow.h"
+#pragma once
+
+#include "math/Vec4.h"
+#include "platform/os-interfaces/OSInterface.h"
 
 namespace cc {
-// static
-BaseEngine::Ptr BaseEngine::createEngine() {
-    return std::make_shared<Engine>();
-}
+class IScreen : public OSInterface {
+public:
+    virtual int   getDPI()              = 0;
+    virtual float getDevicePixelRatio() = 0;
 
+    // https://developer.mozilla.org/en-US/docs/Web/API/Window/orientation
+    enum class Orientation {
+        PORTRAIT             = 0,
+        LANDSCAPE_LEFT       = -90,
+        PORTRAIT_UPSIDE_DOWN = 180,
+        LANDSCAPE_RIGHT      = 90
+    };
+    virtual Orientation getDeviceOrientation() = 0;
+
+    /**
+     * Controls whether the screen should remain on.
+     *
+     * @param keepScreenOn One flag indicating that the screen should remain on.
+     */
+    virtual void setKeepScreenOn(bool keepScreenOn) = 0;
+
+    virtual Vec4 getSafeAreaEdge() = 0;
+    /**
+     @brief Create default screen interface.
+     @return screen interface.
+     */
+    static OSInterface::Ptr createScreenInterface();
+
+private:
+};
 } // namespace cc

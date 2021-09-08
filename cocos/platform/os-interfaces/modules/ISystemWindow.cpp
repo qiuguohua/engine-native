@@ -23,15 +23,18 @@
  THE SOFTWARE.
 ****************************************************************************/
 
-#include "cocos/engine/BaseEngine.h"
-#include "cocos/engine/Engine.h"
-#include "cocos/platform/BasePlatform.h"
-#include "cocos/platform/os-interfaces/modules/ISystemWindow.h"
+#include "platform/os-interfaces/modules/ISystemWindow.h"
+#include "platform/os-interfaces/modules/windows/SystemWindow.h"
 
 namespace cc {
+
+ISystemWindow::ISystemWindow(IEventDispatch* platform)
+: OSInterface(platform) {
+}
+
 // static
-BaseEngine::Ptr BaseEngine::createEngine() {
-    return std::make_shared<Engine>();
+OSInterface::Ptr ISystemWindow::createSystemWindowInterface(IEventDispatch* platform) {
+    return std::make_shared<SystemWindow>(platform);
 }
 
 } // namespace cc
