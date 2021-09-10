@@ -26,7 +26,7 @@
 #pragma once
 
 #include "platform/BasePlatform.h"
-#include "platform/IEventDispathch.h"
+#include "platform/IEventDispatch.h"
 
 namespace cc {
 class UniversalPlatform : public BasePlatform, public IEventDispatch {
@@ -54,27 +54,28 @@ public:
     /**
      *@bref Set the event handling callback.
      */
-    void setEventHandleCallback(EventHandleCallback cb) override;
+    void setHandleEventCallback(HandleEventCallback cb) override;
     /**
      *@bref Set the event to handle callbacks by default.
      */
-    void setDefaultEventHandleCallback(EventHandleCallback cb) override;
+    void setHandleDefaultEventCallback(HandleEventCallback cb) override;
     /**
      *@bref Implement dispatch event interface.
      */
-    void dispatchEvent(OSEventType type, const OSEvent& ev) override;
+    void dispatchEvent(const OSEvent& ev) override;
     /**
-     *@bref Implement dispatch event interface.
+     *@bref Implement dispatch touch event interface.
      */
     void dispatchTouchEvent(const OSEvent& ev) override;
     /**
-     *@bref Implement dispatch event interface.
+     *@bref Implement handle default event interface.
      */
-    void defaultEventHandle(OSEventType type, const OSEvent& ev) override;
+    void handleDefaultEvent(const OSEvent& ev) override;
+    int  getSdkVersion() const override;
 
 private:
-    EventHandleCallback _eventHandleCallback;
-    EventHandleCallback _eventDefaultHandleCallback;
+    HandleEventCallback _handleEventCallback;
+    HandleEventCallback _handleDefaultEventCallback;
 };
 
 } // namespace cc

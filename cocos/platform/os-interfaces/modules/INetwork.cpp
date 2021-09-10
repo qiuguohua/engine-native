@@ -25,7 +25,11 @@
 
 #include "platform/os-interfaces/modules/INetwork.h"
 
-#include "platform/os-interfaces/modules/windows/Network.h"
+#if (CC_PLATFORM == CC_PLATFORM_WINDOWS)
+    #include "platform/os-interfaces/modules/windows/Network.h"
+#elif (CC_PLATFORM == CC_PLATFORM_ANDROID)
+    #include "platform/os-interfaces/modules/android/Network.h"
+#endif
 
 namespace cc {
 

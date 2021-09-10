@@ -315,7 +315,7 @@ SE_BIND_FUNC(jsc_dumpRoot)
 static bool JSBCore_platform(se::State &s) { //NOLINT
     //Application::Platform platform = CURRENT_ENGINE()->getPlatform();
     cc::BasePlatform::OSType type = 
-      cc::BasePlatform::GetPlatform()->getOSType();
+      cc::BasePlatform::getPlatform()->getOSType();
     s.rval().setInt32(static_cast<int32_t>(type));
     return true;
 }

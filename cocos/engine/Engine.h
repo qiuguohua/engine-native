@@ -99,7 +99,7 @@ public:
      @param evtype:event information.
      @return whether it's been handled.
      */
-    bool eventHandle(OSEventType type, const OSEvent& ev);
+    bool handleEvent(const OSEvent& ev);
     /**
      @brief Get engine scheduler.
      */
@@ -109,12 +109,12 @@ private:
     void tick();
     void restartVM();
     bool dispatchWindowEvent(const WindowEvent& ev);
+    bool dispatchDeviceEvent(const DeviceEvent& ev);
     bool dispatchEventToApp(OSEventType type, const OSEvent& ev);
     void onPause();
     void onResume();
     void onClose();
 
-private:
     bool                           _quit{false};
     bool                           _close{false};
     bool                           _pause{false};

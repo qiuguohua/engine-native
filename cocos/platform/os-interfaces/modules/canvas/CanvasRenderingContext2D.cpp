@@ -36,6 +36,8 @@
 
 #if (CC_PLATFORM == CC_PLATFORM_WINDOWS)
     #include "platform/os-interfaces/modules/canvas/CanvasRenderingContext2DDelegate-win32.h"
+#elif (CC_PLATFORM == CC_PLATFORM_ANDROID)
+    #include "platform/os-interfaces/modules/canvas/CanvasRenderingContext2DDelegate-java.h"
 #endif
 
 using Point   = std::array<float, 2>;
@@ -78,9 +80,7 @@ void CanvasGradient::addColorStop(float offset, const std::string &color) {
 CanvasRenderingContext2D::CanvasRenderingContext2D(float width, float height)
 : _width(width),
   _height(height) {
-#if (CC_PLATFORM == CC_PLATFORM_WINDOWS)
     _delegate = new CanvasRenderingContext2DDelegate();
-#endif
     //SE_LOGD("CanvasRenderingContext2D constructor: %p, width: %f, height: %f\n", this, width, height);
 }
 
@@ -210,6 +210,12 @@ void CanvasRenderingContext2D::setLineWidth(float lineWidth) {
 
 void CanvasRenderingContext2D::setLineCap(const std::string &lineCap) {
     //SE_LOGE("%s isn't implemented!\n", __FUNCTION__);
+#if CC_PLATFORM == CC_PLATFORM_WINDOWS
+
+#elif CC_PLATFORM == CC_PLATFORM_ANDROID
+    if (lineCap.empty()) return;
+    _delegate->setLineCap(lineCap);
+#endif
 }
 
 void CanvasRenderingContext2D::setLineJoin(const std::string &lineJoin) {
@@ -218,12 +224,29 @@ void CanvasRenderingContext2D::setLineJoin(const std::string &lineJoin) {
 
 void CanvasRenderingContext2D::fill() {
     // SE_LOGE("%s isn't implemented!\n", __FUNCTION__);
+#if CC_PLATFORM == CC_PLATFORM_WINDOWS
+
+#elif CC_PLATFORM == CC_PLATFORM_ANDROID
+    _delegate->fill();
+
+    if (_canvasBufferUpdatedCB != nullptr) {
+        _canvasBufferUpdatedCB(_delegate->getDataRef());
+    }
+#endif
 }
+
 void CanvasRenderingContext2D::rect(float x, float y, float w, float h) {
+#if CC_PLATFORM == CC_PLATFORM_WINDOWS
     // SE_LOGE("%s isn't implemented!\n", __FUNCTION__);
+#elif CC_PLATFORM == CC_PLATFORM_ANDROID
+    // SE_LOGD("CanvasRenderingContext2D::rect: %p, %f, %f, %f, %f\n", this, x, y, width, height);
+    recreateBufferIfNeeded();
+    _delegate->rect(x, y, w, h);
+#endif
 }
 
 void CanvasRenderingContext2D::setFont(const std::string &font) {
+#if CC_PLATFORM == CC_PLATFORM_WINDOWS
     if (_font != font) {
         _font = font;
 
@@ -242,8 +265,39 @@ void CanvasRenderingContext2D::setFont(const std::string &font) {
 
         auto fontSize = static_cast<float>(atof(fontSizeStr.c_str()));
         //SE_LOGD("CanvasRenderingContext2D::set_font: %s, Size: %f, isBold: %b\n", fontName.c_str(), fontSize, !boldStr.empty());
-        _delegate->updateFont(fontName, fontSize, !boldStr.empty());
+        _delegate->updateFont(fontName, fontSize, !boldStr.empty(), false, false, false);
     }
+#elif CC_PLATFORM == CC_PLATFORM_ANDROID
+    if (_font != font) {
+        _font                                                       = font;
+        std::string                                     fontName    = "sans-serif";
+        std::string                                     fontSizeStr = "30";
+        std::regex                                      re(R"(\s*((\d+)([\.]\d+)?)px\s+([^\r\n]*))");
+        std::match_results<std::string::const_iterator> results;
+        if (std::regex_search(_font.cbegin(), _font.cend(), results, re)) {
+            fontSizeStr = results[2].str();
+            // support get font name from `60px American` or `60px "American abc-abc_abc"`
+            // support get font name contain space,example `times new roman`
+            // if regex rule that does not conform to the rules,such as Chinese,it defaults to sans-serif
+            std::match_results<std::string::const_iterator> fontResults;
+            std::regex                                      fontRe(R"(([\w\s-]+|"[\w\s-]+"$))");
+            std::string                                     tmp(results[4].str());
+            if (std::regex_match(tmp, fontResults, fontRe)) {
+                fontName = results[4].str();
+            }
+        }
+
+        double fontSize    = atof(fontSizeStr.c_str());
+        bool   isBold      = font.find("bold", 0) != std::string::npos;
+        bool   isItalic    = font.find("italic", 0) != std::string::npos;
+        bool   isSmallCaps = font.find("small-caps", 0) != std::string::npos;
+        bool   isOblique   = font.find("oblique", 0) != std::string::npos;
+        //font-style: italic, oblique, normal
+        //font-weight: normal, bold
+        //font-variant: normal, small-caps
+        _delegate->updateFont(fontName, static_cast<float>(fontSize), isBold, isItalic, isOblique, isSmallCaps);
+    }
+#endif
 }
 
 void CanvasRenderingContext2D::setTextAlign(const std::string &textAlign) {
@@ -298,6 +352,13 @@ void CanvasRenderingContext2D::setGlobalCompositeOperation(const std::string &gl
 
 void CanvasRenderingContext2D::fillImageData(const Data &imageData, float imageWidth, float imageHeight, float offsetX, float offsetY) {
     //SE_LOGE("%s isn't implemented!\n", __FUNCTION__);
+#if CC_PLATFORM == CC_PLATFORM_WINDOWS
+#elif CC_PLATFORM == CC_PLATFORM_ANDROID
+    _delegate->fillImageData(imageData, imageWidth, imageHeight, offsetX, offsetY);
+    if (_canvasBufferUpdatedCB != nullptr) {
+        _canvasBufferUpdatedCB(_delegate->getDataRef());
+    }
+#endif
 }
 // transform
 //REFINE:

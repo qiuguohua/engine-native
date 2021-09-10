@@ -22,32 +22,13 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  THE SOFTWARE.
 ****************************************************************************/
-
-#include "platform/WindowsPlatform.h"
-#include "platform/os-interfaces/OSInterface.h"
+#include "platform/os-interfaces/modules/android/Network.h"
+#include "platform/java/jni/JniHelper.h"
 
 namespace cc {
 
-WindowsPlatform::~WindowsPlatform() {
-    destory();
-}
-
-void WindowsPlatform::destory() {
-#ifdef USE_WIN32_CONSOLE
-    FreeConsole();
-#endif
-}
-
-int32_t WindowsPlatform::init() {
-    UniversalPlatform::init();
-#ifdef USE_WIN32_CONSOLE
-    AllocConsole();
-    freopen("CONIN$", "r", stdin);
-    freopen("CONOUT$", "w", stdout);
-    freopen("CONOUT$", "w", stderr);
-#endif
-    //registerOSInterface();
-    return 0;
+INetwork::NetworkType Network::getNetworkType() {
+    return static_cast<INetwork::NetworkType>(JniHelper::callStaticIntMethod(JCLS_HELPER, "getNetworkType"));
 }
 
 } // namespace cc

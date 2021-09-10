@@ -28,7 +28,7 @@
 #include "sdl2/SDL_main.h"
 
 int SDL_main(int argc, char** argv) {
-    cc::BasePlatform* platform = cc::BasePlatform::GetPlatform();
+    cc::BasePlatform* platform = cc::BasePlatform::getPlatform();
     if (platform->init()) {
         CC_LOG_FATAL("Platform initialization failed");
         return -1;

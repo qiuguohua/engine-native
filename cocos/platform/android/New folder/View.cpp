@@ -29,7 +29,7 @@
 #include <android_native_app_glue.h>
 #include "cocos/bindings/event/CustomEventTypes.h"
 #include "cocos/bindings/event/EventDispatcher.h"
-#include "platform/Application.h"
+//#include "platform/Application.h"
 #include "platform/android/jni/JniCocosActivity.h"
 
 namespace {
@@ -72,43 +72,6 @@ void dispatchTouchEvents(AInputEvent *event, cc::TouchEvent *touchEvent) {
 
 namespace cc {
 
-void View::engineHandleCmd(int cmd) {
-    static bool isWindowInitialized = false;
-    // Handle CMD here if needed.
-    switch (cmd) {
-        case APP_CMD_INIT_WINDOW: {
-            if (!isWindowInitialized) {
-                isWindowInitialized = true;
-                return;
-            }
-            cc::CustomEvent event;
-            event.name         = EVENT_RECREATE_WINDOW;
-            event.args->ptrVal = cocosApp.window;
-            cc::EventDispatcher::dispatchCustomEvent(event);
-        } break;
-        case APP_CMD_TERM_WINDOW: {
-            cc::CustomEvent event;
-            event.name         = EVENT_DESTROY_WINDOW;
-            event.args->ptrVal = cocosApp.window;
-            cc::EventDispatcher::dispatchCustomEvent(event);
-        } break;
-        case APP_CMD_RESUME:
-            if (Application::getInstance()) {
-                Application::getInstance()->onResume();
-            }
-            break;
-        case APP_CMD_PAUSE:
-            if (Application::getInstance()) {
-                Application::getInstance()->onPause();
-            }
-            break;
-        case APP_CMD_LOW_MEMORY:
-            cc::EventDispatcher::dispatchMemoryWarningEvent();
-            break;
-        default:
-            break;
-    }
-}
 
 /**
  * Process the next input event.

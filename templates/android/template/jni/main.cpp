@@ -22,8 +22,8 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  THE SOFTWARE.
  ****************************************************************************/
-#include "Game.h"
+//#include "Game.h"
 
-cc::Application *cocos_main(int width, int height) {
-    return new Game(width, height);
-}
+// cc::Application *cocos_main(int width, int height) {
+//    return new Game(width, height);
+// }

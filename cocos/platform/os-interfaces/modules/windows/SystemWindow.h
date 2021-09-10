@@ -36,30 +36,29 @@ namespace cc {
 
 class SystemWindow : public ISystemWindow {
 public:
-    SystemWindow(IEventDispatch* platform);
+    explicit SystemWindow(IEventDispatch* platform);
     ~SystemWindow() override;
 
-    bool  createWindow(const char* title,
-                       int x, int y, int w,
-                       int h, int flags) override;
-    void* getWindowHandler() override;
-    void  pollEvent() override;
+    bool      createWindow(const char* title,
+                           int x, int y, int w,
+                           int h, int flags) override;
+    uintptr_t getWindowHandler() override;
+    void      pollEvent() override;
 
     std::array<int, 2> getViewSize() const override;
-    /**
+    /*
      @brief enable/disable(lock) the cursor, default is enabled
      */
-    void setCursorEnabled(bool value);
+    void setCursorEnabled(bool value) override;
     void copyTextToClipboard(const std::string& text) override;
 
 private:
-    void HandleWindowEvent(SDL_WindowEvent& wevent);
+    void handleWindowEvent(SDL_WindowEvent& wevent);
 
-private:
     bool               _inited = false;
-    struct SDL_Window* _handle = nullptr;
     int                _width  = 0;
     int                _height = 0;
+    struct SDL_Window* _handle = nullptr;
 };
 
 } // namespace cc

@@ -27,7 +27,7 @@
 namespace cc {
 
 float Battery::getBatteryLevel() {
-    return 1.0f;
+    return 1.0F;
 }
 
 } // namespace cc

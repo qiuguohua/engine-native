@@ -182,7 +182,12 @@ CanvasRenderingContext2DDelegate::Size CanvasRenderingContext2DDelegate::measure
     return size;
 }
 
-void CanvasRenderingContext2DDelegate::updateFont(const std::string &fontName, float fontSize, bool bold /* = false */) {
+void CanvasRenderingContext2DDelegate::updateFont(const std::string &fontName,
+                                                  float              fontSize,
+                                                  bool               bold,
+                                                  bool /* italic */,
+                                                  bool /* oblique */,
+                                                  bool /* smallCaps */) {
     do {
         _fontName = fontName;
         _fontSize = static_cast<int>(fontSize);
@@ -444,7 +449,7 @@ void CanvasRenderingContext2DDelegate::fillTextureData() {
     } while (false);
 }
 
-std::array<float, 2> CanvasRenderingContext2DDelegate::convertDrawPoint(Point point, const std::string &text) {
+std::array<float, 2> CanvasRenderingContext2DDelegate::convertDrawPoint(Point /* point */, const std::string &text) {
     Size textSize = measureText(text);
     if (_textAlign == CanvasTextAlign::CENTER) {
         point[0] -= textSize[0] / 2.0f;
@@ -466,6 +471,34 @@ std::array<float, 2> CanvasRenderingContext2DDelegate::convertDrawPoint(Point po
     }
 
     return point;
+}
+
+void CanvasRenderingContext2DDelegate::fill() {
+}
+
+void CanvasRenderingContext2DDelegate::setLineCap(const std::string & /* lineCap */) {
+}
+
+void CanvasRenderingContext2DDelegate::setLineJoin(const std::string & /* lineCap */) {
+}
+
+void CanvasRenderingContext2DDelegate::fillImageData(const Data & /* imageData */,
+                                                     float /* imageWidth */,
+                                                     float /* imageHeight */,
+                                                     float /* offsetX */,
+                                                     float /* offsetY */) {
+}
+
+void CanvasRenderingContext2DDelegate::strokeText(const std::string & /* text */,
+                                                  float /* x */,
+                                                  float /* y */,
+                                                  float /* maxWidth */) {
+}
+
+void CanvasRenderingContext2DDelegate::rect(float /* x */,
+                                            float /* y */,
+                                            float /* w */,
+                                            float /* h */) {
 }
 
 } // namespace cc

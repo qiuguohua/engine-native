@@ -24,8 +24,12 @@
 ****************************************************************************/
 
 #include "platform/os-interfaces/modules/IScreen.h"
-#include "platform/os-interfaces/modules/windows/Screen.h"
 
+#if (CC_PLATFORM == CC_PLATFORM_WINDOWS)
+    #include "platform/os-interfaces/modules/windows/Screen.h"
+#elif (CC_PLATFORM == CC_PLATFORM_ANDROID)
+    #include "platform/os-interfaces/modules/android/Screen.h"
+#endif
 namespace cc {
 
 // static

@@ -25,31 +25,11 @@
 
 #pragma once
 
-#include <string>
-#include <android/native_window.h>
-#include <android/asset_manager.h>
-#include <mutex>
-#include <condition_variable>
+//#include <android/asset_manager.h>
+//#include <android/native_window.h>
+//#include <condition_variable>
+//#include <mutex>
+//#include <string>
 
-namespace cc {
 
-struct CocosApp {
-    AAssetManager *assetManager = nullptr;
-    ANativeWindow *window = nullptr;
-    std::string obbPath;
-    int sdkVersion = 0;
-
-    std::mutex mutex;
-    std::condition_variable cond;
-    ANativeWindow *pendingWindow = nullptr;
-    bool destroyRequested = false;
-    bool animating = true;
-    bool running = false;
-
-    // Current state of the app.  May be either APP_CMD_RESUME, APP_CMD_PAUSE.
-    int appState = 0;
-};
-
-extern CocosApp cocosApp;
-
-} // namespace cc
+#define LOGV(...) __android_log_print(ANDROID_LOG_INFO, "CocosActivity JNI", __VA_ARGS__)

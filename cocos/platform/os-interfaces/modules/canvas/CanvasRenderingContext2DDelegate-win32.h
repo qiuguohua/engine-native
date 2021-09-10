@@ -27,15 +27,15 @@
 
 #include "platform/os-interfaces/modules/canvas/ICanvasRenderingContext2D.h"
 
+#include <Windows.h>
+#include <array>
 #include <cstdint>
+#include <regex>
 #include "base/csscolorparser.h"
-#include "math/Math.h"
 #include "cocos/bindings/jswrapper/SeApi.h"
 #include "cocos/bindings/manual/jsb_platform.h"
+#include "math/Math.h"
 #include "platform/FileUtils.h"
-#include <regex>
-#include <array>
-#include <Windows.h>
 
 namespace cc {
 
@@ -49,37 +49,42 @@ public:
     CanvasRenderingContext2DDelegate();
     ~CanvasRenderingContext2DDelegate() override;
 
-    void recreateBuffer(float w, float h) override;
-    void beginPath() override;
-    void closePath() override;
-    void moveTo(float x, float y) override;
-    void lineTo(float x, float y) override;
-    void stroke() override;
-    void saveContext() override;
-    void restoreContext() override;
-    void clearRect(float /*x*/, float /*y*/, float w, float h) override;
-    void fillRect(float x, float y, float w, float h) override;
-    void fillText(const std::string &text, float x, float y, float /*maxWidth*/) override;
-    void strokeText(const std::string &text, float /*x*/, float /*y*/, float /*maxWidth*/) const;
-    Size measureText(const std::string &text) override;
-    void updateFont(const std::string &fontName, float fontSize, bool bold = false) override;
-    void setTextAlign(CanvasTextAlign align) override;
-    void setTextBaseline(CanvasTextBaseline baseline) override;
-    void setFillStyle(float r, float g, float b, float a) override;
-    void setStrokeStyle(float r, float g, float b, float a) override;
-    void setLineWidth(float lineWidth) override;
+    void            recreateBuffer(float w, float h) override;
+    void            beginPath() override;
+    void            closePath() override;
+    void            moveTo(float x, float y) override;
+    void            lineTo(float x, float y) override;
+    void            stroke() override;
+    void            saveContext() override;
+    void            restoreContext() override;
+    void            clearRect(float /*x*/, float /*y*/, float w, float h) override;
+    void            fillRect(float x, float y, float w, float h) override;
+    void            fillText(const std::string &text, float x, float y, float /*maxWidth*/) override;
+    void            strokeText(const std::string &text, float /*x*/, float /*y*/, float /*maxWidth*/) const;
+    Size            measureText(const std::string &text) override;
+    void            updateFont(const std::string &fontName, float fontSize, bool bold, bool italic, bool oblique, bool smallCaps) override;
+    void            setTextAlign(CanvasTextAlign align) override;
+    void            setTextBaseline(CanvasTextBaseline baseline) override;
+    void            setFillStyle(float r, float g, float b, float a) override;
+    void            setStrokeStyle(float r, float g, float b, float a) override;
+    void            setLineWidth(float lineWidth) override;
     const cc::Data &getDataRef() const override;
+    void            fill() override;
+    void            setLineCap(const std::string &lineCap) override;
+    void            setLineJoin(const std::string &lineCap) override;
+    void            fillImageData(const Data &imageData, float imageWidth, float imageHeight, float offsetX, float offsetY) override;
+    void            strokeText(const std::string &text, float /*x*/, float /*y*/, float /*maxWidth*/) override;
+    void            rect(float x, float y, float w, float h) override;
 
 private:
-    static wchar_t * utf8ToUtf16(const std::string &str, int *pRetLen = nullptr);
-    void removeCustomFont();
-    int  drawText(const std::string &text, int x, int y);
-    Size sizeWithText(const wchar_t *pszText, int nLen);
-    void prepareBitmap(int nWidth, int nHeight);
-    void deleteBitmap();
-    void fillTextureData();
+    static wchar_t *     utf8ToUtf16(const std::string &str, int *pRetLen = nullptr);
+    void                 removeCustomFont();
+    int                  drawText(const std::string &text, int x, int y);
+    Size                 sizeWithText(const wchar_t *pszText, int nLen);
+    void                 prepareBitmap(int nWidth, int nHeight);
+    void                 deleteBitmap();
+    void                 fillTextureData();
     std::array<float, 2> convertDrawPoint(Point point, const std::string &text);
-
 
 public:
     HDC     _DC{nullptr};

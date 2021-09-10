@@ -42,8 +42,8 @@ public:
      @brief Get operating system interface template.
      */
     template <class T>
-    T* GetOSInterface() {
-        BasePlatform* platform = BasePlatform::GetPlatform();
+    T* getOSInterface() {
+        BasePlatform* platform = BasePlatform::getPlatform();
         return platform->getOSInterface<T>();
     }
     /**
@@ -97,7 +97,8 @@ public:
     /**
      @brief Get engine scheduler.
      */
-    using SchedulerPtr                        = std::shared_ptr<Scheduler>;
+    using SchedulerPtr = std::shared_ptr<Scheduler>;
+
     virtual SchedulerPtr getEngineScheduler() = 0;
 };
 

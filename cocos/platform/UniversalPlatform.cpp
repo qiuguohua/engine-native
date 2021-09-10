@@ -42,34 +42,35 @@ UniversalPlatform::OSType UniversalPlatform::getOSType() {
     return getOSInterface<ISystem>()->getOSType();
 }
 
-void UniversalPlatform::dispatchEvent(OSEventType type, const OSEvent& ev) {
+void UniversalPlatform::dispatchEvent(const OSEvent& ev) {
     bool isHandled = false;
-    if (_eventHandleCallback) {
-        isHandled = (_eventHandleCallback)(type, ev);
+    if (_handleEventCallback) {
+        isHandled = (_handleEventCallback)(ev);
     }
     if (isHandled) {
         return;
     }
-    if (_eventDefaultHandleCallback) {
-        isHandled = (_eventDefaultHandleCallback)(type, ev);
+    if (_handleDefaultEventCallback) {
+        isHandled = (_handleDefaultEventCallback)(ev);
     }
-    if (!isHandled)
-        defaultEventHandle(type, ev);
+    if (!isHandled) {
+        handleDefaultEvent(ev);
+    }
 }
 
 void UniversalPlatform::dispatchTouchEvent(const OSEvent& ev) {
 }
 
-void UniversalPlatform::defaultEventHandle(OSEventType type, const OSEvent& ev) {
-    // To do :
+void UniversalPlatform::handleDefaultEvent(const OSEvent& ev) {
+    //TODO
 }
 
-void UniversalPlatform::setEventHandleCallback(EventHandleCallback cb) {
-    _eventHandleCallback = cb;
+void UniversalPlatform::setHandleEventCallback(HandleEventCallback cb) {
+    _handleEventCallback = cb;
 }
 
-void UniversalPlatform::setDefaultEventHandleCallback(EventHandleCallback cb) {
-    _eventDefaultHandleCallback = cb;
+void UniversalPlatform::setHandleDefaultEventCallback(HandleEventCallback cb) {
+    _handleDefaultEventCallback = cb;
 }
 
 int32_t UniversalPlatform::init() {
@@ -80,17 +81,11 @@ int32_t UniversalPlatform::init() {
     registerOSInterface(IBattery::createBatteryInterface());
     registerOSInterface(IVibrate::createVibrateInterface());
     registerOSInterface(IAccelerometer::createAccelerometerInterface());
-    //registerOSInterface(ICanvasRenderingContext2D::getInterface());
-    //OSAbstractInterface::OSAbstractInterfaces intfs =
-    //    OSAbstractInterface::getSystemSupportInterfaces(this);
-    //for (auto it : intfs) {
-    //    registerOSInterface(it);
-    //}
     return 0;
 }
 
 int32_t UniversalPlatform::main(int argc, char** argv) {
-    return cocos_main(0, nullptr);
+    return cocos_main(argc, argv);
 }
 
 int32_t UniversalPlatform::run(int argc, char** argv) {
@@ -98,6 +93,10 @@ int32_t UniversalPlatform::run(int argc, char** argv) {
 }
 
 void UniversalPlatform::destory() {
+}
+
+int UniversalPlatform::getSdkVersion() const {
+    return 0;
 }
 
 } // namespace cc

@@ -489,7 +489,7 @@ static bool js_engine_CanvasRenderingContext2D_fillText(const se::State &s) { //
         setCanvasRenderingContext2DProps(cobj, args[4]);
         if (args[3].isUndefined()) {
             SE_PRECONDITION2(ok, false, "js_engine_CanvasRenderingContext2D_fillText : Error processing arguments");
-            cobj->fillText(arg0, arg1, arg2);
+            cobj->fillText(arg0, arg1, arg2, -1.0F);
         } else {
             ok &= seval_to_float(args[3], &arg3);
             SE_PRECONDITION2(ok, false, "js_engine_CanvasRenderingContext2D_fillText : Error processing arguments");
@@ -524,7 +524,7 @@ static bool js_engine_CanvasRenderingContext2D_strokeText(const se::State &s) { 
             cobj->strokeText(arg0, arg1, arg2, arg3);
         } else {
             SE_PRECONDITION2(ok, false, "js_engine_CanvasRenderingContext2D_strokeText : Error processing arguments");
-            cobj->strokeText(arg0, arg1, arg2);
+            cobj->strokeText(arg0, arg1, arg2, -1.0F);
         }
 
         return true;

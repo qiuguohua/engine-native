@@ -24,7 +24,11 @@
 ****************************************************************************/
 
 #include "platform/os-interfaces/modules/ISystemWindow.h"
-#include "platform/os-interfaces/modules/windows/SystemWindow.h"
+#if (CC_PLATFORM == CC_PLATFORM_WINDOWS)
+    #include "platform/os-interfaces/modules/windows/SystemWindow.h"
+#elif (CC_PLATFORM == CC_PLATFORM_ANDROID)
+    #include "platform/os-interfaces/modules/android/SystemWindow.h"
+#endif
 
 namespace cc {
 

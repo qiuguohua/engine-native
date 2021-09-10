@@ -33,8 +33,8 @@ void Accelerometer::setAccelerometerInterval(float interval) {
 }
 
 const Accelerometer::MotionValue& Accelerometer::getDeviceMotionValue() {
-    static MotionValue __motionValue;
-    return __motionValue;
+    static MotionValue motionValue;
+    return motionValue;
 }
 
 } // namespace cc

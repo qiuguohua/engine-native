@@ -32,22 +32,22 @@ namespace cc {
 class CanvasGradient : public ICanvasGradient {
 public:
     CanvasGradient();
-    ~CanvasGradient(); // NOLINT(performance-trivially-destructible)
+    ~CanvasGradient() override; // NOLINT(performance-trivially-destructible)
     void addColorStop(float offset, const std::string &color) override;
 };
 
 class CanvasRenderingContext2D : public ICanvasRenderingContext2D {
 public:
     CanvasRenderingContext2D(float width, float height);
-    ~CanvasRenderingContext2D();
+    ~CanvasRenderingContext2D() override;
 
     // Rect
     void rect(float x, float y, float width, float height) override;
     void clearRect(float x, float y, float width, float height) override;
     void fillRect(float x, float y, float width, float height) override;
 
-    void             fillText(const std::string &text, float x, float y, float maxWidth = -1.0F) override;
-    void             strokeText(const std::string &text, float x, float y, float maxWidth = -1.0F) override;
+    void             fillText(const std::string &text, float x, float y, float maxWidth) override;
+    void             strokeText(const std::string &text, float x, float y, float maxWidth) override;
     Size             measureText(const std::string &text) override;
     ICanvasGradient *createLinearGradient(float x0, float y0, float x1, float y1) override;
     void             save() override;
@@ -78,7 +78,7 @@ public:
     void setGlobalCompositeOperation(const std::string &globalCompositeOperation) override;
 
     // fill image data into Context2D
-    void fillImageData(const Data &imageData, float imageWidth, float imageHeight, float offsetX, float offsetY);
+    void fillImageData(const Data &imageData, float imageWidth, float imageHeight, float offsetX, float offsetY) override;
 
     // transform
     void translate(float x, float y) override;

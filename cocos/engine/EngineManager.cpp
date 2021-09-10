@@ -28,8 +28,7 @@
 
 namespace cc {
 
-EngineManager::EngineManager() {
-}
+EngineManager::EngineManager() = default;
 
 void EngineManager::setCurrentEngine(const BaseEngine::Ptr& engine) {
     CC_ASSERT(engine != nullptr);
@@ -37,8 +36,9 @@ void EngineManager::setCurrentEngine(const BaseEngine::Ptr& engine) {
 }
 
 std::shared_ptr<BaseEngine> EngineManager::getCurrentEngine() {
-    if (_currentEngine.expired())
+    if (_currentEngine.expired()) {
         return nullptr;
+    }
     return _currentEngine.lock();
 }
 

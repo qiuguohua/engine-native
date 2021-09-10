@@ -1,5 +1,5 @@
 /****************************************************************************
- Copyright (c) 2017-2021 Xiamen Yaji Software Co., Ltd.
+ Copyright (c) 2020-2021 Xiamen Yaji Software Co., Ltd.
 
  http://www.cocos.com
 
@@ -24,31 +24,18 @@
 ****************************************************************************/
 
 #pragma once
-
-#include "platform/UniversalPlatform.h"
-
+#include <iostream>
 namespace cc {
 
-class WindowsPlatform : public UniversalPlatform {
+class MessagePipe{
 public:
-    WindowsPlatform() = default;
-    /**
-     * Destructor of WindowPlatform.
-     */
-    ~WindowsPlatform() override;
-    /**
-     * Implementation of Windows platform initialization.
-     */
-    int32_t init() override;
-    /**
-     * Implementation of Windows platform destory.
-     */
-    void destory() override;
-
+    MessagePipe();
+    ~MessagePipe();
+    void writeCommand(int8_t cmd) const;
+    int readCommand(int8_t &cmd) const ;
 private:
+    int _pipeRead  = 0;
+    int _pipeWrite = 0;
 };
 
-} // namespace cc
-
-
-
+}

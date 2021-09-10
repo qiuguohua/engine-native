@@ -24,7 +24,11 @@
 ****************************************************************************/
 
 #include "platform/BasePlatform.h"
-#include "platform/WindowsPlatform.h"
+#if (CC_PLATFORM == CC_PLATFORM_WINDOWS)
+    #include "platform/win32/WindowsPlatform.h"
+#elif (CC_PLATFORM == CC_PLATFORM_ANDROID)
+    #include "platform/android/AndroidPlatform.h"
+#endif
 
 namespace cc {
 
@@ -32,8 +36,13 @@ BasePlatform::~BasePlatform() {
     _osInterfaces.clear();
 }
 
-BasePlatform* BasePlatform::GetPlatform() {
+BasePlatform* BasePlatform::getPlatform() {
+#if (CC_PLATFORM == CC_PLATFORM_WINDOWS)
     static WindowsPlatform platform;
     return &platform;
+#elif (CC_PLATFORM == CC_PLATFORM_ANDROID)
+    static AndroidPlatform platform;
+    return &platform;
+#endif
 }
 } // namespace cc

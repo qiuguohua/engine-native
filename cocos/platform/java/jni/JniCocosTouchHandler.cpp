@@ -23,8 +23,10 @@
  THE SOFTWARE.
 ****************************************************************************/
 #include <jni.h>
-#include "platform/Application.h"
+#include "cocos/bindings/event/EventDispatcher.h"
+#include "platform/android/jni/JniInteraction.h"
 #include "platform/java/jni/JniHelper.h"
+
 
 namespace {
 struct cc::TouchEvent touchEvent;
@@ -35,7 +37,7 @@ JNIEXPORT void JNICALL Java_com_cocos_lib_CocosTouchHandler_handleActionDown(JNI
                                                                              jfloat x, jfloat y) {
     touchEvent.type = cc::TouchEvent::Type::BEGAN;
     touchEvent.touches.emplace_back(x, y, id);
-    cc::EventDispatcher::dispatchTouchEvent(touchEvent);
+    COCOS_INTERACTION()->dispatchEvent(touchEvent);
     touchEvent.touches.clear();
 }
 //NOLINTNEXTLINE
@@ -43,7 +45,7 @@ JNIEXPORT void JNICALL Java_com_cocos_lib_CocosTouchHandler_handleActionUp(JNIEn
                                                                            jfloat y) {
     touchEvent.type = cc::TouchEvent::Type::ENDED;
     touchEvent.touches.emplace_back(x, y, id);
-    cc::EventDispatcher::dispatchTouchEvent(touchEvent);
+    COCOS_INTERACTION()->dispatchEvent(touchEvent);
     touchEvent.touches.clear();
 }
 //NOLINTNEXTLINE
@@ -64,7 +66,7 @@ JNIEXPORT void JNICALL Java_com_cocos_lib_CocosTouchHandler_handleActionMove(JNI
         touchEvent.touches.emplace_back(x[i], y[i], id[i]);
     }
 
-    cc::EventDispatcher::dispatchTouchEvent(touchEvent);
+    COCOS_INTERACTION()->dispatchEvent(touchEvent);
     touchEvent.touches.clear();
 }
 
@@ -85,7 +87,7 @@ JNIEXPORT void JNICALL Java_com_cocos_lib_CocosTouchHandler_handleActionCancel(J
     for (int i = 0; i < size; i++) {
         touchEvent.touches.emplace_back(x[i], y[i], id[i]);
     }
-    cc::EventDispatcher::dispatchTouchEvent(touchEvent);
+    COCOS_INTERACTION()->dispatchEvent(touchEvent);
     touchEvent.touches.clear();
 }
 }

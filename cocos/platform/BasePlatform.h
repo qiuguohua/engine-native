@@ -47,7 +47,7 @@ public:
     /**
      @brief Get default system platform.
      */
-    static BasePlatform* GetPlatform();
+    static BasePlatform* getPlatform();
     /**
      @brief Initialize system platform.
      */
@@ -64,6 +64,12 @@ public:
      @brief Destory system platform.
      */
     virtual void destory() = 0;
+
+    /**
+     @brief Polling event.
+     */
+    virtual void pollEvent() = 0;
+
     /**
      @brief Get target system type.
      */
@@ -74,19 +80,21 @@ public:
     /**
      @brief Set event handling callback function.
      */
-    using EventHandleCallback = std::function<bool(OSEventType, const OSEvent&)>;
+    using HandleEventCallback = std::function<bool(const OSEvent&)>;
 
-    virtual void setEventHandleCallback(EventHandleCallback cb) = 0;
+    virtual void setHandleEventCallback(HandleEventCallback cb) = 0;
 
     /**
      @brief Set default event handling callback function.
      */
-    virtual void setDefaultEventHandleCallback(EventHandleCallback cb) = 0;
+    virtual void setHandleDefaultEventCallback(HandleEventCallback cb) = 0;
     /**
      @brief Default event handling.
      */
-    virtual void defaultEventHandle(OSEventType type, const OSEvent& ev) = 0;
+    virtual void handleDefaultEvent(const OSEvent& ev) = 0;
 
+    virtual int getSdkVersion() const = 0;
+   
     /**
      @brief Get target system interface.
      @ Non thread safe.
@@ -94,7 +102,7 @@ public:
     template <class T>
     std::enable_if_t<std::is_base_of<OSInterface, T>::value, T*>
     getOSInterface() {
-        for (auto it : _osInterfaces) {
+        for (auto& it : _osInterfaces) {
             T* intf = dynamic_cast<T*>(it.get());
             if (intf) {
                 return intf;
@@ -107,22 +115,22 @@ public:
     /**
      @brief Registration system interface.
      */
-    bool registerOSInterface(OSInterface::Ptr os_interface) {
-        CC_ASSERT(os_interface != nullptr);
-        auto it = std::find(_osInterfaces.begin(), _osInterfaces.end(), os_interface);
+    bool registerOSInterface(const OSInterface::Ptr& osInterface) {
+        CC_ASSERT(osInterface != nullptr);
+        auto it = std::find(_osInterfaces.begin(), _osInterfaces.end(), osInterface);
         if (it != _osInterfaces.end()) {
             CC_LOG_WARNING("Duplicate registration interface");
             return false;
         }
-        _osInterfaces.push_back(os_interface);
+        _osInterfaces.push_back(osInterface);
         return true;
     }
     /**
      @brief Unregistration system interface.
      */
-    void unRegisterOSInterface(OSInterface::Ptr os_interface) {
-        CC_ASSERT(os_interface != nullptr);
-        auto it = std::find(_osInterfaces.begin(), _osInterfaces.end(), os_interface);
+    void unRegisterOSInterface(const OSInterface::Ptr& osInterface) {
+        CC_ASSERT(osInterface != nullptr);
+        auto it = std::find(_osInterfaces.begin(), _osInterfaces.end(), osInterface);
         if (it != _osInterfaces.end()) {
             CC_LOG_WARNING("Interface is not registrated");
             return;

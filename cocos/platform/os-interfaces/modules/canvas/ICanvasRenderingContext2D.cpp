@@ -22,9 +22,6 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  THE SOFTWARE.
 ****************************************************************************/
-
-#pragma once
-
 #include "platform/os-interfaces/modules/canvas/ICanvasRenderingContext2D.h"
 #include "platform/os-interfaces/modules/canvas/CanvasRenderingContext2D.h"
 

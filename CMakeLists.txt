@@ -333,78 +333,105 @@ endif()
 
 ############ platformex
 cocos_source_files(
-    cocos/platformex/IEventDispathch.h
-    cocos/platformex/BasePlatform.cpp
-    cocos/platformex/BasePlatform.h
-    cocos/platformex/UniversalPlatform.cpp
-    cocos/platformex/UniversalPlatform.h
-    cocos/platformex/WindowsPlatform.cpp
-    cocos/platformex/WindowsPlatform.h
+    cocos/platform/IEventDispatch.h
+    cocos/platform/BasePlatform.cpp
+    cocos/platform/BasePlatform.h
+    cocos/platform/UniversalPlatform.cpp
+    cocos/platform/UniversalPlatform.h
 )
+if(WINDOWS)
+    cocos_source_files(
+        cocos/platform/win32/WindowsPlatform.cpp
+        cocos/platform/win32/WindowsPlatform.h
+    )
+else(ANDROID)
+    cocos_source_files(
+        cocos/platform/android/AndroidPlatform.cpp
+        cocos/platform/android/AndroidPlatform.h
+    )
+endif()
 
 ############ platformex : Abstract interface
 cocos_source_files(
-    cocos/platformex/os-interfaces/OSInterface.cpp
-    cocos/platformex/os-interfaces/OSInterface.h
-    cocos/platformex/os-interfaces/OSInterfaceManager.cpp
-    cocos/platformex/os-interfaces/OSInterfaceManager.h
+    cocos/platform/os-interfaces/OSInterface.cpp
+    cocos/platform/os-interfaces/OSInterface.h
+    cocos/platform/os-interfaces/OSInterfaceManager.cpp
+    cocos/platform/os-interfaces/OSInterfaceManager.h
 )
 
 ############ platformex : Interface definition
 cocos_source_files(
-    cocos/platformex/os-interfaces/modules/Device.cpp
-    cocos/platformex/os-interfaces/modules/Device.h
-    cocos/platformex/os-interfaces/modules/IAccelerometer.cpp
-    cocos/platformex/os-interfaces/modules/IAccelerometer.h
-    cocos/platformex/os-interfaces/modules/IBattery.cpp
-    cocos/platformex/os-interfaces/modules/IBattery.h
-    #cocos/platformex/os-interfaces/interfaces/DeviceInterface.cpp
-    #cocos/platformex/os-interfaces/interfaces/DeviceInterface.h
-    cocos/platformex/os-interfaces/modules/IScreen.cpp
-    cocos/platformex/os-interfaces/modules/IScreen.h
-    cocos/platformex/os-interfaces/modules/INetwork.cpp
-    cocos/platformex/os-interfaces/modules/INetwork.h
-    cocos/platformex/os-interfaces/modules/ISystem.cpp
-    cocos/platformex/os-interfaces/modules/ISystem.h
-    cocos/platformex/os-interfaces/modules/ISystemWindow.cpp
-    cocos/platformex/os-interfaces/modules/ISystemWindow.h
-    cocos/platformex/os-interfaces/modules/IVibrate.cpp
-    cocos/platformex/os-interfaces/modules/IVibrate.h
+    cocos/platform/os-interfaces/modules/Device.cpp
+    cocos/platform/os-interfaces/modules/Device.h
+    cocos/platform/os-interfaces/modules/IAccelerometer.cpp
+    cocos/platform/os-interfaces/modules/IAccelerometer.h
+    cocos/platform/os-interfaces/modules/IBattery.cpp
+    cocos/platform/os-interfaces/modules/IBattery.h
+    cocos/platform/os-interfaces/modules/IScreen.cpp
+    cocos/platform/os-interfaces/modules/IScreen.h
+    cocos/platform/os-interfaces/modules/INetwork.cpp
+    cocos/platform/os-interfaces/modules/INetwork.h
+    cocos/platform/os-interfaces/modules/ISystem.cpp
+    cocos/platform/os-interfaces/modules/ISystem.h
+    cocos/platform/os-interfaces/modules/ISystemWindow.cpp
+    cocos/platform/os-interfaces/modules/ISystemWindow.h
+    cocos/platform/os-interfaces/modules/IVibrate.cpp
+    cocos/platform/os-interfaces/modules/IVibrate.h
 )
 
 cocos_source_files(
-    cocos/platformex/os-interfaces/modules/canvas/CanvasRenderingContext2D.cpp
-    cocos/platformex/os-interfaces/modules/canvas/CanvasRenderingContext2D.h
-    cocos/platformex/os-interfaces/modules/canvas/ICanvasRenderingContext2D.cpp
-    cocos/platformex/os-interfaces/modules/canvas/ICanvasRenderingContext2D.h
+    cocos/platform/os-interfaces/modules/canvas/CanvasRenderingContext2D.cpp
+    cocos/platform/os-interfaces/modules/canvas/CanvasRenderingContext2D.h
+    cocos/platform/os-interfaces/modules/canvas/ICanvasRenderingContext2D.cpp
+    cocos/platform/os-interfaces/modules/canvas/ICanvasRenderingContext2D.h
 )
 if(WINDOWS)
-cocos_source_files(
-    cocos/platformex/os-interfaces/modules/canvas/CanvasRenderingContext2DDelegate-win32.cpp
-    cocos/platformex/os-interfaces/modules/canvas/CanvasRenderingContext2DDelegate-win32.h)
+    cocos_source_files(
+        cocos/platform/os-interfaces/modules/canvas/CanvasRenderingContext2DDelegate-win32.cpp
+        cocos/platform/os-interfaces/modules/canvas/CanvasRenderingContext2DDelegate-win32.h
+    )
 else(ANDROID)
-
+    cocos_source_files(
+        cocos/platform/os-interfaces/modules/canvas/CanvasRenderingContext2DDelegate-java.cpp
+        cocos/platform/os-interfaces/modules/canvas/CanvasRenderingContext2DDelegate-java.h
+    )
 endif()
 
 ############ platformex : Interface implementation of windows
 if(WINDOWS)
-cocos_source_files(
-    cocos/platformex/os-interfaces/modules/windows/Accelerometer.cpp
-    cocos/platformex/os-interfaces/modules/windows/Accelerometer.h
-    cocos/platformex/os-interfaces/modules/windows/Battery.cpp
-    cocos/platformex/os-interfaces/modules/windows/Battery.h
-    cocos/platformex/os-interfaces/modules/windows/Screen.cpp
-    cocos/platformex/os-interfaces/modules/windows/Screen.h
-    cocos/platformex/os-interfaces/modules/windows/Network.cpp
-    cocos/platformex/os-interfaces/modules/windows/Network.h
-    cocos/platformex/os-interfaces/modules/windows/Vibrate.cpp
-    cocos/platformex/os-interfaces/modules/windows/Vibrate.h
-    cocos/platformex/os-interfaces/modules/windows/System.cpp
-    cocos/platformex/os-interfaces/modules/windows/System.h
-    cocos/platformex/os-interfaces/modules/windows/SystemWindow.cpp
-    cocos/platformex/os-interfaces/modules/windows/SystemWindow.h
-)
+    cocos_source_files(
+        cocos/platform/os-interfaces/modules/windows/Accelerometer.cpp
+        cocos/platform/os-interfaces/modules/windows/Accelerometer.h
+        cocos/platform/os-interfaces/modules/windows/Battery.cpp
+        cocos/platform/os-interfaces/modules/windows/Battery.h
+        cocos/platform/os-interfaces/modules/windows/Screen.cpp
+        cocos/platform/os-interfaces/modules/windows/Screen.h
+        cocos/platform/os-interfaces/modules/windows/Network.cpp
+        cocos/platform/os-interfaces/modules/windows/Network.h
+        cocos/platform/os-interfaces/modules/windows/Vibrate.cpp
+        cocos/platform/os-interfaces/modules/windows/Vibrate.h
+        cocos/platform/os-interfaces/modules/windows/System.cpp
+        cocos/platform/os-interfaces/modules/windows/System.h
+        cocos/platform/os-interfaces/modules/windows/SystemWindow.cpp
+        cocos/platform/os-interfaces/modules/windows/SystemWindow.h
+    )
 else(ANDROID)
+    cocos_source_files(
+        cocos/platform/os-interfaces/modules/android/Accelerometer.cpp
+        cocos/platform/os-interfaces/modules/android/Accelerometer.h
+        cocos/platform/os-interfaces/modules/android/Battery.cpp
+        cocos/platform/os-interfaces/modules/android/Battery.h
+        cocos/platform/os-interfaces/modules/android/Screen.cpp
+        cocos/platform/os-interfaces/modules/android/Screen.h
+        cocos/platform/os-interfaces/modules/android/Network.cpp
+        cocos/platform/os-interfaces/modules/android/Network.h
+        cocos/platform/os-interfaces/modules/android/Vibrate.cpp
+        cocos/platform/os-interfaces/modules/android/Vibrate.h
+        cocos/platform/os-interfaces/modules/android/System.cpp
+        cocos/platform/os-interfaces/modules/android/System.h
+        cocos/platform/os-interfaces/modules/android/SystemWindow.cpp
+        cocos/platform/os-interfaces/modules/android/SystemWindow.h
+    )
 endif()
 
 ############ module log
@@ -656,13 +683,17 @@ if(WINDOWS)
     )
 elseif(ANDROID)
     cocos_source_files(
-        cocos/platform/android/Application-android.cpp
-        cocos/platform/java/CanvasRenderingContext2D-java.cpp
-        cocos/platform/android/Device-android.cpp
-        cocos/platform/android/View.cpp
-        cocos/platform/android/View.h
+        #cocos/platform/android/Application-android.cpp
+        #cocos/platform/java/CanvasRenderingContext2D-java.cpp
+        #cocos/platform/android/Device-android.cpp
+        #cocos/platform/android/View.cpp
+        #cocos/platform/android/View.h
     )
     set(CC_JNI_SRC_FILES
+        ${CWD}/cocos/platform/android/jni/JniInteraction.cpp
+        ${CWD}/cocos/platform/android/jni/JniInteraction.h
+        ${CWD}/cocos/platform/android/jni/MessagePipe.cpp
+        ${CWD}/cocos/platform/android/jni/MessagePipe.h
         ${CWD}/cocos/platform/android/jni/JniCocosActivity.cpp
         ${CWD}/cocos/platform/android/jni/JniCocosActivity.h
         ${CWD}/cocos/platform/java/jni/JniCocosTouchHandler.cpp
@@ -674,6 +705,7 @@ elseif(ANDROID)
         ${CWD}/cocos/platform/java/jni/JniImp.cpp
         ${CWD}/cocos/platform/java/jni/JniImp.h
     )
+
     
     cocos_source_files(MODULE ccfilesystem
         cocos/platform/android/FileUtils-android.cpp

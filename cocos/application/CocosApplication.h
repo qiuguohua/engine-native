@@ -36,6 +36,7 @@ class CocosApplication : public BaseApplication {
 public:
     CocosApplication();
     ~CocosApplication() override = default;
+
     /*
      *@bref Application initialization.
      */
@@ -97,20 +98,19 @@ public:
      @bref Run the js code file
      @param filePath:Js file path.
      */
-    virtual void jsRunScript(const std::string& filePath);
+    virtual void runJsScript(const std::string& filePath);
     /*
      @bref Js exception handling
      @param location,Exception location
      @param message,Exception message
      @param stack,Exception stack
      */
-    virtual void exceptionHandle(const char* location, const char* message, const char* stack);
+    virtual void handleException(const char* location, const char* message, const char* stack);
     virtual void setXXTeaKey(const std::string& key);
 
 private:
-    void appEventHandle(const OSEvent& ev);
+    void handleAppEvent(const OSEvent& ev);
 
-private:
     ISystemWindow*              _systemWidow;
     std::shared_ptr<BaseEngine> _engine;
 };

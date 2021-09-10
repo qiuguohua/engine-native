@@ -1,6 +1,4 @@
 /****************************************************************************
- Copyright (c) 2010-2012 cocos2d-x.org
- Copyright (c) 2013-2016 Chukong Technologies Inc.
  Copyright (c) 2017-2021 Xiamen Yaji Software Co., Ltd.
 
  http://www.cocos.com
@@ -25,29 +23,13 @@
  THE SOFTWARE.
 ****************************************************************************/
 
-#include <android/log.h>
+#include "platform/os-interfaces/modules/android/Screen.h"
 #include <android/sensor.h>
 #include <android/window.h>
 #include <android_native_app_glue.h>
-#include <jni.h>
-#include <cstring>
-#include "base/UTF8.h"
-#include "platform/Device.h"
-#include "platform/FileUtils.h"
-#include "platform/android/jni/JniCocosActivity.h"
 #include "platform/java/jni/JniHelper.h"
 
-#ifndef JCLS_HELPER
-    #define JCLS_HELPER "com/cocos/lib/CocosHelper"
-#endif
-
-#ifndef JCLS_SENSOR
-    #define JCLS_SENSOR "com/cocos/lib/CocosSensorHandler"
-#endif
-
 namespace {
-cc::Device::MotionValue motionValue;
-
 // constant from Android API:
 // reference: https://developer.android.com/reference/android/view/Surface#ROTATION_0
 enum Rotation {
@@ -60,11 +42,11 @@ enum Rotation {
 
 namespace cc {
 
-int Device::getDPI() {
+int Screen::getDPI() {
     static int dpi = -1;
     if (dpi == -1) {
         AConfiguration *config = AConfiguration_new();
-        AConfiguration_fromAssetManager(config, cocosApp.assetManager);
+        //AConfiguration_fromAssetManager(config, cocosApp.assetManager);
         int32_t density = AConfiguration_getDensity(config);
         AConfiguration_delete(config);
         const int stdDpi = 160;
@@ -73,33 +55,17 @@ int Device::getDPI() {
     return dpi;
 }
 
-void Device::setAccelerometerEnabled(bool isEnabled) {
-    JniHelper::callStaticVoidMethod(JCLS_SENSOR, "setAccelerometerEnabled", isEnabled);
+float Screen::getDevicePixelRatio() {
+    return 1;
 }
 
-void Device::setAccelerometerInterval(float interval) {
-    JniHelper::callStaticVoidMethod(JCLS_SENSOR, "setAccelerometerInterval", interval);
+void Screen::setKeepScreenOn(bool keepScreenOn) {
+    // JniHelper::callStaticVoidMethod(JCLS_HELPER, "setKeepScreenOn", value);
+    //    ANativeActivity_setWindowFlags(JniHelper::getAndroidApp()->activity, AWINDOW_FLAG_KEEP_SCREEN_ON, 0);
+    CC_UNUSED_PARAM(keepScreenOn);
 }
 
-const Device::MotionValue &Device::getDeviceMotionValue() {
-    float *v = JniHelper::callStaticFloatArrayMethod(JCLS_SENSOR, "getDeviceMotionValue");
-
-    motionValue.accelerationIncludingGravityX = v[0];
-    motionValue.accelerationIncludingGravityY = v[1];
-    motionValue.accelerationIncludingGravityZ = v[2];
-
-    motionValue.accelerationX = v[3];
-    motionValue.accelerationY = v[4];
-    motionValue.accelerationZ = v[5];
-
-    motionValue.rotationRateAlpha = v[6];
-    motionValue.rotationRateBeta  = v[7];
-    motionValue.rotationRateGamma = v[8];
-
-    return motionValue;
-}
-
-Device::Orientation Device::getDeviceOrientation() {
+Screen::Orientation Screen::getDeviceOrientation() {
     int rotation = JniHelper::callStaticIntMethod(JCLS_HELPER, "getDeviceRotation");
     switch (rotation) {
         case ROTATION_0:
@@ -116,34 +82,9 @@ Device::Orientation Device::getDeviceOrientation() {
     return Orientation::PORTRAIT;
 }
 
-std::string Device::getDeviceModel() {
-    return JniHelper::callStaticStringMethod(JCLS_HELPER, "getDeviceModel");
-}
-
-void Device::setKeepScreenOn(bool keepScreenOn) {
-    // JniHelper::callStaticVoidMethod(JCLS_HELPER, "setKeepScreenOn", value);
-    //    ANativeActivity_setWindowFlags(JniHelper::getAndroidApp()->activity, AWINDOW_FLAG_KEEP_SCREEN_ON, 0);
-    CC_UNUSED_PARAM(keepScreenOn);
-}
-
-void Device::vibrate(float duration) {
-    JniHelper::callStaticVoidMethod(JCLS_HELPER, "vibrate", duration);
-}
-
-float Device::getBatteryLevel() {
-    return JniHelper::callStaticFloatMethod(JCLS_HELPER, "getBatteryLevel");
-}
-
-Device::NetworkType Device::getNetworkType() {
-    return static_cast<Device::NetworkType>(JniHelper::callStaticIntMethod(JCLS_HELPER, "getNetworkType"));
-}
-
-cc::Vec4 Device::getSafeAreaEdge() {
+Vec4 Screen::getSafeAreaEdge() {
     float *data = JniHelper::callStaticFloatArrayMethod(JCLS_HELPER, "getSafeArea");
     return cc::Vec4(data[0], data[1], data[2], data[3]);
 }
 
-float Device::getDevicePixelRatio() {
-    return 1;
-}
 } // namespace cc

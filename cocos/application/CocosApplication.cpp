@@ -41,7 +41,7 @@ namespace cc {
 
 CocosApplication::CocosApplication() {
     _engine      = BaseEngine::createEngine();
-    _systemWidow = _engine->GetOSInterface<ISystemWindow>();
+    _systemWidow = _engine->getOSInterface<ISystemWindow>();
     CC_ASSERT(_systemWidow != nullptr);
 }
 
@@ -50,14 +50,14 @@ int CocosApplication::init() {
         return -1;
     }
     _engine->addEvent(OSEventType::APP_OSEVENT,
-                      std::bind(&CocosApplication::appEventHandle, this, std::placeholders::_1));
+                      std::bind(&CocosApplication::handleAppEvent, this, std::placeholders::_1));
 
     se::ScriptEngine *se = se::ScriptEngine::getInstance();
 
     jsb_init_file_operation_delegate();
 
     se->setExceptionCallback(
-        std::bind(&CocosApplication::exceptionHandle, this,
+        std::bind(&CocosApplication::handleException, this,
                   std::placeholders::_1, std::placeholders::_2, std::placeholders::_3));
 
     jsb_register_all_modules();
@@ -73,8 +73,8 @@ int CocosApplication::init() {
 }
 
 int32_t CocosApplication::run(int argc, char **argv) {
-    CC_UNUSED(argc);
-    CC_UNUSED(argv);
+    CC_UNUSED_PARAM(argc);
+    CC_UNUSED_PARAM(argv);
     return _engine->run();
 }
 
@@ -110,11 +110,11 @@ void CocosApplication::setJsDebugIpAndPort(const std::string &serverAddr, uint32
 #endif
 }
 
-void CocosApplication::jsRunScript(const std::string &filePath) {
+void CocosApplication::runJsScript(const std::string &filePath) {
     jsb_run_script(filePath);
 }
 
-void CocosApplication::exceptionHandle(const char *location, const char *message, const char *stack) {
+void CocosApplication::handleException(const char *location, const char *message, const char *stack) {
     // Send exception information to server like Tencent Bugly.
     CC_LOG_ERROR("\nUncaught Exception:\n - location :  %s\n - msg : %s\n - detail : \n      %s\n", location, message, stack);
 }
@@ -129,8 +129,8 @@ void CocosApplication::createWindow(const char *title,
     _systemWidow->createWindow(title, x, y, w, h, flags);
 }
 
-void CocosApplication::appEventHandle(const OSEvent &ev) {
-    const AppEvent &appEv = eventCast<AppEvent>(ev);
+void CocosApplication::handleAppEvent(const OSEvent &ev) {
+    const AppEvent &appEv = OSEvent::castEvent<AppEvent>(ev);
     switch (appEv.type) {
         case AppEvent::Type::RESUME:
             onResume();

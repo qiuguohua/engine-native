@@ -23,7 +23,7 @@
  THE SOFTWARE.
 ****************************************************************************/
 #include "platform/os-interfaces/OSInterface.h"
-#include "platform/IEventDispathch.h"
+#include "platform/IEventDispatch.h"
 
 namespace cc {
 
@@ -35,9 +35,9 @@ OSInterface::OSInterface(IEventDispatch* evDispatchInterface)
 : _evDispatchInterface(evDispatchInterface) {
 }
 
-void OSInterface::dispatchEvent(OSEventType type, const OSEvent& ev) {
+void OSInterface::dispatchEvent(const OSEvent& ev) {
     if (_evDispatchInterface) {
-        _evDispatchInterface->dispatchEvent(type, ev);
+        _evDispatchInterface->dispatchEvent(ev);
     }
 }
 

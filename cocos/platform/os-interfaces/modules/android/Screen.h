@@ -25,23 +25,17 @@
 
 #pragma once
 
-#include "bindings/event/EventDispatcher.h"
+#include "platform/os-interfaces/modules/IScreen.h"
 
 namespace cc {
-class IEventDispatch {
+
+class Screen : public IScreen {
 public:
-    /**
-     * Destructor of EventDispatchInterface.
-     */
-    virtual ~IEventDispatch() = default;
-    /**
-     * Dispatch event interface.
-     */
-    virtual void dispatchEvent(OSEventType type, const OSEvent& ev) = 0;
-    /**
-     * Dispatch touch event interface.
-     */
-    virtual void dispatchTouchEvent(const OSEvent& ev) = 0;
+    int         getDPI() override;
+    float       getDevicePixelRatio() override;
+    void        setKeepScreenOn(bool keepScreenOn) override;
+    Orientation getDeviceOrientation() override;
+    Vec4        getSafeAreaEdge() override;
 };
 
 } // namespace cc

@@ -53,7 +53,7 @@ public:
      @param type : event type
      @param type : event information
      */
-    void dispatchEvent(OSEventType type, const OSEvent& ev);
+    void dispatchEvent(const OSEvent& ev);
     /**
      @brief Dispatch touch event.
      @param type : event type

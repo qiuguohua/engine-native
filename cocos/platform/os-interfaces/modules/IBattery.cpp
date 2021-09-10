@@ -24,7 +24,12 @@
 ****************************************************************************/
 
 #include "platform/os-interfaces/modules/IBattery.h"
-#include "platform/os-interfaces/modules/windows/Battery.h"
+
+#if (CC_PLATFORM == CC_PLATFORM_WINDOWS)
+    #include "platform/os-interfaces/modules/windows/Battery.h"
+#elif (CC_PLATFORM == CC_PLATFORM_ANDROID)
+    #include "platform/os-interfaces/modules/android/Battery.h"
+#endif
 
 namespace cc {
 

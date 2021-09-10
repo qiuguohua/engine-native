@@ -40,7 +40,7 @@
 #include "base/Log.h"
 #include "base/Scheduler.h"
 #include "base/UTF8.h"
-#include "platform/Application.h"
+#include "engine/EngineManager.h"
 #include "platform/android/FileUtils-android.h"
 #include "platform/java/jni/JniHelper.h"
 #include "platform/java/jni/JniImp.h"
@@ -75,7 +75,7 @@ void getAudioInfo() {
 class CallerThreadUtils : public ICallerThreadUtils {
 public:
     void performFunctionInCallerThread(const std::function<void()> &func) override {
-        Application::getInstance()->getScheduler()->performFunctionInCocosThread(func);
+        CURRENT_ENGINE()->getEngineScheduler()->performFunctionInCocosThread(func);
     };
 
     std::thread::id getCallerThreadId() override {
