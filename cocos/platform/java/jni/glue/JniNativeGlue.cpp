@@ -51,7 +51,7 @@ void JniNativeGlue::init(int argc, char** argv) {
     platform->run(argc, argv);
 }
 
-void JniNativeGlue::setWindow(NativeWindowType* window) {
+void JniNativeGlue::setWindowHandle(NativeWindowType* window) {
     if (_pendingWindow) {
         writeCommandSync(JniCommand::JNI_CMD_TERM_WINDOW);
     }
