@@ -1,5 +1,5 @@
 /****************************************************************************
- Copyright (c) 2017-2021 Xiamen Yaji Software Co., Ltd.
+ Copyright (c) 2020-2021 Xiamen Yaji Software Co., Ltd.
 
  http://www.cocos.com
 
@@ -22,20 +22,46 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  THE SOFTWARE.
 ****************************************************************************/
-
-#include "platform/os-interfaces/modules/IVibrate.h"
-
-#if (CC_PLATFORM == CC_PLATFORM_WINDOWS)
-    #include "platform/os-interfaces/modules/windows/Vibrate.h"
-#elif (CC_PLATFORM == CC_PLATFORM_ANDROID || CC_PLATFORM == CC_PLATFORM_OHOS)
-    #include "platform/os-interfaces/modules/java/Vibrate.h"
-#endif
+#include "platform/java/jni/glue/MessagePipe.h"
+#include <fcntl.h>
+#include <unistd.h>
+#include "platform/java/jni/log.h"
+//#include <android/log.h>
+//#include "platform/android/jni/JniCocosActivity.h"
 
 namespace cc {
+MessagePipe::MessagePipe() {
+    int messagePipe[2] = {0};
+    if (pipe(messagePipe)) {
+        LOGV("Can not create pipe: %s", strerror(errno));
+    }
 
-// static
-OSInterface::Ptr IVibrate::createVibrateInterface() {
-    return std::make_shared<Vibrate>();
+    _pipeRead  = messagePipe[0];
+    _pipeWrite = messagePipe[1];
+
+    if (fcntl(_pipeRead, F_SETFL, O_NONBLOCK) < 0) {
+        LOGV("Can not make pipe read to non blocking mode.");
+    }
 }
 
+MessagePipe::~MessagePipe() {
+    close(_pipeRead);
+    close(_pipeWrite);
+}
+
+void MessagePipe::writeCommand(int8_t cmd) const {
+    write(_pipeWrite, &cmd, sizeof(cmd));
+}
+
+int MessagePipe::readCommand(int8_t& cmd) const {
+    return read(_pipeRead, &cmd, sizeof(cmd));
+}
+
+void MessagePipe::writeCommand(void* msg, int32_t msgSize) const {
+    write(_pipeWrite, msg, msgSize);
+}
+
+int MessagePipe::readCommand(void* msg, int32_t msgSize) const {
+    return read(_pipeRead, msg, msgSize);
+}
 } // namespace cc

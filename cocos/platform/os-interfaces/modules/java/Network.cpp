@@ -22,20 +22,13 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  THE SOFTWARE.
 ****************************************************************************/
-
-#include "platform/os-interfaces/modules/IVibrate.h"
-
-#if (CC_PLATFORM == CC_PLATFORM_WINDOWS)
-    #include "platform/os-interfaces/modules/windows/Vibrate.h"
-#elif (CC_PLATFORM == CC_PLATFORM_ANDROID || CC_PLATFORM == CC_PLATFORM_OHOS)
-    #include "platform/os-interfaces/modules/java/Vibrate.h"
-#endif
+#include "platform/os-interfaces/modules/java/Network.h"
+#include "platform/java/jni/JniImp.h"
 
 namespace cc {
 
-// static
-OSInterface::Ptr IVibrate::createVibrateInterface() {
-    return std::make_shared<Vibrate>();
+INetwork::NetworkType Network::getNetworkType() {
+    return static_cast<INetwork::NetworkType>(getNetworkTypeJni());
 }
 
 } // namespace cc

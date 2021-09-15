@@ -28,7 +28,7 @@
 #include "platform/UniversalPlatform.h"
 
 namespace cc {
-class JniInteraction;
+class JniNativeGlue;
 class AndroidPlatform : public UniversalPlatform {
 public:
     AndroidPlatform();
@@ -39,6 +39,6 @@ public:
 private:
     void checkWindowHandleInit();
 
-    JniInteraction* _jniInteraction;
+    JniNativeGlue* _jniNativeGlue;
 };
 } // namespace cc

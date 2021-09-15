@@ -49,8 +49,8 @@ int Game::init() {
   setXXTeaKey("");
   setJsDebugIpAndPort("0.0.0.0", 6086, false);
 
-  jsRunScript("jsb-adapter/jsb-builtin.js");
-  jsRunScript("main.js");
+  runJsScript("jsb-adapter/jsb-builtin.js");
+  runJsScript("main.js");
   return 0;
 }
 

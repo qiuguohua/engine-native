@@ -27,10 +27,9 @@
 #include <jni.h>
 #include "platform/BasePlatform.h"
 #include "platform/java/jni/JniHelper.h"
-#include "platform/android/jni/JniInteraction.h"
-#include "platform/os-interfaces/modules/android/SystemWindow.h"
+#include "platform/java/jni/glue/JniNativeGlue.h"
 
-#define LOGD(...) __android_log_print(ANDROID_LOG_DEBUG, "JniCocosSurfaceView JNI", __VA_ARGS__)
+//#define LOGD(...) __android_log_print(ANDROID_LOG_DEBUG, "JniCocosSurfaceView JNI", __VA_ARGS__)
 
 extern "C" {
 //NOLINTNEXTLINE

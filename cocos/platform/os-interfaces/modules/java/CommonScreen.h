@@ -1,5 +1,5 @@
 /****************************************************************************
- Copyright (c) 2020-2021 Xiamen Yaji Software Co., Ltd.
+ Copyright (c) 2017-2021 Xiamen Yaji Software Co., Ltd.
 
  http://www.cocos.com
 
@@ -25,20 +25,16 @@
 
 #pragma once
 
-#include "base/Macros.h"
-#include <cstdint>
-
-struct android_app;
-struct AInputEvent;
+#include "platform/os-interfaces/modules/IScreen.h"
 
 namespace cc {
 
-class TouchEvent;
-
-class View {
+class CommonScreen : public IScreen {
 public:
-    static void engineHandleCmd(int cmd);
-    static int32_t engineHandleInput(struct android_app *app, AInputEvent *event);
+    float       getDevicePixelRatio() override;
+    void        setKeepScreenOn(bool keepScreenOn) override;
+    Orientation getDeviceOrientation() override;
+    Vec4        getSafeAreaEdge() override;
 };
 
 } // namespace cc

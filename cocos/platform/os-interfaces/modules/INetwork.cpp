@@ -27,8 +27,8 @@
 
 #if (CC_PLATFORM == CC_PLATFORM_WINDOWS)
     #include "platform/os-interfaces/modules/windows/Network.h"
-#elif (CC_PLATFORM == CC_PLATFORM_ANDROID)
-    #include "platform/os-interfaces/modules/android/Network.h"
+#elif (CC_PLATFORM == CC_PLATFORM_ANDROID || CC_PLATFORM == CC_PLATFORM_OHOS)
+    #include "platform/os-interfaces/modules/java/Network.h"
 #endif
 
 namespace cc {

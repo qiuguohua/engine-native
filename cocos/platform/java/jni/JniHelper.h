@@ -57,13 +57,6 @@
         }                             \
     } while (false)
 
-#ifndef JCLS_HELPER
-#define JCLS_HELPER "com/cocos/lib/CocosHelper"
-#endif
-
-#ifndef JCLS_SENSOR
-#define JCLS_SENSOR "com/cocos/lib/CocosSensorHandler"
-#endif
 
 struct android_app;
 

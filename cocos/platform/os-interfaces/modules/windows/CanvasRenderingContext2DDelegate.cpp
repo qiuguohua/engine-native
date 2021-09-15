@@ -23,7 +23,7 @@
  THE SOFTWARE.                                                                    \
  ****************************************************************************/
 
-#include "platform/os-interfaces/modules/canvas/CanvasRenderingContext2DDelegate-win32.h"
+#include "platform/os-interfaces/modules/windows/CanvasRenderingContext2DDelegate.h"
 
 namespace {
 void fillRectWithColor(uint8_t *buf, uint32_t totalWidth, uint32_t totalHeight, uint32_t x, uint32_t y, uint32_t width, uint32_t height, uint8_t r, uint8_t g, uint8_t b, uint8_t a) {
@@ -449,7 +449,7 @@ void CanvasRenderingContext2DDelegate::fillTextureData() {
     } while (false);
 }
 
-std::array<float, 2> CanvasRenderingContext2DDelegate::convertDrawPoint(Point /* point */, const std::string &text) {
+std::array<float, 2> CanvasRenderingContext2DDelegate::convertDrawPoint(Point point, const std::string &text) {
     Size textSize = measureText(text);
     if (_textAlign == CanvasTextAlign::CENTER) {
         point[0] -= textSize[0] / 2.0f;

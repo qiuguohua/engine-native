@@ -29,17 +29,6 @@
 #include <android_native_app_glue.h>
 #include "platform/java/jni/JniHelper.h"
 
-namespace {
-// constant from Android API:
-// reference: https://developer.android.com/reference/android/view/Surface#ROTATION_0
-enum Rotation {
-    ROTATION_0 = 0,
-    ROTATION_90,
-    ROTATION_180,
-    ROTATION_270
-};
-} // namespace
-
 namespace cc {
 
 int Screen::getDPI() {
@@ -53,38 +42,6 @@ int Screen::getDPI() {
         dpi              = density * stdDpi;
     }
     return dpi;
-}
-
-float Screen::getDevicePixelRatio() {
-    return 1;
-}
-
-void Screen::setKeepScreenOn(bool keepScreenOn) {
-    // JniHelper::callStaticVoidMethod(JCLS_HELPER, "setKeepScreenOn", value);
-    //    ANativeActivity_setWindowFlags(JniHelper::getAndroidApp()->activity, AWINDOW_FLAG_KEEP_SCREEN_ON, 0);
-    CC_UNUSED_PARAM(keepScreenOn);
-}
-
-Screen::Orientation Screen::getDeviceOrientation() {
-    int rotation = JniHelper::callStaticIntMethod(JCLS_HELPER, "getDeviceRotation");
-    switch (rotation) {
-        case ROTATION_0:
-            return Orientation::PORTRAIT;
-        case ROTATION_90:
-            return Orientation::LANDSCAPE_RIGHT;
-        case ROTATION_180:
-            return Orientation::PORTRAIT_UPSIDE_DOWN;
-        case ROTATION_270:
-            return Orientation::LANDSCAPE_LEFT;
-        default:
-            break;
-    }
-    return Orientation::PORTRAIT;
-}
-
-Vec4 Screen::getSafeAreaEdge() {
-    float *data = JniHelper::callStaticFloatArrayMethod(JCLS_HELPER, "getSafeArea");
-    return cc::Vec4(data[0], data[1], data[2], data[3]);
 }
 
 } // namespace cc

@@ -39,11 +39,18 @@
     #define JCLS_HELPER "com/cocos/lib/CocosHelper"
 #endif
 
+#ifndef JCLS_SENSOR
+    #define JCLS_SENSOR "com/cocos/lib/CocosSensorHandler"
+#endif
+
 using namespace cc; //NOLINT
 
 /***********************************************************
  * Functions invoke from cpp to Java.
  ***********************************************************/
+#ifndef JCLS_HELPER
+    #define JCLS_HELPER "com/cocos/lib/CocosHelper"
+#endif
 
 std::string getObbFilePathJNI() {
     return JniHelper::callStaticStringMethod(JCLS_HELPER, "getObbFilePath");
@@ -92,4 +99,49 @@ bool openURLJNI(const std::string &url) {
 
 void copyTextToClipboardJNI(const std::string &text) {
     JniHelper::callStaticVoidMethod(JCLS_HELPER, "copyTextToClipboard", text);
+}
+
+std::string getDeviceModelJNI() {
+    return JniHelper::callStaticStringMethod(JCLS_HELPER, "getDeviceModel");
+}
+
+int getDpiJNI() {
+    return JniHelper::callStaticIntMethod(JCLS_HELPER, "getDPI");
+}
+
+void setVibrateJNI(float duration) {
+    JniHelper::callStaticVoidMethod(JCLS_HELPER, "vibrate", duration);
+}
+
+int getNetworkTypeJni() {
+    return JniHelper::callStaticIntMethod(JCLS_HELPER, "getNetworkType");
+}
+
+float *getSafeAreaEdgeJNI() {
+    return JniHelper::callStaticFloatArrayMethod(JCLS_HELPER, "getSafeArea");
+}
+
+int getDeviceRotationJNI() {
+    return JniHelper::callStaticIntMethod(JCLS_HELPER, "getDeviceRotation");
+}
+
+float getBatteryLevelJNI() {
+    return JniHelper::callStaticFloatMethod(JCLS_HELPER, "getBatteryLevel");
+}
+
+void flushTasksOnGameThreadJNI() {
+    cc::JniHelper::callStaticVoidMethod(JCLS_HELPER,
+                                        "flushTasksOnGameThread");
+}
+
+void setAccelerometerEnabledJNI(bool isEnabled) {
+    JniHelper::callStaticVoidMethod(JCLS_SENSOR, "setAccelerometerEnabled", isEnabled);
+}
+
+void setAccelerometerIntervalJNI(float interval) {
+    JniHelper::callStaticVoidMethod(JCLS_SENSOR, "setAccelerometerInterval", interval);
+}
+
+float *getDeviceMotionValueJNI() {
+    return JniHelper::callStaticFloatArrayMethod(JCLS_SENSOR, "getDeviceMotionValue");
 }

@@ -28,6 +28,8 @@
     #include "platform/os-interfaces/modules/windows/SystemWindow.h"
 #elif (CC_PLATFORM == CC_PLATFORM_ANDROID)
     #include "platform/os-interfaces/modules/android/SystemWindow.h"
+#elif (CC_PLATFORM == CC_PLATFORM_OHOS)
+    #include "platform/os-interfaces/modules/ohos/SystemWindow.h"
 #endif
 
 namespace cc {

@@ -35,9 +35,9 @@
 #include "platform/FileUtils.h"
 
 #if (CC_PLATFORM == CC_PLATFORM_WINDOWS)
-    #include "platform/os-interfaces/modules/canvas/CanvasRenderingContext2DDelegate-win32.h"
-#elif (CC_PLATFORM == CC_PLATFORM_ANDROID)
-    #include "platform/os-interfaces/modules/canvas/CanvasRenderingContext2DDelegate-java.h"
+    #include "platform/os-interfaces/modules/windows/CanvasRenderingContext2DDelegate.h"
+#elif (CC_PLATFORM == CC_PLATFORM_ANDROID || CC_PLATFORM == CC_PLATFORM_OHOS)
+    #include "platform/os-interfaces/modules/java/CanvasRenderingContext2DDelegate.h"
 #endif
 
 using Point   = std::array<float, 2>;

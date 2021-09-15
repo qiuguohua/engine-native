@@ -344,10 +344,15 @@ if(WINDOWS)
         cocos/platform/win32/WindowsPlatform.cpp
         cocos/platform/win32/WindowsPlatform.h
     )
-else(ANDROID)
+elseif(ANDROID)
     cocos_source_files(
         cocos/platform/android/AndroidPlatform.cpp
         cocos/platform/android/AndroidPlatform.h
+    )
+elseif(OHOS)
+    cocos_source_files(
+        cocos/platform/ohos/OhosPlatform.cpp
+        cocos/platform/ohos/OhosPlatform.h
     )
 endif()
 
@@ -387,13 +392,13 @@ cocos_source_files(
 )
 if(WINDOWS)
     cocos_source_files(
-        cocos/platform/os-interfaces/modules/canvas/CanvasRenderingContext2DDelegate-win32.cpp
-        cocos/platform/os-interfaces/modules/canvas/CanvasRenderingContext2DDelegate-win32.h
+        cocos/platform/os-interfaces/modules/windows/CanvasRenderingContext2DDelegate.cpp
+        cocos/platform/os-interfaces/modules/windows/CanvasRenderingContext2DDelegate.h
     )
-else(ANDROID)
+elseif(ANDROID OR OHOS)
     cocos_source_files(
-        cocos/platform/os-interfaces/modules/canvas/CanvasRenderingContext2DDelegate-java.cpp
-        cocos/platform/os-interfaces/modules/canvas/CanvasRenderingContext2DDelegate-java.h
+        cocos/platform/os-interfaces/modules/java/CanvasRenderingContext2DDelegate.cpp
+        cocos/platform/os-interfaces/modules/java/CanvasRenderingContext2DDelegate.h
     )
 endif()
 
@@ -415,22 +420,37 @@ if(WINDOWS)
         cocos/platform/os-interfaces/modules/windows/SystemWindow.cpp
         cocos/platform/os-interfaces/modules/windows/SystemWindow.h
     )
-else(ANDROID)
+elseif(ANDROID OR OHOS)
     cocos_source_files(
-        cocos/platform/os-interfaces/modules/android/Accelerometer.cpp
-        cocos/platform/os-interfaces/modules/android/Accelerometer.h
-        cocos/platform/os-interfaces/modules/android/Battery.cpp
-        cocos/platform/os-interfaces/modules/android/Battery.h
+        cocos/platform/os-interfaces/modules/java/Accelerometer.cpp
+        cocos/platform/os-interfaces/modules/java/Accelerometer.h
+        cocos/platform/os-interfaces/modules/java/Battery.cpp
+        cocos/platform/os-interfaces/modules/java/Battery.h
+        cocos/platform/os-interfaces/modules/java/CommonScreen.cpp
+        cocos/platform/os-interfaces/modules/java/CommonScreen.h
+        cocos/platform/os-interfaces/modules/java/Network.cpp
+        cocos/platform/os-interfaces/modules/java/Network.h
+        cocos/platform/os-interfaces/modules/java/Vibrate.cpp
+        cocos/platform/os-interfaces/modules/java/Vibrate.h
+        cocos/platform/os-interfaces/modules/java/System.cpp
+        cocos/platform/os-interfaces/modules/java/System.h
+        cocos/platform/os-interfaces/modules/java/CommonSystemWindow.cpp
+        cocos/platform/os-interfaces/modules/java/CommonSystemWindow.h
+    )
+endif()
+if(ANDROID)
+    cocos_source_files(
         cocos/platform/os-interfaces/modules/android/Screen.cpp
         cocos/platform/os-interfaces/modules/android/Screen.h
-        cocos/platform/os-interfaces/modules/android/Network.cpp
-        cocos/platform/os-interfaces/modules/android/Network.h
-        cocos/platform/os-interfaces/modules/android/Vibrate.cpp
-        cocos/platform/os-interfaces/modules/android/Vibrate.h
-        cocos/platform/os-interfaces/modules/android/System.cpp
-        cocos/platform/os-interfaces/modules/android/System.h
         cocos/platform/os-interfaces/modules/android/SystemWindow.cpp
         cocos/platform/os-interfaces/modules/android/SystemWindow.h
+    )
+elseif(OHOS)
+    cocos_source_files(
+        cocos/platform/os-interfaces/modules/ohos/Screen.cpp
+        cocos/platform/os-interfaces/modules/ohos/Screen.h
+        cocos/platform/os-interfaces/modules/ohos/SystemWindow.cpp
+        cocos/platform/os-interfaces/modules/ohos/SystemWindow.h
     )
 endif()
 
@@ -690,10 +710,6 @@ elseif(ANDROID)
         #cocos/platform/android/View.h
     )
     set(CC_JNI_SRC_FILES
-        ${CWD}/cocos/platform/android/jni/JniInteraction.cpp
-        ${CWD}/cocos/platform/android/jni/JniInteraction.h
-        ${CWD}/cocos/platform/android/jni/MessagePipe.cpp
-        ${CWD}/cocos/platform/android/jni/MessagePipe.h
         ${CWD}/cocos/platform/android/jni/JniCocosActivity.cpp
         ${CWD}/cocos/platform/android/jni/JniCocosActivity.h
         ${CWD}/cocos/platform/java/jni/JniCocosTouchHandler.cpp
@@ -704,6 +720,10 @@ elseif(ANDROID)
         ${CWD}/cocos/platform/java/jni/JniHelper.h
         ${CWD}/cocos/platform/java/jni/JniImp.cpp
         ${CWD}/cocos/platform/java/jni/JniImp.h
+        ${CWD}/cocos/platform/java/jni/glue/JniNativeGlue.cpp
+        ${CWD}/cocos/platform/java/jni/glue/JniNativeGlue.h
+        ${CWD}/cocos/platform/java/jni/glue/MessagePipe.cpp
+        ${CWD}/cocos/platform/java/jni/glue/MessagePipe.h
     )
 
     
@@ -713,13 +733,15 @@ elseif(ANDROID)
     )
 elseif(OHOS)
     cocos_source_files(
-        cocos/platform/ohos/Application-ohos.cpp
-        cocos/platform/java/CanvasRenderingContext2D-java.cpp
-        cocos/platform/ohos/Device-ohos.cpp
-        cocos/platform/ohos/View.cpp
-        cocos/platform/ohos/View.h
+        #cocos/platform/ohos/Application-ohos.cpp
+        #cocos/platform/java/CanvasRenderingContext2D-java.cpp
+        #cocos/platform/ohos/Device-ohos.cpp
+        #cocos/platform/ohos/View.cpp
+        #cocos/platform/ohos/View.h
     )
     set(CC_JNI_SRC_FILES
+        #${CWD}/cocos/platform/ohos/jni/glue/JniNativeGlue.cpp
+        #${CWD}/cocos/platform/ohos/jni/glue/JniNativeGlue.h
         ${CWD}/cocos/platform/ohos/jni/JniCocosAbility.cpp
         ${CWD}/cocos/platform/ohos/jni/JniCocosAbility.h
         ${CWD}/cocos/platform/java/jni/JniHelper.cpp
@@ -730,6 +752,10 @@ elseif(OHOS)
         ${CWD}/cocos/platform/java/jni/JniCocosKeyCodeHandler.cpp
         ${CWD}/cocos/platform/java/jni/JniCocosOrientationHelper.cpp
         ${CWD}/cocos/platform/ohos/jni/AbilityConsts.h
+        ${CWD}/cocos/platform/java/jni/glue/JniNativeGlue.cpp
+        ${CWD}/cocos/platform/java/jni/glue/JniNativeGlue.h
+        ${CWD}/cocos/platform/java/jni/glue/MessagePipe.cpp
+        ${CWD}/cocos/platform/java/jni/glue/MessagePipe.h
     )
     cocos_source_files(MODULE ccfilesystem
         cocos/platform/ohos/FileUtils-ohos.cpp

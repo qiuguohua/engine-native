@@ -32,7 +32,7 @@
     #include <atomic>
 
     #include "cocos/network/WebSocketServer.h"
-    #include "cocos/platform/Application.h"
+    #include "cocos/engine/EngineManager.h"
     #include "cocos/base/Scheduler.h"
     #include "cocos/base/Log.h"
 
@@ -97,10 +97,10 @@ void schedule_task_into_server_thread_task_queue(uv_async_t *asyn, std::function
 
 namespace cc {
 namespace network {
-
+    
     #define RUN_IN_GAMETHREAD(task)                                                              \
         do {                                                                                     \
-            cc::Application::getInstance()->getScheduler()->performFunctionInCocosThread([=]() { \
+            CURRENT_ENGINE()->getEngineScheduler()->performFunctionInCocosThread([=]() {         \
                 task;                                                                            \
             });                                                                                  \
         } while (0)

@@ -22,22 +22,24 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  THE SOFTWARE.
 ****************************************************************************/
+
 #include <thread>
 
-#include "platform/android/AndroidPlatform.h"
 #include "platform/java/jni/glue/JniNativeGlue.h"
-#include "platform/os-interfaces/modules/android/SystemWindow.h"
+#include "platform/ohos/OhosPlatform.h"
+#include "platform/os-interfaces/modules/ohos/SystemWindow.h"
+
 
 namespace cc {
-AndroidPlatform::AndroidPlatform() {
+OhosPlatform::OhosPlatform() {
     _jniNativeGlue = COCOS_INTERACTION();
 }
 
-int AndroidPlatform::getSdkVersion() const {
+int OhosPlatform::getSdkVersion() const {
     return _jniNativeGlue->getSdkVersion();
 }
 
-int32_t AndroidPlatform::run(int argc, char** argv) {
+int32_t OhosPlatform::run(int argc, char** argv) {
     std::thread mainLogicThread([this, argc, argv]() {
         checkWindowHandleInit();
         main(argc, argv);
@@ -47,13 +49,13 @@ int32_t AndroidPlatform::run(int argc, char** argv) {
     return 0;
 }
 
-void AndroidPlatform::checkWindowHandleInit() {
+void OhosPlatform::checkWindowHandleInit() {
     _jniNativeGlue->setRunning(true);
     while (_jniNativeGlue->isRunning()) {
         pollEvent();
         NativeWindowType* wndHandle = _jniNativeGlue->getWindowHandle();
         if (wndHandle != nullptr) {
-            SystemWindow* systemWindow = getOSInterface<SystemWindow>();
+             SystemWindow* systemWindow = getOSInterface<SystemWindow>();
             systemWindow->setWindowHandle(wndHandle);
             systemWindow->setWidth(_jniNativeGlue->getWidth());
             systemWindow->setHeight(_jniNativeGlue->getHeight());
@@ -64,7 +66,7 @@ void AndroidPlatform::checkWindowHandleInit() {
     _jniNativeGlue->setEventDispatch(this);
 }
 
-void AndroidPlatform::pollEvent() {
+void OhosPlatform::pollEvent() {
     _jniNativeGlue->execCommand();
     if (!_jniNativeGlue->isPause()) {
         std::this_thread::yield();

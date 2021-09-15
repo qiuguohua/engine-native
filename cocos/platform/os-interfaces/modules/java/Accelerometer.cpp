@@ -23,19 +23,38 @@
  THE SOFTWARE.
 ****************************************************************************/
 
-#include "platform/os-interfaces/modules/IVibrate.h"
-
-#if (CC_PLATFORM == CC_PLATFORM_WINDOWS)
-    #include "platform/os-interfaces/modules/windows/Vibrate.h"
-#elif (CC_PLATFORM == CC_PLATFORM_ANDROID || CC_PLATFORM == CC_PLATFORM_OHOS)
-    #include "platform/os-interfaces/modules/java/Vibrate.h"
-#endif
+#include "platform/os-interfaces/modules/java/Accelerometer.h"
+#include "platform/java/jni/JniImp.h"
 
 namespace cc {
+void Accelerometer::setAccelerometerEnabled(bool isEnabled) {
+    setAccelerometerEnabledJNI(isEnabled);
+}
 
-// static
-OSInterface::Ptr IVibrate::createVibrateInterface() {
-    return std::make_shared<Vibrate>();
+void Accelerometer::setAccelerometerInterval(float interval) {
+    setAccelerometerIntervalJNI(interval);
+}
+
+const Accelerometer::MotionValue& Accelerometer::getDeviceMotionValue() {
+    static MotionValue motionValue;
+    float*             v = getDeviceMotionValueJNI();
+
+    if (v) {
+        motionValue.accelerationIncludingGravityX = v[0];
+        motionValue.accelerationIncludingGravityY = v[1];
+        motionValue.accelerationIncludingGravityZ = v[2];
+
+        motionValue.accelerationX = v[3];
+        motionValue.accelerationY = v[4];
+        motionValue.accelerationZ = v[5];
+
+        motionValue.rotationRateAlpha = v[6];
+        motionValue.rotationRateBeta  = v[7];
+        motionValue.rotationRateGamma = v[8];
+    } else {
+        memset(&motionValue, 0, sizeof(motionValue));
+    }
+    return motionValue;
 }
 
 } // namespace cc

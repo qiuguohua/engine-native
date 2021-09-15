@@ -23,7 +23,7 @@
  THE SOFTWARE.                                                                    \
  ****************************************************************************/
 
-#include "platform/os-interfaces/modules/canvas/CanvasRenderingContext2DDelegate-java.h"
+#include "platform/os-interfaces/modules/java/CanvasRenderingContext2DDelegate.h"
 
 namespace {
 

@@ -29,6 +29,8 @@
     #include "platform/os-interfaces/modules/windows/Screen.h"
 #elif (CC_PLATFORM == CC_PLATFORM_ANDROID)
     #include "platform/os-interfaces/modules/android/Screen.h"
+#elif (CC_PLATFORM == CC_PLATFORM_OHOS)
+    #include "platform/os-interfaces/modules/ohos/Screen.h"
 #endif
 namespace cc {
 
