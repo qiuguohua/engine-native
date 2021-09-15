@@ -1,5 +1,5 @@
 /****************************************************************************
- Copyright (c) 2020-2021 Xiamen Yaji Software Co., Ltd.
+ Copyright (c) 2017-2021 Xiamen Yaji Software Co., Ltd.
 
  http://www.cocos.com
 
@@ -23,19 +23,61 @@
  THE SOFTWARE.
 ****************************************************************************/
 
-#pragma once
-#include <iostream>
+#include "platform/os-interfaces/modules/java/CommonSystemWindow.h"
+#include <fcntl.h>
+#include <jni.h>
+#include <unistd.h>
+#include <functional>
+#include <thread>
+#include <vector>
+#include "base/Log.h"
+#include "base/Macros.h"
+
+#include "platform/java/jni/JniImp.h"
+
+namespace {
+
+} // namespace
+
 namespace cc {
-
-class MessagePipe{
-public:
-    MessagePipe();
-    ~MessagePipe();
-    void writeCommand(int8_t cmd) const;
-    int readCommand(int8_t &cmd) const ;
-private:
-    int _pipeRead  = 0;
-    int _pipeWrite = 0;
-};
-
+CommonSystemWindow::CommonSystemWindow(IEventDispatch *platform)
+: ISystemWindow(platform) {
 }
+
+CommonSystemWindow::~CommonSystemWindow() = default;
+
+void CommonSystemWindow::pollEvent() {
+}
+
+bool CommonSystemWindow::createWindow(const char *title,
+                                    int x, int y, int w,
+                                    int h, int flags) {
+    CC_UNUSED_PARAM(title);
+    CC_UNUSED_PARAM(x);
+    CC_UNUSED_PARAM(y);
+    CC_UNUSED_PARAM(w);
+    CC_UNUSED_PARAM(h);
+    CC_UNUSED_PARAM(flags);
+    return true;
+}
+
+void CommonSystemWindow::setCursorEnabled(bool value) {
+}
+
+void CommonSystemWindow::copyTextToClipboard(const std::string &text) {
+    copyTextToClipboardJNI(text);
+}
+
+std::array<int, 2> CommonSystemWindow::getViewSize() const {
+    return std::array<int, 2>{_width, _height};
+}
+
+void CommonSystemWindow::setHeight(int32_t height) {
+    _height = height;
+}
+
+void CommonSystemWindow::setWidth(int32_t width) {
+    _width = width;
+}
+
+} // namespace cc

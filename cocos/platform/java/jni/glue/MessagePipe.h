@@ -1,5 +1,5 @@
 /****************************************************************************
- Copyright (c) 2017-2021 Xiamen Yaji Software Co., Ltd.
+ Copyright (c) 2020-2021 Xiamen Yaji Software Co., Ltd.
 
  http://www.cocos.com
 
@@ -23,19 +23,24 @@
  THE SOFTWARE.
 ****************************************************************************/
 
-#include "platform/os-interfaces/modules/IVibrate.h"
+#pragma once
 
-#if (CC_PLATFORM == CC_PLATFORM_WINDOWS)
-    #include "platform/os-interfaces/modules/windows/Vibrate.h"
-#elif (CC_PLATFORM == CC_PLATFORM_ANDROID || CC_PLATFORM == CC_PLATFORM_OHOS)
-    #include "platform/os-interfaces/modules/java/Vibrate.h"
-#endif
+#include <iostream>
 
 namespace cc {
 
-// static
-OSInterface::Ptr IVibrate::createVibrateInterface() {
-    return std::make_shared<Vibrate>();
-}
+class MessagePipe {
+public:
+    MessagePipe();
+    ~MessagePipe();
+    void writeCommand(int8_t cmd) const;
+    int  readCommand(int8_t& cmd) const;
+    void writeCommand(void* msg, int32_t msgSize) const;
+    int  readCommand(void* msg, int32_t) const;
+
+private:
+    int _pipeRead  = 0;
+    int _pipeWrite = 0;
+};
 
 } // namespace cc

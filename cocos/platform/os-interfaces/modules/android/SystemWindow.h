@@ -25,37 +25,20 @@
 
 #pragma once
 
-#include <iostream>
-
-#include "platform/os-interfaces/modules/ISystemWindow.h"
-
+#include "platform/os-interfaces/modules/java/CommonSystemWindow.h"
 class ANativeWindow;
 
 namespace cc {
 
-class SystemWindow : public ISystemWindow {
+class SystemWindow : public CommonSystemWindow {
 public:
     explicit SystemWindow(IEventDispatch* platform);
     ~SystemWindow() override;
 
-    bool      createWindow(const char* title,
-                           int x, int y, int w,
-                           int h, int flags) override;
+    void      setWindowHandle(ANativeWindow* handle);
     uintptr_t getWindowHandler() override;
-    void      pollEvent() override;
-
-    std::array<int, 2> getViewSize() const override;
-    /**
-     @brief enable/disable(lock) the cursor, default is enabled
-     */
-    void setCursorEnabled(bool value) override;
-    void copyTextToClipboard(const std::string& text) override;
-    void setWindowHandle(ANativeWindow* handle);
 
 private:
-    bool           _inited = false;
-    int            _width  = 0;
-    int            _height = 0;
     ANativeWindow* _handle = nullptr;
 };
 

@@ -23,19 +23,9 @@
  THE SOFTWARE.
 ****************************************************************************/
 
-#include "platform/os-interfaces/modules/android/System.h"
-#include <android/log.h>
-#include <android/sensor.h>
-#include <android/window.h>
-#include <android_native_app_glue.h>
-#include <jni.h>
-#include <cstring>
-
+#include "platform/os-interfaces/modules/java/System.h"
 #include "platform/java/jni/JniHelper.h"
 #include "platform/java/jni/JniImp.h"
-#ifndef JCLS_HELPER
-    #define JCLS_HELPER "com/cocos/lib/CocosHelper"
-#endif
 
 namespace cc {
 using OSType = System::OSType;
@@ -45,7 +35,7 @@ OSType System::getOSType() const {
 }
 
 std::string System::getDeviceModel() {
-    return JniHelper::callStaticStringMethod(JCLS_HELPER, "getDeviceModel");
+    return getDeviceModelJNI();
 }
 
 System::LanguageType System::getCurrentLanguage() {

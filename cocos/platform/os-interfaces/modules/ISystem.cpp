@@ -26,8 +26,8 @@
 
 #if (CC_PLATFORM == CC_PLATFORM_WINDOWS)
     #include "platform/os-interfaces/modules/windows/System.h"
-#elif (CC_PLATFORM == CC_PLATFORM_ANDROID)
-    #include "platform/os-interfaces/modules/android/System.h"
+#elif (CC_PLATFORM == CC_PLATFORM_ANDROID || CC_PLATFORM == CC_PLATFORM_OHOS)
+    #include "platform/os-interfaces/modules/java/System.h"
 #endif
 
 namespace cc {

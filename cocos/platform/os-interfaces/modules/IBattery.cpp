@@ -27,8 +27,8 @@
 
 #if (CC_PLATFORM == CC_PLATFORM_WINDOWS)
     #include "platform/os-interfaces/modules/windows/Battery.h"
-#elif (CC_PLATFORM == CC_PLATFORM_ANDROID)
-    #include "platform/os-interfaces/modules/android/Battery.h"
+#elif (CC_PLATFORM == CC_PLATFORM_ANDROID || CC_PLATFORM == CC_PLATFORM_OHOS)
+    #include "platform/os-interfaces/modules/java/Battery.h"
 #endif
 
 namespace cc {

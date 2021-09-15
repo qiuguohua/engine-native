@@ -24,10 +24,9 @@
 ****************************************************************************/
 #include <jni.h>
 #include "cocos/bindings/event/EventDispatcher.h"
-#include "platform/android/jni/JniInteraction.h"
 #include "platform/java/jni/JniHelper.h"
+#include "platform/java/jni/glue/JniNativeGlue.h"
 #include "platform/os-interfaces/modules/Device.h"
-
 
 extern "C" {
 

@@ -23,19 +23,40 @@
  THE SOFTWARE.
 ****************************************************************************/
 
-#include "platform/os-interfaces/modules/IVibrate.h"
+#pragma once
 
-#if (CC_PLATFORM == CC_PLATFORM_WINDOWS)
-    #include "platform/os-interfaces/modules/windows/Vibrate.h"
-#elif (CC_PLATFORM == CC_PLATFORM_ANDROID || CC_PLATFORM == CC_PLATFORM_OHOS)
-    #include "platform/os-interfaces/modules/java/Vibrate.h"
-#endif
+#include <iostream>
+
+#include "platform/os-interfaces/modules/ISystemWindow.h"
 
 namespace cc {
 
-// static
-OSInterface::Ptr IVibrate::createVibrateInterface() {
-    return std::make_shared<Vibrate>();
-}
+class CommonSystemWindow : public ISystemWindow {
+public:
+    explicit CommonSystemWindow(IEventDispatch* platform);
+    ~CommonSystemWindow() override;
+
+    bool createWindow(const char* title,
+                      int x, int y, int w,
+                      int h, int flags) override;
+
+    void pollEvent() override;
+
+    std::array<int, 2> getViewSize() const override;
+    /**
+     @brief enable/disable(lock) the cursor, default is enabled
+     */
+    void setCursorEnabled(bool value) override;
+    void copyTextToClipboard(const std::string& text) override;
+    //virtual void setWindowHandle(void* handle);
+    void setHeight(int32_t height);
+    void setWidth(int32_t width);
+private:
+    bool _inited = false;
+
+protected:
+    int32_t _width  = 0;
+    int32_t _height = 0;
+};
 
 } // namespace cc

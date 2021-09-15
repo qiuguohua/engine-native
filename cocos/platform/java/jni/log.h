@@ -1,5 +1,5 @@
 /****************************************************************************
- Copyright (c) 2017-2021 Xiamen Yaji Software Co., Ltd.
+ Copyright (c) 2020-2021 Xiamen Yaji Software Co., Ltd.
 
  http://www.cocos.com
 
@@ -23,35 +23,12 @@
  THE SOFTWARE.
 ****************************************************************************/
 
-#include "platform/os-interfaces/modules/android/Accelerometer.h"
-#include "platform/java/jni/JniHelper.h"
+#pragma once
 
-namespace cc {
-void Accelerometer::setAccelerometerEnabled(bool isEnabled) {
-    JniHelper::callStaticVoidMethod(JCLS_SENSOR, "setAccelerometerEnabled", isEnabled);
-}
-
-void Accelerometer::setAccelerometerInterval(float interval) {
-    JniHelper::callStaticVoidMethod(JCLS_SENSOR, "setAccelerometerInterval", interval);
-}
-
-const Accelerometer::MotionValue& Accelerometer::getDeviceMotionValue() {
-    static MotionValue motionValue;
-    float*             v = JniHelper::callStaticFloatArrayMethod(JCLS_SENSOR, "getDeviceMotionValue");
-
-    motionValue.accelerationIncludingGravityX = v[0];
-    motionValue.accelerationIncludingGravityY = v[1];
-    motionValue.accelerationIncludingGravityZ = v[2];
-
-    motionValue.accelerationX = v[3];
-    motionValue.accelerationY = v[4];
-    motionValue.accelerationZ = v[5];
-
-    motionValue.rotationRateAlpha = v[6];
-    motionValue.rotationRateBeta  = v[7];
-    motionValue.rotationRateGamma = v[8];
-
-    return motionValue;
-}
-
-} // namespace cc
+#if (CC_PLATFORM == CC_PLATFORM_ANDROID)
+    #include <android/log.h>
+    #define LOGV(...) __android_log_print(ANDROID_LOG_INFO, "CocosActivity JNI", __VA_ARGS__)
+#elif (CC_PLATFORM == CC_PLATFORM_OHOS)
+    #include <hilog/log.h>
+    #define LOGV(...) HILOG_INFO(LOG_APP, __VA_ARGS__)
+#endif

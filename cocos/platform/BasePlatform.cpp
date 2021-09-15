@@ -28,13 +28,13 @@
     #include "platform/win32/WindowsPlatform.h"
 #elif (CC_PLATFORM == CC_PLATFORM_ANDROID)
     #include "platform/android/AndroidPlatform.h"
+#elif (CC_PLATFORM == CC_PLATFORM_OHOS)
+    #include "platform/ohos/OhosPlatform.h"
 #endif
 
 namespace cc {
 
-BasePlatform::~BasePlatform() {
-    _osInterfaces.clear();
-}
+BasePlatform::~BasePlatform() = default;
 
 BasePlatform* BasePlatform::getPlatform() {
 #if (CC_PLATFORM == CC_PLATFORM_WINDOWS)
@@ -42,6 +42,9 @@ BasePlatform* BasePlatform::getPlatform() {
     return &platform;
 #elif (CC_PLATFORM == CC_PLATFORM_ANDROID)
     static AndroidPlatform platform;
+    return &platform;
+#elif (CC_PLATFORM == CC_PLATFORM_OHOS)
+    static OhosPlatform platform;
     return &platform;
 #endif
 }

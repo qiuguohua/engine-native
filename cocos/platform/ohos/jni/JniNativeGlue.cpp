@@ -23,8 +23,7 @@
  THE SOFTWARE.
 ****************************************************************************/
 
-#include "platform/android/jni/JniInteraction.h"
-#include "platform/android/jni/MessagePipe.h"
+#include "platform/android/jni/glue/JniNativeGlue.h"
 
 #include <android/asset_manager_jni.h>
 #include <android/log.h>
@@ -35,10 +34,10 @@
 #include <unistd.h>
 #include <thread>
 #include <vector>
-#include "JniCocosActivity.h"
+#include "platform/android/jni/JniCocosActivity.h"
 #include "cocos/bindings/event/CustomEventTypes.h"
-#include "platform/BasePlatform.h"
-#include "platform/IEventDispatch.h"
+
+#include "cocos/bindings/event/EventDispatcher.h"
 #include "platform/android/FileUtils-android.h"
 #include "platform/android/jni/JniCocosActivity.h"
 #include "platform/java/jni/JniHelper.h"
@@ -47,31 +46,13 @@
 namespace cc {
 JniInteraction::JniInteraction() = default;
 
-void JniInteraction::init() {
-    _messagePipe = std::make_unique<MessagePipe>();
-
-    BasePlatform* platform = cc::BasePlatform::getPlatform();
-    if (platform->init()) {
-        LOGV("Platform initialization failed");
-    }
-    platform->run(0, nullptr);
-}
-
 JniInteraction* JniInteraction::getInstance() {
     static JniInteraction cocosInstaction;
     return &cocosInstaction;
 }
 
-bool JniInteraction::isRunning() const {
-    return _running;
-}
+void JniInteraction::init() {
 
-void JniInteraction::setSdkVersion(int sdkVersion) {
-    _sdkVersion = sdkVersion;
-}
-
-int JniInteraction::getSdkVersion() const {
-    return _sdkVersion;
 }
 
 void JniInteraction::setObbPath(const std::string& path) {
@@ -83,49 +64,40 @@ void JniInteraction::setAAssetManager(AAssetManager* assetManager) {
 }
 
 void JniInteraction::setWindow(ANativeWindow* window) {
-    std::unique_lock<std::mutex> lk(_mutex);
     if (_pendingWindow) {
-        writeCommand(APP_CMD_TERM_WINDOW);
+        writeCommandSync(ABILITY_CMD_TERM_WINDOW);
     }
     _pendingWindow = window;
-    if (window) {
-        writeCommand(APP_CMD_INIT_WINDOW);
-    }
-    while (_window != _pendingWindow) {
-        _cond.wait(lk);
-    }
 }
 
-void JniInteraction::writeCommand(int8_t cmd) {
-    _messagePipe->writeCommand(cmd);
-}
-
-int JniInteraction::readCommand(int8_t& cmd) {
-    return _messagePipe->readCommand(cmd);
+void JniInteraction::initWithPendingWindow() {
+    if (_pendingWindow) {
+        writeCommandSync(ABILITY_CMD_INIT_WINDOW);
+    }
 }
 
 void JniInteraction::preExecCmd(int8_t cmd) {
-    switch (cmd) {
-        case APP_CMD_INIT_WINDOW: {
-            LOGV("APP_CMD_INIT_WINDOW");
-            std::unique_lock<std::mutex> lk(_mutex);
+        switch (cmd) {
+        case ABILITY_CMD_INIT_WINDOW: {
+            LOGV("ABILITY_CMD_INIT_WINDOW");
             _window = _pendingWindow;
-            lk.unlock();
-            _cond.notify_all();
-            _animating = true;
+            setAnimating(true);
         } break;
-        case APP_CMD_TERM_WINDOW:
-            LOGV("APP_CMD_TERM_WINDOW");
-            _animating = false;
-            _cond.notify_all();
+        case ABILITY_CMD_TERM_WINDOW:
+            LOGV("ABILITY_CMD_TERM_WINDOW");
+            setAnimating(false);
             break;
-        case APP_CMD_RESUME:
-            LOGV("APP_CMD_RESUME");
+        case ABILITY_CMD_RESUME:
+            LOGV("ABILITY_CMD_RESUME");
             handlePauseResume(cmd);
             break;
-        case APP_CMD_PAUSE:
-            LOGV("APP_CMD_PAUSE");
+        case ABILITY_CMD_PAUSE:
+            LOGV("ABILITY_CMD_PAUSE");
             handlePauseResume(cmd);
+            break;
+        case ABILITY_CMD_DESTROY:
+            LOGV("ABILITY_CMD_DESTROY");
+            cc::cocosApp.destroyRequested = true;
             break;
         default:
             break;
@@ -134,11 +106,9 @@ void JniInteraction::preExecCmd(int8_t cmd) {
 
 void JniInteraction::postExecCmd(int8_t cmd) {
     switch (cmd) {
-        case APP_CMD_TERM_WINDOW: {
-            std::unique_lock<std::mutex> lk(_mutex);
+        case ABILITY_CMD_TERM_WINDOW: {
             _window = nullptr;
-            lk.unlock();
-            _cond.notify_all();
+            _pendingWindow = nullptr;
         } break;
         default:
             break;
@@ -146,76 +116,57 @@ void JniInteraction::postExecCmd(int8_t cmd) {
 }
 
 void JniInteraction::setAppState(int8_t cmd) {
+    /*
     std::unique_lock<std::mutex> lk(_mutex);
     writeCommand(cmd);
     while (_appState != cmd) {
         _cond.wait(lk);
     }
+    */
+    writeCommandSync(cmd);
 }
 
 void JniInteraction::handlePauseResume(int8_t cmd) {
     LOGV("appState=%d", cmd);
-    std::unique_lock<std::mutex> lk(_mutex);
     _appState = static_cast<uint8_t>(cmd);
-    lk.unlock();
-    _cond.notify_all();
 }
 
 void JniInteraction::flushTasksOnGameThread() const {
-    if (_animating) {
+    if (getAnimating()) {
         // Handle java events send by UI thread. Input events are handled here too.
-        cc::JniHelper::callStaticVoidMethod(JCLS_HELPER,
-                                            "flushTasksOnGameThread");
+        flushTasksOnGameThreadJNI();
     }
 }
 
 void JniInteraction::setRunning(bool isRunning) {
-    std::unique_lock<std::mutex> lk(_mutex);
+    _ThreadPromise.set_value();
     _running = isRunning;
-    lk.unlock();
-    _cond.notify_all();
     //_systemWindow = _platform->getInterfaces<SystemWindow>();
 }
 
 void JniInteraction::waitRunning() {
-    std::unique_lock<std::mutex> lk(_mutex);
-    while (!_running) {
-        _cond.wait(lk);
-    }
+    _ThreadPromise.get_future().get();
+}
+
+bool JniInteraction::isRunning() {
+    return _running;
 }
 
 ANativeWindow* JniInteraction::getWindowHandle() {
-    std::unique_lock<std::mutex> lk(_mutex);
     return _window;
 }
 
-void JniInteraction::setEventDispatch(IEventDispatch* eventDispatcher) {
-    _eventDispatcher = eventDispatcher;
-}
-
-void JniInteraction::dispatchEvent(const OSEvent& ev) {
-    if (_eventDispatcher) {
-        _eventDispatcher->dispatchEvent(ev);
-    }
-}
-
-void JniInteraction::dispatchTouchEvent(const OSEvent& ev) {
-    if (_eventDispatcher) {
-        _eventDispatcher->dispatchTouchEvent(ev);
-    }
-}
-
 void JniInteraction::execCommand() {
-    int8_t cmd = 0;
-    if (readCommand(cmd) > 0) {
-        preExecCmd(cmd);
-        engineHandleCmd(cmd);
-        postExecCmd(cmd);
+    CommandMsg msg;
+    if (readCommand(&msg) > 0) {
+        preExecCmd(msg.cmd);
+        engineHandleCmd(msg.cmd);
+        postExecCmd(msg.cmd);
     }
 }
 
 bool JniInteraction::isPause() const {
-    if (!_animating) {
+    if (!getAnimating()) {
         return true;
     }
     if (_appState == APP_CMD_PAUSE) {

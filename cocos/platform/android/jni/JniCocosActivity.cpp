@@ -35,7 +35,7 @@
 #include <vector>
 
 #include "platform/android/FileUtils-android.h"
-#include "platform/android/jni/JniInteraction.h"
+#include "platform/java/jni/glue/JniNativeGlue.h"
 #include "platform/java/jni/JniHelper.h"
 
 
@@ -51,18 +51,19 @@ JNIEXPORT void JNICALL Java_com_cocos_lib_CocosActivity_onCreateNative(JNIEnv *e
     COCOS_INTERACTION()->setSdkVersion(sdkVersion);
     cc::JniHelper::init(env, activity);
     COCOS_INTERACTION()->setObbPath(cc::JniHelper::jstring2string(obbPath));
-    COCOS_INTERACTION()->setAAssetManager(AAssetManager_fromJava(env, assetMgr));
+    COCOS_INTERACTION()->setResourceManager(AAssetManager_fromJava(env, assetMgr));
     cc::FileUtilsAndroid::setassetmanager(AAssetManager_fromJava(env, assetMgr));
-    COCOS_INTERACTION()->init();
+    COCOS_INTERACTION()->init(0, nullptr);
 }
 
 //NOLINTNEXTLINE
 JNIEXPORT void JNICALL Java_com_cocos_lib_CocosActivity_onSurfaceCreatedNative(JNIEnv *env, jobject obj, jobject surface) {
     COCOS_INTERACTION()->setWindow(ANativeWindow_fromSurface(env, surface));
 }
+
 //NOLINTNEXTLINE
 JNIEXPORT void JNICALL Java_com_cocos_lib_CocosActivity_onStartNative(JNIEnv *env, jobject obj) {
-    COCOS_INTERACTION()->setAppState(APP_CMD_RESUME);
+    COCOS_INTERACTION()->onResume();
 }
 //NOLINTNEXTLINE
 JNIEXPORT void JNICALL Java_com_cocos_lib_CocosActivity_onPauseNative(JNIEnv *env, jobject obj) {
@@ -72,11 +73,11 @@ JNIEXPORT void JNICALL Java_com_cocos_lib_CocosActivity_onResumeNative(JNIEnv *e
 }
 //NOLINTNEXTLINE
 JNIEXPORT void JNICALL Java_com_cocos_lib_CocosActivity_onStopNative(JNIEnv *env, jobject obj) {
-    COCOS_INTERACTION()->setAppState(APP_CMD_PAUSE);
+    COCOS_INTERACTION()->onPause();
 }
 //NOLINTNEXTLINE
 JNIEXPORT void JNICALL Java_com_cocos_lib_CocosActivity_onLowMemoryNative(JNIEnv *env, jobject obj) {
-    COCOS_INTERACTION()->writeCommand(APP_CMD_LOW_MEMORY);
+    COCOS_INTERACTION()->onLowMemory();
 }
 //NOLINTNEXTLINE
 JNIEXPORT void JNICALL Java_com_cocos_lib_CocosActivity_onWindowFocusChangedNative(JNIEnv *env, jobject obj, jboolean has_focus) {

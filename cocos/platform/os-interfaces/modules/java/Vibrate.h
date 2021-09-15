@@ -1,5 +1,5 @@
 /****************************************************************************
- Copyright (c) 2020-2021 Xiamen Yaji Software Co., Ltd.
+ Copyright (c) 2017-2021 Xiamen Yaji Software Co., Ltd.
 
  http://www.cocos.com
 
@@ -25,47 +25,20 @@
 
 #pragma once
 
-#include <Windows.h>
-#include <assert.h>
-#include <array>
-#include <string>
-#include "base/Macros.h"
-#include "platform/StdC.h"
-
-// SDL headers
-#include "sdl2/SDL.h"
-#include "sdl2/SDL_main.h"
-#include "sdl2/SDL_syswm.h"
-
-#include "cocos/bindings/event/EventDispatcher.h"
+#include "platform/os-interfaces/modules/IVibrate.h"
 
 namespace cc {
 
-class View {
+class Vibrate : public IVibrate {
 public:
-    View(const std::string &title, int width, int height);
-    virtual ~View();
-
-    bool init();
-
-    bool pollEvent(bool *quit, bool *resume, bool *pause, bool *close);
-
-    std::array<int, 2> getViewSize() const { return std::array<int, 2>{_width, _height}; }
-
-    HWND getWindowHandler();
-
-    void swapbuffer() { SDL_GL_SwapWindow(_window); }
-
-    void setCursorEnabeld(bool);
-
-private:
-    std::string _title;
-    int         _width  = 0;
-    int         _height = 0;
-    bool        _inited = false;
-
-    SDL_Window *_window = nullptr;
-    SDL_Event   sdlEvent;
+    /**
+     * Vibrate for the specified amount of time.
+     * If vibrate is not supported, then invoking this method has no effect.
+     * Some platforms limit to a maximum duration of 5 seconds.
+     * Duration is ignored on iOS due to API limitations.
+     * @param duration The duration in seconds.
+     */
+    void vibrate(float duration) override;
 };
 
 } // namespace cc

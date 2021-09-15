@@ -23,13 +23,23 @@
  THE SOFTWARE.
 ****************************************************************************/
 
-#include "platform/os-interfaces/modules/windows/Vibrate.h"
-#include "platform/java/jni/JniHelper.h"
+#include "platform/os-interfaces/modules/ohos/SystemWindow.h"
+#include <native_layer.h>
+#include <native_layer_jni.h>
 
 namespace cc {
-
-void Vibrate::vibrate(float duration) {
-    JniHelper::callStaticVoidMethod(JCLS_HELPER, "vibrate", duration);
+SystemWindow::SystemWindow(IEventDispatch* platform)
+: CommonSystemWindow(platform) {
 }
 
+SystemWindow::~SystemWindow() = default;
+
+void SystemWindow::setWindowHandle(NativeLayer* handle) {
+    _handle = handle;
 }
+
+uintptr_t SystemWindow::getWindowHandler() {
+    return reinterpret_cast<uintptr_t>(_handle);
+}
+
+} // namespace cc

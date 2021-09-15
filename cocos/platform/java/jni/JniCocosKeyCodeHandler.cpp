@@ -32,8 +32,7 @@
 
 #include <jni.h>
 #include "cocos/bindings/event/EventDispatcher.h"
-#include "platform/android/jni/JniInteraction.h"
-
+#include "platform/java/jni/glue/JniNativeGlue.h"
 
 namespace {
 struct cc::KeyboardEvent keyboardEvent;

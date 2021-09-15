@@ -22,13 +22,13 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  THE SOFTWARE.
 ****************************************************************************/
-#include "platform/os-interfaces/modules/android/Battery.h"
-#include "platform/java/jni/JniHelper.h"
+#include "platform/os-interfaces/modules/java/Battery.h"
+#include "platform/java/jni/JniImp.h"
 
 namespace cc {
 
 float Battery::getBatteryLevel() {
-    return JniHelper::callStaticFloatMethod(JCLS_HELPER, "getBatteryLevel");
+    return getBatteryLevelJNI();
 }
 
 } // namespace cc

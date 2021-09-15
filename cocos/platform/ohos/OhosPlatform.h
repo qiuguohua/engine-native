@@ -22,13 +22,23 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  THE SOFTWARE.
 ****************************************************************************/
-#include "platform/os-interfaces/modules/android/Network.h"
-#include "platform/java/jni/JniHelper.h"
+
+#pragma once
+
+#include "platform/UniversalPlatform.h"
 
 namespace cc {
+class JniNativeGlue;
+class OhosPlatform : public UniversalPlatform {
+public:
+    OhosPlatform();
+    void    pollEvent() override;
+    int32_t run(int argc, char** argv) override;
+    int     getSdkVersion() const override;
 
-INetwork::NetworkType Network::getNetworkType() {
-    return static_cast<INetwork::NetworkType>(JniHelper::callStaticIntMethod(JCLS_HELPER, "getNetworkType"));
-}
+private:
+    void checkWindowHandleInit();
 
+    JniNativeGlue* _jniNativeGlue;
+};
 } // namespace cc
