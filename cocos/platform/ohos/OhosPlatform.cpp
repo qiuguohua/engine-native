@@ -41,7 +41,7 @@ int OhosPlatform::getSdkVersion() const {
 
 int32_t OhosPlatform::run(int argc, char** argv) {
     std::thread mainLogicThread([this, argc, argv]() {
-        checkWindowHandleInit();
+        waitWindowInitialized();
         main(argc, argv);
     });
     mainLogicThread.detach();
@@ -49,7 +49,7 @@ int32_t OhosPlatform::run(int argc, char** argv) {
     return 0;
 }
 
-void OhosPlatform::checkWindowHandleInit() {
+void OhosPlatform::waitWindowInitialized() {
     _jniNativeGlue->setRunning(true);
     while (_jniNativeGlue->isRunning()) {
         pollEvent();

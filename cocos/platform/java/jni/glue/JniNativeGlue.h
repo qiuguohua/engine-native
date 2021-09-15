@@ -64,7 +64,7 @@ public:
 
     virtual void init(int argc, char** argv);
 
-    void              setWindow(NativeWindowType* window);
+    void              setWindowHandle(NativeWindowType* window);
     NativeWindowType* getWindowHandle();
 
     void                 setResourceManager(ResourceManagerType* resourceManager);
@@ -117,14 +117,13 @@ private:
     int  _sdkVersion = 0;
     bool _animating  = true;
 
-    std::promise<void>   _threadPromise;
-    std::string          _obbPath;
-    ResourceManagerType* _resourceManager = nullptr;
-    NativeWindowType*    _window          = nullptr;
-    NativeWindowType*    _pendingWindow   = nullptr;
-    JniCommand           _appState        = JniCommand::JNI_CMD_UNKNOW;
-
-    IEventDispatch*              _eventDispatcher;
+    std::promise<void>           _threadPromise;
+    std::string                  _obbPath;
+    ResourceManagerType*         _resourceManager = nullptr;
+    NativeWindowType*            _window          = nullptr;
+    NativeWindowType*            _pendingWindow   = nullptr;
+    JniCommand                   _appState        = JniCommand::JNI_CMD_UNKNOW;
+    IEventDispatch*              _eventDispatcher = nullptr;
     std::unique_ptr<MessagePipe> _messagePipe;
 };
 

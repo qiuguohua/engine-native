@@ -39,7 +39,7 @@ int AndroidPlatform::getSdkVersion() const {
 
 int32_t AndroidPlatform::run(int argc, char** argv) {
     std::thread mainLogicThread([this, argc, argv]() {
-        checkWindowHandleInit();
+        waitWindowInitialized();
         main(argc, argv);
     });
     mainLogicThread.detach();
@@ -47,7 +47,7 @@ int32_t AndroidPlatform::run(int argc, char** argv) {
     return 0;
 }
 
-void AndroidPlatform::checkWindowHandleInit() {
+void AndroidPlatform::waitWindowInitialized() {
     _jniNativeGlue->setRunning(true);
     while (_jniNativeGlue->isRunning()) {
         pollEvent();

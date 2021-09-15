@@ -58,7 +58,7 @@ JNIEXPORT void JNICALL Java_com_cocos_lib_CocosActivity_onCreateNative(JNIEnv *e
 
 //NOLINTNEXTLINE
 JNIEXPORT void JNICALL Java_com_cocos_lib_CocosActivity_onSurfaceCreatedNative(JNIEnv *env, jobject obj, jobject surface) {
-    COCOS_INTERACTION()->setWindow(ANativeWindow_fromSurface(env, surface));
+    COCOS_INTERACTION()->setWindowHandle(ANativeWindow_fromSurface(env, surface));
 }
 
 //NOLINTNEXTLINE
@@ -87,6 +87,6 @@ JNIEXPORT void JNICALL Java_com_cocos_lib_CocosActivity_onSurfaceChangedNative(J
 }
 //NOLINTNEXTLINE
 JNIEXPORT void JNICALL Java_com_cocos_lib_CocosActivity_onSurfaceDestroyNative(JNIEnv *env, jobject obj) {
-    COCOS_INTERACTION()->setWindow(nullptr);
+    COCOS_INTERACTION()->setWindowHandle(nullptr);
 }
 }

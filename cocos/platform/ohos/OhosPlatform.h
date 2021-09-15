@@ -37,7 +37,7 @@ public:
     int     getSdkVersion() const override;
 
 private:
-    void checkWindowHandleInit();
+    void waitWindowInitialized();
 
     JniNativeGlue* _jniNativeGlue;
 };
