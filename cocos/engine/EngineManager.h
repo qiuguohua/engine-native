@@ -50,7 +50,6 @@ public:
 private:
     EngineManager();
 
-private:
     std::weak_ptr<BaseEngine> _currentEngine;
     DISABLE_COPY_AND_MOVE(EngineManager);
 };

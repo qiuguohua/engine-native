@@ -13,7 +13,7 @@ JNIEXPORT void JNICALL Java_com_cocos_lib_CocosAbilitySlice_onOrientationChanged
         ev.type = cc::WindowEvent::Type::SIZE_CHANGED;
         ev.width = width;
         ev.height = height;
-        COCOS_INTERACTION()->dispatchEvent(ev);
+        JNI_NATIVE_GLUE()->dispatchEvent(ev);
         pOrientation = orientation;
         pHeight      = height;
         pWidth       = width;

@@ -26,11 +26,10 @@
 
 #include "platform/android/AndroidPlatform.h"
 #include "platform/java/jni/glue/JniNativeGlue.h"
-#include "platform/os-interfaces/modules/android/SystemWindow.h"
 
 namespace cc {
 AndroidPlatform::AndroidPlatform() {
-    _jniNativeGlue = COCOS_INTERACTION();
+    _jniNativeGlue = JNI_NATIVE_GLUE();
 }
 
 int AndroidPlatform::getSdkVersion() const {
@@ -51,12 +50,8 @@ void AndroidPlatform::waitWindowInitialized() {
     _jniNativeGlue->setRunning(true);
     while (_jniNativeGlue->isRunning()) {
         pollEvent();
-        NativeWindowType* wndHandle = _jniNativeGlue->getWindowHandle();
+        NativeWindowType* wndHandle = _jniNativeGlue->getWindowHandler();
         if (wndHandle != nullptr) {
-            SystemWindow* systemWindow = getOSInterface<SystemWindow>();
-            systemWindow->setWindowHandle(wndHandle);
-            systemWindow->setWidth(_jniNativeGlue->getWidth());
-            systemWindow->setHeight(_jniNativeGlue->getHeight());
             break;
         }
         //std::this_thread::sleep_for(std::chrono::nanoseconds(100));

@@ -24,6 +24,7 @@
 ****************************************************************************/
 
 #include "platform/os-interfaces/modules/android/SystemWindow.h"
+#include "platform/java/jni/glue/JniNativeGlue.h"
 
 namespace cc {
 SystemWindow::SystemWindow(IEventDispatch* platform)
@@ -32,12 +33,14 @@ SystemWindow::SystemWindow(IEventDispatch* platform)
 
 SystemWindow::~SystemWindow() = default;
 
-void SystemWindow::setWindowHandle(ANativeWindow* handle) {
-    _handle = handle;
+uintptr_t SystemWindow::getWindowHandler() {
+    return reinterpret_cast<uintptr_t>(
+        JNI_NATIVE_GLUE()->getWindowHandler());
 }
 
-uintptr_t SystemWindow::getWindowHandler() {
-    return reinterpret_cast<uintptr_t>(_handle);
+std::array<int, 2> SystemWindow::getViewSize() const {
+    return std::array<int, 2>{JNI_NATIVE_GLUE()->getWidth(),
+                              JNI_NATIVE_GLUE()->getHeight()};
 }
 
 } // namespace cc

@@ -59,7 +59,7 @@ void dispatchKeyCodeEvent(int keyCode, cc::KeyboardEvent &event) {
         keyCode = 0;
     }
     event.key = keyCode;
-    COCOS_INTERACTION()->dispatchEvent(event);
+    JNI_NATIVE_GLUE()->dispatchEvent(event);
 }
 } // namespace
 

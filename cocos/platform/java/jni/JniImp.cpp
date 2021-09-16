@@ -24,16 +24,11 @@
 ****************************************************************************/
 
 #include "JniImp.h"
-#if ANDROID
-    #include <android/log.h>
-#else
-    #include <hilog/log.h>
-#endif
+
 #include <jni.h>
 #include "JniHelper.h"
 
-#define JNI_IMP_LOG_TAG "JniImp"
-#define LOGD(...)       __android_log_print(ANDROID_LOG_DEBUG, JNI_IMP_LOG_TAG, __VA_ARGS__)
+
 
 #ifndef JCLS_HELPER
     #define JCLS_HELPER "com/cocos/lib/CocosHelper"
@@ -105,7 +100,7 @@ std::string getDeviceModelJNI() {
     return JniHelper::callStaticStringMethod(JCLS_HELPER, "getDeviceModel");
 }
 
-int getDpiJNI() {
+int getDPIJNI() {
     return JniHelper::callStaticIntMethod(JCLS_HELPER, "getDPI");
 }
 
@@ -113,7 +108,7 @@ void setVibrateJNI(float duration) {
     JniHelper::callStaticVoidMethod(JCLS_HELPER, "vibrate", duration);
 }
 
-int getNetworkTypeJni() {
+int getNetworkTypeJNI() {
     return JniHelper::callStaticIntMethod(JCLS_HELPER, "getNetworkType");
 }
 

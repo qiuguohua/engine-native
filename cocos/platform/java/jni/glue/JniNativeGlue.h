@@ -64,17 +64,14 @@ public:
 
     virtual void init(int argc, char** argv);
 
-    void              setWindowHandle(NativeWindowType* window);
-    NativeWindowType* getWindowHandle();
+    void              setWindowHandler(NativeWindowType* window);
+    NativeWindowType* getWindowHandler();
 
     void                 setResourceManager(ResourceManagerType* resourceManager);
     ResourceManagerType* getResourceManager();
 
     void setSdkVersion(int sdkVersion);
     int  getSdkVersion() const;
-
-    void setAnimating(bool isAnimating);
-    bool getAnimating() const;
 
     void        setObbPath(const std::string& path);
     std::string getObbPath() const;
@@ -115,7 +112,7 @@ private:
 
     bool _running    = false;
     int  _sdkVersion = 0;
-    bool _animating  = true;
+    bool _animating  = false;
 
     std::promise<void>           _threadPromise;
     std::string                  _obbPath;
@@ -129,4 +126,4 @@ private:
 
 } // namespace cc
 
-#define COCOS_INTERACTION() cc::JniNativeGlue::getInstance()
+#define JNI_NATIVE_GLUE() cc::JniNativeGlue::getInstance()

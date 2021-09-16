@@ -35,11 +35,9 @@ public:
     explicit SystemWindow(IEventDispatch* platform);
     ~SystemWindow() override;
 
-    void      setWindowHandle(ANativeWindow* handle);
     uintptr_t getWindowHandler() override;
-
+    std::array<int, 2> getViewSize() const override;
 private:
-    ANativeWindow* _handle = nullptr;
 };
 
 } // namespace cc

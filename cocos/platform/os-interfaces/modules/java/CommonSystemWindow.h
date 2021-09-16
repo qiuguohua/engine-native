@@ -41,22 +41,14 @@ public:
                       int h, int flags) override;
 
     void pollEvent() override;
-
-    std::array<int, 2> getViewSize() const override;
     /**
      @brief enable/disable(lock) the cursor, default is enabled
      */
     void setCursorEnabled(bool value) override;
     void copyTextToClipboard(const std::string& text) override;
-    //virtual void setWindowHandle(void* handle);
-    void setHeight(int32_t height);
-    void setWidth(int32_t width);
+
 private:
     bool _inited = false;
-
-protected:
-    int32_t _width  = 0;
-    int32_t _height = 0;
 };
 
 } // namespace cc

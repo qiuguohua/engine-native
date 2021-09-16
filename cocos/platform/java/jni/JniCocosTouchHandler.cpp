@@ -36,7 +36,7 @@ JNIEXPORT void JNICALL Java_com_cocos_lib_CocosTouchHandler_handleActionDown(JNI
                                                                              jfloat x, jfloat y) {
     touchEvent.type = cc::TouchEvent::Type::BEGAN;
     touchEvent.touches.emplace_back(x, y, id);
-    COCOS_INTERACTION()->dispatchEvent(touchEvent);
+    JNI_NATIVE_GLUE()->dispatchEvent(touchEvent);
     touchEvent.touches.clear();
 }
 //NOLINTNEXTLINE
@@ -44,7 +44,7 @@ JNIEXPORT void JNICALL Java_com_cocos_lib_CocosTouchHandler_handleActionUp(JNIEn
                                                                            jfloat y) {
     touchEvent.type = cc::TouchEvent::Type::ENDED;
     touchEvent.touches.emplace_back(x, y, id);
-    COCOS_INTERACTION()->dispatchEvent(touchEvent);
+    JNI_NATIVE_GLUE()->dispatchEvent(touchEvent);
     touchEvent.touches.clear();
 }
 //NOLINTNEXTLINE
@@ -65,7 +65,7 @@ JNIEXPORT void JNICALL Java_com_cocos_lib_CocosTouchHandler_handleActionMove(JNI
         touchEvent.touches.emplace_back(x[i], y[i], id[i]);
     }
 
-    COCOS_INTERACTION()->dispatchEvent(touchEvent);
+    JNI_NATIVE_GLUE()->dispatchEvent(touchEvent);
     touchEvent.touches.clear();
 }
 
@@ -86,7 +86,7 @@ JNIEXPORT void JNICALL Java_com_cocos_lib_CocosTouchHandler_handleActionCancel(J
     for (int i = 0; i < size; i++) {
         touchEvent.touches.emplace_back(x[i], y[i], id[i]);
     }
-    COCOS_INTERACTION()->dispatchEvent(touchEvent);
+    JNI_NATIVE_GLUE()->dispatchEvent(touchEvent);
     touchEvent.touches.clear();
 }
 }

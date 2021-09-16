@@ -30,6 +30,3 @@
 //#include <condition_variable>
 //#include <mutex>
 //#include <string>
-
-
-#define LOGV(...) __android_log_print(ANDROID_LOG_INFO, "CocosActivity JNI", __VA_ARGS__)

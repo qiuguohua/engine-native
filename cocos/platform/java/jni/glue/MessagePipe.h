@@ -33,6 +33,7 @@ class MessagePipe {
 public:
     MessagePipe();
     ~MessagePipe();
+
     void writeCommand(int8_t cmd) const;
     int  readCommand(int8_t& cmd) const;
     void writeCommand(void* msg, int32_t msgSize) const;

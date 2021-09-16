@@ -38,32 +38,29 @@
 #include "platform/java/jni/glue/JniNativeGlue.h"
 #include "platform/java/jni/JniHelper.h"
 
-
-#define LOGV(...) __android_log_print(ANDROID_LOG_INFO, "CocosActivity JNI", __VA_ARGS__)
-
 extern "C" {
 //NOLINTNEXTLINE
 JNIEXPORT void JNICALL Java_com_cocos_lib_CocosActivity_onCreateNative(JNIEnv *env, jobject obj, jobject activity,
                                                                        jobject assetMgr, jstring obbPath, jint sdkVersion) {
-    if (COCOS_INTERACTION()->isRunning()) {
+    if (JNI_NATIVE_GLUE()->isRunning()) {
         return;
     }
-    COCOS_INTERACTION()->setSdkVersion(sdkVersion);
+    JNI_NATIVE_GLUE()->setSdkVersion(sdkVersion);
     cc::JniHelper::init(env, activity);
-    COCOS_INTERACTION()->setObbPath(cc::JniHelper::jstring2string(obbPath));
-    COCOS_INTERACTION()->setResourceManager(AAssetManager_fromJava(env, assetMgr));
+    JNI_NATIVE_GLUE()->setObbPath(cc::JniHelper::jstring2string(obbPath));
+    JNI_NATIVE_GLUE()->setResourceManager(AAssetManager_fromJava(env, assetMgr));
     cc::FileUtilsAndroid::setassetmanager(AAssetManager_fromJava(env, assetMgr));
-    COCOS_INTERACTION()->init(0, nullptr);
+    JNI_NATIVE_GLUE()->init(0, nullptr);
 }
 
 //NOLINTNEXTLINE
 JNIEXPORT void JNICALL Java_com_cocos_lib_CocosActivity_onSurfaceCreatedNative(JNIEnv *env, jobject obj, jobject surface) {
-    COCOS_INTERACTION()->setWindowHandle(ANativeWindow_fromSurface(env, surface));
+    JNI_NATIVE_GLUE()->setWindowHandler(ANativeWindow_fromSurface(env, surface));
 }
 
 //NOLINTNEXTLINE
 JNIEXPORT void JNICALL Java_com_cocos_lib_CocosActivity_onStartNative(JNIEnv *env, jobject obj) {
-    COCOS_INTERACTION()->onResume();
+    JNI_NATIVE_GLUE()->onResume();
 }
 //NOLINTNEXTLINE
 JNIEXPORT void JNICALL Java_com_cocos_lib_CocosActivity_onPauseNative(JNIEnv *env, jobject obj) {
@@ -73,11 +70,11 @@ JNIEXPORT void JNICALL Java_com_cocos_lib_CocosActivity_onResumeNative(JNIEnv *e
 }
 //NOLINTNEXTLINE
 JNIEXPORT void JNICALL Java_com_cocos_lib_CocosActivity_onStopNative(JNIEnv *env, jobject obj) {
-    COCOS_INTERACTION()->onPause();
+    JNI_NATIVE_GLUE()->onPause();
 }
 //NOLINTNEXTLINE
 JNIEXPORT void JNICALL Java_com_cocos_lib_CocosActivity_onLowMemoryNative(JNIEnv *env, jobject obj) {
-    COCOS_INTERACTION()->onLowMemory();
+    JNI_NATIVE_GLUE()->onLowMemory();
 }
 //NOLINTNEXTLINE
 JNIEXPORT void JNICALL Java_com_cocos_lib_CocosActivity_onWindowFocusChangedNative(JNIEnv *env, jobject obj, jboolean has_focus) {
@@ -87,6 +84,6 @@ JNIEXPORT void JNICALL Java_com_cocos_lib_CocosActivity_onSurfaceChangedNative(J
 }
 //NOLINTNEXTLINE
 JNIEXPORT void JNICALL Java_com_cocos_lib_CocosActivity_onSurfaceDestroyNative(JNIEnv *env, jobject obj) {
-    COCOS_INTERACTION()->setWindowHandle(nullptr);
+    JNI_NATIVE_GLUE()->setWindowHandler(nullptr);
 }
 }

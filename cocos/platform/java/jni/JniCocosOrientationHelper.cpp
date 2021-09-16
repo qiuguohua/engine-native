@@ -35,6 +35,6 @@ JNIEXPORT void JNICALL Java_com_cocos_lib_CocosOrientationHelper_nativeOnOrienta
     cc::DeviceEvent ev;
     ev.type           = cc::DeviceEvent::Type::DEVICE_ORIENTATION;
     ev.args[0].intVal = static_cast<int>(cc::Device::getDeviceOrientation());
-    COCOS_INTERACTION()->dispatchEvent(ev);
+    JNI_NATIVE_GLUE()->dispatchEvent(ev);
 }
 }

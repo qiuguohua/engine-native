@@ -26,7 +26,6 @@
 #include <android/log.h>
 #include <jni.h>
 #include "platform/BasePlatform.h"
-#include "platform/java/jni/JniHelper.h"
 #include "platform/java/jni/glue/JniNativeGlue.h"
 
 //#define LOGD(...) __android_log_print(ANDROID_LOG_DEBUG, "JniCocosSurfaceView JNI", __VA_ARGS__)
@@ -39,6 +38,6 @@ JNIEXPORT void JNICALL Java_com_cocos_lib_CocosSurfaceView_nativeOnSizeChanged(J
     ev.type = cc::WindowEvent::Type::SIZE_CHANGED;
     ev.width = width;
     ev.height = height;
-    COCOS_INTERACTION()->dispatchEvent(ev);
+    JNI_NATIVE_GLUE()->dispatchEvent(ev);
 }
 }

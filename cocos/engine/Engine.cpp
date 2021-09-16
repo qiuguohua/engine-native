@@ -278,8 +278,7 @@ void Engine::tick() {
 }
 
 bool Engine::dispatchDeviceEvent(const DeviceEvent& ev) {
-    DeviceEvent devEv = OSEvent::castEvent<DeviceEvent>(ev);
-    if (devEv.type == DeviceEvent::Type::DEVICE_MEMORY) {
+    if (ev.type == DeviceEvent::Type::DEVICE_MEMORY) {
         cc::EventDispatcher::dispatchMemoryWarningEvent();
         return true;
     }

@@ -68,16 +68,5 @@ void CommonSystemWindow::copyTextToClipboard(const std::string &text) {
     copyTextToClipboardJNI(text);
 }
 
-std::array<int, 2> CommonSystemWindow::getViewSize() const {
-    return std::array<int, 2>{_width, _height};
-}
-
-void CommonSystemWindow::setHeight(int32_t height) {
-    _height = height;
-}
-
-void CommonSystemWindow::setWidth(int32_t width) {
-    _width = width;
-}
 
 } // namespace cc

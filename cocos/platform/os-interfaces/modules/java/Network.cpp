@@ -28,7 +28,7 @@
 namespace cc {
 
 INetwork::NetworkType Network::getNetworkType() {
-    return static_cast<INetwork::NetworkType>(getNetworkTypeJni());
+    return static_cast<INetwork::NetworkType>(getNetworkTypeJNI());
 }
 
 } // namespace cc

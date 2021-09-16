@@ -34,11 +34,11 @@ class SystemWindow : public CommonSystemWindow {
 public:
     explicit SystemWindow(IEventDispatch* platform);
     ~SystemWindow() override;
-    uintptr_t getWindowHandler() override;
-    void      setWindowHandle(NativeLayer* handle);
 
+    uintptr_t getWindowHandler() override;
+    std::array<int, 2> getViewSize() const override;
+    
 private:
-    NativeLayer* _handle = nullptr;
 };
 
 } // namespace cc

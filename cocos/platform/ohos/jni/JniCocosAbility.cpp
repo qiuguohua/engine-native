@@ -49,14 +49,14 @@ extern "C" {
 JNIEXPORT void JNICALL Java_com_cocos_lib_CocosAbilitySlice_onCreateNative(JNIEnv *env, jobject obj, jobject ability,
                                                                            jstring moduleNameJ, jstring assetPath, jobject resourceManager,
                                                                            jint sdkVersion) {
-    if (COCOS_INTERACTION()->isRunning()) {
+    if (JNI_NATIVE_GLUE()->isRunning()) {
         return;
     }
     cc::JniHelper::init(env, ability);
-    COCOS_INTERACTION()->setSdkVersion(sdkVersion);
+    JNI_NATIVE_GLUE()->setSdkVersion(sdkVersion);
     
     ResourceManager* objResourceManager = InitNativeResourceManager(env, resourceManager);
-    COCOS_INTERACTION()->setResourceManager(objResourceManager);
+    JNI_NATIVE_GLUE()->setResourceManager(objResourceManager);
 
     jboolean    isCopy        = false;
     std::string assetPathClone;
@@ -74,7 +74,7 @@ JNIEXPORT void JNICALL Java_com_cocos_lib_CocosAbilitySlice_onCreateNative(JNIEn
         moduleNameStr = nullptr;
     }
     cc::FileUtilsOHOS::initResourceManager(objResourceManager, assetPathClone, moduleName);
-    COCOS_INTERACTION()->init(0, nullptr);
+    JNI_NATIVE_GLUE()->init(0, nullptr);
 }
 
 JNIEXPORT void JNICALL
@@ -84,29 +84,29 @@ Java_com_cocos_lib_CocosAbilitySlice_onSurfaceCreatedNative(JNIEnv *env, jobject
 JNIEXPORT void JNICALL
 Java_com_cocos_lib_CocosAbilitySlice_onSurfaceChangedNative(JNIEnv *env, jobject obj, jobject surface, jint width, //NOLINT JNI function name
                                                             jint height) {                                         //NOLINT JNI function name
-    COCOS_INTERACTION()->setWindowHandle(GetNativeLayer(env, surface));
+    JNI_NATIVE_GLUE()->setWindowHandler(GetNativeLayer(env, surface));
 }
 
 JNIEXPORT void JNICALL Java_com_cocos_lib_CocosAbilitySlice_onSurfaceDestroyNative(JNIEnv *env, jobject obj) { //NOLINT JNI function name
-    COCOS_INTERACTION()->setWindowHandle(nullptr);
+    JNI_NATIVE_GLUE()->setWindowHandler(nullptr);
 }
 
 JNIEXPORT void JNICALL Java_com_cocos_lib_CocosAbilitySlice_onStartNative(JNIEnv *env, jobject obj) { //NOLINT JNI function name
 }
 
 JNIEXPORT void JNICALL Java_com_cocos_lib_CocosAbilitySlice_onPauseNative(JNIEnv *env, jobject obj) { //NOLINT JNI function name
-    COCOS_INTERACTION()->onPause();
+    JNI_NATIVE_GLUE()->onPause();
 }
 
 JNIEXPORT void JNICALL Java_com_cocos_lib_CocosAbilitySlice_onResumeNative(JNIEnv *env, jobject obj) { //NOLINT JNI function name
-    COCOS_INTERACTION()->onResume();
+    JNI_NATIVE_GLUE()->onResume();
 }
 
 JNIEXPORT void JNICALL Java_com_cocos_lib_CocosAbilitySlice_onStopNative(JNIEnv *env, jobject obj) { //NOLINT JNI function name
 }
 
 JNIEXPORT void JNICALL Java_com_cocos_lib_CocosAbilitySlice_onLowMemoryNative(JNIEnv *env, jobject obj) { //NOLINT JNI function name
-    COCOS_INTERACTION()->onLowMemory();
+    JNI_NATIVE_GLUE()->onLowMemory();
 }
 
 JNIEXPORT void JNICALL
