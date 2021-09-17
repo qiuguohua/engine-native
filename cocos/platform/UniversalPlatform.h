@@ -73,6 +73,7 @@ public:
     void handleDefaultEvent(const OSEvent& ev) override;
     int  getSdkVersion() const override;
 
+    void runInPlatform(PlatformThreadCallback cb) override;
 private:
     HandleEventCallback _handleEventCallback;
     HandleEventCallback _handleDefaultEventCallback;

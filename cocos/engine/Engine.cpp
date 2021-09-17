@@ -24,6 +24,7 @@
 ****************************************************************************/
 
 #include "engine/Engine.h"
+#include <functional>
 #include "base/AutoreleasePool.h"
 #include "base/Macros.h"
 #include "platform/BasePlatform.h"
@@ -111,11 +112,18 @@ int32_t Engine::init() {
 
 int32_t Engine::run() {
     BasePlatform* platform = BasePlatform::getPlatform();
-
+#if (CC_PLATFORM == CC_PLATFORM_MACOS)
+    platform->runInPlatform([&]() {
+        tick();
+        platform->pollEvent();
+    });
+#else
     while (!_quit) {
         tick();
         platform->pollEvent();
     }
+#endif
+    
     return 0;
 }
 

@@ -99,4 +99,8 @@ int UniversalPlatform::getSdkVersion() const {
     return 0;
 }
 
+void UniversalPlatform::runInPlatform(UniversalPlatform::PlatformThreadCallback cb) {
+    cb();
+}
+
 } // namespace cc

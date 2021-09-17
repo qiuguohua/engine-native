@@ -32,6 +32,7 @@
 #include "bindings/event/EventDispatcher.h"
 #include "platform/os-interfaces/modules/ISystem.h"
 
+#include <functional>
 #include <vector>
 
 namespace cc {
@@ -95,6 +96,8 @@ public:
 
     virtual int getSdkVersion() const = 0;
    
+    using PlatformThreadCallback = std::function<void(void)>;
+    virtual void runInPlatform(PlatformThreadCallback) = 0;
     /**
      @brief Get target system interface.
      @ Non thread safe.

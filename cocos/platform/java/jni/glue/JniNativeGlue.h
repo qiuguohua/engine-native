@@ -121,7 +121,7 @@ private:
     NativeWindowType*            _pendingWindow   = nullptr;
     JniCommand                   _appState        = JniCommand::JNI_CMD_UNKNOW;
     IEventDispatch*              _eventDispatcher = nullptr;
-    std::unique_ptr<MessagePipe> _messagePipe;
+    std::unique_ptr<MessagePipe> _messagePipe     = nullptr;
 };
 
 } // namespace cc

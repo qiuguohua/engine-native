@@ -51,7 +51,7 @@ void Screen::setKeepScreenOn(bool value) {
 }
 
 Screen::Orientation Screen::getDeviceOrientation() {
-    return Orientation::LANDSCAPE_RIGHT;
+    return Orientation::PORTRAIT;
 }
 
 Vec4 Screen::getSafeAreaEdge() {
