@@ -89,11 +89,11 @@ public:
     /**
      @brief Add listening event callback.
      */
-    virtual void addEvent(OSEventType evtype, EventCb cb) = 0;
+    virtual void addEventCallback(OSEventType evtype, const EventCb& cb) = 0;
     /**
      @brief Remove listening event callback.
      */
-    virtual void removeEvent(OSEventType evtype) = 0;
+    virtual void removeEventCallback(OSEventType evtype) = 0;
     /**
      @brief Get engine scheduler.
      */

@@ -111,7 +111,7 @@ public:
 private:
     void handleAppEvent(const OSEvent& ev);
 
-    ISystemWindow*              _systemWidow;
+    ISystemWindow*              _systemWidow = {nullptr};
     std::shared_ptr<BaseEngine> _engine;
 };
 } // namespace cc

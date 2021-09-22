@@ -49,8 +49,8 @@ int CocosApplication::init() {
     if (_engine->init()) {
         return -1;
     }
-    _engine->addEvent(OSEventType::APP_OSEVENT,
-                      std::bind(&CocosApplication::handleAppEvent, this, std::placeholders::_1));
+    auto& callback = std::bind(&CocosApplication::handleAppEvent, this, std::placeholders::_1);
+    _engine->addEventCallback(OSEventType::APP_OSEVENT, callback);
 
     se::ScriptEngine *se = se::ScriptEngine::getInstance();
 
