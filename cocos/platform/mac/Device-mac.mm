@@ -27,7 +27,7 @@
 
 #if CC_PLATFORM == CC_PLATFORM_MAC_OSX
 
-    #include "platform/Device.h"
+    //#include "platform/Device.h"
     #include "platform/apple/Device-apple.h"
     #include "Reachability.h"
 
@@ -37,7 +37,7 @@
     #include <string>
 
 namespace cc {
-
+/*
 int Device::getDPI() {
     NSScreen *screen = [NSScreen mainScreen];
     NSDictionary *description = [screen deviceDescription];
@@ -108,7 +108,7 @@ Vec4 Device::getSafeAreaEdge() {
     // no SafeArea concept on mac, return ZERO Vec4.
     return Vec4();
 }
-
+*/
 } // namespace cc
 
 #endif // CC_PLATFORM == CC_PLATFORM_MAC_OSX

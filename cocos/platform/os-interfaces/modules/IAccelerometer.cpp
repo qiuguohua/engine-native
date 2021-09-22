@@ -29,6 +29,10 @@
     #include "platform/os-interfaces/modules/windows/Accelerometer.h"
 #elif (CC_PLATFORM == CC_PLATFORM_ANDROID || CC_PLATFORM == CC_PLATFORM_OHOS)
     #include "platform/os-interfaces/modules/java/Accelerometer.h"
+#elif (CC_PLATFORM == CC_PLATFORM_MAC_OSX)
+    #include "platform/os-interfaces/modules/mac/Accelerometer.h"
+#elif (CC_PLATFORM == CC_PLATFORM_MAC_IOS)
+    #include "platform/os-interfaces/modules/ios/Accelerometer.h"
 #endif
 
 namespace cc {

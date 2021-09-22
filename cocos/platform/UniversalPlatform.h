@@ -38,11 +38,11 @@ public:
     /**
      *@bref Start base platform initialization.
      */
-    int32_t run(int argc, char** argv) override;
+    int32_t run(int argc, const char** argv) override;
     /**
      *@bref Implement the main logic of the base platform.
      */
-    int32_t main(int argc, char** argv) override;
+    int32_t main(int argc, const char** argv) override;
     /**
      *@bref Implement the destruction of the base platform.
      */
@@ -72,9 +72,19 @@ public:
      */
     void handleDefaultEvent(const OSEvent& ev) override;
     int  getSdkVersion() const override;
+    void pollEvent() override;
+    
+    void runInPlatform(PlatformThreadCallback task, int32_t fps) override;
+    int32_t getFps() override;
+    void setFps(int32_t fps) override;
+    
 
-    void runInPlatform(PlatformThreadCallback cb) override;
+protected:
+    PlatformThreadCallback _mainTask;
+    
 private:
+    int32_t _fps;
+
     HandleEventCallback _handleEventCallback;
     HandleEventCallback _handleDefaultEventCallback;
 };

@@ -56,11 +56,11 @@ public:
     /**
      @brief Run system platform.
      */
-    virtual int32_t run(int argc, char** argv) = 0;
+    virtual int32_t run(int argc, const char** argv) = 0;
     /**
      @brief Main logic.
      */
-    virtual int32_t main(int argc, char** argv) = 0;
+    virtual int32_t main(int argc, const char** argv) = 0;
     /**
      @brief Destory system platform.
      */
@@ -97,7 +97,13 @@ public:
     virtual int getSdkVersion() const = 0;
    
     using PlatformThreadCallback = std::function<void(void)>;
-    virtual void runInPlatform(PlatformThreadCallback) = 0;
+    virtual void runInPlatform(PlatformThreadCallback callback, int32_t fps) = 0;
+    virtual int32_t getFps() = 0;
+    virtual void setFps(int32_t fps) = 0;
+    
+    virtual void onPause() = 0;
+    virtual void onResume() = 0;
+    virtual void onClose() = 0;
     /**
      @brief Get target system interface.
      @ Non thread safe.

@@ -31,7 +31,8 @@
 #import <Foundation/Foundation.h>
 #import <OpenAL/alc.h>
 #include <thread>
-#include "platform/Application.h"
+//#include "platform/Application.h"
+#include "engine/EngineManager.h"
 #include "base/Scheduler.h"
 
 #include "audio/apple/AudioDecoder.h"
@@ -337,7 +338,7 @@ void AudioCache::invokingLoadCallbacks() {
     }
 
     auto isDestroyed = _isDestroyed;
-    auto scheduler = Application::getInstance()->getScheduler();
+    auto scheduler = CURRENT_ENGINE()->getEngineScheduler();
     scheduler->performFunctionInCocosThread([&, isDestroyed]() {
         if (*isDestroyed) {
             ALOGV("invokingLoadCallbacks perform in cocos thread, AudioCache (%p) was destroyed!", this);
