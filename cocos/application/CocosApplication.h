@@ -44,7 +44,7 @@ public:
     /*
      *@bref Application main business logic.
      */
-    int32_t run(int argc, char** argv) override;
+    int32_t run(int argc, const char** argv) override;
     /*
      *@bref Pause the application.
      */
@@ -112,6 +112,6 @@ private:
     void handleAppEvent(const OSEvent& ev);
 
     ISystemWindow*              _systemWidow = {nullptr};
-    std::shared_ptr<BaseEngine> _engine;
+    std::shared_ptr<BaseEngine> _engine      = {nullptr};
 };
 } // namespace cc

@@ -35,7 +35,7 @@
 
 #include "audio/include/AudioEngine.h"
 #include "platform/FileUtils.h"
-#include "platform/Application.h"
+#include "engine/EngineManager.h"
 #include "base/Scheduler.h"
 #include "base/Utils.h"
 
@@ -307,7 +307,7 @@ bool AudioEngineImpl::init() {
 
             // ================ Workaround end ================ //
 
-            _scheduler = Application::getInstance()->getScheduler();
+            _scheduler = CURRENT_ENGINE()->getEngineScheduler();
             ret = true;
             ALOGI("OpenAL was initialized successfully!");
         }

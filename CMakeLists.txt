@@ -310,6 +310,8 @@ cocos_source_files(
     cocos/application/BaseApplication.h
     cocos/application/CocosApplication.h
     cocos/application/CocosApplication.cpp
+    cocos/application/ApplicationManager.h
+    cocos/application/ApplicationManager.cpp
 )
 
 ############ engine
@@ -327,8 +329,14 @@ if(WINDOWS)
 cocos_source_files(
     cocos/main/main.cpp
 )
-else()
-
+elseif(MACOSX)
+    cocos_source_files(
+        cocos/main/main.mm
+    )
+elseif(IOS)
+    cocos_source_files(
+        cocos/main/main-ios.mm
+    )
 endif()
 
 ############ platformex
@@ -353,6 +361,26 @@ elseif(OHOS)
     cocos_source_files(
         cocos/platform/ohos/OhosPlatform.cpp
         cocos/platform/ohos/OhosPlatform.h
+    )
+elseif(MACOSX)
+    cocos_source_files(
+        cocos/platform/mac/MacPlatform.mm
+        cocos/platform/mac/MacPlatform.h
+        cocos/platform/mac/ViewController.h
+        cocos/platform/mac/ViewController.mm
+        cocos/platform/mac/AppDelegate.h
+        cocos/platform/mac/AppDelegate.mm
+    )
+elseif(IOS)
+    cocos_source_files(
+        cocos/platform/ios/IOSPlatform.mm
+        cocos/platform/ios/IOSPlatform.h
+        cocos/platform/ios/AppDelegate.mm
+        cocos/platform/ios/AppDelegate.h
+        cocos/platform/ios/service/SDKWrapper.m
+        cocos/platform/ios/service/SDKWrapper.h
+        cocos/platform/ios/ViewController.mm
+        cocos/platform/ios/ViewController.h
     )
 endif()
 
@@ -399,6 +427,11 @@ elseif(ANDROID OR OHOS)
     cocos_source_files(
         cocos/platform/os-interfaces/modules/java/CanvasRenderingContext2DDelegate.cpp
         cocos/platform/os-interfaces/modules/java/CanvasRenderingContext2DDelegate.h
+    )
+elseif(MACOSX OR IOS)
+    cocos_source_files(
+        cocos/platform/os-interfaces/modules/apple/CanvasRenderingContext2DDelegate.mm
+        cocos/platform/os-interfaces/modules/apple/CanvasRenderingContext2DDelegate.h
     )
 endif()
 
@@ -452,6 +485,40 @@ elseif(OHOS)
         cocos/platform/os-interfaces/modules/ohos/SystemWindow.cpp
         cocos/platform/os-interfaces/modules/ohos/SystemWindow.h
     )
+elseif(MACOSX)
+   cocos_source_files(
+        cocos/platform/os-interfaces/modules/mac/Accelerometer.mm
+        cocos/platform/os-interfaces/modules/mac/Accelerometer.h
+        cocos/platform/os-interfaces/modules/mac/Battery.mm
+        cocos/platform/os-interfaces/modules/mac/Battery.h
+        cocos/platform/os-interfaces/modules/mac/Screen.mm
+        cocos/platform/os-interfaces/modules/mac/Screen.h
+        cocos/platform/os-interfaces/modules/mac/Network.mm
+        cocos/platform/os-interfaces/modules/mac/Network.h
+        cocos/platform/os-interfaces/modules/mac/Vibrate.mm
+        cocos/platform/os-interfaces/modules/mac/Vibrate.h
+        cocos/platform/os-interfaces/modules/mac/System.mm
+        cocos/platform/os-interfaces/modules/mac/System.h
+        cocos/platform/os-interfaces/modules/mac/SystemWindow.mm
+        cocos/platform/os-interfaces/modules/mac/SystemWindow.h
+   )
+elseif(IOS)
+   cocos_source_files(
+        cocos/platform/os-interfaces/modules/ios/Accelerometer.mm
+        cocos/platform/os-interfaces/modules/ios/Accelerometer.h
+        cocos/platform/os-interfaces/modules/ios/Battery.mm
+        cocos/platform/os-interfaces/modules/ios/Battery.h
+        cocos/platform/os-interfaces/modules/ios/Screen.mm
+        cocos/platform/os-interfaces/modules/ios/Screen.h
+        cocos/platform/os-interfaces/modules/ios/Network.mm
+        cocos/platform/os-interfaces/modules/ios/Network.h
+        cocos/platform/os-interfaces/modules/ios/Vibrate.mm
+        cocos/platform/os-interfaces/modules/ios/Vibrate.h
+        cocos/platform/os-interfaces/modules/ios/System.mm
+        cocos/platform/os-interfaces/modules/ios/System.h
+        cocos/platform/os-interfaces/modules/ios/SystemWindow.mm
+        cocos/platform/os-interfaces/modules/ios/SystemWindow.h
+   )
 endif()
 
 ############ module log
@@ -763,14 +830,14 @@ elseif(OHOS)
     )
 elseif(APPLE)
     cocos_source_files(
-                     cocos/platform/apple/Device-apple.mm
-                     cocos/platform/apple/CanvasRenderingContext2D-apple.mm
-                     cocos/platform/apple/Device-apple.h
+                     #cocos/platform/apple/Device-apple.mm
+                     #cocos/platform/apple/CanvasRenderingContext2D-apple.mm
+                     #cocos/platform/apple/Device-apple.h
     )
-    # bad structure
+    
     cocos_source_files(
-                     cocos/platform/ios/Reachability.h
-                     cocos/platform/ios/Reachability.cpp
+                     cocos/platform/apple/Reachability.h
+                     cocos/platform/apple/Reachability.cpp
     )
     
     cocos_source_files(MODULE ccfilesystem
@@ -782,16 +849,16 @@ elseif(APPLE)
             cocos/platform/mac/View.h
             cocos/platform/mac/KeyCodeHelper.h
             cocos/platform/mac/View.mm
-            cocos/platform/mac/Device-mac.mm
-            cocos/platform/mac/Application-mac.mm
+            #cocos/platform/mac/Device-mac.mm
+            #cocos/platform/mac/Application-mac.mm
             cocos/platform/mac/KeyCodeHelper.cpp
         )
     elseif(IOS)
         cocos_source_files(
                          cocos/platform/ios/View.h
             NO_WERROR    cocos/platform/ios/View.mm     # CAMetalLayer bug for apple
-                         cocos/platform/ios/Application-ios.mm
-                         cocos/platform/ios/Device-ios.mm
+                         #cocos/platform/ios/Application-ios.mm
+                         #cocos/platform/ios/Device-ios.mm
         )
     endif()
 endif()

@@ -31,7 +31,12 @@
     #include "platform/os-interfaces/modules/android/Screen.h"
 #elif (CC_PLATFORM == CC_PLATFORM_OHOS)
     #include "platform/os-interfaces/modules/ohos/Screen.h"
+#elif (CC_PLATFORM == CC_PLATFORM_MAC_OSX)
+    #include "platform/os-interfaces/modules/mac/Screen.h"
+#elif (CC_PLATFORM == CC_PLATFORM_MAC_IOS)
+    #include "platform/os-interfaces/modules/ios/Screen.h"
 #endif
+
 namespace cc {
 
 // static

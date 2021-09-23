@@ -102,8 +102,8 @@ public:
 
     void execCommand();
 
-    int32_t getWidth();
-    int32_t getHeight();
+    int32_t getWidth() const;
+    int32_t getHeight() const;
 
 private:
     void preExecCmd(JniCommand cmd);
@@ -121,7 +121,7 @@ private:
     NativeWindowType*            _pendingWindow   = nullptr;
     JniCommand                   _appState        = JniCommand::JNI_CMD_UNKNOW;
     IEventDispatch*              _eventDispatcher = nullptr;
-    std::unique_ptr<MessagePipe> _messagePipe;
+    std::unique_ptr<MessagePipe> _messagePipe     = nullptr;
 };
 
 } // namespace cc

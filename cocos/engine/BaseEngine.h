@@ -42,7 +42,7 @@ public:
      @brief Get operating system interface template.
      */
     template <class T>
-    T* getOSInterface() {
+    T* getOSInterface() const {
         BasePlatform* platform = BasePlatform::getPlatform();
         return platform->getOSInterface<T>();
     }
@@ -99,7 +99,7 @@ public:
      */
     using SchedulerPtr = std::shared_ptr<Scheduler>;
 
-    virtual SchedulerPtr getEngineScheduler() = 0;
+    virtual SchedulerPtr getEngineScheduler() const = 0;
 };
 
 } // namespace cc

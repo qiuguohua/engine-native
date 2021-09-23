@@ -36,6 +36,7 @@ void WindowsPlatform::destory() {
 #ifdef USE_WIN32_CONSOLE
     FreeConsole();
 #endif
+    UniversalPlatform::destory();
 }
 
 int32_t WindowsPlatform::init() {

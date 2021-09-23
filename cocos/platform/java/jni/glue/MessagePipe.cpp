@@ -57,11 +57,11 @@ int MessagePipe::readCommand(int8_t& cmd) const {
     return read(_pipeRead, &cmd, sizeof(cmd));
 }
 
-void MessagePipe::writeCommand(void* msg, int32_t msgSize) const {
-    write(_pipeWrite, msg, msgSize);
+void MessagePipe::writeCommand(void* msg, int32_t size) const {
+    write(_pipeWrite, msg, size);
 }
 
-int MessagePipe::readCommand(void* msg, int32_t msgSize) const {
-    return read(_pipeRead, msg, msgSize);
+int MessagePipe::readCommand(void* msg, int32_t size) const {
+    return read(_pipeRead, msg, size);
 }
 } // namespace cc

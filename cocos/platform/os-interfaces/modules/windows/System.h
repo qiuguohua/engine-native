@@ -38,12 +38,12 @@ public:
     /**
      @brief Get target device model.
      */
-    std::string getDeviceModel() override;
+    std::string getDeviceModel() const override;
     /**
      @brief Get current language config.
      @return Current language config.
      */
-    LanguageType getCurrentLanguage() override;
+    LanguageType getCurrentLanguage() const override;
     /**
      @brief Get current language iso 639-1 code.
      @return Current language iso 639-1 code.
@@ -53,7 +53,7 @@ public:
      @brief Get system version.
      @return system version.
      */
-    std::string getSystemVersion() override;
+    std::string getSystemVersion() const override;
     /**
      @brief Open url in default browser.
      @param String with url to open.

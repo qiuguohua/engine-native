@@ -29,7 +29,6 @@
 #include "JniHelper.h"
 
 
-
 #ifndef JCLS_HELPER
     #define JCLS_HELPER "com/cocos/lib/CocosHelper"
 #endif
@@ -43,9 +42,6 @@ using namespace cc; //NOLINT
 /***********************************************************
  * Functions invoke from cpp to Java.
  ***********************************************************/
-#ifndef JCLS_HELPER
-    #define JCLS_HELPER "com/cocos/lib/CocosHelper"
-#endif
 
 std::string getObbFilePathJNI() {
     return JniHelper::callStaticStringMethod(JCLS_HELPER, "getObbFilePath");

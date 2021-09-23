@@ -30,6 +30,10 @@
     #include "platform/android/AndroidPlatform.h"
 #elif (CC_PLATFORM == CC_PLATFORM_OHOS)
     #include "platform/ohos/OhosPlatform.h"
+#elif (CC_PLATFORM == CC_PLATFORM_MAC_OSX)
+    #include "platform/mac/MacPlatform.h"
+#elif (CC_PLATFORM == CC_PLATFORM_MAC_IOS)
+    #include "platform/ios/IOSPlatform.h"
 #endif
 
 namespace cc {
@@ -45,6 +49,12 @@ BasePlatform* BasePlatform::getPlatform() {
     return &platform;
 #elif (CC_PLATFORM == CC_PLATFORM_OHOS)
     static OhosPlatform platform;
+    return &platform;
+#elif (CC_PLATFORM == CC_PLATFORM_MAC_OSX)
+    static MacPlatform platform;
+    return &platform;
+#elif (CC_PLATFORM == CC_PLATFORM_MAC_IOS)
+    static IOSPlatform platform;
     return &platform;
 #endif
 }

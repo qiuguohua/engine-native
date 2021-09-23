@@ -26,6 +26,7 @@
 #pragma once
 
 #include <vector>
+#include <memory>
 #include "base/Macros.h"
 #include "bindings/event/EventDispatcher.h"
 
@@ -68,7 +69,7 @@ protected:
     IEventDispatch* _evDispatchInterface;
 
 private:
-    DISABLE_COPY_AND_MOVE(OSInterface);
+    CC_DISABLE_COPY_AND_MOVE_SEMANTICS(OSInterface);
 };
 
 } // namespace cc

@@ -35,7 +35,7 @@ public:
      * Gets battery level, only avaiable on iOS and Android.
      * @return 0.0 ~ 1.0
      */
-    virtual float getBatteryLevel() = 0;
+    virtual float getBatteryLevel() const = 0;
     /**
      @brief Create default battery interface.
      @return battery interface.

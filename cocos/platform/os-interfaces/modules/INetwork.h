@@ -36,7 +36,7 @@ public:
         LAN,
         WWAN
     };
-    virtual NetworkType getNetworkType() = 0;
+    virtual NetworkType getNetworkType() const = 0;
     /**
      @brief Create default network interface.
      @return network interface.
