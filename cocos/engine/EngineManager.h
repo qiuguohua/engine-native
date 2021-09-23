@@ -40,7 +40,7 @@ public:
      @bref Get engine manager instance.
      @return current running engine
      */
-    std::shared_ptr<BaseEngine> getCurrentEngine();
+    std::shared_ptr<BaseEngine> getCurrentEngine() const;
     /*
      @bref Sets the currently running engine.
      @engine current running engine
@@ -51,7 +51,7 @@ private:
     EngineManager();
 
     std::weak_ptr<BaseEngine> _currentEngine;
-    DISABLE_COPY_AND_MOVE(EngineManager);
+    CC_DISABLE_COPY_AND_MOVE_SEMANTICS(EngineManager);
 };
 
 } // namespace cc

@@ -35,14 +35,14 @@ void EngineManager::setCurrentEngine(const BaseEngine::Ptr& engine) {
     _currentEngine = engine;
 }
 
-std::shared_ptr<BaseEngine> EngineManager::getCurrentEngine() {
+std::shared_ptr<BaseEngine> EngineManager::getCurrentEngine() const {
     if (_currentEngine.expired()) {
         return nullptr;
     }
     return _currentEngine.lock();
 }
 
-EngineManager* EngineManager::getInstance() {
+EngineManager* EngineManager::getInstance(){
     static EngineManager engineManager;
     return &engineManager;
 }

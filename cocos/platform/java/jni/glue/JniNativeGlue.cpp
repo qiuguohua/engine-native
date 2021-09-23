@@ -258,7 +258,7 @@ void JniNativeGlue::postExecCmd(JniCommand cmd) {
     }
 }
 
-int32_t JniNativeGlue::getWidth() {
+int32_t JniNativeGlue::getWidth() const {
     int32_t width = 0;
     if (_window) {
 #if (CC_PLATFORM == CC_PLATFORM_ANDROID)
@@ -270,7 +270,7 @@ int32_t JniNativeGlue::getWidth() {
     return width;
 }
 
-int32_t JniNativeGlue::getHeight() {
+int32_t JniNativeGlue::getHeight() const {
     int32_t height = 0;
     if (_window) {
 #if (CC_PLATFORM == CC_PLATFORM_ANDROID)

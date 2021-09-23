@@ -44,7 +44,7 @@ public:
     /*
      *@bref Application main business logic.
      */
-    int32_t run(int argc, char** argv) override;
+    int32_t run(int argc, const char** argv) override;
     /*
      *@bref Pause the application.
      */

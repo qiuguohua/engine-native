@@ -23,7 +23,7 @@
  THE SOFTWARE.
 ****************************************************************************/
 
-#include "platform/CanvasRenderingContext2D.h"
+#include "platform/os-interfaces/modules/apple/CanvasRenderingContext2DDelegate.h"
 #include "base/csscolorparser.h"
 #include "base/UTF8.h"
 #include "math/Math.h"
@@ -51,20 +51,8 @@
 
 #include <regex>
 #include <array>
-enum class CanvasTextAlign {
-    LEFT,
-    CENTER,
-    RIGHT
-};
 
-enum class CanvasTextBaseline {
-    TOP,
-    MIDDLE,
-    BOTTOM,
-    ALPHABETIC
-};
-
-@interface CanvasRenderingContext2DImpl : NSObject {
+@interface CanvasRenderingContext2DDelegateImpl : NSObject {
     NSFont *_font;
     NSMutableDictionary *_tokenAttributesDict;
     NSString *_fontName;
@@ -101,7 +89,7 @@ enum class CanvasTextBaseline {
 
 @end
 
-@implementation CanvasRenderingContext2DImpl
+@implementation CanvasRenderingContext2DDelegateImpl
 
 @synthesize font = _font;
 @synthesize tokenAttributesDict = _tokenAttributesDict;
@@ -528,24 +516,133 @@ enum class CanvasTextBaseline {
 @end
 
 namespace cc {
-
-CanvasGradient::CanvasGradient() {
-    SE_LOGD("CanvasGradient constructor: %p\n", this);
+CanvasRenderingContext2DDelegate::CanvasRenderingContext2DDelegate() {
+    _impl = [[CanvasRenderingContext2DDelegateImpl alloc] init];
 }
 
-CanvasGradient::~CanvasGradient() {
-    SE_LOGD("CanvasGradient destructor: %p\n", this);
+CanvasRenderingContext2DDelegate::~CanvasRenderingContext2DDelegate() {
+    [_impl release];
 }
 
-void CanvasGradient::addColorStop(float offset, const std::string &color) {
-    SE_LOGD("CanvasGradient::addColorStop: %p\n", this);
+void CanvasRenderingContext2DDelegate::recreateBuffer(float w, float h) {
+    [_impl recreateBufferWithWidth:w height:h];
 }
 
-// CanvasRenderingContext2D
 
-namespace {
+const cc::Data & CanvasRenderingContext2DDelegate::getDataRef() {
+    static Data data;
+    data = [_impl getDataRef];
+    unMultiplyAlpha(data.getBytes(), data.getSize());
+    return data;
+}
+
+void CanvasRenderingContext2DDelegate::beginPath() {
+    [_impl beginPath];
+}
+
+void CanvasRenderingContext2DDelegate::closePath() {
+    
+}
+
+void CanvasRenderingContext2DDelegate::moveTo(float x, float y) {
+    [_impl moveToX:x y:y];
+}
+
+void CanvasRenderingContext2DDelegate::lineTo(float x, float y) {
+    [_impl lineToX:x y:y];
+}
+
+void CanvasRenderingContext2DDelegate::stroke() {
+    [_impl stroke];
+}
+
+void CanvasRenderingContext2DDelegate::saveContext() {
+      [_impl saveContext];
+}
+
+void CanvasRenderingContext2DDelegate::restoreContext() {
+    [_impl restoreContext];
+}
+
+void CanvasRenderingContext2DDelegate::clearRect(float x, float y, float w, float h) {
+    [_impl clearRect:CGRectMake(x, y, w, h)];
+}
+
+void CanvasRenderingContext2DDelegate::fill() {
+
+}
+
+void CanvasRenderingContext2DDelegate::setLineCap(const std::string &lineCap) {
+
+}
+
+void CanvasRenderingContext2DDelegate::setLineJoin(const std::string &lineJoin) {
+
+}
+
+void CanvasRenderingContext2DDelegate::rect(float x, float y, float w, float h) {
+
+}
+
+void CanvasRenderingContext2DDelegate::fillRect(float x, float y, float w, float h) {
+    [_impl fillRect:CGRectMake(x, y, w, h)];
+}
+
+void CanvasRenderingContext2DDelegate::fillText(const std::string &text, float x, float y, float maxWidth) {
+    [_impl fillText:[NSString stringWithUTF8String:text.c_str()] x:x y:y maxWidth:maxWidth];
+}
+
+void CanvasRenderingContext2DDelegate::strokeText(const std::string &text, float x, float y, float maxWidth) {
+    [_impl strokeText:[NSString stringWithUTF8String:text.c_str()] x:x y:y maxWidth:maxWidth];
+}
+
+CanvasRenderingContext2DDelegate::Size CanvasRenderingContext2DDelegate::measureText(const std::string &text) {
+    NSString *str = [NSString stringWithUTF8String:text.c_str()];
+    if (str == nil) {
+        std::string textNew;
+        cc::StringUtils::UTF8LooseFix(text, textNew);
+        str = [NSString stringWithUTF8String:textNew.c_str()];
+    }
+    CGSize size = [_impl measureText:str];
+    return CanvasRenderingContext2DDelegate::Size{(float)size.width, (float)size.height};
+}
+
+void CanvasRenderingContext2DDelegate::updateFont(const std::string &fontName, float fontSize, bool bold, bool italic, bool oblique, bool smallCaps) {
+    CGFloat gfloatFontSize = fontSize;
+    [_impl updateFontWithName:[NSString stringWithUTF8String:fontName.c_str()] fontSize:gfloatFontSize bold:bold];
+}
+
+void CanvasRenderingContext2DDelegate::setTextAlign(CanvasTextAlign align) {
+    _impl.textAlign = align;
+}
+
+void CanvasRenderingContext2DDelegate::setTextBaseline(CanvasTextBaseline baseline) {
+    _impl.textBaseLine = baseline;
+}
+
+void CanvasRenderingContext2DDelegate::setFillStyle(float r, float g, float b, float a) {
+    [_impl setFillStyleWithRed:r green:g blue:b alpha:a];
+}
+
+void CanvasRenderingContext2DDelegate::setStrokeStyle(float r, float g, float b, float a) {
+    [_impl setStrokeStyleWithRed:r green:g blue:b alpha:a];
+}
+
+void CanvasRenderingContext2DDelegate::setLineWidth(float lineWidth) {
+    _impl.lineWidth = lineWidth;
+}
+
+void CanvasRenderingContext2DDelegate::fillImageData(const Data &imageData, float imageWidth, float imageHeight, float offsetX, float offsetY) {
+
+}
+
+
+void CanvasRenderingContext2DDelegate::fillData() {
+
+}
+
 #define CLAMP(V, HI) std::min((V), (HI))
-void unMultiplyAlpha(unsigned char *ptr, ssize_t size) {
+void CanvasRenderingContext2DDelegate::unMultiplyAlpha(unsigned char *ptr, ssize_t size) {
     float alpha;
     for (int i = 0; i < size; i += 4) {
         alpha = (float)ptr[i + 3];
@@ -556,245 +653,6 @@ void unMultiplyAlpha(unsigned char *ptr, ssize_t size) {
         }
     }
 }
-} // namespace
-
-#define SEND_DATA_TO_JS(CB, IMPL)                         \
-    if (CB) {                                             \
-        Data data([IMPL getDataRef]);                     \
-        unMultiplyAlpha(data.getBytes(), data.getSize()); \
-        CB(data);                                         \
-    }
-
-CanvasRenderingContext2D::CanvasRenderingContext2D(float width, float height)
-: _width(width),
-  _height(height) {
-    //    SE_LOGD("CanvasRenderingContext2D constructor: %p, width: %f, height: %f\n", this, width, height);
-    _impl = [[CanvasRenderingContext2DImpl alloc] init];
-}
-
-CanvasRenderingContext2D::~CanvasRenderingContext2D() {
-    //    SE_LOGD("CanvasRenderingContext2D destructor: %p\n", this);
-    [_impl release];
-}
-
-void CanvasRenderingContext2D::recreateBufferIfNeeded() {
-    if (_isBufferSizeDirty) {
-        _isBufferSizeDirty = false;
-        //        SE_LOGD("CanvasRenderingContext2D::recreateBufferIfNeeded %p, w: %f, h:%f\n", this, __width, __height);
-        [_impl recreateBufferWithWidth:_width height:_height];
-        SEND_DATA_TO_JS(_canvasBufferUpdatedCB, _impl);
-    }
-}
-
-void CanvasRenderingContext2D::clearRect(float x, float y, float width, float height) {
-    //    SE_LOGD("CanvasGradient::clearRect: %p, %f, %f, %f, %f\n", this, x, y, width, height);
-    recreateBufferIfNeeded();
-    [_impl clearRect:CGRectMake(x, y, width, height)];
-}
-
-void CanvasRenderingContext2D::fillRect(float x, float y, float width, float height) {
-    recreateBufferIfNeeded();
-    [_impl fillRect:CGRectMake(x, y, width, height)];
-    SEND_DATA_TO_JS(_canvasBufferUpdatedCB, _impl);
-}
-
-void CanvasRenderingContext2D::fillText(const std::string &text, float x, float y, float maxWidth) {
-    //    SE_LOGD("CanvasRenderingContext2D(%p)::fillText: %s, %f, %f, %f\n", this, text.c_str(), x, y, maxWidth);
-    if (text.empty())
-        return;
-
-    recreateBufferIfNeeded();
-
-    [_impl fillText:[NSString stringWithUTF8String:text.c_str()] x:x y:y maxWidth:maxWidth];
-    SEND_DATA_TO_JS(_canvasBufferUpdatedCB, _impl);
-}
-
-void CanvasRenderingContext2D::strokeText(const std::string &text, float x, float y, float maxWidth) {
-    //    SE_LOGD("CanvasRenderingContext2D(%p)::strokeText: %s, %f, %f, %f\n", this, text.c_str(), x, y, maxWidth);
-    if (text.empty())
-        return;
-    recreateBufferIfNeeded();
-
-    [_impl strokeText:[NSString stringWithUTF8String:text.c_str()] x:x y:y maxWidth:maxWidth];
-    SEND_DATA_TO_JS(_canvasBufferUpdatedCB, _impl);
-}
-
-cc::Size CanvasRenderingContext2D::measureText(const std::string &text) {
-    NSString *str = [NSString stringWithUTF8String:text.c_str()];
-    if (str == nil) {
-        std::string textNew;
-        cc::StringUtils::UTF8LooseFix(text, textNew);
-        str = [NSString stringWithUTF8String:textNew.c_str()];
-    }
-    CGSize size = [_impl measureText:str];
-    return cc::Size(size.width, size.height);
-}
-
-CanvasGradient *CanvasRenderingContext2D::createLinearGradient(float x0, float y0, float x1, float y1) {
-    return nullptr;
-}
-
-void CanvasRenderingContext2D::save() {
-    [_impl saveContext];
-}
-
-void CanvasRenderingContext2D::beginPath() {
-    [_impl beginPath];
-}
-
-void CanvasRenderingContext2D::closePath() {
-    //SE_LOGE("%s isn't implemented!\n", __FUNCTION__);
-}
-
-void CanvasRenderingContext2D::moveTo(float x, float y) {
-    [_impl moveToX:x y:y];
-}
-
-void CanvasRenderingContext2D::lineTo(float x, float y) {
-    [_impl lineToX:x y:y];
-}
-
-void CanvasRenderingContext2D::stroke() {
-    [_impl stroke];
-    SEND_DATA_TO_JS(_canvasBufferUpdatedCB, _impl);
-}
-
-void CanvasRenderingContext2D::fill() {
-    //SE_LOGE("%s isn't implemented!\n", __FUNCTION__);
-}
-
-void CanvasRenderingContext2D::rect(float x, float y, float w, float h) {
-    //SE_LOGE("%s isn't implemented!\n", __FUNCTION__);
-}
-
-void CanvasRenderingContext2D::restore() {
-    [_impl restoreContext];
-}
-
-void CanvasRenderingContext2D::setCanvasBufferUpdatedCallback(const CanvasBufferUpdatedCallback &cb) {
-    _canvasBufferUpdatedCB = cb;
-    recreateBufferIfNeeded();
-}
-
-void CanvasRenderingContext2D::setWidth(float width) {
-    //    SE_LOGD("CanvasRenderingContext2D::set__width: %f\n", width);
-    if (math::IsEqualF(width, _width)) return;
-    _width = width;
-    _isBufferSizeDirty = true;
-    recreateBufferIfNeeded();
-}
-
-void CanvasRenderingContext2D::setHeight(float height) {
-    //    SE_LOGD("CanvasRenderingContext2D::set__height: %f\n", height);
-    if (math::IsEqualF(height, _height)) return;
-    _height = height;
-    _isBufferSizeDirty = true;
-    recreateBufferIfNeeded();
-}
-
-void CanvasRenderingContext2D::setLineWidth(float lineWidth) {
-    _lineWidth = lineWidth;
-    _impl.lineWidth = _lineWidth;
-}
-
-void CanvasRenderingContext2D::setLineCap(const std::string &lineCap) {
-    //SE_LOGE("%s isn't implemented!\n", __FUNCTION__);
-}
-
-void CanvasRenderingContext2D::setLineJoin(const std::string &lineJoin) {
-    //SE_LOGE("%s isn't implemented!\n", __FUNCTION__);
-}
-
-void CanvasRenderingContext2D::setFont(const std::string &font) {
-    if (_font != font) {
-        _font = font;
-
-        std::string boldStr;
-        std::string fontName = "Arial";
-        std::string fontSizeStr = "30";
-
-        // support get font name from `60px American` or `60px "American abc-abc_abc"`
-        std::regex re("(bold)?\\s*((\\d+)([\\.]\\d+)?)px\\s+([\\w-]+|\"[\\w -]+\"$)");
-        std::match_results<std::string::const_iterator> results;
-        if (std::regex_search(_font.cbegin(), _font.cend(), results, re)) {
-            boldStr = results[1].str();
-            fontSizeStr = results[2].str();
-            fontName = results[5].str();
-        }
-
-        CGFloat fontSize = atof(fontSizeStr.c_str());
-        [_impl updateFontWithName:[NSString stringWithUTF8String:fontName.c_str()] fontSize:fontSize bold:!boldStr.empty()];
-    }
-}
-
-void CanvasRenderingContext2D::setTextAlign(const std::string &textAlign) {
-    //    SE_LOGD("CanvasRenderingContext2D::set_textAlign: %s\n", textAlign.c_str());
-    if (textAlign == "left") {
-        _impl.textAlign = CanvasTextAlign::LEFT;
-    } else if (textAlign == "center" || textAlign == "middle") {
-        _impl.textAlign = CanvasTextAlign::CENTER;
-    } else if (textAlign == "right") {
-        _impl.textAlign = CanvasTextAlign::RIGHT;
-    } else {
-        assert(false);
-    }
-}
-
-void CanvasRenderingContext2D::setTextBaseline(const std::string &textBaseline) {
-    //    SE_LOGD("CanvasRenderingContext2D::set_textBaseline: %s\n", textBaseline.c_str());
-    if (textBaseline == "top") {
-        _impl.textBaseLine = CanvasTextBaseline::TOP;
-    } else if (textBaseline == "middle") {
-        _impl.textBaseLine = CanvasTextBaseline::MIDDLE;
-    } else if (textBaseline == "bottom") //REFINE:, how to deal with alphabetic, currently we handle it as bottom mode.
-    {
-        _impl.textBaseLine = CanvasTextBaseline::BOTTOM;
-    } else if (textBaseline == "alphabetic") {
-        _impl.textBaseLine = CanvasTextBaseline::ALPHABETIC;
-    } else {
-        assert(false);
-    }
-}
-
-void CanvasRenderingContext2D::setFillStyle(const std::string &fillStyle) {
-    CSSColorParser::Color color = CSSColorParser::parse(fillStyle);
-    [_impl setFillStyleWithRed:color.r / 255.0f green:color.g / 255.0f blue:color.b / 255.0f alpha:color.a];
-    //    SE_LOGD("CanvasRenderingContext2D::set_fillStyle: %s, (%d, %d, %d, %f)\n", fillStyle.c_str(), color.r, color.g, color.b, color.a);
-}
-
-void CanvasRenderingContext2D::setStrokeStyle(const std::string &strokeStyle) {
-    CSSColorParser::Color color = CSSColorParser::parse(strokeStyle);
-    [_impl setStrokeStyleWithRed:color.r / 255.0f green:color.g / 255.0f blue:color.b / 255.0f alpha:color.a];
-}
-
-void CanvasRenderingContext2D::setGlobalCompositeOperation(const std::string &globalCompositeOperation) {
-    //SE_LOGE("%s isn't implemented!\n", __FUNCTION__);
-}
-
-void CanvasRenderingContext2D::fillImageData(const Data &imageData, float imageWidth, float imageHeight, float offsetX, float offsetY) {
-    //SE_LOGE("%s isn't implemented!\n", __FUNCTION__);
-}
-
-// transform
-
-void CanvasRenderingContext2D::translate(float x, float y) {
-    //SE_LOGE("%s isn't implemented!\n", __FUNCTION__);
-}
-
-void CanvasRenderingContext2D::scale(float x, float y) {
-    //SE_LOGE("%s isn't implemented!\n", __FUNCTION__);
-}
-
-void CanvasRenderingContext2D::rotate(float angle) {
-    //SE_LOGE("%s isn't implemented!\n", __FUNCTION__);
-}
-
-void CanvasRenderingContext2D::transform(float a, float b, float c, float d, float e, float f) {
-    //SE_LOGE("%s isn't implemented!\n", __FUNCTION__);
-}
-
-void CanvasRenderingContext2D::setTransform(float a, float b, float c, float d, float e, float f) {
-    //SE_LOGE("%s isn't implemented!\n", __FUNCTION__);
-}
 
 } // namespace cc
+

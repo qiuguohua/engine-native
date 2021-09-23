@@ -75,7 +75,7 @@ public:
                                             int x, int y, int w,
                                             int h, int flags) = 0;
     virtual void               pollEvent()                    = 0;
-    virtual uintptr_t          getWindowHandler()             = 0;
+    virtual uintptr_t          getWindowHandler() const       = 0;
     virtual std::array<int, 2> getViewSize() const            = 0;
     /**
      @brief enable/disable(lock) the cursor, default is enabled

@@ -36,8 +36,8 @@ public:
 
     void writeCommand(int8_t cmd) const;
     int  readCommand(int8_t& cmd) const;
-    void writeCommand(void* msg, int32_t msgSize) const;
-    int  readCommand(void* msg, int32_t) const;
+    void writeCommand(void* msg, int32_t size) const;
+    int  readCommand(void* msg, int32_t size) const;
 
 private:
     int _pipeRead  = 0;

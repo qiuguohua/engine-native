@@ -29,6 +29,10 @@
     #include "platform/os-interfaces/modules/windows/Network.h"
 #elif (CC_PLATFORM == CC_PLATFORM_ANDROID || CC_PLATFORM == CC_PLATFORM_OHOS)
     #include "platform/os-interfaces/modules/java/Network.h"
+#elif (CC_PLATFORM == CC_PLATFORM_MAC_OSX)
+    #include "platform/os-interfaces/modules/mac/Network.h"
+#elif (CC_PLATFORM == CC_PLATFORM_MAC_IOS)
+    #include "platform/os-interfaces/modules/ios/Network.h"
 #endif
 
 namespace cc {

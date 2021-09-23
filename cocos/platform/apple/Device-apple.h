@@ -28,6 +28,6 @@
 #ifndef CCDevice_apple_hpp
 #define CCDevice_apple_hpp
 
-#include "platform/Device.h"
+//#include "platform/Device.h"
 
 #endif /* CCDevice_apple_hpp */

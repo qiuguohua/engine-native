@@ -33,11 +33,11 @@ OSType System::getOSType() const {
     return OSType::WINDOWS;
 }
 
-std::string System::getDeviceModel() {
+std::string System::getDeviceModel() const {
     return "Windows";
 }
 
-System::LanguageType System::getCurrentLanguage() {
+System::LanguageType System::getCurrentLanguage() const {
     LanguageType ret = LanguageType::ENGLISH;
 
     LCID           localeID          = GetUserDefaultLCID();
@@ -119,7 +119,7 @@ std::string System::getCurrentLanguageCode() const {
     return code;
 }
 
-std::string System::getSystemVersion() {
+std::string System::getSystemVersion() const {
     char    buff[256] = {0};
     HMODULE handle    = GetModuleHandleW(L"ntdll.dll");
     if (handle) {

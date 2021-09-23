@@ -30,7 +30,12 @@
     #include "platform/os-interfaces/modules/android/SystemWindow.h"
 #elif (CC_PLATFORM == CC_PLATFORM_OHOS)
     #include "platform/os-interfaces/modules/ohos/SystemWindow.h"
+#elif (CC_PLATFORM == CC_PLATFORM_MAC_OSX)
+    #include "platform/os-interfaces/modules/mac/SystemWindow.h"
+#elif (CC_PLATFORM == CC_PLATFORM_MAC_IOS)
+    #include "platform/os-interfaces/modules/ios/SystemWindow.h"
 #endif
+
 
 namespace cc {
 

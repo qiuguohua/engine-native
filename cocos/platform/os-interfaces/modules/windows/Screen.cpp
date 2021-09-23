@@ -30,7 +30,7 @@
 
 namespace cc {
 
-int Screen::getDPI() {
+int Screen::getDPI() const {
     static int dpi = -1;
     if (dpi == -1) {
         HDC hScreenDC = GetDC(nullptr);
@@ -42,7 +42,7 @@ int Screen::getDPI() {
     return dpi;
 }
 
-float Screen::getDevicePixelRatio() {
+float Screen::getDevicePixelRatio() const {
     return 1;
 }
 
@@ -50,11 +50,11 @@ void Screen::setKeepScreenOn(bool value) {
     CC_UNUSED_PARAM(value);
 }
 
-Screen::Orientation Screen::getDeviceOrientation() {
-    return Orientation::LANDSCAPE_RIGHT;
+Screen::Orientation Screen::getDeviceOrientation() const {
+    return Orientation::PORTRAIT;
 }
 
-Vec4 Screen::getSafeAreaEdge() {
+Vec4 Screen::getSafeAreaEdge() const {
     return cc::Vec4();
 }
 

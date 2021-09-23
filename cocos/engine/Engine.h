@@ -103,7 +103,7 @@ public:
     /**
      @brief Get engine scheduler.
      */
-    SchedulerPtr getEngineScheduler() override;
+    SchedulerPtr getEngineScheduler() const override;
 
 private:
     void tick();
@@ -128,7 +128,7 @@ private:
     std::map<OSEventType, EventCb> _eventCallbacks;
     using EventHandleFunctor = std::function<void()>;
 
-    DISABLE_COPY_AND_MOVE(Engine);
+    CC_DISABLE_COPY_AND_MOVE_SEMANTICS(Engine);
 };
 
 } // namespace cc

@@ -26,7 +26,7 @@
 
 namespace cc {
 
-float Battery::getBatteryLevel() {
+float Battery::getBatteryLevel() const {
     return 1.0F;
 }
 

@@ -42,7 +42,7 @@ public:
     bool      createWindow(const char* title,
                            int x, int y, int w,
                            int h, int flags) override;
-    uintptr_t getWindowHandler() override;
+    uintptr_t getWindowHandler() const override;
     void      pollEvent() override;
 
     std::array<int, 2> getViewSize() const override;

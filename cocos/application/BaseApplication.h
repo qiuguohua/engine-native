@@ -39,7 +39,8 @@ public:
     /*
      *@bref Application main business logic.
      */
-    virtual int32_t run(int argc, char** argv) = 0;
+    virtual int32_t run(int          argc,
+                        const char** argv) = 0;
     /*
      *@bref Pause the application.
      */
@@ -59,11 +60,11 @@ public:
 };
 } // namespace cc
 
-#define COCOS_START_APPLICATION_MAIN(className)                    \
-    int cocos_main(int argc, char** argv) {                        \
-        std::unique_ptr<cc::BaseApplication> app(new className()); \
-        if (app->init()) {                                         \
-            return -1;                                             \
-        }                                                          \
-        return app->run(argc, argv);                               \
+#define COCOS_START_APPLICATION_MAIN(className)                           \
+    int cocos_main(int argc, const char** argv) {                         \
+        static std::unique_ptr<cc::BaseApplication> app(new className()); \
+        if (app->init()) {                                                \
+            return -1;                                                    \
+        }                                                                 \
+        return app->run(argc, argv);                                      \
     }

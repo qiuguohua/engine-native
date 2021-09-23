@@ -38,11 +38,11 @@
     #include "platform/os-interfaces/modules/windows/CanvasRenderingContext2DDelegate.h"
 #elif (CC_PLATFORM == CC_PLATFORM_ANDROID || CC_PLATFORM == CC_PLATFORM_OHOS)
     #include "platform/os-interfaces/modules/java/CanvasRenderingContext2DDelegate.h"
+#elif (CC_PLATFORM == CC_PLATFORM_MAC_OSX || CC_PLATFORM == CC_PLATFORM_IOS)
+    #include "platform/os-interfaces/modules/apple/CanvasRenderingContext2DDelegate.h"
 #endif
 
-using Point   = std::array<float, 2>;
 using Vec2    = std::array<float, 2>;
-using Size    = std::array<float, 2>;
 using Color4F = std::array<float, 4>;
 
 namespace {
@@ -66,7 +66,7 @@ void fillRectWithColor(uint8_t *buf, uint32_t totalWidth, uint32_t totalHeight, 
 } // namespace
 
 namespace cc {
-
+//using Size    = std::array<float, 2>;
 CanvasGradient::CanvasGradient() = default;
 
 CanvasGradient::~CanvasGradient() = default;
@@ -297,7 +297,28 @@ void CanvasRenderingContext2D::setFont(const std::string &font) {
         //font-variant: normal, small-caps
         _delegate->updateFont(fontName, static_cast<float>(fontSize), isBold, isItalic, isOblique, isSmallCaps);
     }
+#elif CC_PLATFORM == CC_PLATFORM_MAC_OSX || CC_PLATFORM == CC_PLATFORM_MAC_IOS
+    if (_font != font) {
+        _font = font;
+
+        std::string boldStr;
+        std::string fontName = "Arial";
+        std::string fontSizeStr = "30";
+
+        // support get font name from `60px American` or `60px "American abc-abc_abc"`
+        std::regex re("(bold)?\\s*((\\d+)([\\.]\\d+)?)px\\s+([\\w-]+|\"[\\w -]+\"$)");
+        std::match_results<std::string::const_iterator> results;
+        if (std::regex_search(_font.cbegin(), _font.cend(), results, re)) {
+            boldStr = results[1].str();
+            fontSizeStr = results[2].str();
+            fontName = results[5].str();
+        }
+        float fontSize = atof(fontSizeStr.c_str());
+        bool isBold = !boldStr.empty();
+        _delegate->updateFont(fontName, static_cast<float>(fontSize), isBold, false, false, false);
+    }
 #endif
+
 }
 
 void CanvasRenderingContext2D::setTextAlign(const std::string &textAlign) {
