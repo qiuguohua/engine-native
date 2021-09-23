@@ -25,17 +25,23 @@
 ****************************************************************************/
 #import "ViewController.h"
 #include "cocos/bindings/event/EventDispatcher.h"
-#include "cocos/platform/Device.h"
+#include "platform/IEventDispatch.h"
+#include "platform/os-interfaces/modules/IScreen.h"
+#include "platform/BasePlatform.h"
+#include "platform/ios/AppDelegate.h"
+//#include "cocos/platform/Device.h"
 
 namespace {
-    cc::Device::Orientation _lastOrientation;
+//    cc::Device::Orientation _lastOrientation;
 }
 
 @interface ViewController ()
-
+ 
 @end
 
 @implementation ViewController
+
+cc::IScreen::Orientation _lastOrientation;
 
 - (BOOL) shouldAutorotate {
     return YES;
@@ -52,28 +58,34 @@ namespace {
 }
 
 - (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator {
-    cc::Device::Orientation orientation = _lastOrientation;
+    cc::IScreen::Orientation orientation = _lastOrientation;
     // reference: https://developer.apple.com/documentation/uikit/uiinterfaceorientation?language=objc
     // UIInterfaceOrientationLandscapeRight = UIDeviceOrientationLandscapeLeft
     // UIInterfaceOrientationLandscapeLeft = UIDeviceOrientationLandscapeRight
     switch ([UIDevice currentDevice].orientation) {
         case UIDeviceOrientationPortrait:
-            orientation = cc::Device::Orientation::PORTRAIT;
+            orientation = cc::IScreen::Orientation::PORTRAIT;
             break;
         case UIDeviceOrientationLandscapeRight:
-            orientation = cc::Device::Orientation::LANDSCAPE_LEFT;
+            orientation = cc::IScreen::Orientation::LANDSCAPE_LEFT;
             break;
         case UIDeviceOrientationPortraitUpsideDown:
-            orientation = cc::Device::Orientation::PORTRAIT_UPSIDE_DOWN;
+            orientation = cc::IScreen::Orientation::PORTRAIT_UPSIDE_DOWN;
             break;
         case UIDeviceOrientationLandscapeLeft:
-            orientation = cc::Device::Orientation::LANDSCAPE_RIGHT;
+            orientation = cc::IScreen::Orientation::LANDSCAPE_RIGHT;
             break;
         default:
             break;
     }
     if (_lastOrientation != orientation) {
-        cc::EventDispatcher::dispatchOrientationChangeEvent((int) orientation);
+        cc::DeviceEvent ev;
+        cc::BasePlatform* platform = cc::BasePlatform::getPlatform();
+        cc::IScreen* screenIntf = platform->getOSInterface<cc::IScreen>();
+        ev.type           = cc::DeviceEvent::Type::DEVICE_ORIENTATION;
+        ev.args[0].intVal = static_cast<int>(screenIntf->getDeviceOrientation());
+        AppDelegate* delegate = [[UIApplication sharedApplication] delegate];
+        [delegate dispatchEvent:ev];
         _lastOrientation = orientation;
     }
 }

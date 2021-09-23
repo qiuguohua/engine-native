@@ -26,7 +26,6 @@
 ****************************************************************************/
 
 #include "platform/apple/Device-apple.h"
-#include "platform/Application.h"
 
 #if CC_PLATFORM == CC_PLATFORM_MAC_OSX
     #import <AppKit/AppKit.h>
@@ -36,7 +35,7 @@
 #endif
 
 namespace cc {
-
+/*
 float Device::getDevicePixelRatio() {
 #if (CC_PLATFORM == CC_PLATFORM_MAC_OSX)
     return [[[[NSApplication sharedApplication] delegate] getWindow] backingScaleFactor];
@@ -45,5 +44,5 @@ float Device::getDevicePixelRatio() {
     return [[UIScreen mainScreen] nativeScale];
 #endif //CC_USE_METAL
 }
-
+*/
 } // namespace cc

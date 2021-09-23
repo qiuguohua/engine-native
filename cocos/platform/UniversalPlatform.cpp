@@ -35,7 +35,7 @@
 #include "platform/os-interfaces/modules/ISystemWindow.h"
 #include "platform/os-interfaces/modules/IVibrate.h"
 
-extern int cocos_main(int argc, char** argv);
+extern int cocos_main(int argc, const char** argv);
 
 namespace cc {
 UniversalPlatform::OSType UniversalPlatform::getOSType() const {
@@ -84,11 +84,11 @@ int32_t UniversalPlatform::init() {
     return 0;
 }
 
-int32_t UniversalPlatform::main(int argc, char** argv) {
+int32_t UniversalPlatform::main(int argc, const char** argv) {
     return cocos_main(argc, argv);
 }
 
-int32_t UniversalPlatform::run(int argc, char** argv) {
+int32_t UniversalPlatform::run(int argc, const char** argv) {
     return main(argc, argv);
 }
 
@@ -99,8 +99,20 @@ int UniversalPlatform::getSdkVersion() const {
     return 0;
 }
 
-void UniversalPlatform::runInPlatform(UniversalPlatform::PlatformThreadCallback cb) {
-    cb();
+void UniversalPlatform::runInPlatform(UniversalPlatform::PlatformThreadCallback task,int32_t fps) {
+    task();
+}
+
+int32_t UniversalPlatform::getFps() {
+    return _fps;
+}
+
+void UniversalPlatform::setFps(int32_t fps) {
+    _fps = fps;
+}
+
+void UniversalPlatform::pollEvent() {
+    
 }
 
 } // namespace cc

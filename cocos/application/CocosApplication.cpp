@@ -65,14 +65,14 @@ int CocosApplication::init() {
     se->start();
 
 #if (CC_PLATFORM == CC_PLATFORM_MAC_IOS)
-    cc::Vec2 logicSize  = getViewLogicalSize();
-    float    pixelRatio = cc::Device::getDevicePixelRatio();
-    cc::EventDispatcher::dispatchResizeEvent(logicSize.x * pixelRatio, logicSize.y * pixelRatio);
+    //cc::Vec2 logicSize  = getViewLogicalSize();
+    //float    pixelRatio = cc::Device::getDevicePixelRatio();
+    //facc::EventDispatcher::dispatchResizeEvent(logicSize.x * pixelRatio, logicSize.y * pixelRatio);
 #endif
     return 0;
 }
 
-int32_t CocosApplication::run(int argc, char **argv) {
+int32_t CocosApplication::run(int argc, const char **argv) {
     CC_UNUSED_PARAM(argc);
     CC_UNUSED_PARAM(argv);
     return _engine->run();

@@ -34,13 +34,13 @@
 
 #include "base/Scheduler.h"
 #include "cocos/bindings/jswrapper/SeApi.h"
-#include "platform/Application.h"
-#include "platform/Device.h"
+//#include "platform/Application.h"
+//#include "platform/Device.h"
 
 #include "pipeline/Define.h"
 #include "pipeline/RenderPipeline.h"
 #include "renderer/GFXDeviceManager.h"
-
+/*
 @interface MyTimer : NSObject {
     cc::Application *_app;
     NSTimer *        _timer;
@@ -256,3 +256,4 @@ std::string Application::getSystemVersion() {
 }
 
 } // namespace cc
+*/

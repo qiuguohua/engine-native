@@ -27,12 +27,13 @@
 #import "ViewController.h"
 #include "platform/ios/View.h"
 
-#include "Game.h"
-#include "SDKWrapper.h"
+#include "platform/ios/IOSPlatform.h"
+#include "platform/ios/service/SDKWrapper.h"
 
 @implementation AppDelegate
 
-Game *      game = nullptr;
+cc::IOSPlatform * platform = nullptr;
+
 @synthesize window;
 
 #pragma mark -
@@ -44,6 +45,10 @@ Game *      game = nullptr;
     CGRect bounds = [[UIScreen mainScreen] bounds];
     self.window   = [[UIWindow alloc] initWithFrame:bounds];
 
+    platform = (cc::IOSPlatform*)cc::BasePlatform::getPlatform();
+    // Must use abstract base class assignment, otherwise the calling function may be incorrect in objective-c
+    cc::IEventDispatch * eventDispatcher = platform;
+    
     // Should create view controller first, cc::Application will use it.
     _viewController                           = [[ViewController alloc] init];
     _viewController.view                      = [[View alloc] initWithFrame:bounds];
@@ -51,11 +56,9 @@ Game *      game = nullptr;
     _viewController.view.multipleTouchEnabled = true;
     [self.window setRootViewController:_viewController];
 
-    // cocos2d application instance
-    game = new Game(bounds.size.width, bounds.size.height);
-    game->init();
-
     [self.window makeKeyAndVisible];
+
+    platform->main(0, nullptr);
 
     return YES;
 }
@@ -66,7 +69,7 @@ Game *      game = nullptr;
      Use this method to pause ongoing tasks, disable timers, and throttle down OpenGL ES frame rates. Games should use this method to pause the game.
      */
     [[SDKWrapper shared] applicationWillResignActive:application];
-    game->onPause();
+    platform->onPause();
 }
 
 - (void)applicationDidBecomeActive:(UIApplication *)application {
@@ -74,7 +77,7 @@ Game *      game = nullptr;
      Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
      */
     [[SDKWrapper shared] applicationDidBecomeActive:application];
-    game->onResume();
+    platform->onResume();
 }
 
 - (void)applicationDidEnterBackground:(UIApplication *)application {
@@ -93,10 +96,14 @@ Game *      game = nullptr;
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application {
-    game->onClose();
+    platform->onClose();
+    platform = nullptr;
     [[SDKWrapper shared] applicationWillTerminate:application];
-    delete game;
-    game = nullptr;
+}
+
+- (void)dispatchEvent:(const cc::OSEvent&) ev {
+    if(platform)
+       platform->dispatchEvent(ev);
 }
 
 #pragma mark -
@@ -104,7 +111,11 @@ Game *      game = nullptr;
 
 - (void)applicationDidReceiveMemoryWarning:(UIApplication *)application {
     [[SDKWrapper shared] applicationDidReceiveMemoryWarning:application];
-    cc::EventDispatcher::dispatchMemoryWarningEvent();
+    cc::DeviceEvent ev;
+    ev.type = cc::DeviceEvent::Type::DEVICE_MEMORY;
+    if(platform) {
+        platform->dispatchEvent(ev);
+    }
 }
 
 @end

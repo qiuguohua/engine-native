@@ -112,11 +112,11 @@ int32_t Engine::init() {
 
 int32_t Engine::run() {
     BasePlatform* platform = BasePlatform::getPlatform();
-#if (CC_PLATFORM == CC_PLATFORM_MACOS)
+#if (CC_PLATFORM == CC_PLATFORM_MAC_OSX || CC_PLATFORM == CC_PLATFORM_MAC_IOS)
     platform->runInPlatform([&]() {
         tick();
-        platform->pollEvent();
-    });
+        //platform->pollEvent();
+    }, 60);
 #else
     while (!_quit) {
         tick();
