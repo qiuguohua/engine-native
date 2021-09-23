@@ -38,7 +38,7 @@
 extern int cocos_main(int argc, char** argv);
 
 namespace cc {
-UniversalPlatform::OSType UniversalPlatform::getOSType() {
+UniversalPlatform::OSType UniversalPlatform::getOSType() const {
     return getOSInterface<ISystem>()->getOSType();
 }
 

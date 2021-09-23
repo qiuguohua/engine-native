@@ -348,7 +348,7 @@ bool SystemWindow::createWindow(const char *title,
     return true;
 }
 
-uintptr_t SystemWindow::getWindowHandler() {
+uintptr_t SystemWindow::getWindowHandler() const {
     //return _handle;
     CC_ASSERT(_handle != nullptr);
     SDL_SysWMinfo wmInfo;

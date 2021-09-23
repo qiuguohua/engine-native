@@ -42,7 +42,7 @@ public:
      @brief Get operating system interface template.
      */
     template <class T>
-    T* getOSInterface() {
+    T* getOSInterface() const {
         BasePlatform* platform = BasePlatform::getPlatform();
         return platform->getOSInterface<T>();
     }
@@ -89,17 +89,17 @@ public:
     /**
      @brief Add listening event callback.
      */
-    virtual void addEvent(OSEventType evtype, EventCb cb) = 0;
+    virtual void addEventCallback(OSEventType evtype, EventCb cb) = 0;
     /**
      @brief Remove listening event callback.
      */
-    virtual void removeEvent(OSEventType evtype) = 0;
+    virtual void removeEventCallback(OSEventType evtype) = 0;
     /**
      @brief Get engine scheduler.
      */
     using SchedulerPtr = std::shared_ptr<Scheduler>;
 
-    virtual SchedulerPtr getEngineScheduler() = 0;
+    virtual SchedulerPtr getEngineScheduler() const = 0;
 };
 
 } // namespace cc

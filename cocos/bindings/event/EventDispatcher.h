@@ -68,7 +68,8 @@ private:
 
 #define CONSTRUCT_EVENT(name, type)  name() : OSEvent(type) {}
 
-struct AppEvent : public OSEvent {
+class AppEvent : public OSEvent {
+public:
     CONSTRUCT_EVENT(AppEvent, OSEventType::APP_OSEVENT)
     enum class Type {
         RUN = 0,
@@ -80,7 +81,8 @@ struct AppEvent : public OSEvent {
     Type type = Type::UNKNOWN;
 };
 
-struct WindowEvent : public OSEvent {
+class WindowEvent : public OSEvent {
+public:
     CONSTRUCT_EVENT(WindowEvent, OSEventType::WINDOW_OSEVENT)
     enum class Type {
         QUIT = 0,
@@ -99,7 +101,8 @@ struct WindowEvent : public OSEvent {
 };
 // Touch event related
 
-struct TouchInfo {
+class TouchInfo {
+public:
     float x     = 0;
     float y     = 0;
     int   index = 0;
@@ -110,7 +113,8 @@ struct TouchInfo {
       index(index) {}
 };
 
-struct TouchEvent : public OSEvent {
+class TouchEvent : public OSEvent {
+public:
     CONSTRUCT_EVENT(TouchEvent, OSEventType::TOUCH_OSEVENT)
     enum class Type {
         BEGAN,
@@ -120,11 +124,13 @@ struct TouchEvent : public OSEvent {
         UNKNOWN
     };
 
+
     std::vector<TouchInfo> touches;
     Type                   type = Type::UNKNOWN;
 };
 
-struct MouseEvent : public OSEvent {
+class MouseEvent : public OSEvent {
+public:
     CONSTRUCT_EVENT(MouseEvent, OSEventType::MOUSE_OSEVENT)
     enum class Type {
         DOWN,
@@ -201,7 +207,8 @@ enum class KeyCode {
     NUMPAD_9        = 10057
 };
 
-struct KeyboardEvent : public OSEvent {
+class KeyboardEvent : public OSEvent {
+public:
     CONSTRUCT_EVENT(KeyboardEvent, OSEventType::KEYBOARD_OSEVENT)
     enum class Action {
         PRESS,
@@ -209,6 +216,7 @@ struct KeyboardEvent : public OSEvent {
         REPEAT,
         UNKNOWN
     };
+
 
     int    key            = -1;
     Action action         = Action::UNKNOWN;
@@ -260,9 +268,9 @@ public:
     static void destroy();
     static bool initialized();
 
-    static void dispatchTouchEvent(const struct TouchEvent &touchEvent);
-    static void dispatchMouseEvent(const struct MouseEvent &mouseEvent);
-    static void dispatchKeyboardEvent(const struct KeyboardEvent &keyboardEvent);
+    static void dispatchTouchEvent(const TouchEvent &touchEvent);
+    static void dispatchMouseEvent(const MouseEvent &mouseEvent);
+    static void dispatchKeyboardEvent(const KeyboardEvent &keyboardEvent);
     static void dispatchTickEvent(float dt);
     static void dispatchResizeEvent(int width, int height);
     static void dispatchOrientationChangeEvent(int orientation);

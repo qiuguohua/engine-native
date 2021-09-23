@@ -102,8 +102,8 @@ public:
 
     void execCommand();
 
-    int32_t getWidth();
-    int32_t getHeight();
+    int32_t getWidth() const;
+    int32_t getHeight() const;
 
 private:
     void preExecCmd(JniCommand cmd);

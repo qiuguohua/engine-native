@@ -50,7 +50,7 @@ public:
     /**
      *@bref Get targe platform type.
      */
-    OSType getOSType() override;
+    OSType getOSType() const override;
     /**
      *@bref Set the event handling callback.
      */

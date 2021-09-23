@@ -179,11 +179,11 @@ void Engine::setPreferredFramesPerSecond(int fps) {
     _prefererredNanosecondsPerFrame = static_cast<long>(1.0 / _fps * NANOSECONDS_PER_SECOND); //NOLINT(google-runtime-int)
 }
 
-void Engine::addEvent(OSEventType evType, EventCb cb) {
+void Engine::addEventCallback(OSEventType evType, EventCb cb) {
     _eventCallbacks.insert(std::make_pair(evType, cb));
 }
 
-void Engine::removeEvent(OSEventType evType) {
+void Engine::removeEventCallback(OSEventType evType) {
     auto it = _eventCallbacks.find(evType);
     if (it != _eventCallbacks.end()) {
         _eventCallbacks.erase(it);
@@ -244,7 +244,7 @@ bool Engine::handleEvent(const OSEvent& ev) {
     return isHandled;
 }
 
-Engine::SchedulerPtr Engine::getEngineScheduler() {
+Engine::SchedulerPtr Engine::getEngineScheduler() const {
     return _scheduler;
 }
 

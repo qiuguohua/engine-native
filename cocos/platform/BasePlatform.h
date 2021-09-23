@@ -58,7 +58,7 @@ public:
      */
     virtual int32_t run(int argc, char** argv) = 0;
     /**
-     @brief Main logic.
+     @brief Main business logic.
      */
     virtual int32_t main(int argc, char** argv) = 0;
     /**
@@ -76,7 +76,7 @@ public:
      */
     using OSType = ISystem::OSType;
 
-    virtual OSType getOSType() = 0;
+    virtual OSType getOSType() const = 0;
 
     /**
      @brief Set event handling callback function.
@@ -93,7 +93,10 @@ public:
      @brief Default event handling.
      */
     virtual void handleDefaultEvent(const OSEvent& ev) = 0;
-
+    /**
+     @brief Get the SDK version for Android.Other systems also have sdk versions, 
+            but they are not currently used.
+     */
     virtual int getSdkVersion() const = 0;
    
     using PlatformThreadCallback = std::function<void(void)>;
@@ -104,7 +107,7 @@ public:
      */
     template <class T>
     std::enable_if_t<std::is_base_of<OSInterface, T>::value, T*>
-    getOSInterface() {
+    getOSInterface() const {
         for (auto& it : _osInterfaces) {
             T* intf = dynamic_cast<T*>(it.get());
             if (intf) {

@@ -26,7 +26,7 @@
 
 namespace cc {
 
-INetwork::NetworkType Network::getNetworkType() {
+INetwork::NetworkType Network::getNetworkType() const {
     return INetwork::NetworkType::LAN;
 }
 

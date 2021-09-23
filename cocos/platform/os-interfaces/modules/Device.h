@@ -141,8 +141,7 @@ public:
 
 private:
     Device();
-    DISABLE_COPY_SEMANTICS(Device)
-    DISABLE_MOVE_SEMANTICS(Device)
+    CC_DISABLE_COPY_AND_MOVE_SEMANTICS(Device)
 };
 
 // end group
