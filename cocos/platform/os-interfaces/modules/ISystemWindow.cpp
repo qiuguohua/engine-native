@@ -25,27 +25,22 @@
 
 #include "platform/os-interfaces/modules/ISystemWindow.h"
 #if (CC_PLATFORM == CC_PLATFORM_WINDOWS)
-    #include "platform/os-interfaces/modules/windows/SystemWindow.h"
+    #include "platform/win32/interfaces/SystemWindow.h"
 #elif (CC_PLATFORM == CC_PLATFORM_ANDROID)
-    #include "platform/os-interfaces/modules/android/SystemWindow.h"
+    #include "platform/android/interfaces/SystemWindow.h"
 #elif (CC_PLATFORM == CC_PLATFORM_OHOS)
-    #include "platform/os-interfaces/modules/ohos/SystemWindow.h"
+    #include "platform/ohos/interfaces/SystemWindow.h"
 #elif (CC_PLATFORM == CC_PLATFORM_MAC_OSX)
-    #include "platform/os-interfaces/modules/mac/SystemWindow.h"
+    #include "platform/mac/interfaces/SystemWindow.h"
 #elif (CC_PLATFORM == CC_PLATFORM_MAC_IOS)
-    #include "platform/os-interfaces/modules/ios/SystemWindow.h"
+    #include "platform/ios/interfaces/SystemWindow.h"
 #endif
-
 
 namespace cc {
 
-ISystemWindow::ISystemWindow(IEventDispatch* platform)
-: OSInterface(platform) {
-}
-
 // static
-OSInterface::Ptr ISystemWindow::createSystemWindowInterface(IEventDispatch* platform) {
-    return std::make_shared<SystemWindow>(platform);
+OSInterface::Ptr ISystemWindow::createSystemWindowInterface() {
+    return std::make_shared<SystemWindow>();
 }
 
 } // namespace cc

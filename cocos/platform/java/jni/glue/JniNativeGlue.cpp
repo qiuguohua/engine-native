@@ -41,7 +41,7 @@ JniNativeGlue* JniNativeGlue::getInstance() {
     return &jniNativeGlue;
 }
 
-void JniNativeGlue::init(int argc, char** argv) {
+void JniNativeGlue::start(int argc, const char** argv) {
     _messagePipe = std::make_unique<MessagePipe>();
 
     BasePlatform* platform = cc::BasePlatform::getPlatform();
@@ -236,6 +236,7 @@ void JniNativeGlue::engineHandleCmd(JniCommand cmd) {
             WindowEvent ev;
             ev.type = WindowEvent::Type::CLOSE;
             dispatchEvent(ev);
+            setRunning(false);
         } break;
         case JniCommand::JNI_CMD_LOW_MEMORY: {
             DeviceEvent ev;

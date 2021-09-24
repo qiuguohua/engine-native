@@ -25,13 +25,13 @@
 #include "platform/os-interfaces/modules/ISystem.h"
 
 #if (CC_PLATFORM == CC_PLATFORM_WINDOWS)
-    #include "platform/os-interfaces/modules/windows/System.h"
+    #include "platform/win32/interfaces/System.h"
 #elif (CC_PLATFORM == CC_PLATFORM_ANDROID || CC_PLATFORM == CC_PLATFORM_OHOS)
-    #include "platform/os-interfaces/modules/java/System.h"
+    #include "platform/java/interfaces/System.h"
 #elif (CC_PLATFORM == CC_PLATFORM_MAC_OSX)
-    #include "platform/os-interfaces/modules/mac/System.h"
+    #include "platform/mac/interfaces/System.h"
 #elif (CC_PLATFORM == CC_PLATFORM_MAC_IOS)
-    #include "platform/os-interfaces/modules/ios/System.h"
+    #include "platform/ios/interfaces/System.h"
 #endif
 
 namespace cc {

@@ -23,7 +23,7 @@
  THE SOFTWARE.
 ****************************************************************************/
 
-#include "platform/os-interfaces/modules/android/Screen.h"
+#include "platform/android/interfaces/Screen.h"
 #include <android/sensor.h>
 #include <android/window.h>
 #include <android_native_app_glue.h>

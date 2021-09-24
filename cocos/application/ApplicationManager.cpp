@@ -22,3 +22,23 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  THE SOFTWARE.
 ****************************************************************************/
+
+#include "application/ApplicationManager.h"
+
+namespace cc {
+// static
+ApplicationManager* ApplicationManager::getInstance() {
+    static ApplicationManager mgr;
+    return &mgr;
+}
+
+void ApplicationManager::releseAllApplcation() {
+    _apps.clear();
+}
+
+} // namespace cc
+
+//
+void cocos_destory() {
+    cc::ApplicationManager::getInstance()->releseAllApplcation();
+}

@@ -23,7 +23,7 @@
  THE SOFTWARE.
 ****************************************************************************/
 
-#include "platform/os-interfaces/modules/android/Screen.h"
+#include "platform/android/interfaces/Screen.h"
 #include "platform/java/jni/JniImp.h"
 
 namespace cc {

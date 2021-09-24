@@ -26,13 +26,13 @@
 #include "platform/os-interfaces/modules/IBattery.h"
 
 #if (CC_PLATFORM == CC_PLATFORM_WINDOWS)
-    #include "platform/os-interfaces/modules/windows/Battery.h"
+    #include "platform/win32/interfaces/Battery.h"
 #elif (CC_PLATFORM == CC_PLATFORM_ANDROID || CC_PLATFORM == CC_PLATFORM_OHOS)
-    #include "platform/os-interfaces/modules/java/Battery.h"
+    #include "platform/java/interfaces/Battery.h"
 #elif (CC_PLATFORM == CC_PLATFORM_MAC_OSX)
-    #include "platform/os-interfaces/modules/mac/Battery.h"
+    #include "platform/mac/interfaces/Battery.h"
 #elif (CC_PLATFORM == CC_PLATFORM_MAC_IOS)
-    #include "platform/os-interfaces/modules/ios/Battery.h"
+    #include "platform/ios/interfaces/Battery.h"
 #endif
 
 namespace cc {

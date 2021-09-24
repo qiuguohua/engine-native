@@ -42,7 +42,6 @@
 #include "platform/android/jni/JniCocosActivity.h"
 #include "platform/java/jni/JniHelper.h"
 
-
 namespace cc {
 JniInteraction::JniInteraction() = default;
 
@@ -52,7 +51,6 @@ JniInteraction* JniInteraction::getInstance() {
 }
 
 void JniInteraction::init() {
-
 }
 
 void JniInteraction::setObbPath(const std::string& path) {
@@ -63,7 +61,7 @@ void JniInteraction::setAAssetManager(AAssetManager* assetManager) {
     _assetManager = assetManager;
 }
 
-void JniInteraction::setResourceManager(ResourceManager * assetManager) {
+void JniInteraction::setResourceManager(ResourceManager* assetManager) {
     _resourceManager = assetManager;
 }
 
@@ -80,8 +78,6 @@ void JniInteraction::setWindow(ANativeWindow* window) {
         _cond.wait(lk);
     }
 }
-
-
 
 void JniInteraction::preExecCmd(int8_t cmd) {
     switch (cmd) {

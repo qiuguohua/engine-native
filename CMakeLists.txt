@@ -420,104 +420,104 @@ cocos_source_files(
 )
 if(WINDOWS)
     cocos_source_files(
-        cocos/platform/os-interfaces/modules/windows/CanvasRenderingContext2DDelegate.cpp
-        cocos/platform/os-interfaces/modules/windows/CanvasRenderingContext2DDelegate.h
+        cocos/platform/win32/interfaces/CanvasRenderingContext2DDelegate.cpp
+        cocos/platform/win32/interfaces/CanvasRenderingContext2DDelegate.h
     )
 elseif(ANDROID OR OHOS)
     cocos_source_files(
-        cocos/platform/os-interfaces/modules/java/CanvasRenderingContext2DDelegate.cpp
-        cocos/platform/os-interfaces/modules/java/CanvasRenderingContext2DDelegate.h
+        cocos/platform/java/interfaces/CanvasRenderingContext2DDelegate.cpp
+        cocos/platform/java/interfaces/CanvasRenderingContext2DDelegate.h
     )
 elseif(MACOSX OR IOS)
     cocos_source_files(
-        cocos/platform/os-interfaces/modules/apple/CanvasRenderingContext2DDelegate.mm
-        cocos/platform/os-interfaces/modules/apple/CanvasRenderingContext2DDelegate.h
+        cocos/platform/apple/interfaces/CanvasRenderingContext2DDelegate.mm
+        cocos/platform/apple/interfaces/CanvasRenderingContext2DDelegate.h
     )
 endif()
 
 ############ platformex : Interface implementation of windows
 if(WINDOWS)
     cocos_source_files(
-        cocos/platform/os-interfaces/modules/windows/Accelerometer.cpp
-        cocos/platform/os-interfaces/modules/windows/Accelerometer.h
-        cocos/platform/os-interfaces/modules/windows/Battery.cpp
-        cocos/platform/os-interfaces/modules/windows/Battery.h
-        cocos/platform/os-interfaces/modules/windows/Screen.cpp
-        cocos/platform/os-interfaces/modules/windows/Screen.h
-        cocos/platform/os-interfaces/modules/windows/Network.cpp
-        cocos/platform/os-interfaces/modules/windows/Network.h
-        cocos/platform/os-interfaces/modules/windows/Vibrate.cpp
-        cocos/platform/os-interfaces/modules/windows/Vibrate.h
-        cocos/platform/os-interfaces/modules/windows/System.cpp
-        cocos/platform/os-interfaces/modules/windows/System.h
-        cocos/platform/os-interfaces/modules/windows/SystemWindow.cpp
-        cocos/platform/os-interfaces/modules/windows/SystemWindow.h
+        cocos/platform/win32/interfaces/Accelerometer.cpp
+        cocos/platform/win32/interfaces/Accelerometer.h
+        cocos/platform/win32/interfaces/Battery.cpp
+        cocos/platform/win32/interfaces/Battery.h
+        cocos/platform/win32/interfaces/Screen.cpp
+        cocos/platform/win32/interfaces/Screen.h
+        cocos/platform/win32/interfaces/Network.cpp
+        cocos/platform/win32/interfaces/Network.h
+        cocos/platform/win32/interfaces/Vibrate.cpp
+        cocos/platform/win32/interfaces/Vibrate.h
+        cocos/platform/win32/interfaces/System.cpp
+        cocos/platform/win32/interfaces/System.h
+        cocos/platform/win32/interfaces/SystemWindow.cpp
+        cocos/platform/win32/interfaces/SystemWindow.h
     )
 elseif(ANDROID OR OHOS)
     cocos_source_files(
-        cocos/platform/os-interfaces/modules/java/Accelerometer.cpp
-        cocos/platform/os-interfaces/modules/java/Accelerometer.h
-        cocos/platform/os-interfaces/modules/java/Battery.cpp
-        cocos/platform/os-interfaces/modules/java/Battery.h
-        cocos/platform/os-interfaces/modules/java/CommonScreen.cpp
-        cocos/platform/os-interfaces/modules/java/CommonScreen.h
-        cocos/platform/os-interfaces/modules/java/Network.cpp
-        cocos/platform/os-interfaces/modules/java/Network.h
-        cocos/platform/os-interfaces/modules/java/Vibrate.cpp
-        cocos/platform/os-interfaces/modules/java/Vibrate.h
-        cocos/platform/os-interfaces/modules/java/System.cpp
-        cocos/platform/os-interfaces/modules/java/System.h
-        cocos/platform/os-interfaces/modules/java/CommonSystemWindow.cpp
-        cocos/platform/os-interfaces/modules/java/CommonSystemWindow.h
+        cocos/platform/java/interfaces/Accelerometer.cpp
+        cocos/platform/java/interfaces/Accelerometer.h
+        cocos/platform/java/interfaces/Battery.cpp
+        cocos/platform/java/interfaces/Battery.h
+        cocos/platform/java/interfaces/CommonScreen.cpp
+        cocos/platform/java/interfaces/CommonScreen.h
+        cocos/platform/java/interfaces/Network.cpp
+        cocos/platform/java/interfaces/Network.h
+        cocos/platform/java/interfaces/Vibrate.cpp
+        cocos/platform/java/interfaces/Vibrate.h
+        cocos/platform/java/interfaces/System.cpp
+        cocos/platform/java/interfaces/System.h
+        cocos/platform/java/interfaces/CommonSystemWindow.cpp
+        cocos/platform/java/interfaces/CommonSystemWindow.h
     )
 endif()
 if(ANDROID)
     cocos_source_files(
-        cocos/platform/os-interfaces/modules/android/Screen.cpp
-        cocos/platform/os-interfaces/modules/android/Screen.h
-        cocos/platform/os-interfaces/modules/android/SystemWindow.cpp
-        cocos/platform/os-interfaces/modules/android/SystemWindow.h
+        cocos/platform/android/interfaces/Screen.cpp
+        cocos/platform/android/interfaces/Screen.h
+        cocos/platform/android/interfaces/SystemWindow.cpp
+        cocos/platform/android/interfaces/SystemWindow.h
     )
 elseif(OHOS)
     cocos_source_files(
-        cocos/platform/os-interfaces/modules/ohos/Screen.cpp
-        cocos/platform/os-interfaces/modules/ohos/Screen.h
-        cocos/platform/os-interfaces/modules/ohos/SystemWindow.cpp
-        cocos/platform/os-interfaces/modules/ohos/SystemWindow.h
+        cocos/platform/ohos/interfaces/Screen.cpp
+        cocos/platform/ohos/interfaces/Screen.h
+        cocos/platform/ohos/interfaces/SystemWindow.cpp
+        cocos/platform/ohos/interfaces/SystemWindow.h
     )
 elseif(MACOSX)
    cocos_source_files(
-        cocos/platform/os-interfaces/modules/mac/Accelerometer.mm
-        cocos/platform/os-interfaces/modules/mac/Accelerometer.h
-        cocos/platform/os-interfaces/modules/mac/Battery.mm
-        cocos/platform/os-interfaces/modules/mac/Battery.h
-        cocos/platform/os-interfaces/modules/mac/Screen.mm
-        cocos/platform/os-interfaces/modules/mac/Screen.h
-        cocos/platform/os-interfaces/modules/mac/Network.mm
-        cocos/platform/os-interfaces/modules/mac/Network.h
-        cocos/platform/os-interfaces/modules/mac/Vibrate.mm
-        cocos/platform/os-interfaces/modules/mac/Vibrate.h
-        cocos/platform/os-interfaces/modules/mac/System.mm
-        cocos/platform/os-interfaces/modules/mac/System.h
-        cocos/platform/os-interfaces/modules/mac/SystemWindow.mm
-        cocos/platform/os-interfaces/modules/mac/SystemWindow.h
+        cocos/platform/mac/interfaces/Accelerometer.mm
+        cocos/platform/mac/interfaces/Accelerometer.h
+        cocos/platform/mac/interfaces/Battery.mm
+        cocos/platform/mac/interfaces/Battery.h
+        cocos/platform/mac/interfaces/Screen.mm
+        cocos/platform/mac/interfaces/Screen.h
+        cocos/platform/mac/interfaces/Network.mm
+        cocos/platform/mac/interfaces/Network.h
+        cocos/platform/mac/interfaces/Vibrate.mm
+        cocos/platform/mac/interfaces/Vibrate.h
+        cocos/platform/mac/interfaces/System.mm
+        cocos/platform/mac/interfaces/System.h
+        cocos/platform/mac/interfaces/SystemWindow.mm
+        cocos/platform/mac/interfaces/SystemWindow.h
    )
 elseif(IOS)
    cocos_source_files(
-        cocos/platform/os-interfaces/modules/ios/Accelerometer.mm
-        cocos/platform/os-interfaces/modules/ios/Accelerometer.h
-        cocos/platform/os-interfaces/modules/ios/Battery.mm
-        cocos/platform/os-interfaces/modules/ios/Battery.h
-        cocos/platform/os-interfaces/modules/ios/Screen.mm
-        cocos/platform/os-interfaces/modules/ios/Screen.h
-        cocos/platform/os-interfaces/modules/ios/Network.mm
-        cocos/platform/os-interfaces/modules/ios/Network.h
-        cocos/platform/os-interfaces/modules/ios/Vibrate.mm
-        cocos/platform/os-interfaces/modules/ios/Vibrate.h
-        cocos/platform/os-interfaces/modules/ios/System.mm
-        cocos/platform/os-interfaces/modules/ios/System.h
-        cocos/platform/os-interfaces/modules/ios/SystemWindow.mm
-        cocos/platform/os-interfaces/modules/ios/SystemWindow.h
+        cocos/platform/ios/interfaces/Accelerometer.mm
+        cocos/platform/ios/interfaces/Accelerometer.h
+        cocos/platform/ios/interfaces/Battery.mm
+        cocos/platform/ios/interfaces/Battery.h
+        cocos/platform/ios/interfaces/Screen.mm
+        cocos/platform/ios/interfaces/Screen.h
+        cocos/platform/ios/interfaces/Network.mm
+        cocos/platform/ios/interfaces/Network.h
+        cocos/platform/ios/interfaces/Vibrate.mm
+        cocos/platform/ios/interfaces/Vibrate.h
+        cocos/platform/ios/interfaces/System.mm
+        cocos/platform/ios/interfaces/System.h
+        cocos/platform/ios/interfaces/SystemWindow.mm
+        cocos/platform/ios/interfaces/SystemWindow.h
    )
 endif()
 

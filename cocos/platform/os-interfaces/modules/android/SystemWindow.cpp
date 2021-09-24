@@ -23,7 +23,7 @@
  THE SOFTWARE.
 ****************************************************************************/
 
-#include "platform/os-interfaces/modules/android/SystemWindow.h"
+#include "platform/android/interfaces/SystemWindow.h"
 #include "platform/java/jni/glue/JniNativeGlue.h"
 
 namespace cc {

@@ -40,10 +40,6 @@ public:
      */
     int32_t run(int argc, const char** argv) override;
     /**
-     *@bref Implement the main logic of the base platform.
-     */
-    int32_t main(int argc, const char** argv) override;
-    /**
      *@bref Implement the destruction of the base platform.
      */
     void destory() override;

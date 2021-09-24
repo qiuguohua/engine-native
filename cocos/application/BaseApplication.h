@@ -77,7 +77,4 @@ public:
             return -1;                                                                    \
         }                                                                                 \
         return app->run(argc, argv);                                                      \
-    }                                                                                     \
-    void cocos_destory() {                                                                \
-        cc::ApplicationManager::getInstance()->releseAllApplcation();                     \
     }

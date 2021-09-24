@@ -23,7 +23,7 @@
  THE SOFTWARE.
 ****************************************************************************/
 
-#include "platform/os-interfaces/modules/ohos/SystemWindow.h"
+#include "platform/ohos/interfaces/SystemWindow.h"
 #include "platform/java/jni/glue/JniNativeGlue.h"
 
 namespace cc {

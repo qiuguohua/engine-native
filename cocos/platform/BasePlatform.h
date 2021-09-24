@@ -41,6 +41,7 @@ class OSInterface;
 
 class BasePlatform {
 public:
+    BasePlatform() = default;
     /**
      @brief Destructor of AbstratctPlatform.
      */
@@ -60,7 +61,7 @@ public:
     /**
      @brief Main business logic.
      */
-    virtual int32_t main(int argc, const char** argv) = 0;
+    virtual int32_t loop(void) = 0;
     /**
      @brief Destory system platform.
      */
@@ -98,15 +99,15 @@ public:
             but they are not currently used.
      */
     virtual int getSdkVersion() const = 0;
-   
-    using ThreadCallback = std::function<void(void)>;
-    virtual void runInPlatformThread(ThreadCallback callback, int32_t fps) = 0;
-    virtual int32_t getFps() const = 0;
-    virtual void setFps(int32_t fps) = 0;
-    
-    virtual void onPause() = 0;
+
+    using ThreadCallback                                                      = std::function<void(void)>;
+    virtual void    runInPlatformThread(ThreadCallback callback, int32_t fps) = 0;
+    virtual int32_t getFps() const                                            = 0;
+    virtual void    setFps(int32_t fps)                                       = 0;
+
+    virtual void onPause()  = 0;
     virtual void onResume() = 0;
-    virtual void onClose() = 0;
+    virtual void onClose()  = 0;
     /**
      @brief Get target system interface.
      @ Non thread safe.
@@ -152,5 +153,6 @@ public:
 
 private:
     std::vector<OSInterface::Ptr> _osInterfaces;
+    CC_DISABLE_COPY_AND_MOVE_SEMANTICS(BasePlatform);
 };
 } // namespace cc

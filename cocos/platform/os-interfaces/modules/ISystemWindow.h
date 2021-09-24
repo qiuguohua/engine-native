@@ -34,6 +34,7 @@ namespace cc {
 
 class ISystemWindow : public OSInterface {
 public:
+    using WindowSize = std::array<int, 2>;
     typedef enum {
         /* !!! FIXME: change this to name = (1<<x). */
         CC_WINDOW_FULLSCREEN         = 0x00000001, /**< fullscreen window */
@@ -61,7 +62,6 @@ public:
         CC_WINDOW_VULKAN             = 0x10000000  /**< window usable for Vulkan surface */
     } WindowFlags;
 
-    explicit ISystemWindow(IEventDispatch* platform);
     /*
      *@bref Create window.
      *@param title: Window title
@@ -71,12 +71,11 @@ public:
      *@param h: Window height
      *@param flags: Window flag
      */
-    virtual bool               createWindow(const char* title,
-                                            int x, int y, int w,
-                                            int h, int flags) = 0;
-    virtual void               pollEvent()                    = 0;
-    virtual uintptr_t          getWindowHandler() const       = 0;
-    virtual std::array<int, 2> getViewSize() const            = 0;
+    virtual bool       createWindow(const char* title,
+                                    int x, int y, int w,
+                                    int h, int flags) = 0;
+    virtual uintptr_t  getWindowHandler() const       = 0;
+    virtual WindowSize getViewSize() const            = 0;
     /**
      @brief enable/disable(lock) the cursor, default is enabled
      */
@@ -87,7 +86,7 @@ public:
      @brief Create default sytem window interface.
      @return sytem window interface.
      */
-    static OSInterface::Ptr createSystemWindowInterface(IEventDispatch* platform);
+    static OSInterface::Ptr createSystemWindowInterface();
 
 private:
 };

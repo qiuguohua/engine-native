@@ -10,14 +10,12 @@ JNIEXPORT void JNICALL Java_com_cocos_lib_CocosAbilitySlice_onOrientationChanged
     static jint pHeight      = 0;
     if (pOrientation != orientation || pWidth != width || pHeight != height) {
         cc::WindowEvent ev;
-        ev.type = cc::WindowEvent::Type::SIZE_CHANGED;
-        ev.width = width;
+        ev.type   = cc::WindowEvent::Type::SIZE_CHANGED;
+        ev.width  = width;
         ev.height = height;
         JNI_NATIVE_GLUE()->dispatchEvent(ev);
         pOrientation = orientation;
         pHeight      = height;
         pWidth       = width;
     }
-
-    
 }

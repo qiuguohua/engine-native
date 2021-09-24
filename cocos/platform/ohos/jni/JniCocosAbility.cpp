@@ -36,9 +36,10 @@ THE SOFTWARE.
 #include "base/Log.h"
 
 #include "platform/java/jni/JniHelper.h"
+#include "platform/java/jni/glue/JniNativeGlue.h"
 #include "platform/ohos/FileUtils-ohos.h"
 #include "platform/ohos/jni/AbilityConsts.h"
-#include "platform/java/jni/glue/JniNativeGlue.h"
+
 
 #define LOGV(...) HILOG_INFO(LOG_APP, __VA_ARGS__)
 //NOLINTNEXTLINE
@@ -54,19 +55,19 @@ JNIEXPORT void JNICALL Java_com_cocos_lib_CocosAbilitySlice_onCreateNative(JNIEn
     }
     cc::JniHelper::init(env, ability);
     JNI_NATIVE_GLUE()->setSdkVersion(sdkVersion);
-    
-    ResourceManager* objResourceManager = InitNativeResourceManager(env, resourceManager);
+
+    ResourceManager *objResourceManager = InitNativeResourceManager(env, resourceManager);
     JNI_NATIVE_GLUE()->setResourceManager(objResourceManager);
 
-    jboolean    isCopy        = false;
+    jboolean    isCopy = false;
     std::string assetPathClone;
-    const char *assetPathStr  = env->GetStringUTFChars(assetPath, &isCopy);
-    assetPathClone            = assetPathStr;
+    const char *assetPathStr = env->GetStringUTFChars(assetPath, &isCopy);
+    assetPathClone           = assetPathStr;
     if (isCopy) {
         env->ReleaseStringUTFChars(assetPath, assetPathStr);
         assetPathStr = nullptr;
     }
-    std::string      moduleName{"entry"};
+    std::string moduleName{"entry"};
     const char *moduleNameStr = env->GetStringUTFChars(moduleNameJ, &isCopy);
     moduleName                = moduleNameStr;
     if (isCopy) {
@@ -74,7 +75,7 @@ JNIEXPORT void JNICALL Java_com_cocos_lib_CocosAbilitySlice_onCreateNative(JNIEn
         moduleNameStr = nullptr;
     }
     cc::FileUtilsOHOS::initResourceManager(objResourceManager, assetPathClone, moduleName);
-    JNI_NATIVE_GLUE()->init(0, nullptr);
+    JNI_NATIVE_GLUE()->start(0, nullptr);
 }
 
 JNIEXPORT void JNICALL

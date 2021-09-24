@@ -35,8 +35,9 @@
 #include <vector>
 
 #include "platform/android/FileUtils-android.h"
-#include "platform/java/jni/glue/JniNativeGlue.h"
 #include "platform/java/jni/JniHelper.h"
+#include "platform/java/jni/glue/JniNativeGlue.h"
+
 
 extern "C" {
 //NOLINTNEXTLINE
@@ -50,7 +51,7 @@ JNIEXPORT void JNICALL Java_com_cocos_lib_CocosActivity_onCreateNative(JNIEnv *e
     JNI_NATIVE_GLUE()->setObbPath(cc::JniHelper::jstring2string(obbPath));
     JNI_NATIVE_GLUE()->setResourceManager(AAssetManager_fromJava(env, assetMgr));
     cc::FileUtilsAndroid::setassetmanager(AAssetManager_fromJava(env, assetMgr));
-    JNI_NATIVE_GLUE()->init(0, nullptr);
+    JNI_NATIVE_GLUE()->start(0, nullptr);
 }
 
 //NOLINTNEXTLINE

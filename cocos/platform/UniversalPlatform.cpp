@@ -35,7 +35,7 @@
 #include "platform/os-interfaces/modules/ISystemWindow.h"
 #include "platform/os-interfaces/modules/IVibrate.h"
 
-extern int cocos_main(int argc, const char** argv);
+extern int  cocos_main(int argc, const char** argv);
 extern void cocos_destory();
 
 namespace cc {
@@ -75,7 +75,7 @@ void UniversalPlatform::setHandleDefaultEventCallback(HandleEventCallback cb) {
 }
 
 int32_t UniversalPlatform::init() {
-    registerOSInterface(ISystemWindow::createSystemWindowInterface(this));
+    registerOSInterface(ISystemWindow::createSystemWindowInterface());
     registerOSInterface(ISystem::createSystemInterface());
     registerOSInterface(INetwork::createNetworkInterface());
     registerOSInterface(IScreen::createScreenInterface());
@@ -85,14 +85,9 @@ int32_t UniversalPlatform::init() {
     return 0;
 }
 
-int32_t UniversalPlatform::main(int argc, const char** argv) {
-    int32_t ret = cocos_main(argc, argv);
-    destory();
-    return ret;
-}
-
 int32_t UniversalPlatform::run(int argc, const char** argv) {
-    return main(argc, argv);
+    cocos_main(argc, argv);
+    return loop();
 }
 
 void UniversalPlatform::destory() {
@@ -103,8 +98,8 @@ int UniversalPlatform::getSdkVersion() const {
     return 0;
 }
 
-void UniversalPlatform::runInPlatformThread(UniversalPlatform::ThreadCallback task,int32_t fps) {
-    task();
+void UniversalPlatform::runInPlatformThread(ThreadCallback task, int32_t fps) {
+    _mainTask = task;
 }
 
 int32_t UniversalPlatform::getFps() const {
@@ -116,19 +111,15 @@ void UniversalPlatform::setFps(int32_t fps) {
 }
 
 void UniversalPlatform::pollEvent() {
-    
 }
 
 void UniversalPlatform::onPause() {
-
 }
 
 void UniversalPlatform::onResume() {
-
 }
 
 void UniversalPlatform::onClose() {
-
 }
 
 } // namespace cc

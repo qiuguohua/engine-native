@@ -26,13 +26,13 @@
 #include "platform/os-interfaces/modules/INetwork.h"
 
 #if (CC_PLATFORM == CC_PLATFORM_WINDOWS)
-    #include "platform/os-interfaces/modules/windows/Network.h"
+    #include "platform/win32/interfaces/Network.h"
 #elif (CC_PLATFORM == CC_PLATFORM_ANDROID || CC_PLATFORM == CC_PLATFORM_OHOS)
-    #include "platform/os-interfaces/modules/java/Network.h"
+    #include "platform/java/interfaces/Network.h"
 #elif (CC_PLATFORM == CC_PLATFORM_MAC_OSX)
-    #include "platform/os-interfaces/modules/mac/Network.h"
+    #include "platform/mac/interfaces/Network.h"
 #elif (CC_PLATFORM == CC_PLATFORM_MAC_IOS)
-    #include "platform/os-interfaces/modules/ios/Network.h"
+    #include "platform/ios/interfaces/Network.h"
 #endif
 
 namespace cc {

@@ -34,14 +34,14 @@
 #include <unistd.h>
 #include <thread>
 #include <vector>
-#include "platform/android/jni/JniCocosActivity.h"
 #include "cocos/bindings/event/CustomEventTypes.h"
+#include "platform/android/jni/JniCocosActivity.h"
+
 
 #include "cocos/bindings/event/EventDispatcher.h"
 #include "platform/android/FileUtils-android.h"
 #include "platform/android/jni/JniCocosActivity.h"
 #include "platform/java/jni/JniHelper.h"
-
 
 namespace cc {
 JniInteraction::JniInteraction() = default;
@@ -52,7 +52,6 @@ JniInteraction* JniInteraction::getInstance() {
 }
 
 void JniInteraction::init() {
-
 }
 
 void JniInteraction::setObbPath(const std::string& path) {
@@ -77,7 +76,7 @@ void JniInteraction::initWithPendingWindow() {
 }
 
 void JniInteraction::preExecCmd(int8_t cmd) {
-        switch (cmd) {
+    switch (cmd) {
         case ABILITY_CMD_INIT_WINDOW: {
             LOGV("ABILITY_CMD_INIT_WINDOW");
             _window = _pendingWindow;
@@ -107,7 +106,7 @@ void JniInteraction::preExecCmd(int8_t cmd) {
 void JniInteraction::postExecCmd(int8_t cmd) {
     switch (cmd) {
         case ABILITY_CMD_TERM_WINDOW: {
-            _window = nullptr;
+            _window        = nullptr;
             _pendingWindow = nullptr;
         } break;
         default:
