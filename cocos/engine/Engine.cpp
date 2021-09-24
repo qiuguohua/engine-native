@@ -92,6 +92,9 @@ Engine::~Engine() {
     se::ScriptEngine::destroyInstance();
 
     gfx::DeviceManager::destroy();
+
+    BasePlatform* platform = BasePlatform::getPlatform();
+    platform->setHandleEventCallback(nullptr);
 }
 
 int32_t Engine::init() {
@@ -113,17 +116,18 @@ int32_t Engine::init() {
 int32_t Engine::run() {
     BasePlatform* platform = BasePlatform::getPlatform();
 #if (CC_PLATFORM == CC_PLATFORM_MAC_OSX || CC_PLATFORM == CC_PLATFORM_MAC_IOS)
-    platform->runInPlatform([&]() {
+    platform->runInPlatformThread([&]() {
         tick();
         //platform->pollEvent();
-    }, 60);
+    },
+                            60);
 #else
     while (!_quit) {
         tick();
         platform->pollEvent();
     }
 #endif
-    
+
     return 0;
 }
 
@@ -179,17 +183,54 @@ void Engine::setPreferredFramesPerSecond(int fps) {
     _prefererredNanosecondsPerFrame = static_cast<long>(1.0 / _fps * NANOSECONDS_PER_SECOND); //NOLINT(google-runtime-int)
 }
 
-void Engine::addEvent(OSEventType evType, EventCb cb) {
+void Engine::addEventCallback(OSEventType evType, const EventCb& cb) {
     _eventCallbacks.insert(std::make_pair(evType, cb));
 }
 
-void Engine::removeEvent(OSEventType evType) {
+void Engine::removeEventCallback(OSEventType evType) {
     auto it = _eventCallbacks.find(evType);
     if (it != _eventCallbacks.end()) {
         _eventCallbacks.erase(it);
     }
     // For debugging.
     CC_ASSERT(false);
+}
+
+void Engine::tick() {
+    if (_needRestart) {
+        restartVM();
+        _needRestart = false;
+    }
+
+    static std::chrono::steady_clock::time_point prevTime;
+    static std::chrono::steady_clock::time_point now;
+    static float                                 dt   = 0.F;
+    static double                                dtNS = NANOSECONDS_60FPS;
+
+    ++_totalFrames;
+
+    // iOS/macOS use its own fps limitation algorithm.
+#if (CC_PLATFORM == CC_PLATFORM_ANDROID || CC_PLATFORM == CC_PLATFORM_WINDOWS || CC_PLATFORM == CC_PLATFORM_OHOS)
+    if (dtNS < static_cast<double>(_prefererredNanosecondsPerFrame)) {
+        std::this_thread::sleep_for(
+            std::chrono::nanoseconds(_prefererredNanosecondsPerFrame - static_cast<int64_t>(dtNS)));
+        dtNS = static_cast<double>(_prefererredNanosecondsPerFrame);
+    }
+#endif
+
+    prevTime = std::chrono::steady_clock::now();
+
+    _scheduler->update(dt);
+    cc::EventDispatcher::dispatchTickEvent(dt);
+
+    LegacyAutoreleasePool* currentPool = PoolManager::getInstance()->getCurrentPool();
+    if (currentPool) {
+        currentPool->clear();
+    }
+
+    now  = std::chrono::steady_clock::now();
+    dtNS = dtNS * 0.1 + 0.9 * static_cast<double>(std::chrono::duration_cast<std::chrono::nanoseconds>(now - prevTime).count());
+    dt   = static_cast<float>(dtNS) / NANOSECONDS_PER_SECOND;
 }
 
 void Engine::restartVM() {
@@ -244,45 +285,8 @@ bool Engine::handleEvent(const OSEvent& ev) {
     return isHandled;
 }
 
-Engine::SchedulerPtr Engine::getEngineScheduler() {
+Engine::SchedulerPtr Engine::getEngineScheduler() const {
     return _scheduler;
-}
-
-void Engine::tick() {
-    if (_needRestart) {
-        restartVM();
-        _needRestart = false;
-    }
-
-    static std::chrono::steady_clock::time_point prevTime;
-    static std::chrono::steady_clock::time_point now;
-    static float                                 dt   = 0.F;
-    static double                                dtNS = NANOSECONDS_60FPS;
-
-    ++_totalFrames;
-
-    // iOS/macOS use its own fps limitation algorithm.
-#if (CC_PLATFORM == CC_PLATFORM_ANDROID || CC_PLATFORM == CC_PLATFORM_WINDOWS || CC_PLATFORM == CC_PLATFORM_OHOS)
-    if (dtNS < static_cast<double>(_prefererredNanosecondsPerFrame)) {
-        std::this_thread::sleep_for(
-            std::chrono::nanoseconds(_prefererredNanosecondsPerFrame - static_cast<int64_t>(dtNS)));
-        dtNS = static_cast<double>(_prefererredNanosecondsPerFrame);
-    }
-#endif
-
-    prevTime = std::chrono::steady_clock::now();
-
-    _scheduler->update(dt);
-    cc::EventDispatcher::dispatchTickEvent(dt);
-
-    LegacyAutoreleasePool* currentPool = PoolManager::getInstance()->getCurrentPool();
-    if (currentPool) {
-        currentPool->clear();
-    }
-
-    now  = std::chrono::steady_clock::now();
-    dtNS = dtNS * 0.1 + 0.9 * static_cast<double>(std::chrono::duration_cast<std::chrono::nanoseconds>(now - prevTime).count());
-    dt   = static_cast<float>(dtNS) / NANOSECONDS_PER_SECOND;
 }
 
 bool Engine::dispatchDeviceEvent(const DeviceEvent& ev) {

@@ -69,10 +69,10 @@ public:
     virtual OSType getOSType() const = 0;
 
     //
-    virtual std::string  getDeviceModel()               = 0;
-    virtual LanguageType getCurrentLanguage()           = 0;
+    virtual std::string  getDeviceModel() const         = 0;
+    virtual LanguageType getCurrentLanguage() const     = 0;
     virtual std::string  getCurrentLanguageCode() const = 0;
-    virtual std::string  getSystemVersion()             = 0;
+    virtual std::string  getSystemVersion() const       = 0;
 
     virtual std::string getCurrentLanguageToString();
 

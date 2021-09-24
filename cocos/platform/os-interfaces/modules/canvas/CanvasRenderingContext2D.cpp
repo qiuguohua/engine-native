@@ -41,7 +41,7 @@
 #elif (CC_PLATFORM == CC_PLATFORM_MAC_OSX || CC_PLATFORM == CC_PLATFORM_IOS)
     #include "platform/os-interfaces/modules/apple/CanvasRenderingContext2DDelegate.h"
 #endif
-#include "platform/os-interfaces/modules/apple/CanvasRenderingContext2DDelegate.h"
+
 using Vec2    = std::array<float, 2>;
 using Color4F = std::array<float, 4>;
 

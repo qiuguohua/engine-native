@@ -26,10 +26,11 @@
 #include "platform/os-interfaces/modules/windows/Screen.h"
 #include "base/Macros.h"
 
-#import <UIKit/UIKit.h>
-#import <CoreMotion/CoreMotion.h>
 #include <CoreFoundation/CoreFoundation.h>
+#import <CoreMotion/CoreMotion.h>
 #include <CoreText/CoreText.h>
+#import <UIKit/UIKit.h>
+
 
 namespace cc {
 
@@ -59,11 +60,11 @@ float Screen::getDevicePixelRatio() {
 }
 
 void Screen::setKeepScreenOn(bool value) {
-   [[UIApplication sharedApplication] setIdleTimerDisabled:(BOOL)value];
+    [[UIApplication sharedApplication] setIdleTimerDisabled:(BOOL)value];
 }
 
 Screen::Orientation Screen::getDeviceOrientation() {
-      Orientation orientation = Orientation::PORTRAIT;
+    Orientation orientation = Orientation::PORTRAIT;
     switch ([[UIApplication sharedApplication] statusBarOrientation]) {
         case UIInterfaceOrientationLandscapeRight:
             orientation = Orientation::LANDSCAPE_RIGHT;

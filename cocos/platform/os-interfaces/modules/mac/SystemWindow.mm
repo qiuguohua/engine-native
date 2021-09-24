@@ -23,11 +23,12 @@
  THE SOFTWARE.
 ****************************************************************************/
 #include "platform/os-interfaces/modules/mac/SystemWindow.h"
-#include "platform/mac/AppDelegate.h"
 #import <AppKit/AppKit.h>
+#include "platform/mac/AppDelegate.h"
+
 
 namespace {
-    
+
 }
 
 namespace cc {
@@ -38,21 +39,20 @@ SystemWindow::SystemWindow(IEventDispatch *platform)
 
 SystemWindow::~SystemWindow() = default;
 
-bool SystemWindow::createWindow(const char* title,
-                       int x, int y, int w,
-                       int h, int flags) {
-    _width = w;
-    _height = h;
-    AppDelegate* delegate = [[NSApplication sharedApplication] delegate];
-    NSString * aString = [NSString stringWithUTF8String:title];
+bool SystemWindow::createWindow(const char *title,
+                                int x, int y, int w,
+                                int h, int flags) {
+    _width                = w;
+    _height               = h;
+    AppDelegate *delegate = [[NSApplication sharedApplication] delegate];
+    NSString *   aString  = [NSString stringWithUTF8String:title];
     [delegate createWindow:aString xPos:x yPos:y width:w height:h];
 }
-
 
 void SystemWindow::setCursorEnabled(bool value) {
 }
 
-void SystemWindow::copyTextToClipboard(const std::string& text) {
+void SystemWindow::copyTextToClipboard(const std::string &text) {
     NSPasteboard *pasteboard = [NSPasteboard generalPasteboard];
     [pasteboard clearContents];
     NSString *tmp = [NSString stringWithCString:text.c_str() encoding:NSUTF8StringEncoding];
@@ -69,7 +69,6 @@ std::array<int, 2> SystemWindow::getViewSize() const {
 }
 
 void SystemWindow::pollEvent() {
-    
 }
 
 }

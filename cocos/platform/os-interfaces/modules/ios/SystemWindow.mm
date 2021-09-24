@@ -23,34 +23,33 @@
  THE SOFTWARE.
 ****************************************************************************/
 #include "platform/os-interfaces/modules/mac/SystemWindow.h"
-#include "platform/ios/AppDelegate.h"
 #import <UIKit/UIKit.h>
+#include "platform/ios/AppDelegate.h"
 
 namespace {
-    
+
 }
 
 namespace cc {
 
-SystemWindow::SystemWindow(IEventDispatch *platform)
+SystemWindow::SystemWindow(IEventDispatch* platform)
 : ISystemWindow(platform) {
 }
 
 SystemWindow::~SystemWindow() = default;
 
 bool SystemWindow::createWindow(const char* title,
-                       int x, int y, int w,
-                       int h, int flags) {
-    _width = w;
+                                int x, int y, int w,
+                                int h, int flags) {
+    _width  = w;
     _height = h;
 }
-
 
 void SystemWindow::setCursorEnabled(bool value) {
 }
 
 void SystemWindow::copyTextToClipboard(const std::string& text) {
-    UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
+    UIPasteboard* pasteboard = [UIPasteboard generalPasteboard];
     pasteboard.string        = [NSString stringWithCString:text.c_str() encoding:NSUTF8StringEncoding];
 }
 
@@ -64,7 +63,6 @@ std::array<int, 2> SystemWindow::getViewSize() const {
 }
 
 void SystemWindow::pollEvent() {
-    
 }
 
 }

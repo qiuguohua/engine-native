@@ -405,8 +405,8 @@ static bool JSB_setCursorEnabled(se::State &s) { //NOLINT
     ok &= seval_to_boolean(args[0], &value);
     SE_PRECONDITION2(ok, false, "Error processing arguments");
 
-    ISystemWindow *platform = GET_PLATFORM_INTERFACE(ISystemWindow);
-    platform->setCursorEnabled(value);
+    auto *systemWindow = GET_PLATFORM_INTERFACE(ISystemWindow);
+    systemWindow->setCursorEnabled(value);
     return true;
 }
 SE_BIND_FUNC(JSB_setCursorEnabled)

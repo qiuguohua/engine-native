@@ -25,37 +25,30 @@
 
 #pragma once
 
-#include "base/Macros.h"
-#include "engine/BaseEngine.h"
+#include <vector>
 
 namespace cc {
-
-class EngineManager {
+class BaseApplication;
+class ApplicationManager {
 public:
-    /*
-     @bref Get engine manager instance.
-     */
-    static EngineManager* getInstance();
-    /*
-     @bref Get engine manager instance.
-     @return current running engine
-     */
-    std::shared_ptr<BaseEngine> getCurrentEngine() const;
-    /*
-     @bref Sets the currently running engine.
-     @engine current running engine
-     */
-    void setCurrentEngine(const BaseEngine::Ptr& engine);
+    static ApplicationManager* getInstance() {
+        static ApplicationManager mgr;
+        return &mgr;
+    }
+
+    using ApplcationPtr = std::shared_ptr<BaseApplication>;
+    template <class T>
+    ApplcationPtr createApplication() {
+        ApplcationPtr app(new T);
+        _apps.push_back(app);
+        return app;
+    }
+
+    void releseAllApplcation() {
+        _apps.clear();
+    }
 
 private:
-    EngineManager();
-
-    std::weak_ptr<BaseEngine> _currentEngine;
-    CC_DISABLE_COPY_AND_MOVE_SEMANTICS(EngineManager);
+    std::vector<ApplcationPtr> _apps;
 };
-
 } // namespace cc
-
-#define CURRENT_ENGINE() cc::EngineManager::getInstance()->getCurrentEngine()
-
-#define GET_PLATFORM_INTERFACE(intf) CURRENT_ENGINE()->getOSInterface<intf>()

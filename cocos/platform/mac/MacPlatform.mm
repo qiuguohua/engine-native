@@ -111,13 +111,14 @@ int32_t MacPlatform::run(int argc, const char** argv) {
     return NSApplicationMain(argc, argv);
 }
 
-void MacPlatform::runInPlatform(MacPlatform::PlatformThreadCallback cb, int32_t fps) {
-    _cb = cb;
+void MacPlatform::runInPlatformThread(MacPlatform::ThreadCallback& task, int32_t fps) {
+    _mainTask = task;
     setFps(fps);
 }
 
-void MacPlatform::runCB() {
-   _cb();
+void MacPlatform::runTask() {
+    if(_mainTask)
+        _mainTask();
 }
 
 void MacPlatform::onPause() {

@@ -36,9 +36,10 @@
 #include "platform/os-interfaces/modules/IVibrate.h"
 
 extern int cocos_main(int argc, const char** argv);
+extern void cocos_destory();
 
 namespace cc {
-UniversalPlatform::OSType UniversalPlatform::getOSType() {
+UniversalPlatform::OSType UniversalPlatform::getOSType() const {
     return getOSInterface<ISystem>()->getOSType();
 }
 
@@ -85,7 +86,9 @@ int32_t UniversalPlatform::init() {
 }
 
 int32_t UniversalPlatform::main(int argc, const char** argv) {
-    return cocos_main(argc, argv);
+    int32_t ret = cocos_main(argc, argv);
+    destory();
+    return ret;
 }
 
 int32_t UniversalPlatform::run(int argc, const char** argv) {
@@ -93,17 +96,18 @@ int32_t UniversalPlatform::run(int argc, const char** argv) {
 }
 
 void UniversalPlatform::destory() {
+    cocos_destory();
 }
 
 int UniversalPlatform::getSdkVersion() const {
     return 0;
 }
 
-void UniversalPlatform::runInPlatform(UniversalPlatform::PlatformThreadCallback task,int32_t fps) {
+void UniversalPlatform::runInPlatformThread(UniversalPlatform::ThreadCallback task,int32_t fps) {
     task();
 }
 
-int32_t UniversalPlatform::getFps() {
+int32_t UniversalPlatform::getFps() const {
     return _fps;
 }
 
@@ -113,6 +117,18 @@ void UniversalPlatform::setFps(int32_t fps) {
 
 void UniversalPlatform::pollEvent() {
     
+}
+
+void UniversalPlatform::onPause() {
+
+}
+
+void UniversalPlatform::onResume() {
+
+}
+
+void UniversalPlatform::onClose() {
+
 }
 
 } // namespace cc

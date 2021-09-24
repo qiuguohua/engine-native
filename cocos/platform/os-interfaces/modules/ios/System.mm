@@ -22,13 +22,15 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  THE SOFTWARE.
 ****************************************************************************/
-#import <UIKit/UIKit.h>
 #include "platform/os-interfaces/modules/mac/System.h"
+#import <UIKit/UIKit.h>
 
+
+#include <sys/utsname.h>
 #include <algorithm>
 #include <mutex>
 #include <sstream>
-#include <sys/utsname.h>
+
 
 namespace cc {
 using OSType = System::OSType;
@@ -44,7 +46,7 @@ std::string System::getDeviceModel() {
 }
 
 System::LanguageType System::getCurrentLanguage() {
-      // get the current language and country config
+    // get the current language and country config
     NSUserDefaults *defaults        = [NSUserDefaults standardUserDefaults];
     NSArray *       languages       = [defaults objectForKey:@"AppleLanguages"];
     NSString *      currentLanguage = [languages objectAtIndex:0];
@@ -87,7 +89,7 @@ std::string System::getSystemVersion() {
     return [systemVersion UTF8String];
 }
 
-bool System::openURL(const std::string& url) {
+bool System::openURL(const std::string &url) {
     NSString *   msg   = [NSString stringWithCString:url.c_str() encoding:NSUTF8StringEncoding];
     NSURL *      nsUrl = [NSURL URLWithString:msg];
     __block BOOL flag  = false;

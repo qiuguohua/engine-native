@@ -23,10 +23,11 @@
  THE SOFTWARE.
 ****************************************************************************/
 #include "platform/os-interfaces/modules/windows/Network.h"
-#include <Foundation/Foundation.h>
-#include <Cocoa/Cocoa.h>
 #import <AppKit/AppKit.h>
+#include <Cocoa/Cocoa.h>
+#include <Foundation/Foundation.h>
 #include "platform/apple/Reachability.h"
+
 
 namespace cc {
 
@@ -37,7 +38,7 @@ INetwork::NetworkType Network::getNetworkType() {
         __reachability->retain();
     }
 
-    NetworkType ret = NetworkType::NONE;
+    NetworkType                 ret    = NetworkType::NONE;
     Reachability::NetworkStatus status = __reachability->getCurrentReachabilityStatus();
     switch (status) {
         case Reachability::NetworkStatus::REACHABLE_VIA_WIFI:

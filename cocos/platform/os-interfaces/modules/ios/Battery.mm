@@ -28,7 +28,7 @@
 namespace cc {
 
 float Battery::getBatteryLevel() {
-   return [UIDevice currentDevice].batteryLevel;
+    return [UIDevice currentDevice].batteryLevel;
 }
 
 } // namespace cc

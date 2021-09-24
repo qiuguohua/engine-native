@@ -37,7 +37,6 @@
 class CanvasRenderingContext2DDelegateImpl;
 #endif
 
-
 namespace cc {
 
 class CanvasRenderingContext2DDelegate : public ICanvasRenderingContext2D::Delegate {
@@ -69,7 +68,7 @@ public:
     void            setFillStyle(float r, float g, float b, float a) override;
     void            setStrokeStyle(float r, float g, float b, float a) override;
     void            setLineWidth(float lineWidth) override;
-    const cc::Data &getDataRef() override;
+    const cc::Data &getDataRef() const override;
     void            fillImageData(const Data &imageData, float imageWidth, float imageHeight, float offsetX, float offsetY) override;
 
 private:
@@ -78,7 +77,7 @@ private:
 
 public:
 private:
-    CanvasRenderingContext2DDelegateImpl* _impl;
+    CanvasRenderingContext2DDelegateImpl *_impl;
 };
 
 } // namespace cc

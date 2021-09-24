@@ -50,7 +50,7 @@ public:
     /**
      *@bref Get targe platform type.
      */
-    OSType getOSType() override;
+    OSType getOSType() const override;
     /**
      *@bref Set the event handling callback.
      */
@@ -71,17 +71,24 @@ public:
      *@bref Implement handle default event interface.
      */
     void handleDefaultEvent(const OSEvent& ev) override;
+    /**
+     @brief Get the SDK version for Android.Other systems also have sdk versions, 
+            but they are not currently used.
+     */
     int  getSdkVersion() const override;
     void pollEvent() override;
-    
-    void runInPlatform(PlatformThreadCallback task, int32_t fps) override;
-    int32_t getFps() override;
-    void setFps(int32_t fps) override;
-    
+
+    void    runInPlatformThread(ThreadCallback task, int32_t fps) override;
+    int32_t getFps() const override;
+    void    setFps(int32_t fps) override;
+
+    void onPause() override;
+    void onResume() override;
+    void onClose() override;
 
 protected:
-    PlatformThreadCallback _mainTask;
-    
+    ThreadCallback _mainTask;
+
 private:
     int32_t _fps;
 

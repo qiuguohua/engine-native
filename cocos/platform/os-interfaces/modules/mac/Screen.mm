@@ -27,16 +27,17 @@
 #include "base/Macros.h"
 
 #import <AppKit/AppKit.h>
-#include <Foundation/Foundation.h>
 #include <Cocoa/Cocoa.h>
+#include <Foundation/Foundation.h>
+
 
 namespace cc {
 
 int Screen::getDPI() {
-    NSScreen *screen = [NSScreen mainScreen];
-    NSDictionary *description = [screen deviceDescription];
-    NSSize displayPixelSize = [[description objectForKey:NSDeviceSize] sizeValue];
-    CGSize displayPhysicalSize = CGDisplayScreenSize([[description objectForKey:@"NSScreenNumber"] unsignedIntValue]);
+    NSScreen *    screen              = [NSScreen mainScreen];
+    NSDictionary *description         = [screen deviceDescription];
+    NSSize        displayPixelSize    = [[description objectForKey:NSDeviceSize] sizeValue];
+    CGSize        displayPhysicalSize = CGDisplayScreenSize([[description objectForKey:@"NSScreenNumber"] unsignedIntValue]);
 
     return ((displayPixelSize.width / displayPhysicalSize.width) * 25.4f);
 }

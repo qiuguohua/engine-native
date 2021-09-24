@@ -87,12 +87,12 @@ public:
      @param evtype:event type.
      @param cb:event callback.
      */
-    void addEvent(OSEventType evtype, EventCb cb) override;
+    void addEventCallback(OSEventType evtype, const EventCb& cb) override;
     /**
      @brief Remove Event Listening.
      @param evtype:event type.
      */
-    void removeEvent(OSEventType evtype) override;
+    void removeEventCallback(OSEventType evtype) override;
     /**
      @brief Event handling callback.
      @param evtype:event type.
@@ -103,7 +103,7 @@ public:
     /**
      @brief Get engine scheduler.
      */
-    SchedulerPtr getEngineScheduler() override;
+    SchedulerPtr getEngineScheduler() const override;
 
 private:
     void tick();
@@ -119,16 +119,16 @@ private:
     bool                           _close{false};
     bool                           _pause{false};
     bool                           _resune{false};
-    std::shared_ptr<Scheduler>     _scheduler;
-    int                            _fps                            = 60;
-    int64_t                        _prefererredNanosecondsPerFrame = NANOSECONDS_60FPS;
-    uint                           _totalFrames                    = 0;
-    cc::Vec2                       _viewLogicalSize;
-    bool                           _needRestart = false;
+    std::shared_ptr<Scheduler>     _scheduler{nullptr};
+    int                            _fps{60};
+    int64_t                        _prefererredNanosecondsPerFrame{NANOSECONDS_60FPS};
+    uint                           _totalFrames{0};
+    cc::Vec2                       _viewLogicalSize{0, 0};
+    bool                           _needRestart{false};
     std::map<OSEventType, EventCb> _eventCallbacks;
     using EventHandleFunctor = std::function<void()>;
 
-    DISABLE_COPY_AND_MOVE(Engine);
+    CC_DISABLE_COPY_AND_MOVE_SEMANTICS(Engine);
 };
 
 } // namespace cc

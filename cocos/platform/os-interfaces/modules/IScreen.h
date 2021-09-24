@@ -31,8 +31,8 @@
 namespace cc {
 class IScreen : public OSInterface {
 public:
-    virtual int   getDPI()              = 0;
-    virtual float getDevicePixelRatio() = 0;
+    virtual int   getDPI() const              = 0;
+    virtual float getDevicePixelRatio() const = 0;
 
     // https://developer.mozilla.org/en-US/docs/Web/API/Window/orientation
     enum class Orientation {
@@ -41,7 +41,7 @@ public:
         PORTRAIT_UPSIDE_DOWN = 180,
         LANDSCAPE_RIGHT      = 90
     };
-    virtual Orientation getDeviceOrientation() = 0;
+    virtual Orientation getDeviceOrientation() const = 0;
 
     /**
      * Controls whether the screen should remain on.
@@ -50,7 +50,7 @@ public:
      */
     virtual void setKeepScreenOn(bool keepScreenOn) = 0;
 
-    virtual Vec4 getSafeAreaEdge() = 0;
+    virtual Vec4 getSafeAreaEdge() const = 0;
     /**
      @brief Create default screen interface.
      @return screen interface.

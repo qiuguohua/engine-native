@@ -29,7 +29,7 @@
 
 namespace cc {
 
-class Vibrate: public IVibrate {
+class Vibrate : public IVibrate {
 public:
     /**
      * Vibrate for the specified amount of time.

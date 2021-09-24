@@ -310,6 +310,8 @@ cocos_source_files(
     cocos/application/BaseApplication.h
     cocos/application/CocosApplication.h
     cocos/application/CocosApplication.cpp
+    cocos/application/ApplicationManager.h
+    cocos/application/ApplicationManager.cpp
 )
 
 ############ engine
@@ -328,13 +330,13 @@ cocos_source_files(
     cocos/main/main.cpp
 )
 elseif(MACOSX)
-cocos_source_files(
-    cocos/main/main.mm
-)
+    cocos_source_files(
+        cocos/main/main.mm
+    )
 elseif(IOS)
-cocos_source_files(
-    cocos/main/main-ios.mm
-)
+    cocos_source_files(
+        cocos/main/main-ios.mm
+    )
 endif()
 
 ############ platformex

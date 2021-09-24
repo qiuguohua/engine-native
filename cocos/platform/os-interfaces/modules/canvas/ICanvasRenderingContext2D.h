@@ -91,7 +91,7 @@ public:
         virtual void            setFillStyle(float r, float g, float b, float a)                                                              = 0;
         virtual void            setStrokeStyle(float r, float g, float b, float a)                                                            = 0;
         virtual void            setLineWidth(float lineWidth)                                                                                 = 0;
-        virtual const cc::Data &getDataRef()                                                                                            = 0;
+        virtual const cc::Data &getDataRef() const                                                                                            = 0;
     };
     //static OSInterface::Ptr getInterface();
     // Rect
