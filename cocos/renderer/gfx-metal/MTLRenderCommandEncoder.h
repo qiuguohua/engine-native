@@ -107,7 +107,7 @@ public:
 
         _scissorRect = rect;
         _isScissorRectSet = true;
-        [_mtlEncoder setScissorRect:mu::toMTLScissorRect(_scissorRect)];
+        //[_mtlEncoder setScissorRect:mu::toMTLScissorRect(_scissorRect)];
     }
 
     inline void setCullMode(MTLCullMode mode) {
