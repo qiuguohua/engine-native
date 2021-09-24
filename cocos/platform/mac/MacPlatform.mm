@@ -79,7 +79,7 @@ extern int cocos_main(int argc, const char** argv);
 
 - (void)renderScene {
     //platform->tick();
-    _platform->runCB();
+    _platform->runTask();
 }
 
 @end
@@ -111,7 +111,7 @@ int32_t MacPlatform::run(int argc, const char** argv) {
     return NSApplicationMain(argc, argv);
 }
 
-void MacPlatform::runInPlatformThread(MacPlatform::ThreadCallback& task, int32_t fps) {
+void MacPlatform::runInPlatformThread(const ThreadCallback& task, int32_t fps) {
     _mainTask = task;
     setFps(fps);
 }

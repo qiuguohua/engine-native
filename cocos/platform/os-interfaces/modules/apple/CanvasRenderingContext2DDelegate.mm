@@ -529,7 +529,7 @@ void CanvasRenderingContext2DDelegate::recreateBuffer(float w, float h) {
     [_impl recreateBufferWithWidth:w height:h];
 }
 
-const cc::Data &CanvasRenderingContext2DDelegate::getDataRef() {
+const cc::Data &CanvasRenderingContext2DDelegate::getDataRef() const {
     static Data data;
     data = [_impl getDataRef];
     unMultiplyAlpha(data.getBytes(), data.getSize());
@@ -634,7 +634,7 @@ void CanvasRenderingContext2DDelegate::fillData() {
 }
 
 #define CLAMP(V, HI) std::min((V), (HI))
-void CanvasRenderingContext2DDelegate::unMultiplyAlpha(unsigned char *ptr, ssize_t size) {
+void CanvasRenderingContext2DDelegate::unMultiplyAlpha(unsigned char *ptr, ssize_t size) const {
     float alpha;
     for (int i = 0; i < size; i += 4) {
         alpha = (float)ptr[i + 3];

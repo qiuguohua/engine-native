@@ -27,7 +27,7 @@
 
 namespace cc {
 
-float Battery::getBatteryLevel() {
+float Battery::getBatteryLevel() const {
     return [UIDevice currentDevice].batteryLevel;
 }
 

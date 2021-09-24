@@ -32,7 +32,7 @@ namespace cc {
 class Battery : public IBattery {
 public:
     Battery() = default;
-    float getBatteryLevel() override;
+    float getBatteryLevel() const override;
 };
 
 } // namespace cc

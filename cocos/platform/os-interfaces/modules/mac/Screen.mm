@@ -33,7 +33,7 @@
 
 namespace cc {
 
-int Screen::getDPI() {
+int Screen::getDPI() const {
     NSScreen *    screen              = [NSScreen mainScreen];
     NSDictionary *description         = [screen deviceDescription];
     NSSize        displayPixelSize    = [[description objectForKey:NSDeviceSize] sizeValue];
@@ -42,7 +42,7 @@ int Screen::getDPI() {
     return ((displayPixelSize.width / displayPhysicalSize.width) * 25.4f);
 }
 
-float Screen::getDevicePixelRatio() {
+float Screen::getDevicePixelRatio() const {
     return [[[[NSApplication sharedApplication] delegate] getWindow] backingScaleFactor];
     ;
 }
@@ -51,11 +51,11 @@ void Screen::setKeepScreenOn(bool value) {
     CC_UNUSED_PARAM(value);
 }
 
-Screen::Orientation Screen::getDeviceOrientation() {
+Screen::Orientation Screen::getDeviceOrientation() const {
     return Orientation::PORTRAIT;
 }
 
-Vec4 Screen::getSafeAreaEdge() {
+Vec4 Screen::getSafeAreaEdge() const {
     return cc::Vec4();
 }
 

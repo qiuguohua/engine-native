@@ -39,13 +39,13 @@ OSType System::getOSType() const {
     return OSType::IPHONE;
 }
 
-std::string System::getDeviceModel() {
+std::string System::getDeviceModel() const {
     struct utsname systemInfo;
     uname(&systemInfo);
     return systemInfo.machine;
 }
 
-System::LanguageType System::getCurrentLanguage() {
+System::LanguageType System::getCurrentLanguage() const {
     // get the current language and country config
     NSUserDefaults *defaults        = [NSUserDefaults standardUserDefaults];
     NSArray *       languages       = [defaults objectForKey:@"AppleLanguages"];
@@ -84,7 +84,7 @@ std::string System::getCurrentLanguageCode() const {
     return [currentLanguage UTF8String];
 }
 
-std::string System::getSystemVersion() {
+std::string System::getSystemVersion() const {
     NSString *systemVersion = [UIDevice currentDevice].systemVersion;
     return [systemVersion UTF8String];
 }

@@ -106,7 +106,7 @@ int32_t IOSPlatform::run(int argc, const char** argv) {
     return retVal;
 }
 
-void IOSPlatform::runInPlatformThread(IOSPlatform::ThreadCallback task, int32_t fps) {
+void IOSPlatform::runInPlatformThread(const ThreadCallback& task, int32_t fps) {
     setFps(fps);
     _mainTask = task;
 }

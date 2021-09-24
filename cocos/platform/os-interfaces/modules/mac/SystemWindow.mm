@@ -59,7 +59,7 @@ void SystemWindow::copyTextToClipboard(const std::string &text) {
     [pasteboard setString:tmp forType:NSPasteboardTypeString];
 }
 
-uintptr_t SystemWindow::getWindowHandler() {
+uintptr_t SystemWindow::getWindowHandler() const {
     NSView *view = [[[[NSApplication sharedApplication] delegate] getWindow] contentView];
     return reinterpret_cast<uintptr_t>(view);
 }

@@ -50,7 +50,7 @@ public:
      */
     int32_t main(int argc, const char** argv) override;
     
-    void runInPlatformThread(ThreadCallback cb, int32_t fps) override;
+    void runInPlatformThread(const ThreadCallback& task, int32_t fps) override;
     
     void runTask();
     void onPause() override;

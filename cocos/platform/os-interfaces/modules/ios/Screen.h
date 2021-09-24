@@ -31,11 +31,11 @@ namespace cc {
 
 class Screen : public IScreen {
 public:
-    int         getDPI() override;
-    float       getDevicePixelRatio() override;
+    int         getDPI() const override;
+    float       getDevicePixelRatio() const override;
     void        setKeepScreenOn(bool value) override;
-    Orientation getDeviceOrientation() override;
-    Vec4        getSafeAreaEdge() override;
+    Orientation getDeviceOrientation() const override;
+    Vec4        getSafeAreaEdge() const override;
 };
 
 } // namespace cc

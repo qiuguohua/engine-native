@@ -53,7 +53,7 @@ void SystemWindow::copyTextToClipboard(const std::string& text) {
     pasteboard.string        = [NSString stringWithCString:text.c_str() encoding:NSUTF8StringEncoding];
 }
 
-uintptr_t SystemWindow::getWindowHandler() {
+uintptr_t SystemWindow::getWindowHandler() const {
     return reinterpret_cast<uintptr_t>(UIApplication.sharedApplication.delegate.window.rootViewController.view);
 }
 

@@ -34,7 +34,7 @@
 
 namespace cc {
 
-int Screen::getDPI() {
+int Screen::getDPI() const {
     static int dpi = -1;
 
     if (dpi == -1) {
@@ -55,7 +55,7 @@ int Screen::getDPI() {
     return dpi;
 }
 
-float Screen::getDevicePixelRatio() {
+float Screen::getDevicePixelRatio() const {
     return [[UIScreen mainScreen] nativeScale];
 }
 
@@ -63,7 +63,7 @@ void Screen::setKeepScreenOn(bool value) {
     [[UIApplication sharedApplication] setIdleTimerDisabled:(BOOL)value];
 }
 
-Screen::Orientation Screen::getDeviceOrientation() {
+Screen::Orientation Screen::getDeviceOrientation() const {
     Orientation orientation = Orientation::PORTRAIT;
     switch ([[UIApplication sharedApplication] statusBarOrientation]) {
         case UIInterfaceOrientationLandscapeRight:
@@ -89,7 +89,7 @@ Screen::Orientation Screen::getDeviceOrientation() {
     return orientation;
 }
 
-Vec4 Screen::getSafeAreaEdge() {
+Vec4 Screen::getSafeAreaEdge() const {
     UIView *screenView = UIApplication.sharedApplication.delegate.window.rootViewController.view;
 
     if (@available(iOS 11.0, *)) {

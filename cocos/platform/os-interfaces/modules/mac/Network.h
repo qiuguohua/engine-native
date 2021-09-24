@@ -31,7 +31,7 @@ namespace cc {
 
 class Network : public INetwork {
 public:
-    NetworkType getNetworkType() override;
+    NetworkType getNetworkType() const override;
 };
 
 } // namespace cc

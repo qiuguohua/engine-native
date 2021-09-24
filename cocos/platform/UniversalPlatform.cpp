@@ -103,8 +103,10 @@ int UniversalPlatform::getSdkVersion() const {
     return 0;
 }
 
-void UniversalPlatform::runInPlatformThread(UniversalPlatform::ThreadCallback task,int32_t fps) {
-    task();
+void UniversalPlatform::runInPlatformThread(const ThreadCallback& task,int32_t fps) {
+    if(task) {
+        task();
+    }
 }
 
 int32_t UniversalPlatform::getFps() const {

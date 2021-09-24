@@ -29,7 +29,7 @@
 
 namespace cc {
 
-INetwork::NetworkType Network::getNetworkType() {
+INetwork::NetworkType Network::getNetworkType() const {
     static Reachability *__reachability = nullptr;
     if (__reachability == nullptr) {
         __reachability = Reachability::createForInternetConnection();

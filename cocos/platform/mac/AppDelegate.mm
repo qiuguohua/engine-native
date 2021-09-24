@@ -8,7 +8,7 @@
 @interface AppDelegate () {
     NSWindow* _window;
 //    Game*     _game;
-    cc::MacPlatform* platform;
+    cc::MacPlatform* _platform;
 }
 @end
 
@@ -46,20 +46,20 @@
 }
 
 - (void)applicationDidFinishLaunching:(NSNotification*)aNotification {
-    platform = (cc::MacPlatform*)cc::BasePlatform::getPlatform();
-    platform->main(0, nullptr);
+    _platform = (cc::MacPlatform*)cc::BasePlatform::getPlatform();
+    _platform->main(0, nullptr);
 }
 
 - (void)windowWillMiniaturizeNotification {
-    platform->onPause();
+    _platform->onPause();
 }
 
 - (void)windowDidDeminiaturizeNotification {
-    platform->onResume();
+    _platform->onResume();
 }
 
 - (void)windowWillCloseNotification {
-    platform->onClose();
+    _platform->onClose();
 }
 
 - (NSWindow*)getWindow {
@@ -70,6 +70,7 @@
 //    delete _game;
     //FIXME: will crash if relase it here.
     // [_window release];
+    _platform->destory();
 }
 
 - (BOOL)applicationShouldTerminateAfterLastWindowClosed:(NSApplication*)theApplication {
@@ -77,8 +78,8 @@
 }
 
 - (void)dispatchEvent:(const cc::OSEvent&) ev {
-    if(platform)
-       platform->dispatchEvent(ev);
+    if(_platform)
+        _platform->dispatchEvent(ev);
 }
 
 @end

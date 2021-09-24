@@ -38,7 +38,7 @@
     #include "platform/os-interfaces/modules/windows/CanvasRenderingContext2DDelegate.h"
 #elif (CC_PLATFORM == CC_PLATFORM_ANDROID || CC_PLATFORM == CC_PLATFORM_OHOS)
     #include "platform/os-interfaces/modules/java/CanvasRenderingContext2DDelegate.h"
-#elif (CC_PLATFORM == CC_PLATFORM_MAC_OSX || CC_PLATFORM == CC_PLATFORM_IOS)
+#elif (CC_PLATFORM == CC_PLATFORM_MAC_OSX || CC_PLATFORM == CC_PLATFORM_MAC_hhIOS)
     #include "platform/os-interfaces/modules/apple/CanvasRenderingContext2DDelegate.h"
 #endif
 
