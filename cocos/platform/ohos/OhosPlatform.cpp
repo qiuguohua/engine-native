@@ -25,10 +25,10 @@
 
 #include <thread>
 
+#include "platform/UniversalPlatform.h"
 #include "platform/java/jni/glue/JniNativeGlue.h"
 #include "platform/ohos/OhosPlatform.h"
-#include "platform/os-interfaces/modules/ohos/SystemWindow.h"
-
+#include "platform/ohos/interfaces/SystemWindow.h"
 
 namespace cc {
 OhosPlatform::OhosPlatform() {
@@ -39,10 +39,10 @@ int OhosPlatform::getSdkVersion() const {
     return _jniNativeGlue->getSdkVersion();
 }
 
-int32_t OhosPlatform::run(int argc, char** argv) {
+int32_t OhosPlatform::run(int argc, const char** argv) {
     std::thread mainLogicThread([this, argc, argv]() {
         waitWindowInitialized();
-        main(argc, argv);
+        UniversalPlatform::run(argc, argv);
     });
     mainLogicThread.detach();
     _jniNativeGlue->waitRunning();
@@ -59,6 +59,16 @@ void OhosPlatform::waitWindowInitialized() {
         }
     }
     _jniNativeGlue->setEventDispatch(this);
+}
+
+int32_t OhosPlatform::loop() {
+    while (_jniNativeGlue->isRunning()) {
+        pollEvent();
+        if (_mainTask) {
+            _mainTask();
+        }
+    }
+    return 0;
 }
 
 void OhosPlatform::pollEvent() {

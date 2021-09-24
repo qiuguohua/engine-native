@@ -33,8 +33,9 @@ class OhosPlatform : public UniversalPlatform {
 public:
     OhosPlatform();
     void    pollEvent() override;
-    int32_t run(int argc, char** argv) override;
+    int32_t run(int argc, const char** argv) override;
     int     getSdkVersion() const override;
+    int32_t loop() override;
 
 private:
     void waitWindowInitialized();

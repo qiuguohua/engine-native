@@ -30,7 +30,6 @@ THE SOFTWARE.
 #include <mutex>
 #include <string>
 
-
 #include <future>
 
 namespace cc {

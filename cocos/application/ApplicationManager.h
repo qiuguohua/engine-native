@@ -25,28 +25,25 @@
 
 #pragma once
 
+#include <memory>
 #include <vector>
 
 namespace cc {
 class BaseApplication;
 class ApplicationManager {
 public:
-    static ApplicationManager* getInstance() {
-        static ApplicationManager mgr;
-        return &mgr;
-    }
+    static ApplicationManager* getInstance();
 
     using ApplcationPtr = std::shared_ptr<BaseApplication>;
     template <class T>
-    ApplcationPtr createApplication() {
+    std::enable_if_t<std::is_base_of<BaseApplication, T>::value, ApplcationPtr>
+    createApplication() {
         ApplcationPtr app(new T);
         _apps.push_back(app);
-        return app;
+        return std::move(app);
     }
 
-    void releseAllApplcation() {
-        _apps.clear();
-    }
+    void releseAllApplcation();
 
 private:
     std::vector<ApplcationPtr> _apps;

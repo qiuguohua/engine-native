@@ -62,7 +62,7 @@ public:
     virtual ~JniNativeGlue() = default;
     static JniNativeGlue* getInstance();
 
-    virtual void init(int argc, char** argv);
+    virtual void start(int argc, const char** argv);
 
     void              setWindowHandler(NativeWindowType* window);
     NativeWindowType* getWindowHandler();

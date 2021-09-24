@@ -99,9 +99,9 @@ int32_t MacPlatform::init() {
     return UniversalPlatform::init();
 }
 
-int32_t MacPlatform::main(int argc, const char** argv) {
+int32_t MacPlatform::loop(void) {
     [_timer start];
-    return cocos_main(argc, argv);
+    return cocos_main(0, nullptr);
 }
 
 int32_t MacPlatform::run(int argc, const char** argv) {

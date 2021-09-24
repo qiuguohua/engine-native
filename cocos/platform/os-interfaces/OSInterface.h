@@ -25,10 +25,11 @@
 
 #pragma once
 
-#include <vector>
 #include <memory>
+#include <vector>
 #include "base/Macros.h"
 #include "bindings/event/EventDispatcher.h"
+
 
 namespace cc {
 class IEventDispatch;

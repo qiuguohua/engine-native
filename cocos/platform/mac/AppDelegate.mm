@@ -47,7 +47,7 @@
 
 - (void)applicationDidFinishLaunching:(NSNotification*)aNotification {
     _platform = (cc::MacPlatform*)cc::BasePlatform::getPlatform();
-    _platform->main(0, nullptr);
+    _platform->loop();
 }
 
 - (void)windowWillMiniaturizeNotification {

@@ -45,7 +45,7 @@ cc::IOSPlatform * platform = nullptr;
     CGRect bounds = [[UIScreen mainScreen] bounds];
     self.window   = [[UIWindow alloc] initWithFrame:bounds];
 
-    platform = (cc::IOSPlatform*)cc::BasePlatform::getPlatform();
+
     // Must use abstract base class assignment, otherwise the calling function may be incorrect in objective-c
     cc::IEventDispatch * eventDispatcher = platform;
     
@@ -57,8 +57,9 @@ cc::IOSPlatform * platform = nullptr;
     [self.window setRootViewController:_viewController];
 
     [self.window makeKeyAndVisible];
-
-    platform->main(0, nullptr);
+    
+    platform = (cc::IOSPlatform*)cc::BasePlatform::getPlatform();
+    platform->loop();
 
     return YES;
 }
@@ -97,6 +98,7 @@ cc::IOSPlatform * platform = nullptr;
 
 - (void)applicationWillTerminate:(UIApplication *)application {
     platform->onClose();
+    platform->destory();
     platform = nullptr;
     [[SDKWrapper shared] applicationWillTerminate:application];
 }

@@ -48,7 +48,7 @@ public:
     /**
      *@bref Implement the main logic of the base platform.
      */
-    int32_t main(int argc, const char** argv) override;
+    int32_t loop() override;
     
     void runInPlatformThread(const ThreadCallback& task, int32_t fps) override;
     

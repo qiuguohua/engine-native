@@ -94,9 +94,10 @@ int32_t IOSPlatform::init() {
     return UniversalPlatform::init();
 }
 
-int32_t IOSPlatform::main(int argc, const char** argv) {
+int32_t IOSPlatform::loop() {
+    cocos_main(0, nullptr);
     [_timer start];
-    return cocos_main(argc, argv);
+    return 0;
 }
 
 int32_t IOSPlatform::run(int argc, const char** argv) {

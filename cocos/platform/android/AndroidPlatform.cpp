@@ -36,10 +36,11 @@ int AndroidPlatform::getSdkVersion() const {
     return _jniNativeGlue->getSdkVersion();
 }
 
-int32_t AndroidPlatform::run(int argc, char** argv) {
+int32_t AndroidPlatform::run(int argc, const char** argv) {
     std::thread mainLogicThread([this, argc, argv]() {
         waitWindowInitialized();
-        main(argc, argv);
+        UniversalPlatform::run(argc, argv);
+        destory();
     });
     mainLogicThread.detach();
     _jniNativeGlue->waitRunning();
@@ -57,6 +58,16 @@ void AndroidPlatform::waitWindowInitialized() {
         //std::this_thread::sleep_for(std::chrono::nanoseconds(100));
     }
     _jniNativeGlue->setEventDispatch(this);
+}
+
+int32_t AndroidPlatform::loop() {
+    while (_jniNativeGlue->isRunning()) {
+        pollEvent();
+        if (_mainTask) {
+            _mainTask();
+        }
+    }
+    return 0;
 }
 
 void AndroidPlatform::pollEvent() {

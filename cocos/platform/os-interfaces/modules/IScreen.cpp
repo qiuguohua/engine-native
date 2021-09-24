@@ -26,15 +26,15 @@
 #include "platform/os-interfaces/modules/IScreen.h"
 
 #if (CC_PLATFORM == CC_PLATFORM_WINDOWS)
-    #include "platform/os-interfaces/modules/windows/Screen.h"
+    #include "platform/win32/interfaces/Screen.h"
 #elif (CC_PLATFORM == CC_PLATFORM_ANDROID)
-    #include "platform/os-interfaces/modules/android/Screen.h"
+    #include "platform/android/interfaces/Screen.h"
 #elif (CC_PLATFORM == CC_PLATFORM_OHOS)
-    #include "platform/os-interfaces/modules/ohos/Screen.h"
+    #include "platform/ohos/interfaces/Screen.h"
 #elif (CC_PLATFORM == CC_PLATFORM_MAC_OSX)
-    #include "platform/os-interfaces/modules/mac/Screen.h"
+    #include "platform/mac/interfaces/Screen.h"
 #elif (CC_PLATFORM == CC_PLATFORM_MAC_IOS)
-    #include "platform/os-interfaces/modules/ios/Screen.h"
+    #include "platform/ios/interfaces/Screen.h"
 #endif
 
 namespace cc {

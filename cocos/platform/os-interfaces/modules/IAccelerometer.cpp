@@ -26,13 +26,13 @@
 #include "platform/os-interfaces/modules/IAccelerometer.h"
 
 #if (CC_PLATFORM == CC_PLATFORM_WINDOWS)
-    #include "platform/os-interfaces/modules/windows/Accelerometer.h"
+    #include "platform/win32/interfaces/Accelerometer.h"
 #elif (CC_PLATFORM == CC_PLATFORM_ANDROID || CC_PLATFORM == CC_PLATFORM_OHOS)
-    #include "platform/os-interfaces/modules/java/Accelerometer.h"
+    #include "platform/java/interfaces/Accelerometer.h"
 #elif (CC_PLATFORM == CC_PLATFORM_MAC_OSX)
-    #include "platform/os-interfaces/modules/mac/Accelerometer.h"
+    #include "platform/mac/interfaces/Accelerometer.h"
 #elif (CC_PLATFORM == CC_PLATFORM_MAC_IOS)
-    #include "platform/os-interfaces/modules/ios/Accelerometer.h"
+    #include "platform/ios/interfaces/Accelerometer.h"
 #endif
 
 namespace cc {

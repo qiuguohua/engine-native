@@ -35,11 +35,11 @@
 #include "platform/FileUtils.h"
 
 #if (CC_PLATFORM == CC_PLATFORM_WINDOWS)
-    #include "platform/os-interfaces/modules/windows/CanvasRenderingContext2DDelegate.h"
+    #include "platform/win32/interfaces/CanvasRenderingContext2DDelegate.h"
 #elif (CC_PLATFORM == CC_PLATFORM_ANDROID || CC_PLATFORM == CC_PLATFORM_OHOS)
-    #include "platform/os-interfaces/modules/java/CanvasRenderingContext2DDelegate.h"
-#elif (CC_PLATFORM == CC_PLATFORM_MAC_OSX || CC_PLATFORM == CC_PLATFORM_MAC_hhIOS)
-    #include "platform/os-interfaces/modules/apple/CanvasRenderingContext2DDelegate.h"
+    #include "platform/java/interfaces/CanvasRenderingContext2DDelegate.h"
+#elif (CC_PLATFORM == CC_PLATFORM_MAC_OSX || CC_PLATFORM == CC_PLATFORM_MAC_IOS)
+    #include "platform/apple/interfaces/CanvasRenderingContext2DDelegate.h"
 #endif
 
 using Vec2    = std::array<float, 2>;

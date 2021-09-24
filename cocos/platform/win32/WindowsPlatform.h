@@ -26,10 +26,15 @@
 #pragma once
 
 #include "platform/UniversalPlatform.h"
+#include "platform/win32/interfaces/SystemWindow.h"
+
+struct SDL_WindowEvent;
+struct SDL_Window;
 
 namespace cc {
 
-class WindowsPlatform : public UniversalPlatform {
+class WindowsPlatform : public UniversalPlatform ,
+                        public SystemWindow::Delegate{
 public:
     WindowsPlatform() = default;
     /**
@@ -40,13 +45,25 @@ public:
      * Implementation of Windows platform initialization.
      */
     int32_t init() override;
+
+    int32_t loop() override;
     /**
      * Implementation of Windows platform destory.
      */
     void destory() override;
-    void pollEvent() override;
+
+    // override from SystemWindow::Delegate
+    bool createWindow(const char* title,
+                      int x, int y, int w,
+                      int h, int flags) override;
+    uintptr_t getWindowHandler() const override;
 
 private:
+    void               pollEvent();
+    void               handleWindowEvent(SDL_WindowEvent& wevent);
+    bool               _inited{false};
+    bool               _quit{false};
+    struct SDL_Window* _handle{nullptr};
 };
 
 } // namespace cc
