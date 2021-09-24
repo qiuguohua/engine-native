@@ -29,7 +29,6 @@
 namespace cc {
 
 WindowsPlatform::~WindowsPlatform() {
-    destory();
 }
 
 void WindowsPlatform::destory() {

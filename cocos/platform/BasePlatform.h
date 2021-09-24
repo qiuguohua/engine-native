@@ -99,9 +99,9 @@ public:
      */
     virtual int getSdkVersion() const = 0;
    
-    using PlatformThreadCallback = std::function<void(void)>;
-    virtual void runInPlatform(PlatformThreadCallback callback, int32_t fps) = 0;
-    virtual int32_t getFps() = 0;
+    using ThreadCallback = std::function<void(void)>;
+    virtual void runInPlatformThread(ThreadCallback callback, int32_t fps) = 0;
+    virtual int32_t getFps() const = 0;
     virtual void setFps(int32_t fps) = 0;
     
     virtual void onPause() = 0;

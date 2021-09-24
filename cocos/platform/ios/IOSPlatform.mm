@@ -76,7 +76,7 @@ extern int cocos_main(int argc, const char** argv);
 }
 
 - (void)renderScene:(id)sender {
-    _platform->runCB();
+    _platform->runTask();
 }
 
 @end
@@ -94,13 +94,6 @@ int32_t IOSPlatform::init() {
     return UniversalPlatform::init();
 }
 
-void IOSPlatform::pollEvent() {
-    ISystemWindow* systemWindow = getOSInterface<ISystemWindow>();
-    if (systemWindow) {
-        systemWindow->pollEvent();
-    }
-}
-
 int32_t IOSPlatform::main(int argc, const char** argv) {
     [_timer start];
     return cocos_main(argc, argv);
@@ -113,14 +106,22 @@ int32_t IOSPlatform::run(int argc, const char** argv) {
     return retVal;
 }
 
-void IOSPlatform::runInPlatform(IOSPlatform::PlatformThreadCallback task, int32_t fps) {
-    [_timer changeFPS:fps];
+void IOSPlatform::runInPlatformThread(IOSPlatform::ThreadCallback task, int32_t fps) {
+    setFps(fps);
     _mainTask = task;
 }
 
-void IOSPlatform::runCB() {
+void IOSPlatform::runTask() {
     if(_mainTask)
       _mainTask();
+}
+
+void IOSPlatform::setFps(int32_t fps) {
+    [_timer changeFPS:fps];
+}
+
+int32_t IOSPlatform::getFps() const {
+    return [_timer getFPS];
 }
 
 void IOSPlatform::onPause() {

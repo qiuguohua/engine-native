@@ -50,15 +50,16 @@ public:
      */
     int32_t main(int argc, const char** argv) override;
     
-    void pollEvent() override;
-    void runInPlatform(PlatformThreadCallback task, int32_t fps) override;
-    void runCB();
+    void runInPlatformThread(ThreadCallback task, int32_t fps) override;
+    void setFps(int32_t fps) override;
+    int32_t getFps() const override;
+    void runTask();
     
     void onPause() override;
     void onResume() override;
     void onClose() override;
 private:
-    PlatformThreadCallback _cb;
+    ThreadCallback _cb;
 };
 
 } // namespace cc

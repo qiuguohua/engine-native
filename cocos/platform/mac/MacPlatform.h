@@ -50,13 +50,12 @@ public:
      */
     int32_t main(int argc, const char** argv) override;
     
-    void runInPlatform(PlatformThreadCallback cb, int32_t fps) override;
-    void runCB();
+    void runInPlatformThread(ThreadCallback cb, int32_t fps) override;
+    
+    void runTask();
     void onPause() override;
     void onResume() override;
     void onClose() override;
-private:
-    PlatformThreadCallback _cb;
 };
 
 } // namespace cc
