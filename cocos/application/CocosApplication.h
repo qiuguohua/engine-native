@@ -61,6 +61,10 @@ public:
      *@bref Close the application.
      */
     void close() override;
+    /*
+     *@bref Get engine.
+     */
+    BaseEngine::Ptr getEngine() const override;
 
     /*
      *@bref Stop application event.
@@ -74,7 +78,6 @@ public:
      *@bref Close application event.
      */
     virtual void onClose();
-
     /*
      *@bref Create window.
      *@param title: Window title
@@ -111,7 +114,7 @@ public:
 private:
     void handleAppEvent(const OSEvent& ev);
 
-    ISystemWindow*              _systemWidow = {nullptr};
-    std::shared_ptr<BaseEngine> _engine      = {nullptr};
+    ISystemWindow*  _systemWidow = {nullptr};
+    BaseEngine::Ptr _engine      = {nullptr};
 };
 } // namespace cc

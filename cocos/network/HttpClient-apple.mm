@@ -34,7 +34,7 @@
 #import "network/HttpAsynConnection-apple.h"
 #include "network/HttpCookie.h"
 #include "platform/FileUtils.h"
-#include "engine/EngineManager.h"
+#include "application/ApplicationManager.h"
 #include "base/Scheduler.h"
 
 namespace cc {

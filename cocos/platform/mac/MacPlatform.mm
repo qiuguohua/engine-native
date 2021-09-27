@@ -107,13 +107,15 @@ int32_t MacPlatform::loop(void) {
 int32_t MacPlatform::run(int argc, const char** argv) {
     id delegate = [[AppDelegate alloc] init];
     NSApplication.sharedApplication.delegate = delegate;
-  
     return NSApplicationMain(argc, argv);
 }
 
-void MacPlatform::runInPlatformThread(const ThreadCallback& task, int32_t fps) {
-    _mainTask = task;
-    setFps(fps);
+void MacPlatform::setFps(int32_t fps) {
+    [_timer changeFPS:fps];
+}
+
+int32_t MacPlatform::getFps() const {
+    return [_timer getFPS];
 }
 
 void MacPlatform::runTask() {

@@ -94,6 +94,10 @@ void CocosApplication::close() {
     _engine->close();
 }
 
+BaseEngine::Ptr CocosApplication::getEngine() const {
+    return _engine;
+}
+
 void CocosApplication::onPause() {
 }
 

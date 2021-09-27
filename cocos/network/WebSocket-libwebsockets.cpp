@@ -54,7 +54,7 @@
 #include "base/Scheduler.h"
 #include "network/Uri.h"
 #include "network/WebSocket.h"
-#include "engine/EngineManager.h"
+#include "application/ApplicationManager.h"
 
 #include "platform/FileUtils.h"
 #include "platform/StdC.h"
@@ -68,7 +68,12 @@
 
 #define WS_RX_BUFFER_SIZE              (65536)
 #define WS_RESERVE_RECEIVE_BUFFER_SIZE (4096)
-#define WS_ENABLE_LIBUV                1
+
+#if CC_PLATFORM == CC_PLATFORM_ANDROID
+    #define WS_ENABLE_LIBUV 1
+#else
+    #define WS_ENABLE_LIBUV 0
+#endif
 
 #ifdef LOG_TAG
     #undef LOG_TAG
@@ -465,7 +470,7 @@ void WsThreadHelper::onSubThreadLoop() {
         // Windows: Cause delay 40ms for event WS_MSG_TO_SUBTHREAD_CREATE_CONNECTION
         // Android: Let libuv lws to decide when to stop
         wsPolling = true;
-        lws_service(wsContext, 40);
+        lws_service(wsContext, WS_ENABLE_LIBUV ? 40 : 4);
         wsPolling = false;
     }
 }
@@ -513,7 +518,9 @@ void WsThreadHelper::wsThreadEntryFunc() const {
 }
 
 void WsThreadHelper::sendMessageToCocosThread(const std::function<void()> &cb) {
-    CURRENT_ENGINE()->getEngineScheduler()->performFunctionInCocosThread(cb);
+    if (CURRENT_APPLICATION() != nullptr) {
+        CURRENT_APPLICATION()->getEngine()->getEngineScheduler()->performFunctionInCocosThread(cb);
+    }
 }
 
 void WsThreadHelper::sendMessageToWebSocketThread(WsMessage *msg) {
@@ -1254,7 +1261,6 @@ int WebSocketImpl::onConnectionClosed() {
             if (_closeState == CloseState::SYNC_CLOSING) {
                 LOGD("onConnectionClosed, WebSocket (%p) is closing by client synchronously.\n", this);
                 for (;;) {
-                    std::lock_guard<std::mutex> lkClose(_closeMutex);
                     _closeCondition.notify_one();
                     if (_closeState == CloseState::SYNC_CLOSED) {
                         break;

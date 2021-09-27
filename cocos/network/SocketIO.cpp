@@ -35,7 +35,7 @@
 #include "network/HttpClient.h"
 #include "network/Uri.h"
 #include "network/WebSocket.h"
-#include "engine/EngineManager.h"
+#include "application/ApplicationManager.h"
 
 #include "json/document-wrapper.h"
 #include "json/rapidjson.h"
@@ -881,8 +881,8 @@ void SIOClientImpl::onClose(WebSocket * /*ws*/) {
         }
         // discard this client
         _connected = false;
-        if (CURRENT_ENGINE()) {
-            CURRENT_ENGINE()->getEngineScheduler()->unscheduleAllForTarget(this);
+        if (CURRENT_APPLICATION() != nullptr) {
+            CURRENT_APPLICATION()->getEngine()->getEngineScheduler()->unscheduleAllForTarget(this);
         }
 
         SocketIO::getInstance()->removeSocket(_uri.getAuthority());

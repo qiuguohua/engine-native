@@ -220,7 +220,6 @@ int32_t WindowsPlatform::init() {
         CC_LOG_ERROR("SDL could not initialize! SDL_Error: %s\n", SDL_GetError());
         return false;
     }
-    _inited = true;
     return 0;
 }
 
@@ -445,6 +444,9 @@ void WindowsPlatform::pollEvent() {
 bool WindowsPlatform::createWindow(const char *title,
                                 int x, int y, int w,
                                 int h, int flags) {
+    if (_inited) {
+        return true;
+    }
     // Create window
     int sdlFlags = windowFlagsToSDLWindowFlag(flags);
     _handle      = SDL_CreateWindow(title, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, w, h, sdlFlags);
@@ -453,6 +455,7 @@ bool WindowsPlatform::createWindow(const char *title,
         CC_LOG_ERROR("Window could not be created! SDL_Error: %s\n", SDL_GetError());
         return false;
     }
+    _inited = true;
 }
 uintptr_t WindowsPlatform::getWindowHandler() const {
     SDL_SysWMinfo wmInfo;

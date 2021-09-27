@@ -1,6 +1,4 @@
 /****************************************************************************
- Copyright (c) 2010-2012 cocos2d-x.org
- Copyright (c) 2013-2016 Chukong Technologies Inc.
  Copyright (c) 2017-2021 Xiamen Yaji Software Co., Ltd.
 
  http://www.cocos.com
@@ -24,10 +22,11 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  THE SOFTWARE.
 ****************************************************************************/
+#include <iostream>
 
-#ifndef CCDevice_apple_hpp
-#define CCDevice_apple_hpp
+#include "platform/BasePlatform.h"
+#include "sdl2/SDL_main.h"
 
-//#include "platform/Device.h"
-
-#endif /* CCDevice_apple_hpp */
+int SDL_main(int argc, char** argv) {
+    START_PLATFORM(argc, (const char**)argv);
+}

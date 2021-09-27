@@ -24,6 +24,7 @@
 ****************************************************************************/
 
 #include "application/ApplicationManager.h"
+#include "base/Macros.h"
 
 namespace cc {
 // static
@@ -36,6 +37,17 @@ void ApplicationManager::releseAllApplcation() {
     _apps.clear();
 }
 
+ApplicationManager::ApplcationPtr ApplicationManager::getCurrentApp() const {
+    if (_currentApp.expired()) {
+        return nullptr;
+    }
+    return _currentApp.lock();
+}
+
+ApplicationManager::ApplcationPtr ApplicationManager::getCurrentAppSafe() const {
+    CC_ASSERT(!_currentApp.expired());
+    return _currentApp.lock();
+}
 } // namespace cc
 
 //

@@ -32,7 +32,7 @@
 #include <cstdio>
 #include <queue>
 #include <sstream>
-#include "engine/EngineManager.h"
+#include "application/ApplicationManager.h"
 #include "platform/FileUtils.h"
 #include "platform/java/jni/JniHelper.h"
 

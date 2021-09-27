@@ -29,7 +29,7 @@
 #include "network/Downloader.h"
 #include "platform/java/jni/JniHelper.h"
 #include "platform/java/jni/JniImp.h"
-#include "engine/EngineManager.h"
+#include "application/ApplicationManager.h"
 #include <mutex>
 
 #ifndef JCLS_DOWNLOADER

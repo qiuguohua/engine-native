@@ -24,22 +24,22 @@
 ****************************************************************************/
 
 #include "jsb_global.h"
+#include "application/ApplicationManager.h"
 #include "base/AutoreleasePool.h"
 #include "base/CoreStd.h"
 #include "base/Scheduler.h"
 #include "base/ThreadPool.h"
 #include "base/ZipUtils.h"
 #include "base/base64.h"
+#include "bindings/jswrapper/v8/ScriptEngine.h"
 #include "gfx-base/GFXDef.h"
 #include "jsb_conversions.h"
 #include "network/HttpClient.h"
 #include "platform/Image.h"
-#include "ui/edit-box/EditBox.h"
-#include "xxtea/xxtea.h"
-#include "engine/EngineManager.h"
-#include "bindings/jswrapper/v8/ScriptEngine.h"
 #include "platform/os-interfaces/modules/ISystem.h"
 #include "platform/os-interfaces/modules/ISystemWindow.h"
+#include "ui/edit-box/EditBox.h"
+#include "xxtea/xxtea.h"
 
 #if CC_PLATFORM == CC_PLATFORM_ANDROID
     #include "platform/java/jni/JniImp.h"
@@ -314,8 +314,8 @@ SE_BIND_FUNC(jsc_dumpRoot)
 
 static bool JSBCore_platform(se::State &s) { //NOLINT
     //Application::Platform platform = CURRENT_ENGINE()->getPlatform();
-    cc::BasePlatform::OSType type = 
-      cc::BasePlatform::getPlatform()->getOSType();
+    cc::BasePlatform::OSType type =
+        cc::BasePlatform::getPlatform()->getOSType();
     s.rval().setInt32(static_cast<int32_t>(type));
     return true;
 }
@@ -346,7 +346,7 @@ SE_BIND_FUNC(JSBCore_os)
 
 static bool JSBCore_getCurrentLanguage(se::State &s) { //NOLINT
     ISystem *   platform    = GET_PLATFORM_INTERFACE(ISystem);
-    std::string     languageStr = platform->getCurrentLanguageToString();
+    std::string languageStr = platform->getCurrentLanguageToString();
     s.rval().setString(languageStr);
     return true;
 }
@@ -354,7 +354,7 @@ SE_BIND_FUNC(JSBCore_getCurrentLanguage)
 
 static bool JSBCore_getCurrentLanguageCode(se::State &s) { //NOLINT
     ISystem *   platform = GET_PLATFORM_INTERFACE(ISystem);
-    std::string     language = platform->getCurrentLanguageCode();
+    std::string language = platform->getCurrentLanguageCode();
     s.rval().setString(language);
     return true;
 }
@@ -362,7 +362,7 @@ SE_BIND_FUNC(JSBCore_getCurrentLanguageCode)
 
 static bool JSB_getOSVersion(se::State &s) { //NOLINT
     ISystem *   platform      = GET_PLATFORM_INTERFACE(ISystem);
-    std::string     systemVersion = platform->getSystemVersion();
+    std::string systemVersion = platform->getSystemVersion();
     s.rval().setString(systemVersion);
     return true;
 }
@@ -370,13 +370,13 @@ SE_BIND_FUNC(JSB_getOSVersion)
 
 static bool JSB_core_restartVM(se::State &s) { //NOLINT
     //REFINE: release AudioEngine, waiting HttpClient & WebSocket threads to exit.
-    CURRENT_ENGINE()->restart();
+    CURRENT_APPLICATION()->restart();
     return true;
 }
 SE_BIND_FUNC(JSB_core_restartVM)
 
 static bool JSB_closeWindow(se::State &s) {
-    CURRENT_ENGINE()->close();
+    CURRENT_APPLICATION()->close();
     return true;
 }
 SE_BIND_FUNC(JSB_closeWindow)

@@ -26,7 +26,7 @@ THE SOFTWARE.
 #ifndef __CCSYNC_TASK_POOL_H_
 #define __CCSYNC_TASK_POOL_H_
 
-#include "engine/EngineManager.h"
+#include "application/ApplicationManager.h"
 
 #include <vector>
 #include <queue>
