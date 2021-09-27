@@ -29,6 +29,7 @@
 #include "cocos/bindings/manual/jsb_classtype.h"
 #include "cocos/bindings/manual/jsb_global.h"
 #include "cocos/bindings/manual/jsb_module_register.h"
+#include "cocos/application/ApplicationManager.h"
 
 #if (CC_PLATFORM == CC_PLATFORM_MAC_IOS)
 #include "platform/Device.h"
@@ -68,3 +69,5 @@ void Game::onClose() {
   //    //cc::Application::onClose();
   //    cc::EventDispatcher::dispatchCloseEvent();
 }
+
+COCOS_APPLICATION_MAIN(Game);

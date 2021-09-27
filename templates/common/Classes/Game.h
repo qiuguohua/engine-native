@@ -25,6 +25,7 @@
 #pragma once
 
 #include "cocos/application/CocosApplication.h"
+
 /**
  @brief    The cocos2d Application.
  
@@ -40,4 +41,3 @@ class Game : public cc::CocosApplication {
     void onClose() override;
 };
 
-COCOS_START_APPLICATION_MAIN(Game);
