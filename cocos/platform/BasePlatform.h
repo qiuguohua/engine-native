@@ -97,11 +97,11 @@ public:
      @brief Get the SDK version for Android.Other systems also have sdk versions, 
             but they are not currently used.
      */
-    virtual int getSdkVersion() const = 0;
-    using ThreadCallback                                                      = std::function<void(void)>;
+    virtual int getSdkVersion() const                                                = 0;
+    using ThreadCallback                                                             = std::function<void(void)>;
     virtual void    runInPlatformThread(const ThreadCallback& callback, int32_t fps) = 0;
-    virtual int32_t getFps() const                                            = 0;
-    virtual void    setFps(int32_t fps)                                       = 0;
+    virtual int32_t getFps() const                                                   = 0;
+    virtual void    setFps(int32_t fps)                                              = 0;
 
     virtual void onPause()  = 0;
     virtual void onResume() = 0;
@@ -154,3 +154,13 @@ private:
     CC_DISABLE_COPY_AND_MOVE_SEMANTICS(BasePlatform);
 };
 } // namespace cc
+
+#define START_PLATFORM(argc, argv)                                    \
+    do {                                                              \
+        cc::BasePlatform* platform = cc::BasePlatform::getPlatform(); \
+        if (platform->init()) {                                       \
+            CC_LOG_FATAL("Platform initialization failed");           \
+            return -1;                                                \
+        }                                                             \
+        return platform->run(argc, argv);                             \
+    } while (0)

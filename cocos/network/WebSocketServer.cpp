@@ -32,7 +32,7 @@
     #include <atomic>
 
     #include "cocos/network/WebSocketServer.h"
-    #include "cocos/engine/EngineManager.h"
+    #include "cocos/application/ApplicationManager.h"
     #include "cocos/base/Scheduler.h"
     #include "cocos/base/Log.h"
 

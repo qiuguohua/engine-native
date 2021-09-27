@@ -24,7 +24,7 @@
 ****************************************************************************/
 #include "platform/os-interfaces/modules/Device.h"
 
-#include "engine/EngineManager.h"
+#include "application/ApplicationManager.h"
 #include "platform/os-interfaces/modules/IAccelerometer.h"
 #include "platform/os-interfaces/modules/IBattery.h"
 #include "platform/os-interfaces/modules/INetwork.h"

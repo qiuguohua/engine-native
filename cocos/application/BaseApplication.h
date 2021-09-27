@@ -26,12 +26,13 @@
 #pragma once
 
 #include <memory>
-#include "application/ApplicationManager.h"
+#include "engine/BaseEngine.h"
 
 namespace cc {
 
 class BaseApplication {
 public:
+
     virtual ~BaseApplication() = default;
     /*
      *@bref Application initialization
@@ -58,23 +59,10 @@ public:
      *@bref Close the application.
      */
     virtual void close() = 0;
+    /*
+     *@bref Get engine.
+     */
+    virtual BaseEngine::Ptr getEngine() const = 0;
 };
 
 } // namespace cc
-
-//#define COCOS_START_APPLICATION_MAIN(className)                           \
-//    int cocos_main(int argc, const char** argv) {                         \
-//        std::unique_ptr<cc::BaseApplication> app(new className()); \
-//        if (app->init()) {                                                \
-//            return -1;                                                    \
-//        }                                                                 \
-//        return app->run(argc, argv);                                      \
-//    }
-#define COCOS_START_APPLICATION_MAIN(className)                                           \
-    int cocos_main(int argc, const char** argv) {                                         \
-        auto app = cc::ApplicationManager::getInstance()->createApplication<className>(); \
-        if (app->init()) {                                                                \
-            return -1;                                                                    \
-        }                                                                                 \
-        return app->run(argc, argv);                                                      \
-    }

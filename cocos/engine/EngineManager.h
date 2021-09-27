@@ -56,6 +56,3 @@ private:
 
 } // namespace cc
 
-#define CURRENT_ENGINE() cc::EngineManager::getInstance()->getCurrentEngine()
-
-#define GET_PLATFORM_INTERFACE(intf) CURRENT_ENGINE()->getOSInterface<intf>()

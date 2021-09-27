@@ -32,7 +32,7 @@
 #import <OpenAL/alc.h>
 #include <thread>
 //#include "platform/Application.h"
-#include "engine/EngineManager.h"
+#include "application/ApplicationManager.h"
 #include "base/Scheduler.h"
 
 #include "audio/apple/AudioDecoder.h"

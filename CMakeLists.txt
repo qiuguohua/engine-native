@@ -327,11 +327,11 @@ cocos_source_files(
 ############ main
 if(WINDOWS)
 cocos_source_files(
-    cocos/main/main.cpp
+    cocos/main/main-win32.cpp
 )
 elseif(MACOSX)
     cocos_source_files(
-        cocos/main/main.mm
+        cocos/main/main-mac.mm
     )
 elseif(IOS)
     cocos_source_files(
@@ -384,7 +384,7 @@ elseif(IOS)
     )
 endif()
 
-############ platformex : Abstract interface
+############ platform : Abstract interface
 cocos_source_files(
     cocos/platform/os-interfaces/OSInterface.cpp
     cocos/platform/os-interfaces/OSInterface.h
@@ -392,7 +392,7 @@ cocos_source_files(
     cocos/platform/os-interfaces/OSInterfaceManager.h
 )
 
-############ platformex : Interface definition
+############ platform : Interface definition
 cocos_source_files(
     cocos/platform/os-interfaces/modules/Device.cpp
     cocos/platform/os-interfaces/modules/Device.h
@@ -435,7 +435,7 @@ elseif(MACOSX OR IOS)
     )
 endif()
 
-############ platformex : Interface implementation of windows
+############ platform : Interface implementation of windows
 if(WINDOWS)
     cocos_source_files(
         cocos/platform/win32/interfaces/Accelerometer.cpp
@@ -716,10 +716,6 @@ endif()
 
 ##### platform
 cocos_source_files(
-    #cocos/platform/Application.h
-    #cocos/platform/Application.cpp
-    #cocos/platform/CanvasRenderingContext2D.h
-    #cocos/platform/Device.h
     cocos/platform/Image.cpp
     cocos/platform/Image.h
     cocos/platform/StdC.h
@@ -754,11 +750,6 @@ endif()
 
 if(WINDOWS)
     cocos_source_files(
-#        NO_WERROR    cocos/platform/win32/Application-win32.cpp
-#        NO_WERROR    cocos/platform/win32/CanvasRenderingContext2D-win32.cpp
-#                     cocos/platform/win32/Device-win32.cpp
-#                     cocos/platform/win32/View-win32.cpp
-#                     cocos/platform/win32/View-win32.h
                      cocos/platform/win32/compat
                      cocos/platform/win32/compat/stdint.h
                      cocos/platform/win32/inet_pton_mingw.cpp
@@ -769,13 +760,6 @@ if(WINDOWS)
         cocos/platform/win32/FileUtils-win32.h
     )
 elseif(ANDROID)
-    cocos_source_files(
-        #cocos/platform/android/Application-android.cpp
-        #cocos/platform/java/CanvasRenderingContext2D-java.cpp
-        #cocos/platform/android/Device-android.cpp
-        #cocos/platform/android/View.cpp
-        #cocos/platform/android/View.h
-    )
     set(CC_JNI_SRC_FILES
         ${CWD}/cocos/platform/android/jni/JniCocosActivity.cpp
         ${CWD}/cocos/platform/android/jni/JniCocosActivity.h
@@ -799,16 +783,7 @@ elseif(ANDROID)
         cocos/platform/android/FileUtils-android.h
     )
 elseif(OHOS)
-    cocos_source_files(
-        #cocos/platform/ohos/Application-ohos.cpp
-        #cocos/platform/java/CanvasRenderingContext2D-java.cpp
-        #cocos/platform/ohos/Device-ohos.cpp
-        #cocos/platform/ohos/View.cpp
-        #cocos/platform/ohos/View.h
-    )
     set(CC_JNI_SRC_FILES
-        #${CWD}/cocos/platform/ohos/jni/glue/JniNativeGlue.cpp
-        #${CWD}/cocos/platform/ohos/jni/glue/JniNativeGlue.h
         ${CWD}/cocos/platform/ohos/jni/JniCocosAbility.cpp
         ${CWD}/cocos/platform/ohos/jni/JniCocosAbility.h
         ${CWD}/cocos/platform/java/jni/JniHelper.cpp
@@ -830,12 +805,6 @@ elseif(OHOS)
     )
 elseif(APPLE)
     cocos_source_files(
-                     #cocos/platform/apple/Device-apple.mm
-                     #cocos/platform/apple/CanvasRenderingContext2D-apple.mm
-                     #cocos/platform/apple/Device-apple.h
-    )
-    
-    cocos_source_files(
                      cocos/platform/apple/Reachability.h
                      cocos/platform/apple/Reachability.cpp
     )
@@ -849,16 +818,12 @@ elseif(APPLE)
             cocos/platform/mac/View.h
             cocos/platform/mac/KeyCodeHelper.h
             cocos/platform/mac/View.mm
-            #cocos/platform/mac/Device-mac.mm
-            #cocos/platform/mac/Application-mac.mm
             cocos/platform/mac/KeyCodeHelper.cpp
         )
     elseif(IOS)
         cocos_source_files(
                          cocos/platform/ios/View.h
             NO_WERROR    cocos/platform/ios/View.mm     # CAMetalLayer bug for apple
-                         #cocos/platform/ios/Application-ios.mm
-                         #cocos/platform/ios/Device-ios.mm
         )
     endif()
 endif()

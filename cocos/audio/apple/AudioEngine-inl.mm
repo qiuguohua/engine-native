@@ -35,7 +35,7 @@
 
 #include "audio/include/AudioEngine.h"
 #include "platform/FileUtils.h"
-#include "engine/EngineManager.h"
+#include "application/ApplicationManager.h"
 #include "base/Scheduler.h"
 #include "base/Utils.h"
 

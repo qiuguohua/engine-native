@@ -40,7 +40,7 @@
 #include "audio/include/AudioEngine.h"
 #include "audio/oalsoft/AudioDecoderManager.h"
 #include "base/Scheduler.h"
-#include "engine/EngineManager.h"
+#include "application/ApplicationManager.h"
 #include "platform/FileUtils.h"
 
 #if CC_PLATFORM == CC_PLATFORM_WINDOWS

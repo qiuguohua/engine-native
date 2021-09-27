@@ -29,7 +29,7 @@
 #include "audio/oalsoft/AudioCache.h"
 #include <thread>
 
-#include "engine/EngineManager.h"
+#include "application/ApplicationManager.h"
 
 #include "audio/oalsoft/AudioDecoder.h"
 #include "audio/oalsoft/AudioDecoderManager.h"
@@ -319,7 +319,7 @@ void AudioCache::invokingLoadCallbacks() {
     auto isDestroyed = _isDestroyed;
 
     BaseEngine::SchedulerPtr scheduler = 
-      CURRENT_ENGINE() ? CURRENT_ENGINE()->getEngineScheduler() : nullptr;
+      CURRENT_APPLICATION() ? CURRENT_APPLICATION()->getEngine()->getEngineScheduler() : nullptr;
     if (!scheduler) {
         return;
     }

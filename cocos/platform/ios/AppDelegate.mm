@@ -32,7 +32,7 @@
 
 @implementation AppDelegate
 
-cc::IOSPlatform * platform = nullptr;
+cc::IOSPlatform *_platform = nullptr;
 
 @synthesize window;
 
@@ -45,10 +45,6 @@ cc::IOSPlatform * platform = nullptr;
     CGRect bounds = [[UIScreen mainScreen] bounds];
     self.window   = [[UIWindow alloc] initWithFrame:bounds];
 
-
-    // Must use abstract base class assignment, otherwise the calling function may be incorrect in objective-c
-    cc::IEventDispatch * eventDispatcher = platform;
-    
     // Should create view controller first, cc::Application will use it.
     _viewController                           = [[ViewController alloc] init];
     _viewController.view                      = [[View alloc] initWithFrame:bounds];
@@ -57,9 +53,10 @@ cc::IOSPlatform * platform = nullptr;
     [self.window setRootViewController:_viewController];
 
     [self.window makeKeyAndVisible];
-    
-    platform = (cc::IOSPlatform*)cc::BasePlatform::getPlatform();
-    platform->loop();
+
+    _platform = dynamic_cast<cc::IOSPlatform *>(cc::BasePlatform::getPlatform());
+    CC_ASSERT(_platform != nullptr);
+    _platform->loop();
 
     return YES;
 }
@@ -70,7 +67,7 @@ cc::IOSPlatform * platform = nullptr;
      Use this method to pause ongoing tasks, disable timers, and throttle down OpenGL ES frame rates. Games should use this method to pause the game.
      */
     [[SDKWrapper shared] applicationWillResignActive:application];
-    platform->onPause();
+    _platform->onPause();
 }
 
 - (void)applicationDidBecomeActive:(UIApplication *)application {
@@ -78,7 +75,7 @@ cc::IOSPlatform * platform = nullptr;
      Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
      */
     [[SDKWrapper shared] applicationDidBecomeActive:application];
-    platform->onResume();
+    _platform->onResume();
 }
 
 - (void)applicationDidEnterBackground:(UIApplication *)application {
@@ -97,15 +94,14 @@ cc::IOSPlatform * platform = nullptr;
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application {
-    platform->onClose();
-    platform->destory();
-    platform = nullptr;
+    _platform->onClose();
+    _platform->destory();
+    _platform = nullptr;
     [[SDKWrapper shared] applicationWillTerminate:application];
 }
 
-- (void)dispatchEvent:(const cc::OSEvent&) ev {
-    if(platform)
-       platform->dispatchEvent(ev);
+- (void)dispatchEvent:(const cc::OSEvent &)ev {
+    _platform->dispatchEvent(ev);
 }
 
 #pragma mark -
@@ -115,9 +111,7 @@ cc::IOSPlatform * platform = nullptr;
     [[SDKWrapper shared] applicationDidReceiveMemoryWarning:application];
     cc::DeviceEvent ev;
     ev.type = cc::DeviceEvent::Type::DEVICE_MEMORY;
-    if(platform) {
-        platform->dispatchEvent(ev);
-    }
+    _platform->dispatchEvent(ev);
 }
 
 @end

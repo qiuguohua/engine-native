@@ -42,7 +42,7 @@
 #include "cocos/bindings/manual/jsb_conversions.h"
 #include "cocos/network/HttpClient.h"
 
-#include "engine/EngineManager.h"
+#include "application/ApplicationManager.h"
 
 using namespace cc;          //NOLINT
 using namespace cc::network; //NOLINT

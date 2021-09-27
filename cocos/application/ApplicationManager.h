@@ -28,24 +28,66 @@
 #include <memory>
 #include <vector>
 
+#include "application/BaseApplication.h"
+
 namespace cc {
-class BaseApplication;
 class ApplicationManager {
 public:
     static ApplicationManager* getInstance();
 
     using ApplcationPtr = std::shared_ptr<BaseApplication>;
+
+    /*
+     @bref Generate application entry.
+     */
     template <class T>
     std::enable_if_t<std::is_base_of<BaseApplication, T>::value, ApplcationPtr>
     createApplication() {
         ApplcationPtr app(new T);
         _apps.push_back(app);
+        _currentApp = app;
         return std::move(app);
     }
 
+    /*
+     @bref Release all generated applications.
+     */
     void releseAllApplcation();
+    /*
+     @bref Get the current application, may get empty.
+     */
+    ApplcationPtr getCurrentApp() const;
+    /*
+     @bref Get the current application, make sure it is not empty.
+     @bref Used to get the engine.
+     */
+    ApplcationPtr getCurrentAppSafe() const;
 
 private:
-    std::vector<ApplcationPtr> _apps;
+    std::weak_ptr<BaseApplication> _currentApp;
+    std::vector<ApplcationPtr>     _apps;
 };
 } // namespace cc
+
+#define APPLICATION_MANAGER()        cc::ApplicationManager::getInstance()
+#define CURRENT_APPLICATION()        APPLICATION_MANAGER()->getCurrentApp()
+#define CURRENT_APPLICATION_SAFE()   APPLICATION_MANAGER()->getCurrentAppSafe()
+#define CURRENT_ENGINE()             CURRENT_APPLICATION_SAFE()->getEngine()
+#define GET_PLATFORM_INTERFACE(intf) CURRENT_ENGINE()->getOSInterface<intf>()
+
+/*
+ @bref Called at the user-defined main entry
+ */
+#define COCOST_START_APPLICATION(className)                               \
+    do {                                                                  \
+        auto app = APPLICATION_MANAGER()->createApplication<className>(); \
+        if (app->init()) {                                                \
+            return -1;                                                    \
+        }                                                                 \
+        return app->run(argc, argv);                                      \
+    } while (0)
+
+#define COCOS_APPLICATION_MAIN(className)         \
+    int cocos_main(int argc, const char** argv) { \
+        COCOST_START_APPLICATION(className);      \
+    }

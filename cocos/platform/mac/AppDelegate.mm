@@ -2,23 +2,23 @@
 #include <string>
 //#import "Game.h"
 #import "ViewController.h"
-#include "platform/mac/MacPlatform.h"
 #include "cocos/bindings/event/EventDispatcher.h"
+#include "platform/mac/MacPlatform.h"
+
 
 @interface AppDelegate () {
     NSWindow* _window;
-//    Game*     _game;
+    //    Game*     _game;
     cc::MacPlatform* _platform;
 }
 @end
 
 @implementation AppDelegate
 
-- (void) createWindow:(NSString*)title xPos:(int)x yPos:(int)y width:(int)w height:(int)h {
-    
+- (void)createWindow:(NSString*)title xPos:(int)x yPos:(int)y width:(int)w height:(int)h {
     _window.title = title;
-    NSRect rect = NSMakeRect(x, y, w, h);
-    _window     = [[NSWindow alloc] initWithContentRect:rect
+    NSRect rect   = NSMakeRect(x, y, w, h);
+    _window       = [[NSWindow alloc] initWithContentRect:rect
                                           styleMask:NSWindowStyleMaskMiniaturizable | NSWindowStyleMaskTitled | NSWindowStyleMaskClosable | NSWindowStyleMaskResizable
                                             backing:NSBackingStoreBuffered
                                               defer:NO];
@@ -46,7 +46,8 @@
 }
 
 - (void)applicationDidFinishLaunching:(NSNotification*)aNotification {
-    _platform = (cc::MacPlatform*)cc::BasePlatform::getPlatform();
+    _platform = dynamic_cast<cc::MacPlatform*>(cc::BasePlatform::getPlatform());
+    CC_ASSERT(_platform != nullptr);
     _platform->loop();
 }
 
@@ -67,7 +68,7 @@
 }
 
 - (void)applicationWillTerminate:(NSNotification*)aNotification {
-//    delete _game;
+    //    delete _game;
     //FIXME: will crash if relase it here.
     // [_window release];
     _platform->destory();
@@ -77,9 +78,8 @@
     return YES;
 }
 
-- (void)dispatchEvent:(const cc::OSEvent&) ev {
-    if(_platform)
-        _platform->dispatchEvent(ev);
+- (void)dispatchEvent:(const cc::OSEvent&)ev {
+    _platform->dispatchEvent(ev);
 }
 
 @end

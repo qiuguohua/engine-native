@@ -99,9 +99,8 @@ int UniversalPlatform::getSdkVersion() const {
 }
 
 void UniversalPlatform::runInPlatformThread(const ThreadCallback& task,int32_t fps) {
-    if(task) {
-        task();
-    }
+    _mainTask = task;
+    setFps(fps);
 }
 
 int32_t UniversalPlatform::getFps() const {

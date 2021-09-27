@@ -26,7 +26,7 @@
 #include "EditBox.h"
 #include "cocos/bindings/jswrapper/SeApi.h"
 #include "cocos/bindings/manual/jsb_global.h"
-#include "cocos/engine/EngineManager.h"
+#include "cocos/application/ApplicationManager.h"
 #include "cocos/platform/os-interfaces/modules/ISystemWindow.h"
 
 #include <stdlib.h>
@@ -49,7 +49,7 @@ WNDPROC   g_prevEditWindowProc = nullptr;
 se::Value g_textInputCallback;
 
 HWND getCurrentWindowHwnd() {
-    if (CURRENT_ENGINE()) {
+    if (!CURRENT_APPLICATION()) {
         return nullptr;
     }
     ISystemWindow *intf = GET_PLATFORM_INTERFACE(ISystemWindow);

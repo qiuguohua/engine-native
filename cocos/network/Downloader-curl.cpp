@@ -32,7 +32,7 @@
 
 #include "base/Scheduler.h"
 #include "platform/FileUtils.h"
-#include "engine/EngineManager.h"
+#include "application/ApplicationManager.h"
 
 #include "network/Downloader.h"
 

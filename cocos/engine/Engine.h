@@ -105,15 +105,16 @@ public:
      */
     SchedulerPtr getEngineScheduler() const override;
 
+
 private:
     void tick();
-    void restartVM();
     bool dispatchWindowEvent(const WindowEvent& ev);
     bool dispatchDeviceEvent(const DeviceEvent& ev);
     bool dispatchEventToApp(OSEventType type, const OSEvent& ev);
     void onPause();
     void onResume();
     void onClose();
+    int32_t restartVM();
 
     bool                           _quit{false};
     bool                           _close{false};
@@ -125,6 +126,7 @@ private:
     uint                           _totalFrames{0};
     cc::Vec2                       _viewLogicalSize{0, 0};
     bool                           _needRestart{false};
+    
     std::map<OSEventType, EventCb> _eventCallbacks;
     using EventHandleFunctor = std::function<void()>;
 

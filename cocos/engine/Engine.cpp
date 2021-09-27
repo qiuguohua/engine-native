@@ -47,6 +47,8 @@
 #include "cocos/network/HttpClient.h"
 #include "engine/EngineManager.h"
 #include "platform/os-interfaces/modules/ISystemWindow.h"
+#include "application/ApplicationManager.h"
+#include "application/BaseApplication.h"
 
 namespace {
 
@@ -79,7 +81,12 @@ bool setCanvasCallback(se::Object* global) {
 
 namespace cc {
 
-Engine::Engine() = default;
+Engine::Engine() {
+    _scheduler = std::make_shared<Scheduler>();
+    FileUtils::getInstance()->addSearchPath("Resources", true);
+    EventDispatcher::init();
+    se::ScriptEngine::getInstance();
+}
 
 Engine::~Engine() {
 #if USE_AUDIO
@@ -98,12 +105,12 @@ Engine::~Engine() {
 }
 
 int32_t Engine::init() {
-    _scheduler = std::make_shared<Scheduler>();
-    FileUtils::getInstance()->addSearchPath("Resources", true);
-
-    EventDispatcher::init();
+    _scheduler->removeAllFunctionsToBePerformedInCocosThread();
+    _scheduler->unscheduleAll();
 
     EngineManager::getInstance()->setCurrentEngine(shared_from_this());
+
+    se::ScriptEngine::getInstance()->cleanup();
 
     BasePlatform* platform = BasePlatform::getPlatform();
     platform->setHandleEventCallback(
@@ -224,7 +231,7 @@ void Engine::tick() {
     dt   = static_cast<float>(dtNS) / NANOSECONDS_PER_SECOND;
 }
 
-void Engine::restartVM() {
+int32_t Engine::restartVM() {
     cc::EventDispatcher::dispatchRestartVM();
 
     pipeline::RenderPipeline::getInstance()->destroy();
@@ -248,8 +255,14 @@ void Engine::restartVM() {
 
     // start
     cc::EventDispatcher::init();
-    init();
+    ApplicationManager::getInstance()->getCurrentApp()->init();
+    //init();
+    //AppEvent appEv;
+    //appEv.type = AppEvent::Type::RESTART;
+    //dispatchEventToApp(OSEventType::APP_OSEVENT, appEv);
+
     cc::gfx::DeviceManager::addCustomEvent();
+    return 0;
 }
 
 bool Engine::handleEvent(const OSEvent& ev) {
