@@ -43,12 +43,11 @@
 
 #include <memory>
 #include <sstream>
-#include "base/Scheduler.h"
-#include "cocos/network/HttpClient.h"
-#include "engine/EngineManager.h"
-#include "platform/os-interfaces/modules/ISystemWindow.h"
 #include "application/ApplicationManager.h"
 #include "application/BaseApplication.h"
+#include "base/Scheduler.h"
+#include "cocos/network/HttpClient.h"
+#include "platform/os-interfaces/modules/ISystemWindow.h"
 
 namespace {
 
@@ -108,8 +107,6 @@ int32_t Engine::init() {
     _scheduler->removeAllFunctionsToBePerformedInCocosThread();
     _scheduler->unscheduleAll();
 
-    EngineManager::getInstance()->setCurrentEngine(shared_from_this());
-
     se::ScriptEngine::getInstance()->cleanup();
 
     BasePlatform* platform = BasePlatform::getPlatform();
@@ -124,8 +121,7 @@ int32_t Engine::run() {
     BasePlatform* platform = BasePlatform::getPlatform();
     platform->runInPlatformThread([&]() {
         tick();
-    },
-                                  _fps);
+    });
     return 0;
 }
 
@@ -176,9 +172,9 @@ void Engine::setPreferredFramesPerSecond(int fps) {
     if (fps == 0) {
         return;
     }
-
-    _fps                            = fps;
-    _prefererredNanosecondsPerFrame = static_cast<long>(1.0 / _fps * NANOSECONDS_PER_SECOND); //NOLINT(google-runtime-int)
+    BasePlatform* platform = BasePlatform::getPlatform();
+    platform->setFps(fps);
+    _prefererredNanosecondsPerFrame = static_cast<long>(1.0 / fps * NANOSECONDS_PER_SECOND); //NOLINT(google-runtime-int)
 }
 
 void Engine::addEventCallback(OSEventType evType, const EventCb& cb) {

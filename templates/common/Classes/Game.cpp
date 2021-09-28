@@ -56,18 +56,15 @@ int Game::init() {
 }
 
 void Game::onPause() {
-  //    //cc::Application::onPause();
-  //    cc::EventDispatcher::dispatchEnterBackgroundEvent();
+  cc::CocosApplication::onPause();
 }
-//
+
 void Game::onResume() {
-  //    //cc::Application::onResume();
-  //    cc::EventDispatcher::dispatchEnterForegroundEvent();
+  cc::CocosApplication::onResume();
 }
-//
+
 void Game::onClose() {
-  //    //cc::Application::onClose();
-  //    cc::EventDispatcher::dispatchCloseEvent();
+  cc::CocosApplication::onClose();
 }
 
 COCOS_APPLICATION_MAIN(Game);

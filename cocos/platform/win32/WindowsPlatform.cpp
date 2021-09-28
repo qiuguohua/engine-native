@@ -149,7 +149,6 @@ int sdlKeycodeToCocosCode(int sdlCode, int mode) {
     }
 }
 
-
 std::unordered_map<cc::ISystemWindow::WindowFlags, SDL_WindowFlags> gWindowFlagMap = {
     {cc::ISystemWindow::CC_WINDOW_FULLSCREEN, SDL_WINDOW_FULLSCREEN},
     {cc::ISystemWindow::CC_WINDOW_OPENGL, SDL_WINDOW_OPENGL},
@@ -186,7 +185,7 @@ int windowFlagsToSDLWindowFlag(int flags) {
 } // namespace
 
 namespace cc {
-
+WindowsPlatform::WindowsPlatform() = default;
 WindowsPlatform::~WindowsPlatform() {
     if (_handle) {
         SDL_DestroyWindow(_handle);
@@ -198,10 +197,6 @@ WindowsPlatform::~WindowsPlatform() {
 #ifdef USE_WIN32_CONSOLE
     FreeConsole();
 #endif
-}
-
-void WindowsPlatform::destory() {
-    UniversalPlatform::destory();
 }
 
 int32_t WindowsPlatform::init() {
@@ -258,9 +253,7 @@ int32_t WindowsPlatform::loop() {
         actualInterval = nNow.QuadPart - nLast.QuadPart;
         if (actualInterval >= desiredInterval) {
             nLast.QuadPart = nNow.QuadPart;
-            if (_mainTask) {
-                _mainTask();
-            }
+            runTask();
             SDL_GL_SwapWindow(_handle);
         } else {
             // The precision of timer on Windows is set to highest (1ms) by 'timeBeginPeriod' from above code,
@@ -277,7 +270,7 @@ int32_t WindowsPlatform::loop() {
     if (wTimerRes != 0)
         timeEndPeriod(wTimerRes);
 
-    destory();
+    onDestory();
     return 0;
 }
 
@@ -441,9 +434,10 @@ void WindowsPlatform::pollEvent() {
             break;
     }
 }
+
 bool WindowsPlatform::createWindow(const char *title,
-                                int x, int y, int w,
-                                int h, int flags) {
+                                   int x, int y, int w,
+                                   int h, int flags) {
     if (_inited) {
         return true;
     }
@@ -457,6 +451,7 @@ bool WindowsPlatform::createWindow(const char *title,
     }
     _inited = true;
 }
+
 uintptr_t WindowsPlatform::getWindowHandler() const {
     SDL_SysWMinfo wmInfo;
     SDL_VERSION(&wmInfo.version);

@@ -320,8 +320,6 @@ cocos_source_files(
     cocos/engine/BaseEngine.h
     cocos/engine/Engine.cpp
     cocos/engine/Engine.h
-    cocos/engine/EngineManager.cpp
-    cocos/engine/EngineManager.h
 )
 
 ############ main
@@ -465,25 +463,25 @@ elseif(ANDROID OR OHOS)
         cocos/platform/java/interfaces/Network.h
         cocos/platform/java/interfaces/Vibrate.cpp
         cocos/platform/java/interfaces/Vibrate.h
-        cocos/platform/java/interfaces/System.cpp
-        cocos/platform/java/interfaces/System.h
-        cocos/platform/java/interfaces/CommonSystemWindow.cpp
-        cocos/platform/java/interfaces/CommonSystemWindow.h
+        cocos/platform/java/interfaces/CommonSystem.cpp
+        cocos/platform/java/interfaces/CommonSystem.h
+        cocos/platform/java/interfaces/SystemWindow.cpp
+        cocos/platform/java/interfaces/SystemWindow.h
     )
 endif()
 if(ANDROID)
     cocos_source_files(
         cocos/platform/android/interfaces/Screen.cpp
         cocos/platform/android/interfaces/Screen.h
-        cocos/platform/android/interfaces/SystemWindow.cpp
-        cocos/platform/android/interfaces/SystemWindow.h
+        cocos/platform/android/interfaces/System.cpp
+        cocos/platform/android/interfaces/System.h
     )
 elseif(OHOS)
     cocos_source_files(
         cocos/platform/ohos/interfaces/Screen.cpp
         cocos/platform/ohos/interfaces/Screen.h
-        cocos/platform/ohos/interfaces/SystemWindow.cpp
-        cocos/platform/ohos/interfaces/SystemWindow.h
+        cocos/platform/ohos/interfaces/System.cpp
+        cocos/platform/ohos/interfaces/System.h
     )
 elseif(MACOSX)
    cocos_source_files(

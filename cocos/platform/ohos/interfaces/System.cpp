@@ -23,43 +23,15 @@
  THE SOFTWARE.
 ****************************************************************************/
 
-#include "platform/java/interfaces/CommonSystemWindow.h"
-#include <fcntl.h>
-#include <jni.h>
-#include <unistd.h>
-#include <functional>
-#include <thread>
-#include <vector>
-#include "base/Log.h"
-#include "base/Macros.h"
+#include "platform/android/interfaces/System.h"
 
-#include "platform/java/jni/JniImp.h"
-
-namespace {
-
-} // namespace
 
 namespace cc {
-CommonSystemWindow::CommonSystemWindow() = default;
-CommonSystemWindow::~CommonSystemWindow() = default;
+System::System() = default;
+System::~System() = default;
 
-bool CommonSystemWindow::createWindow(const char *title,
-                                    int x, int y, int w,
-                                    int h, int flags) {
-    CC_UNUSED_PARAM(title);
-    CC_UNUSED_PARAM(x);
-    CC_UNUSED_PARAM(y);
-    CC_UNUSED_PARAM(w);
-    CC_UNUSED_PARAM(h);
-    CC_UNUSED_PARAM(flags);
-    return true;
-}
-
-void CommonSystemWindow::setCursorEnabled(bool value) {
-}
-
-void CommonSystemWindow::copyTextToClipboard(const std::string &text) {
-    copyTextToClipboardJNI(text);
+System::OSType System::getOSType() const {
+    return OSType::OHOS;
 }
 
 

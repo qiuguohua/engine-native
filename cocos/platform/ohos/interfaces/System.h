@@ -23,23 +23,20 @@
  THE SOFTWARE.
 ****************************************************************************/
 
-#include "platform/ohos/interfaces/SystemWindow.h"
-#include "platform/java/jni/glue/JniNativeGlue.h"
+#pragma once
+
+#include "platform/java/interfaces/CommonSystem.h"
+
+class ANativeWindow;
 
 namespace cc {
-SystemWindow::SystemWindow() {
-}
 
-SystemWindow::~SystemWindow() = default;
+class System : public CommonSystem {
+public:
+    System();
+    ~System() override;
 
-uintptr_t SystemWindow::getWindowHandler() const {
-    return reinterpret_cast<uintptr_t>(
-        JNI_NATIVE_GLUE()->getWindowHandler());
-}
-
-std::array<int, 2> SystemWindow::getViewSize() const {
-    return std::array<int, 2>{JNI_NATIVE_GLUE()->getWidth(),
-                              JNI_NATIVE_GLUE()->getHeight()};
-}
+    OSType getOSType() const override;
+};
 
 } // namespace cc

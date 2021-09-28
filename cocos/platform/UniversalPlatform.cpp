@@ -63,7 +63,7 @@ void UniversalPlatform::dispatchTouchEvent(const OSEvent& ev) {
 }
 
 void UniversalPlatform::handleDefaultEvent(const OSEvent& ev) {
-    //TODO
+    // TODO
 }
 
 void UniversalPlatform::setHandleEventCallback(HandleEventCallback cb) {
@@ -86,21 +86,24 @@ int32_t UniversalPlatform::init() {
 }
 
 int32_t UniversalPlatform::run(int argc, const char** argv) {
-    cocos_main(argc, argv);
+    if(cocos_main(argc, argv) != 0){
+        return -1;
+    }
     return loop();
-}
-
-void UniversalPlatform::destory() {
-    cocos_destory();
 }
 
 int UniversalPlatform::getSdkVersion() const {
     return 0;
 }
 
-void UniversalPlatform::runInPlatformThread(const ThreadCallback& task,int32_t fps) {
+void UniversalPlatform::runInPlatformThread(const ThreadCallback& task) {
     _mainTask = task;
-    setFps(fps);
+}
+
+void UniversalPlatform::runTask() {
+    if (_mainTask) {
+        _mainTask();
+    }
 }
 
 int32_t UniversalPlatform::getFps() const {
@@ -121,6 +124,10 @@ void UniversalPlatform::onResume() {
 }
 
 void UniversalPlatform::onClose() {
+}
+
+void UniversalPlatform::onDestory() {
+    cocos_destory();
 }
 
 } // namespace cc

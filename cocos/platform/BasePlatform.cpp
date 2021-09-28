@@ -37,7 +37,7 @@
 #endif
 
 namespace cc {
-
+BasePlatform::BasePlatform()  = default;
 BasePlatform::~BasePlatform() = default;
 
 BasePlatform* BasePlatform::getPlatform() {

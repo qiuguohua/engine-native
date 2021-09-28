@@ -59,7 +59,7 @@ public:
         JNI_CMD_LOW_MEMORY,
         JNI_CMD_UNKNOW,
     };
-    virtual ~JniNativeGlue() = default;
+    virtual ~JniNativeGlue();
     static JniNativeGlue* getInstance();
 
     virtual void start(int argc, const char** argv);
@@ -110,18 +110,18 @@ private:
     void engineHandleCmd(JniCommand cmd);
     void postExecCmd(JniCommand cmd);
 
-    bool _running    = false;
-    int  _sdkVersion = 0;
-    bool _animating  = false;
+    bool _running{false};
+    int  _sdkVersion{0};
+    bool _animating{false};
 
     std::promise<void>           _threadPromise;
     std::string                  _obbPath;
-    ResourceManagerType*         _resourceManager = nullptr;
-    NativeWindowType*            _window          = nullptr;
-    NativeWindowType*            _pendingWindow   = nullptr;
-    JniCommand                   _appState        = JniCommand::JNI_CMD_UNKNOW;
-    IEventDispatch*              _eventDispatcher = nullptr;
-    std::unique_ptr<MessagePipe> _messagePipe     = nullptr;
+    ResourceManagerType*         _resourceManager{nullptr};
+    NativeWindowType*            _window{nullptr};
+    NativeWindowType*            _pendingWindow{nullptr};
+    JniCommand                   _appState{JniCommand::JNI_CMD_UNKNOW};
+    IEventDispatch*              _eventDispatcher{nullptr};
+    std::unique_ptr<MessagePipe> _messagePipe{nullptr};
 };
 
 } // namespace cc

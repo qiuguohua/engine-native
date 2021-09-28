@@ -23,21 +23,52 @@
  THE SOFTWARE.
 ****************************************************************************/
 
-#pragma once
+#include "platform/java/interfaces/SystemWindow.h"
+#include <fcntl.h>
+#include <jni.h>
+#include <unistd.h>
+#include <functional>
+#include <thread>
+#include <vector>
+#include "base/Log.h"
+#include "base/Macros.h"
+#include "platform/java/jni/JniImp.h"
+#include "platform/java/jni/glue/JniNativeGlue.h"
 
-#include "platform/java/interfaces/CommonSystemWindow.h"
-class ANativeWindow;
+
+namespace {
+
+} // namespace
 
 namespace cc {
+    
+bool SystemWindow::createWindow(const char *title,
+                                int x, int y, int w,
+                                int h, int flags) {
+    CC_UNUSED_PARAM(title);
+    CC_UNUSED_PARAM(x);
+    CC_UNUSED_PARAM(y);
+    CC_UNUSED_PARAM(w);
+    CC_UNUSED_PARAM(h);
+    CC_UNUSED_PARAM(flags);
+    return true;
+}
 
-class SystemWindow : public CommonSystemWindow {
-public:
-    SystemWindow();
-    ~SystemWindow() override;
+void SystemWindow::setCursorEnabled(bool value) {
+}
 
-    uintptr_t getWindowHandler() const override;
-    std::array<int, 2> getViewSize() const const override;
-private:
-};
+void SystemWindow::copyTextToClipboard(const std::string &text) {
+    copyTextToClipboardJNI(text);
+}
+
+uintptr_t SystemWindow::getWindowHandler() const {
+    return reinterpret_cast<uintptr_t>(
+        JNI_NATIVE_GLUE()->getWindowHandler());
+}
+
+std::array<int, 2> SystemWindow::getViewSize() const {
+    return std::array<int, 2>{JNI_NATIVE_GLUE()->getWidth(),
+                              JNI_NATIVE_GLUE()->getHeight()};
+}
 
 } // namespace cc

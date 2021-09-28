@@ -35,6 +35,7 @@
 #include "platform/java/jni/log.h"
 
 namespace cc {
+JniNativeGlue::~JniNativeGlue() = default;
 
 JniNativeGlue* JniNativeGlue::getInstance() {
     static JniNativeGlue jniNativeGlue;
@@ -182,7 +183,7 @@ void JniNativeGlue::preExecCmd(JniCommand cmd) {
         case JniCommand::JNI_CMD_INIT_WINDOW: {
             LOGV("JNI_CMD_INIT_WINDOW");
             _animating = true;
-            _window = _pendingWindow;
+            _window    = _pendingWindow;
         } break;
         case JniCommand::JNI_CMD_TERM_WINDOW:
             LOGV("JNI_CMD_TERM_WINDOW");

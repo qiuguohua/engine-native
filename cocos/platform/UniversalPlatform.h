@@ -39,10 +39,7 @@ public:
      *@bref Start base platform initialization.
      */
     int32_t run(int argc, const char** argv) override;
-    /**
-     *@bref Implement the destruction of the base platform.
-     */
-    void destory() override;
+
     /**
      *@bref Get targe platform type.
      */
@@ -71,25 +68,52 @@ public:
      @brief Get the SDK version for Android.Other systems also have sdk versions, 
             but they are not currently used.
      */
-    int  getSdkVersion() const override;
+    int getSdkVersion() const override;
+    /**
+     @brief Polling event
+     */
     void pollEvent() override;
-
-    void    runInPlatformThread(const ThreadCallback& task, int32_t fps) override;
+    /**
+     @brief Run the task in the platform thread, 
+     @brief most platforms are the main thread, android is the non-main thread
+     @param task : Tasks running in platform threads
+     */
+    void runInPlatformThread(const ThreadCallback& task) override;
+    /**
+     @brief Get task call frequency.
+     */
     int32_t getFps() const override;
-    void    setFps(int32_t fps) override;
-
-    void onPause() override;
-    void onResume() override;
-    void onClose() override;
+    /**
+     @brief Set task call frequency.
+     */
+    void setFps(int32_t fps) override;
 
 protected:
-    ThreadCallback _mainTask;
+    virtual void runTask();
+    /**
+     @brief Processing pause message
+     */
+    virtual void onPause();
+    /**
+     @brief Processing resume message
+     */
+    virtual void onResume();
+    /**
+     @brief Processing close message
+     */
+    virtual void onClose();
+    /**
+     @brief Processing destroy message
+     */
+    virtual void onDestory();
 
 private:
-    int32_t _fps;
+    ThreadCallback _mainTask{nullptr};
 
-    HandleEventCallback _handleEventCallback;
-    HandleEventCallback _handleDefaultEventCallback;
+    int32_t _fps{60};
+
+    HandleEventCallback _handleEventCallback{nullptr};
+    HandleEventCallback _handleDefaultEventCallback{nullptr};
 };
 
 } // namespace cc

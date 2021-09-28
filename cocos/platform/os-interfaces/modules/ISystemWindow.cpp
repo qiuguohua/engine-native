@@ -26,10 +26,8 @@
 #include "platform/os-interfaces/modules/ISystemWindow.h"
 #if (CC_PLATFORM == CC_PLATFORM_WINDOWS)
     #include "platform/win32/interfaces/SystemWindow.h"
-#elif (CC_PLATFORM == CC_PLATFORM_ANDROID)
-    #include "platform/android/interfaces/SystemWindow.h"
-#elif (CC_PLATFORM == CC_PLATFORM_OHOS)
-    #include "platform/ohos/interfaces/SystemWindow.h"
+#elif (CC_PLATFORM == CC_PLATFORM_ANDROID || CC_PLATFORM == CC_PLATFORM_OHOS)
+    #include "platform/java/interfaces/SystemWindow.h"
 #elif (CC_PLATFORM == CC_PLATFORM_MAC_OSX)
     #include "platform/mac/interfaces/SystemWindow.h"
 #elif (CC_PLATFORM == CC_PLATFORM_MAC_IOS)

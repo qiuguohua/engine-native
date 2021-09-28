@@ -35,7 +35,7 @@ namespace cc {
 
 class BaseEngine : public std::enable_shared_from_this<BaseEngine> {
 public:
-    virtual ~BaseEngine() = default;
+    virtual ~BaseEngine();
     using Ptr             = std::shared_ptr<BaseEngine>;
 
     /**
@@ -94,11 +94,11 @@ public:
      @brief Remove listening event callback.
      */
     virtual void removeEventCallback(OSEventType evtype) = 0;
+
+    using SchedulerPtr = std::shared_ptr<Scheduler>;
     /**
      @brief Get engine scheduler.
      */
-    using SchedulerPtr = std::shared_ptr<Scheduler>;
-
     virtual SchedulerPtr getEngineScheduler() const = 0;
 };
 

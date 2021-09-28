@@ -32,7 +32,6 @@ namespace cc {
 
 class BaseApplication {
 public:
-
     virtual ~BaseApplication() = default;
     /*
      *@bref Application initialization

@@ -23,28 +23,26 @@
  THE SOFTWARE.
 ****************************************************************************/
 
-#include "engine/EngineManager.h"
-#include "base/Macros.h"
+#pragma once
+
+#include <iostream>
+
+#include "platform/os-interfaces/modules/ISystemWindow.h"
 
 namespace cc {
 
-EngineManager::EngineManager() = default;
-
-void EngineManager::setCurrentEngine(const BaseEngine::Ptr& engine) {
-    CC_ASSERT(engine != nullptr);
-    _currentEngine = engine;
-}
-
-std::shared_ptr<BaseEngine> EngineManager::getCurrentEngine() const {
-    if (_currentEngine.expired()) {
-        return nullptr;
-    }
-    return _currentEngine.lock();
-}
-
-EngineManager* EngineManager::getInstance(){
-    static EngineManager engineManager;
-    return &engineManager;
-}
+class SystemWindow : public ISystemWindow {
+public:
+    bool createWindow(const char* title,
+                      int x, int y, int w,
+                      int h, int flags) override;
+    /**
+     @brief enable/disable(lock) the cursor, default is enabled
+     */
+    void               setCursorEnabled(bool value) override;
+    void               copyTextToClipboard(const std::string& text) override;
+    uintptr_t          getWindowHandler() const override;
+    std::array<int, 2> getViewSize() const override;
+};
 
 } // namespace cc

@@ -29,6 +29,9 @@
 #include "cocos/platform/os-interfaces/modules/ISystemWindow.h"
 
 namespace cc {
+
+BaseEngine::~BaseEngine() = default;
+
 // static
 BaseEngine::Ptr BaseEngine::createEngine() {
     return std::make_shared<Engine>();

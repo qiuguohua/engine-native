@@ -23,22 +23,19 @@
  THE SOFTWARE.
 ****************************************************************************/
 
-#include "platform/java/interfaces/System.h"
+#include "platform/java/interfaces/CommonSystem.h"
 #include "platform/java/jni/JniHelper.h"
 #include "platform/java/jni/JniImp.h"
 
 namespace cc {
-using OSType = System::OSType;
+CommonSystem::CommonSystem() = default;
+CommonSystem::~CommonSystem() = default;
 
-OSType System::getOSType() const {
-    return OSType::ANDROIDOS;
-}
-
-std::string System::getDeviceModel() const {
+std::string CommonSystem::getDeviceModel() const {
     return getDeviceModelJNI();
 }
 
-System::LanguageType System::getCurrentLanguage() const {
+CommonSystem::LanguageType CommonSystem::getCurrentLanguage() const {
     std::string  languageName  = getCurrentLanguageJNI();
     const char*  pLanguageName = languageName.c_str();
     LanguageType ret           = LanguageType::ENGLISH;
@@ -85,15 +82,15 @@ System::LanguageType System::getCurrentLanguage() const {
     return ret;
 }
 
-std::string System::getCurrentLanguageCode() const {
+std::string CommonSystem::getCurrentLanguageCode() const {
     return getCurrentLanguageCodeJNI();
 }
 
-std::string System::getSystemVersion() const {
+std::string CommonSystem::getSystemVersion() const {
     return getSystemVersionJNI();
 }
 
-bool System::openURL(const std::string& url) {
+bool CommonSystem::openURL(const std::string& url) {
     return openURLJNI(url);
 }
 

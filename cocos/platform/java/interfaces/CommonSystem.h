@@ -25,25 +25,39 @@
 
 #pragma once
 
-#include <iostream>
-
-#include "platform/os-interfaces/modules/ISystemWindow.h"
+#include "platform/os-interfaces/modules/ISystem.h"
 
 namespace cc {
 
-class CommonSystemWindow : public ISystemWindow {
+class CommonSystem : public ISystem {
 public:
-    CommonSystemWindow();
-    ~CommonSystemWindow() override;
-
-    bool createWindow(const char* title,
-                      int x, int y, int w,
-                      int h, int flags) override;
+    CommonSystem();
+    ~CommonSystem() override;
     /**
-     @brief enable/disable(lock) the cursor, default is enabled
+     @brief Get target device model.
      */
-    void setCursorEnabled(bool value) override;
-    void copyTextToClipboard(const std::string& text) override;
+    std::string getDeviceModel() const override;
+    /**
+     @brief Get current language config.
+     @return Current language config.
+     */
+    LanguageType getCurrentLanguage() const override;
+    /**
+     @brief Get current language iso 639-1 code.
+     @return Current language iso 639-1 code.
+     */
+    std::string getCurrentLanguageCode() const override;
+    /**
+     @brief Get system version.
+     @return system version.
+     */
+    std::string getSystemVersion() const override;
+    /**
+     @brief Open url in default browser.
+     @param String with url to open.
+     @return True if the resource located by the URL was successfully opened; otherwise false.
+     */
+    bool openURL(const std::string& url) override;
 };
 
 } // namespace cc

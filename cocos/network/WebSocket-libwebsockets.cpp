@@ -1261,6 +1261,7 @@ int WebSocketImpl::onConnectionClosed() {
             if (_closeState == CloseState::SYNC_CLOSING) {
                 LOGD("onConnectionClosed, WebSocket (%p) is closing by client synchronously.\n", this);
                 for (;;) {
+                    std::lock_guard<std::mutex> lkClose(_closeMutex);
                     _closeCondition.notify_one();
                     if (_closeState == CloseState::SYNC_CLOSED) {
                         break;

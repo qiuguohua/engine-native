@@ -35,7 +35,7 @@ class BaseEngine;
 class CocosApplication : public BaseApplication {
 public:
     CocosApplication();
-    ~CocosApplication() override = default;
+    ~CocosApplication() override;
 
     /*
      *@bref Application initialization.
@@ -67,15 +67,15 @@ public:
     BaseEngine::Ptr getEngine() const override;
 
     /*
-     *@bref Stop application event.
+     *@bref Processing pause events..
      */
     virtual void onPause();
     /*
-     *@bref Resume application event.
+     *@bref Processing recovery events.
      */
     virtual void onResume();
     /*
-     *@bref Close application event.
+     *@bref Processing close events.
      */
     virtual void onClose();
     /*
@@ -114,7 +114,7 @@ public:
 private:
     void handleAppEvent(const OSEvent& ev);
 
-    ISystemWindow*  _systemWidow = {nullptr};
-    BaseEngine::Ptr _engine      = {nullptr};
+    ISystemWindow*  _systemWidow{nullptr};
+    BaseEngine::Ptr _engine{nullptr};
 };
 } // namespace cc

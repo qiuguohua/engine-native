@@ -40,7 +40,7 @@ class OSInterface;
 
 class BasePlatform {
 public:
-    BasePlatform() = default;
+    BasePlatform();
     /**
      @brief Destructor of AbstratctPlatform.
      */
@@ -61,10 +61,6 @@ public:
      @brief Main business logic.
      */
     virtual int32_t loop(void) = 0;
-    /**
-     @brief Destory system platform.
-     */
-    virtual void destory() = 0;
 
     /**
      @brief Polling event.
@@ -97,15 +93,24 @@ public:
      @brief Get the SDK version for Android.Other systems also have sdk versions, 
             but they are not currently used.
      */
-    virtual int getSdkVersion() const                                                = 0;
-    using ThreadCallback                                                             = std::function<void(void)>;
-    virtual void    runInPlatformThread(const ThreadCallback& callback, int32_t fps) = 0;
-    virtual int32_t getFps() const                                                   = 0;
-    virtual void    setFps(int32_t fps)                                              = 0;
+    virtual int getSdkVersion() const = 0;
+    /**
+     @brief Run the task in the platform thread, 
+     @brief most platforms are the main thread, android is the non-main thread
+     @param task : Tasks running in platform threads
+     @param fps : Task call frequency
+     */
+    using ThreadCallback                                         = std::function<void(void)>;
+    virtual void runInPlatformThread(const ThreadCallback& task) = 0;
+    /**
+     @brief Get task call frequency.
+     */
+    virtual int32_t getFps() const = 0;
+    /**
+     @brief Set task call frequency.
+     */
+    virtual void setFps(int32_t fps) = 0;
 
-    virtual void onPause()  = 0;
-    virtual void onResume() = 0;
-    virtual void onClose()  = 0;
     /**
      @brief Get target system interface.
      @ Non thread safe.
@@ -150,6 +155,7 @@ public:
     }
 
 private:
+
     std::vector<OSInterface::Ptr> _osInterfaces;
     CC_DISABLE_COPY_AND_MOVE_SEMANTICS(BasePlatform);
 };

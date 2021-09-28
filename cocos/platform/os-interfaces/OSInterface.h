@@ -67,7 +67,7 @@ public:
 
 protected:
     // InterfaceType _type;
-    IEventDispatch* _evDispatchInterface;
+    IEventDispatch* _evDispatchInterface{nullptr};
 
 private:
     CC_DISABLE_COPY_AND_MOVE_SEMANTICS(OSInterface);

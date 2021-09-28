@@ -105,31 +105,27 @@ public:
      */
     SchedulerPtr getEngineScheduler() const override;
 
-
 private:
-    void tick();
-    bool dispatchWindowEvent(const WindowEvent& ev);
-    bool dispatchDeviceEvent(const DeviceEvent& ev);
-    bool dispatchEventToApp(OSEventType type, const OSEvent& ev);
-    void onPause();
-    void onResume();
-    void onClose();
+    void    tick();
+    bool    dispatchWindowEvent(const WindowEvent& ev);
+    bool    dispatchDeviceEvent(const DeviceEvent& ev);
+    bool    dispatchEventToApp(OSEventType type, const OSEvent& ev);
+    void    onPause();
+    void    onResume();
+    void    onClose();
     int32_t restartVM();
 
-    bool                           _quit{false};
-    bool                           _close{false};
-    bool                           _pause{false};
-    bool                           _resune{false};
-    std::shared_ptr<Scheduler>     _scheduler{nullptr};
-    int                            _fps{60};
-    int64_t                        _prefererredNanosecondsPerFrame{NANOSECONDS_60FPS};
-    uint                           _totalFrames{0};
-    cc::Vec2                       _viewLogicalSize{0, 0};
-    bool                           _needRestart{false};
-    
-    std::map<OSEventType, EventCb> _eventCallbacks;
-    using EventHandleFunctor = std::function<void()>;
+    bool                       _quit{false};
+    bool                       _close{false};
+    bool                       _pause{false};
+    bool                       _resune{false};
+    std::shared_ptr<Scheduler> _scheduler{nullptr};
+    int64_t                    _prefererredNanosecondsPerFrame{NANOSECONDS_60FPS};
+    uint                       _totalFrames{0};
+    cc::Vec2                   _viewLogicalSize{0, 0};
+    bool                       _needRestart{false};
 
+    std::map<OSEventType, EventCb> _eventCallbacks;
     CC_DISABLE_COPY_AND_MOVE_SEMANTICS(Engine);
 };
 

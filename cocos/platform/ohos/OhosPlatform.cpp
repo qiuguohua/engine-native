@@ -28,7 +28,7 @@
 #include "platform/UniversalPlatform.h"
 #include "platform/java/jni/glue/JniNativeGlue.h"
 #include "platform/ohos/OhosPlatform.h"
-#include "platform/ohos/interfaces/SystemWindow.h"
+#include "platform/java/interfaces/SystemWindow.h"
 
 namespace cc {
 OhosPlatform::OhosPlatform() {

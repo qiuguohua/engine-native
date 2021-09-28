@@ -31,7 +31,6 @@ namespace cc {
 
 class Battery : public IBattery {
 public:
-    Battery() = default;
     float getBatteryLevel() const override;
 };
 

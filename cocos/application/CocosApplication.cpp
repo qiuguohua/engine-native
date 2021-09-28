@@ -45,6 +45,8 @@ CocosApplication::CocosApplication() {
     CC_ASSERT(_systemWidow != nullptr);
 }
 
+CocosApplication::~CocosApplication() = default;
+
 int CocosApplication::init() {
     if (_engine->init()) {
         return -1;
@@ -99,12 +101,15 @@ BaseEngine::Ptr CocosApplication::getEngine() const {
 }
 
 void CocosApplication::onPause() {
+    // TODO:
 }
 
 void CocosApplication::onResume() {
+    // TODO:
 }
 
 void CocosApplication::onClose() {
+    // TODO:
 }
 
 void CocosApplication::setJsDebugIpAndPort(const std::string &serverAddr, uint32_t port, bool isWaitForConnect) {

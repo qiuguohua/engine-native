@@ -23,36 +23,17 @@
  THE SOFTWARE.
 ****************************************************************************/
 
-#pragma once
+#include "platform/android/interfaces/System.h"
 
-#include "base/Macros.h"
-#include "engine/BaseEngine.h"
 
 namespace cc {
+System::System() = default;
 
-class EngineManager {
-public:
-    /*
-     @bref Get engine manager instance.
-     */
-    static EngineManager* getInstance();
-    /*
-     @bref Get engine manager instance.
-     @return current running engine
-     */
-    std::shared_ptr<BaseEngine> getCurrentEngine() const;
-    /*
-     @bref Sets the currently running engine.
-     @engine current running engine
-     */
-    void setCurrentEngine(const BaseEngine::Ptr& engine);
+System::~System() = default;
 
-private:
-    EngineManager();
+System::OSType System::getOSType() const {
+    return OSType::ANDROIDOS;
+}
 
-    std::weak_ptr<BaseEngine> _currentEngine;
-    CC_DISABLE_COPY_AND_MOVE_SEMANTICS(EngineManager);
-};
 
 } // namespace cc
-

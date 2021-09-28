@@ -36,7 +36,7 @@ namespace cc {
 class WindowsPlatform : public UniversalPlatform ,
                         public SystemWindow::Delegate{
 public:
-    WindowsPlatform() = default;
+    WindowsPlatform();
     /**
      * Destructor of WindowPlatform.
      */
@@ -47,10 +47,6 @@ public:
     int32_t init() override;
 
     int32_t loop() override;
-    /**
-     * Implementation of Windows platform destory.
-     */
-    void destory() override;
 
     // override from SystemWindow::Delegate
     bool createWindow(const char* title,

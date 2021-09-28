@@ -33,6 +33,7 @@ namespace cc {
 
 class ISystem : public OSInterface {
 public:
+    ~ISystem() override;
     enum class LanguageType {
         ENGLISH = 0,
         CHINESE,

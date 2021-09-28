@@ -27,6 +27,7 @@
 #include "platform/java/jni/JniImp.h"
 
 namespace cc {
+
 void Accelerometer::setAccelerometerEnabled(bool isEnabled) {
     setAccelerometerEnabledJNI(isEnabled);
 }

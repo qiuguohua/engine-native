@@ -31,7 +31,6 @@ namespace cc {
 
 class Accelerometer : public IAccelerometer {
 public:
-    Accelerometer() = default;
     /**
      * To enable or disable accelerometer.
      */
