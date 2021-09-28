@@ -77,6 +77,10 @@ extern int cocos_main(int argc, const char** argv);
     [self resume];
 }
 
+- (int)getFps {
+    return _fps;
+}
+
 - (void)renderScene {
     //platform->tick();
     _platform->runTask();
@@ -115,7 +119,7 @@ void MacPlatform::setFps(int32_t fps) {
 }
 
 int32_t MacPlatform::getFps() const {
-    return [_timer getFPS];
+    return [_timer getFps];
 }
 
 void MacPlatform::runTask() {

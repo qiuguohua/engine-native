@@ -49,7 +49,8 @@ public:
     void copyTextToClipboard(const std::string& text) override;
 
 private:
-    int32_t _width  = 0;
-    int32_t _height = 0;
+    int32_t _width{0};
+    int32_t _height{0};
+    bool isInit{false};
 };
 } // namespace cc

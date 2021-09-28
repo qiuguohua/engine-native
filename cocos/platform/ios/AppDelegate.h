@@ -27,6 +27,7 @@
 
 @class ViewController;
 
+__attribute__((visibility("default")))
 @interface AppDelegate : NSObject <UIApplicationDelegate>
 {
 }

@@ -49,8 +49,7 @@ public:
      *@bref Implement the main logic of the base platform.
      */
     int32_t loop() override;
-    
-    void runInPlatformThread(const ThreadCallback& task, int32_t fps) override;
+
     void setFps(int32_t fps) override;
     int32_t getFps() const override;
     void runTask();

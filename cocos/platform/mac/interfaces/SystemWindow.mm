@@ -40,6 +40,10 @@ SystemWindow::~SystemWindow() = default;
 bool SystemWindow::createWindow(const char *title,
                                 int x, int y, int w,
                                 int h, int flags) {
+    if(isInit) {
+        return true;
+    }
+    isInit = true;
     _width                = w;
     _height               = h;
     AppDelegate *delegate = [[NSApplication sharedApplication] delegate];
