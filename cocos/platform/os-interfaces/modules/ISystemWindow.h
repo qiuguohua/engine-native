@@ -26,7 +26,7 @@
 #pragma once
 
 #include "platform/os-interfaces/OSInterface.h"
-
+#include "math/Vec2.h"
 #include <array>
 #include <iostream>
 
@@ -34,7 +34,7 @@ namespace cc {
 
 class ISystemWindow : public OSInterface {
 public:
-    using WindowSize = std::array<int, 2>;
+    using Size = cc::Vec2;
     typedef enum {
         /* !!! FIXME: change this to name = (1<<x). */
         CC_WINDOW_FULLSCREEN         = 0x00000001, /**< fullscreen window */
@@ -75,7 +75,7 @@ public:
                                     int x, int y, int w,
                                     int h, int flags) = 0;
     virtual uintptr_t  getWindowHandler() const       = 0;
-    virtual WindowSize getViewSize() const            = 0;
+    virtual Size getViewSize() const            = 0;
     /**
      @brief enable/disable(lock) the cursor, default is enabled
      */

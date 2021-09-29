@@ -88,7 +88,6 @@ public:
      */
     void setFps(int32_t fps) override;
 
-protected:
     virtual void runTask();
     /**
      @brief Processing pause message

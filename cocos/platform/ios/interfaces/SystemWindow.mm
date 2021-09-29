@@ -53,9 +53,9 @@ uintptr_t SystemWindow::getWindowHandler() const {
     return reinterpret_cast<uintptr_t>(UIApplication.sharedApplication.delegate.window.rootViewController.view);
 }
 
-std::array<int, 2> SystemWindow::getViewSize() const {
+SystemWindow::Size SystemWindow::getViewSize() const {
     CGRect bounds = [[UIScreen mainScreen] bounds];
-    return std::array<int, 2>{(int)bounds.size.width, (int)bounds.size.height};
+    return Size{static_cast<float>(bounds.size.width), static_cast<float>(bounds.size.height)};
 }
 
 

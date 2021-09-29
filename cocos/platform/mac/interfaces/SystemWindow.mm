@@ -66,8 +66,8 @@ uintptr_t SystemWindow::getWindowHandler() const {
     return reinterpret_cast<uintptr_t>(view);
 }
 
-std::array<int, 2> SystemWindow::getViewSize() const {
-    return std::array<int, 2>{_width, _height};
+SystemWindow::Size SystemWindow::getViewSize() const {
+    return Size{static_cast<float>(_width), static_cast<float>(_height)};
 }
 
 }

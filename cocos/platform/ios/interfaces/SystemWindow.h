@@ -41,7 +41,7 @@ public:
                            int h, int flags) override;
     uintptr_t getWindowHandler() const override;
 
-    std::array<int, 2> getViewSize() const override;
+    Size getViewSize() const override;
     /*
      @brief enable/disable(lock) the cursor, default is enabled
      */
@@ -49,7 +49,7 @@ public:
     void copyTextToClipboard(const std::string& text) override;
 
 private:
-    int32_t _width  = 0;
-    int32_t _height = 0;
+    int32_t _width{0};
+    int32_t _height{0};
 };
 } // namespace cc

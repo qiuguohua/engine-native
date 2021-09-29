@@ -95,7 +95,7 @@ cc::IOSPlatform *_platform = nullptr;
 
 - (void)applicationWillTerminate:(UIApplication *)application {
     _platform->onClose();
-    _platform->destory();
+    _platform->onDestory();
     _platform = nullptr;
     [[SDKWrapper shared] applicationWillTerminate:application];
 }

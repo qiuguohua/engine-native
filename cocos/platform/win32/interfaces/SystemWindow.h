@@ -53,7 +53,7 @@ public:
                            int h, int flags) override;
     uintptr_t getWindowHandler() const override;
 
-    WindowSize getViewSize() const override;
+    Size getViewSize() const override;
     /*
      @brief enable/disable(lock) the cursor, default is enabled
      */

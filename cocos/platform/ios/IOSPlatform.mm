@@ -107,11 +107,6 @@ int32_t IOSPlatform::run(int argc, const char** argv) {
     return retVal;
 }
 
-void IOSPlatform::runTask() {
-    if(_mainTask)
-      _mainTask();
-}
-
 void IOSPlatform::setFps(int32_t fps) {
     [_timer changeFPS:fps];
 }

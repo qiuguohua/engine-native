@@ -66,9 +66,9 @@ uintptr_t SystemWindow::getWindowHandler() const {
         JNI_NATIVE_GLUE()->getWindowHandler());
 }
 
-std::array<int, 2> SystemWindow::getViewSize() const {
-    return std::array<int, 2>{JNI_NATIVE_GLUE()->getWidth(),
-                              JNI_NATIVE_GLUE()->getHeight()};
+SystemWindow::Size SystemWindow::getViewSize() const {
+    return Size{static_cast<float>(JNI_NATIVE_GLUE()->getWidth()),
+                static_cast<float>(JNI_NATIVE_GLUE()->getHeight())};
 }
 
 } // namespace cc
