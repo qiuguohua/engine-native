@@ -35,7 +35,6 @@
 #include "network/HttpRequest.h"
 #include "network/HttpResponse.h"
 #include "network/HttpCookie.h"
-#include "base/Scheduler.h"
 
 /**
  * @addtogroup network
@@ -43,7 +42,7 @@
  */
 
 namespace cc {
-
+class Scheduler;
 namespace network {
 
 /** Singleton that handles asynchronous http requests.

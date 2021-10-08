@@ -26,8 +26,8 @@ THE SOFTWARE.
 #ifndef __CCSYNC_TASK_POOL_H_
 #define __CCSYNC_TASK_POOL_H_
 
-#include "platform/Application.h"
-#include "base/Scheduler.h"
+#include "application/ApplicationManager.h"
+
 #include <vector>
 #include <queue>
 #include <memory>
@@ -121,7 +121,7 @@ protected:
                         }
 
                         task();
-                        Application::getInstance()->getScheduler()->performFunctionInCocosThread([&, callback] { callback.callback(callback.callbackParam); });
+                        CURRENT_ENGINE()->getScheduler()->performFunctionInCocosThread([&, callback] { callback.callback(callback.callbackParam); });
                     }
                 });
         }

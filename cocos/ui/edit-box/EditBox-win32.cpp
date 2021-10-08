@@ -24,17 +24,16 @@
 ****************************************************************************/
 
 #include "EditBox.h"
-#include "platform/Application.h"
-#include "platform/win32/View-win32.h"
 #include "cocos/bindings/jswrapper/SeApi.h"
 #include "cocos/bindings/manual/jsb_global.h"
-#include <windows.h>
-#include <locale>
-#include <codecvt>
-#include <stdlib.h>
-#include <memory>
+#include "cocos/application/ApplicationManager.h"
+#include "cocos/platform/os-interfaces/modules/ISystemWindow.h"
 
-extern std::shared_ptr<cc::View> cc_get_application_view();
+#include <stdlib.h>
+#include <windows.h>
+#include <codecvt>
+#include <locale>
+#include <memory>
 
 namespace cc {
 
@@ -43,14 +42,26 @@ namespace cc {
 ************************************************************************/
 
 namespace {
-bool g_isMultiline = false;
-HWND g_hwndEditBox = nullptr;
-WNDPROC g_prevMainWindowProc = nullptr;
-WNDPROC g_prevEditWindowProc = nullptr;
+bool      g_isMultiline        = false;
+HWND      g_hwndEditBox        = nullptr;
+WNDPROC   g_prevMainWindowProc = nullptr;
+WNDPROC   g_prevEditWindowProc = nullptr;
 se::Value g_textInputCallback;
 
+HWND getCurrentWindowHwnd() {
+    if (!CURRENT_APPLICATION()) {
+        return nullptr;
+    }
+    ISystemWindow *intf = GET_PLATFORM_INTERFACE(ISystemWindow);
+    if (!intf) {
+        return nullptr;
+    }
+    return reinterpret_cast<HWND>(intf->getWindowHandler());
+}
+
 int getCocosWindowHeight() {
-    HWND parent = cc_get_application_view()->getWindowHandler();
+    //HWND parent = cc_get_application_view()->getWindowHandler();
+    HWND parent = getCurrentWindowHwnd();
     RECT rect;
     GetClientRect(parent, &rect);
     return (rect.bottom - rect.top);
@@ -60,7 +71,7 @@ void getTextInputCallback() {
     if (!g_textInputCallback.isUndefined())
         return;
 
-    auto global = se::ScriptEngine::getInstance()->getGlobalObject();
+    auto      global = se::ScriptEngine::getInstance()->getGlobalObject();
     se::Value jsbVal;
     if (global->getProperty("jsb", &jsbVal) && jsbVal.isObject()) {
         jsbVal.toObject()->getProperty("onTextInput", &g_textInputCallback);
@@ -108,7 +119,7 @@ LRESULT mainWindowProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
         case WM_LBUTTONDOWN:
             EditBox::complete();
             EditBox::hide();
-            SetFocus(cc_get_application_view()->getWindowHandler());
+            SetFocus(getCurrentWindowHwnd());
             break;
         case WM_COMMAND:
             if (EN_CHANGE == HIWORD(wParam))
@@ -128,7 +139,7 @@ LRESULT editWindowProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
             if (wParam == VK_RETURN && !g_isMultiline) {
                 EditBox::complete();
                 EditBox::hide();
-                SetFocus(cc_get_application_view()->getWindowHandler());
+                SetFocus(getCurrentWindowHwnd());
             }
             break;
         default:
@@ -145,7 +156,7 @@ Implementation of EditBox.
 void EditBox::show(const EditBox::ShowInfo &showInfo) {
     int windowHeight = getCocosWindowHeight();
     if (!g_hwndEditBox) {
-        HWND parent = cc_get_application_view()->getWindowHandler();
+        HWND parent = getCurrentWindowHwnd();
 
         UINT32 flags = WS_CHILD | ES_LEFT | WS_TABSTOP | ES_AUTOHSCROLL;
         g_isMultiline = showInfo.isMultiline;
@@ -205,7 +216,7 @@ void EditBox::show(const EditBox::ShowInfo &showInfo) {
 void EditBox::hide() {
     DestroyWindow(g_hwndEditBox);
 
-    SetWindowLongPtr(cc_get_application_view()->getWindowHandler(), GWLP_WNDPROC, (LONG_PTR)g_prevMainWindowProc);
+    SetWindowLongPtr(getCurrentWindowHwnd(), GWLP_WNDPROC, (LONG_PTR)g_prevMainWindowProc);
     SetWindowLongPtr(g_hwndEditBox, GWLP_WNDPROC, (LONG_PTR)g_prevEditWindowProc);
     g_hwndEditBox = nullptr;
 }

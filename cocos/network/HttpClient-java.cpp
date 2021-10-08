@@ -32,8 +32,7 @@
 #include <cstdio>
 #include <queue>
 #include <sstream>
-
-#include "platform/Application.h"
+#include "application/ApplicationManager.h"
 #include "platform/FileUtils.h"
 #include "platform/java/jni/JniHelper.h"
 
@@ -830,7 +829,7 @@ HttpClient::HttpClient()
   _requestSentinel(new HttpRequest()) {
     CC_LOG_DEBUG("In the constructor of HttpClient!");
     increaseThreadCount();
-    _scheduler = Application::getInstance()->getScheduler();
+    _scheduler = CURRENT_ENGINE()->getScheduler();
 }
 
 HttpClient::~HttpClient() {
