@@ -72,7 +72,7 @@ void CanvasRenderingContext2DDelegate::recreateBuffer(float w, float h) {
     memset(data, 0x00, textureSize);
     _imageData.fastSet(data, textureSize);
 
-    prepareBitmap(_bufferWidth, _bufferHeight);
+    prepareBitmap(static_cast<int>(_bufferWidth), static_cast<int>(_bufferHeight));
 }
 
 void CanvasRenderingContext2DDelegate::beginPath() {
