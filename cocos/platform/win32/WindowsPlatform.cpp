@@ -261,7 +261,7 @@ int32_t WindowsPlatform::loop() {
             // Sleep(3) may make a sleep of 2ms or 4ms. Therefore, we subtract 1ms here to make Sleep time shorter.
             // If 'waitMS' is equal or less than 1ms, don't sleep and run into next loop to
             // boost CPU to next frame accurately.
-            waitMS = (desiredInterval - actualInterval) * 1000LL / nFreq.QuadPart - 1L;
+            waitMS = static_cast<LONG>((desiredInterval - actualInterval) * 1000LL / nFreq.QuadPart - 1L);
             if (waitMS > 1L)
                 Sleep(waitMS);
         }
@@ -450,6 +450,7 @@ bool WindowsPlatform::createWindow(const char *title,
         return false;
     }
     _inited = true;
+    return true;
 }
 
 uintptr_t WindowsPlatform::getWindowHandler() const {

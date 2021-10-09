@@ -23,44 +23,46 @@
  THE SOFTWARE.
  ****************************************************************************/
 #include "Game.h"
+#include "cocos/application/ApplicationManager.h"
 #include "cocos/bindings/event/CustomEventTypes.h"
 #include "cocos/bindings/event/EventDispatcher.h"
 #include "cocos/bindings/jswrapper/SeApi.h"
 #include "cocos/bindings/manual/jsb_classtype.h"
 #include "cocos/bindings/manual/jsb_global.h"
 #include "cocos/bindings/manual/jsb_module_register.h"
-#include "cocos/application/ApplicationManager.h"
+
 
 Game::Game() : cc::CocosApplication() {}
 
 int Game::init() {
-  createWindow("My game", 0, 0, 800, 600,
-               cc::ISystemWindow::CC_WINDOW_SHOWN |
-                   cc::ISystemWindow::CC_WINDOW_RESIZABLE |
-                   cc::ISystemWindow::CC_WINDOW_INPUT_FOCUS);
-  int ret = cc::CocosApplication::init();
-  if (ret != 0) {
-    return ret;
-  }
+    createWindow("My game", 0, 0, 800, 600,
+                 cc::ISystemWindow::CC_WINDOW_SHOWN |
+                     cc::ISystemWindow::CC_WINDOW_RESIZABLE |
+                     cc::ISystemWindow::CC_WINDOW_INPUT_FOCUS);
+    setJsDebugIpAndPort("0.0.0.0", 6086, false);
 
-  setXXTeaKey("");
-  setJsDebugIpAndPort("0.0.0.0", 6086, false);
+    int ret = cc::CocosApplication::init();
+    if (ret != 0) {
+        return ret;
+    }
 
-  runJsScript("jsb-adapter/jsb-builtin.js");
-  runJsScript("main.js");
-  return 0;
+    setXXTeaKey("");
+
+    runJsScript("jsb-adapter/jsb-builtin.js");
+    runJsScript("main.js");
+    return 0;
 }
 
 void Game::onPause() {
-  cc::CocosApplication::onPause();
+    cc::CocosApplication::onPause();
 }
 
 void Game::onResume() {
-  cc::CocosApplication::onResume();
+    cc::CocosApplication::onResume();
 }
 
 void Game::onClose() {
-  cc::CocosApplication::onClose();
+    cc::CocosApplication::onClose();
 }
 
 COCOS_APPLICATION_MAIN(Game);

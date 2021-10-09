@@ -27,10 +27,9 @@
 #define LOG_TAG "AudioCache"
 
 #include "audio/oalsoft/AudioCache.h"
+#include <algorithm>
 #include <thread>
-
 #include "application/ApplicationManager.h"
-
 #include "audio/oalsoft/AudioDecoder.h"
 #include "audio/oalsoft/AudioDecoderManager.h"
 
@@ -318,8 +317,8 @@ void AudioCache::invokingLoadCallbacks() {
 
     auto isDestroyed = _isDestroyed;
 
-    BaseEngine::SchedulerPtr scheduler = 
-      CURRENT_APPLICATION() ? CURRENT_APPLICATION()->getEngine()->getScheduler() : nullptr;
+    BaseEngine::SchedulerPtr scheduler =
+        CURRENT_APPLICATION() ? CURRENT_APPLICATION()->getEngine()->getScheduler() : nullptr;
     if (!scheduler) {
         return;
     }

@@ -72,12 +72,12 @@ void CanvasRenderingContext2DDelegate::recreateBuffer(float w, float h) {
     memset(data, 0x00, textureSize);
     _imageData.fastSet(data, textureSize);
 
-    prepareBitmap(_bufferWidth, _bufferHeight);
+    prepareBitmap(static_cast<int>(_bufferWidth), static_cast<int>(_bufferHeight));
 }
 
 void CanvasRenderingContext2DDelegate::beginPath() {
     // called: set_lineWidth() -> beginPath() -> moveTo() -> lineTo() -> stroke(), when draw line
-    _hpen = CreatePen(PS_SOLID, _lineWidth, RGB(255, 255, 255));
+    _hpen = CreatePen(PS_SOLID, static_cast<int>(_lineWidth), RGB(255, 255, 255));
     // the return value of SelectObject is a handle to the object being replaced, so we should delete them to avoid memory leak
     HGDIOBJ hOldPen = SelectObject(_DC, _hpen);
     HGDIOBJ hOldBmp = SelectObject(_DC, _bmp);
@@ -91,11 +91,11 @@ void CanvasRenderingContext2DDelegate::closePath() {
 }
 
 void CanvasRenderingContext2DDelegate::moveTo(float x, float y) {
-    MoveToEx(_DC, x, -(y - _bufferHeight - _fontSize), nullptr);
+    MoveToEx(_DC, static_cast<int>(x), static_cast<int>(-(y - _bufferHeight - _fontSize)), nullptr);
 }
 
 void CanvasRenderingContext2DDelegate::lineTo(float x, float y) {
-    LineTo(_DC, x, -(y - _bufferHeight - _fontSize));
+    LineTo(_DC,  static_cast<int>(x),  static_cast<int>(-(y - _bufferHeight - _fontSize)));
 }
 
 void CanvasRenderingContext2DDelegate::stroke() {
@@ -138,10 +138,10 @@ void CanvasRenderingContext2DDelegate::fillRect(float x, float y, float w, float
     //not filled all Bits in buffer? the buffer length is _bufferWidth * _bufferHeight * 4, but it filled _bufferWidth * _bufferHeight * 3?
     uint8_t *buffer = _imageData.getBytes();
     if (buffer) {
-        uint8_t r = _fillStyle[0] * 255.0f;
-        uint8_t g = _fillStyle[1] * 255.0f;
-        uint8_t b = _fillStyle[2] * 255.0f;
-        uint8_t a = _fillStyle[3] * 255.0f;
+        uint8_t r = static_cast<uint8_t>(_fillStyle[0] * 255.0f);
+        uint8_t g = static_cast<uint8_t>(_fillStyle[1] * 255.0f);
+        uint8_t b = static_cast<uint8_t>(_fillStyle[2] * 255.0f);
+        uint8_t a = static_cast<uint8_t>(_fillStyle[3] * 255.0f);
         fillRectWithColor(buffer,
                           static_cast<uint32_t>(_bufferWidth),
                           static_cast<uint32_t>(_bufferHeight),
@@ -200,7 +200,7 @@ void CanvasRenderingContext2DDelegate::updateFont(const std::string &fontName,
             if (iter != fontInfoMap.end()) {
                 fontPath                = iter->second;
                 std::string tmpFontPath = fontPath;
-                int         nFindPos    = tmpFontPath.rfind("/");
+                size_t         nFindPos = tmpFontPath.rfind("/");
                 tmpFontPath             = &tmpFontPath[nFindPos + 1];
                 nFindPos                = tmpFontPath.rfind(".");
                 // IDEA: draw ttf failed if font file name not equal font face name
@@ -290,7 +290,7 @@ wchar_t *CanvasRenderingContext2DDelegate::utf8ToUtf16(const std::string &str, i
         if (str.empty()) {
             break;
         }
-        int nLen    = str.size();
+        int nLen    = static_cast<int>(str.size());
         int nBufLen = nLen + 1;
         pwszBuffer  = new wchar_t[nBufLen];
         CC_BREAK_IF(!pwszBuffer);
@@ -341,8 +341,8 @@ int CanvasRenderingContext2DDelegate::drawText(const std::string &text, int x, i
 
         RECT rcText = {0};
 
-        rcText.right  = newSize[0];
-        rcText.bottom = newSize[1];
+        rcText.right  = static_cast<int>(newSize[0]);
+        rcText.bottom = static_cast<int>(newSize[1]);
 
         LONG offsetX = x;
         LONG offsetY = y;
@@ -374,8 +374,8 @@ CanvasRenderingContext2DDelegate::Size CanvasRenderingContext2DDelegate::sizeWit
         // measure text size
         DrawTextW(_DC, pszText, nLen, &rc, dwCalcFmt);
 
-        tRet[0] = rc.right;
-        tRet[1] = rc.bottom;
+        tRet[0] = static_cast<float>(rc.right);
+        tRet[1] = static_cast<float>(rc.bottom);
     } while (false);
 
     return tRet;
@@ -417,7 +417,7 @@ void CanvasRenderingContext2DDelegate::fillTextureData() {
 
         // copy pixel data
         bi.bmiHeader.biHeight = (bi.bmiHeader.biHeight > 0) ? -bi.bmiHeader.biHeight : bi.bmiHeader.biHeight;
-        GetDIBits(_DC, _bmp, 0, _bufferHeight, dataBuf,
+        GetDIBits(_DC, _bmp, 0, static_cast<UINT>(_bufferHeight), dataBuf,
                   (LPBITMAPINFO)&bi, DIB_RGB_COLORS);
 
         uint8_t   r            = static_cast<uint8_t>(round(_fillStyle[0] * 255));
