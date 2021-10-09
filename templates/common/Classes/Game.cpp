@@ -31,7 +31,6 @@
 #include "cocos/bindings/manual/jsb_global.h"
 #include "cocos/bindings/manual/jsb_module_register.h"
 
-
 Game::Game() : cc::CocosApplication() {}
 
 int Game::init() {
