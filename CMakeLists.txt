@@ -2270,6 +2270,7 @@ if(APPLE)
         ${CWD}/cocos/platform/ios
     )
     target_link_libraries(cocos2d PUBLIC
+        "-all_load"
         "-liconv"
         "-framework AudioToolbox"
         "-framework Foundation"
