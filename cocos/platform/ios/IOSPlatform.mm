@@ -72,7 +72,7 @@ extern int cocos_main(int argc, const char** argv);
 }
 
 - (int)getFPS {
-    return _displayLink.preferredFramesPerSecond;
+    return (int)_displayLink.preferredFramesPerSecond;
 }
 
 - (void)renderScene:(id)sender {

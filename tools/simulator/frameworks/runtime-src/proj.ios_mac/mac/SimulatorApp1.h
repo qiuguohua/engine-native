@@ -25,21 +25,14 @@
  ****************************************************************************/
 
 
-//#import <Cocoa/Cocoa.h>
-//#import "ConsoleWindowController.h"
 
-#include <string>
-#include "ProjectConfig/ProjectConfig.h"
-#include "ProjectConfig/SimulatorConfig.h"
-#include "Game.h"
 
 class SimulatorApp {
 public:
     static SimulatorApp *getInstance();
     virtual ~SimulatorApp();
     int run();
-    virtual int getWidth() const;
-    virtual int getHegith() const;
+
 protected:
     SimulatorApp();
 
