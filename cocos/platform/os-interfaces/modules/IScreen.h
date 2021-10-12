@@ -44,6 +44,17 @@ public:
     virtual Orientation getDeviceOrientation() const = 0;
 
     /**
+     @brief Get current display stats.
+     @return bool, is displaying stats or not.
+     */
+    virtual bool isDisplayStats() = 0;
+
+    /**
+     @brief set display stats information.
+     */
+    virtual void setDisplayStats(bool isShow) = 0;
+
+    /**
      * Controls whether the screen should remain on.
      *
      * @param keepScreenOn One flag indicating that the screen should remain on.

@@ -25,11 +25,12 @@
 
 #include "platform/win32/interfaces/Screen.h"
 #include "base/Macros.h"
+#include "cocos/bindings/jswrapper/SeApi.h"
+
 
 #import <AppKit/AppKit.h>
 #include <Cocoa/Cocoa.h>
 #include <Foundation/Foundation.h>
-
 
 namespace cc {
 
@@ -57,6 +58,21 @@ Screen::Orientation Screen::getDeviceOrientation() const {
 
 Vec4 Screen::getSafeAreaEdge() const {
     return cc::Vec4();
+}
+
+bool Screen::isDisplayStats() {
+    se::AutoHandleScope hs;
+    se::Value           ret;
+    char                commandBuf[100] = "cc.debug.isDisplayStats();";
+    se::ScriptEngine::getInstance()->evalString(commandBuf, 100, &ret);
+    return ret.toBoolean();
+}
+
+void Screen::setDisplayStats(bool isShow) {
+    se::AutoHandleScope hs;
+    char                commandBuf[100] = {0};
+    sprintf(commandBuf, "cc.debug.setDisplayStats(%s);", isShow ? "true" : "false");
+    se::ScriptEngine::getInstance()->evalString(commandBuf);
 }
 
 } // namespace cc

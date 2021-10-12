@@ -24,6 +24,7 @@
 ****************************************************************************/
 
 #include "platform/java/interfaces/CommonScreen.h"
+#include "cocos/bindings/jswrapper/SeApi.h"
 #include "platform/java/jni/JniImp.h"
 
 namespace {
@@ -82,6 +83,21 @@ IScreen::Orientation CommonScreen::getDeviceOrientation() const {
 Vec4 CommonScreen::getSafeAreaEdge() const {
     float *data = getSafeAreaEdgeJNI();
     return cc::Vec4(data[0], data[1], data[2], data[3]);
+}
+
+bool CommonScreen::isDisplayStats() { //NOLINT
+    se::AutoHandleScope hs;
+    se::Value           ret;
+    char                commandBuf[100] = "cc.debug.isDisplayStats();";
+    se::ScriptEngine::getInstance()->evalString(commandBuf, 100, &ret);
+    return ret.toBoolean();
+}
+
+void CommonScreen::setDisplayStats(bool isShow) { //NOLINT
+    se::AutoHandleScope hs;
+    char                commandBuf[100] = {0};
+    sprintf(commandBuf, "cc.debug.setDisplayStats(%s);", isShow ? "true" : "false");
+    se::ScriptEngine::getInstance()->evalString(commandBuf);
 }
 
 } // namespace cc

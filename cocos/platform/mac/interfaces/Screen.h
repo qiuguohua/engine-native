@@ -36,6 +36,16 @@ public:
     void        setKeepScreenOn(bool value) override;
     Orientation getDeviceOrientation() const override;
     Vec4        getSafeAreaEdge() const override;
+    /**
+     @brief Get current display stats.
+     @return bool, is displaying stats or not.
+     */
+    bool isDisplayStats() override;
+
+    /**
+     @brief set display stats information.
+     */
+    void setDisplayStats(bool isShow) override;
 };
 
 } // namespace cc
