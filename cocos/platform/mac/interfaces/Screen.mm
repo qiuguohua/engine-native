@@ -24,13 +24,13 @@
 ****************************************************************************/
 
 #include "platform/win32/interfaces/Screen.h"
-#include "base/Macros.h"
-#include "cocos/bindings/jswrapper/SeApi.h"
-
 
 #import <AppKit/AppKit.h>
 #include <Cocoa/Cocoa.h>
 #include <Foundation/Foundation.h>
+
+#include "base/Macros.h"
+#include "cocos/bindings/jswrapper/SeApi.h"
 
 namespace cc {
 

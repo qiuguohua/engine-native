@@ -52,7 +52,7 @@ int CocosApplication::init() {
     if (_engine->init()) {
         return -1;
     }
-    auto callback = std::bind(&CocosApplication::handleAppEvent, this, std::placeholders::_1);
+    auto callback = std::bind(&CocosApplication::handleAppEvent, this, std::placeholders::_1); // NOLINT(modernize-avoid-bind)
     _engine->addEventCallback(OSEventType::APP_OSEVENT, callback);
 
     se::ScriptEngine *se = se::ScriptEngine::getInstance();
@@ -60,7 +60,7 @@ int CocosApplication::init() {
     jsb_init_file_operation_delegate();
 
     se->setExceptionCallback(
-        std::bind(&CocosApplication::handleException, this,
+        std::bind(&CocosApplication::handleException, this,                             // NOLINT(modernize-avoid-bind)
                   std::placeholders::_1, std::placeholders::_2, std::placeholders::_3));
 
     jsb_register_all_modules();
@@ -103,15 +103,15 @@ BaseEngine::Ptr CocosApplication::getEngine() const {
 }
 
 void CocosApplication::onPause() {
-    // TODO:
+    // TODO(cc): Handling pause events
 }
 
 void CocosApplication::onResume() {
-    // TODO:
+    // TODO(cc): Handling resume events
 }
 
 void CocosApplication::onClose() {
-    // TODO:
+    // TODO(cc): Handling close events
 }
 
 void CocosApplication::setJsDebugIpAndPort(const std::string &serverAddr, uint32_t port, bool isWaitForConnect) {

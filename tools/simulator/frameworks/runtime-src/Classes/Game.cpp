@@ -31,7 +31,12 @@
 #include "cocos/bindings/manual/jsb_global.h"
 #include "cocos/bindings/manual/jsb_module_register.h"
 
+#if (CC_PLATFORM == CC_PLATFORM_WINDOWS)
 #include "SimulatorWin.h"
+#elif (CC_PLATFORM == CC_PLATFORM_MAC_OSX)
+#include "../proj.ios_mac/mac/SimulatorApp.h"
+#endif
+
 #include "ide-support/CodeIDESupport.h"
 #include "ide-support/RuntimeJsImpl.h"
 #include "runtime/ConfigParser.h"
@@ -47,9 +52,9 @@ Game::~Game() {
 }
 
 int Game::init() {
-    SimulatorWin::getInstance()->run();
-    createWindow("My game", 0, 0, SimulatorWin::getInstance()->getWidth(),
-                 SimulatorWin::getInstance()->getHegith(),
+    SimulatorApp::getInstance()->run();
+    createWindow("My game", 0, 0, SimulatorApp::getInstance()->getWidth(),
+                 SimulatorApp::getInstance()->getHegith(),
                  cc::ISystemWindow::CC_WINDOW_SHOWN |
                      cc::ISystemWindow::CC_WINDOW_RESIZABLE |
                      cc::ISystemWindow::CC_WINDOW_INPUT_FOCUS);
