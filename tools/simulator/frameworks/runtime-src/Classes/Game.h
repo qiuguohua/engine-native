@@ -25,7 +25,6 @@
 #pragma once
 
 #include "cocos/application/CocosApplication.h"
-
 /**
  @brief    The cocos2d Application.
  

@@ -51,6 +51,6 @@ ApplicationManager::ApplcationPtr ApplicationManager::getCurrentAppSafe() const 
 } // namespace cc
 
 //
-void cocos_destory() {
+void cocos_destory() { // NOLINT(readability-identifier-naming)
     cc::ApplicationManager::getInstance()->releseAllApplcation();
 }

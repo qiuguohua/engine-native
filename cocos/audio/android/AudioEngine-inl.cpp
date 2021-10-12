@@ -102,7 +102,7 @@ static int fdGetter(const std::string &url, off_t *start, off_t *length) {
         *length = static_cast<off_t>(lenV);
     }
     if (fd <= 0) {
-        auto asset = AAssetManager_open(cc::FileUtilsAndroid::getAssetManager(), url.c_str(), AASSET_MODE_UNKNOWN);
+        auto* asset = AAssetManager_open(cc::FileUtilsAndroid::getAssetManager(), url.c_str(), AASSET_MODE_UNKNOWN);
         // open asset as file descriptor
         fd = AAsset_openFileDescriptor(asset, start, length);
         AAsset_close(asset);
@@ -211,7 +211,7 @@ int AudioEngineImpl::play2d(const std::string &filePath, bool loop, float volume
 
         audioId = _audioIDIndex++;
 
-        auto player = _audioPlayerProvider->getAudioPlayer(fullPath);
+        auto* player = _audioPlayerProvider->getAudioPlayer(fullPath);
         if (player != nullptr) {
             player->setId(audioId);
             _audioPlayers.insert(std::make_pair(audioId, player));
@@ -261,7 +261,7 @@ int AudioEngineImpl::play2d(const std::string &filePath, bool loop, float volume
 void AudioEngineImpl::setVolume(int audioID, float volume) {
     auto iter = _audioPlayers.find(audioID);
     if (iter != _audioPlayers.end()) {
-        auto player = iter->second;
+        auto* player = iter->second;
         player->setVolume(volume);
     }
 }
@@ -269,7 +269,7 @@ void AudioEngineImpl::setVolume(int audioID, float volume) {
 void AudioEngineImpl::setLoop(int audioID, bool loop) {
     auto iter = _audioPlayers.find(audioID);
     if (iter != _audioPlayers.end()) {
-        auto player = iter->second;
+        auto* player = iter->second;
         player->setLoop(loop);
     }
 }
