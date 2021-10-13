@@ -35,7 +35,7 @@ namespace cc {
 class ISystemWindow : public OSInterface {
 public:
     using Size = cc::Vec2;
-    typedef enum {
+    using WindowFlags = enum {
         /* !!! FIXME: change this to name = (1<<x). */
         CC_WINDOW_FULLSCREEN         = 0x00000001, /**< fullscreen window */
         CC_WINDOW_OPENGL             = 0x00000002, /**< window usable with OpenGL context */
@@ -60,7 +60,7 @@ public:
         CC_WINDOW_TOOLTIP            = 0x00040000, /**< window should be treated as a tooltip */
         CC_WINDOW_POPUP_MENU         = 0x00080000, /**< window should be treated as a popup menu */
         CC_WINDOW_VULKAN             = 0x10000000  /**< window usable for Vulkan surface */
-    } WindowFlags;
+    };
 
     /*
      *@bref Create window.

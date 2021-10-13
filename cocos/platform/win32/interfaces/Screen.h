@@ -40,12 +40,12 @@ public:
      @brief Get current display stats.
      @return bool, is displaying stats or not.
      */
-    bool isDisplayStats();
+    bool isDisplayStats() override;
 
     /**
      @brief set display stats information.
      */
-    void setDisplayStats(bool isShow);
+    void setDisplayStats(bool isShow) override;
 };
 
 } // namespace cc

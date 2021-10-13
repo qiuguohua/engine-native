@@ -23,7 +23,7 @@
  THE SOFTWARE.
 ****************************************************************************/
 
-#include "platform/win32/interfaces/Screen.h"
+#include "platform/ios/interfaces/Screen.h"
 
 #include <CoreFoundation/CoreFoundation.h>
 #import <CoreMotion/CoreMotion.h>

@@ -85,9 +85,6 @@ public:
     explicit HttpURLConnection(HttpClient *httpClient)
     : _client(httpClient),
       _httpURLConnection(nullptr),
-      _requestmethod(""),
-      _responseCookies(""),
-      _cookieFileName(""),
       _contentLength(0) {
     }
 
@@ -97,7 +94,7 @@ public:
         }
     }
 
-    void setRequestMethod(const char *method) {
+    void setRequestMethod(const char *method) { // NOLINT
         _requestmethod = method;
 
         JniMethodInfo methodInfo;
@@ -141,7 +138,7 @@ public:
         return true;
     }
 
-    int connect() {
+    int connect() { // NOLINT
         int           suc = 0;
         JniMethodInfo methodInfo;
         if (JniHelper::getStaticMethodInfo(methodInfo,
@@ -158,7 +155,7 @@ public:
         return suc;
     }
 
-    void disconnect() {
+    void disconnect() { // NOLINT
         JniMethodInfo methodInfo;
         if (JniHelper::getStaticMethodInfo(methodInfo,
                                            JCLS_HTTPCLIENT,
@@ -172,7 +169,7 @@ public:
         }
     }
 
-    int getResponseCode() {
+    int getResponseCode() { // NOLINT
         int           responseCode = 0;
         JniMethodInfo methodInfo;
         if (JniHelper::getStaticMethodInfo(methodInfo,
@@ -189,7 +186,7 @@ public:
         return responseCode;
     }
 
-    char *getResponseMessage() {
+    char *getResponseMessage() { // NOLINT
         char *        message = nullptr;
         JniMethodInfo methodInfo;
         if (JniHelper::getStaticMethodInfo(methodInfo,
@@ -210,7 +207,7 @@ public:
         return message;
     }
 
-    void sendRequest(HttpRequest *request) {
+    void sendRequest(HttpRequest *request) { // NOLINT
         JniMethodInfo methodInfo;
         if (JniHelper::getStaticMethodInfo(methodInfo,
                                            JCLS_HTTPCLIENT,
@@ -229,7 +226,7 @@ public:
         }
     }
 
-    size_t saveResponseCookies(const char *responseCookies, size_t count) {
+    size_t saveResponseCookies(const char *responseCookies, size_t count) { // NOLINT
         if (nullptr == responseCookies || strlen(responseCookies) == 0 || count == 0) {
             return 0;
         }
@@ -251,7 +248,7 @@ public:
         return count;
     }
 
-    char *getResponseHeaders() {
+    char *getResponseHeaders() { // NOLINT
         char *        headers = nullptr;
         JniMethodInfo methodInfo;
         if (JniHelper::getStaticMethodInfo(methodInfo,
@@ -272,7 +269,7 @@ public:
         return headers;
     }
 
-    char *getResponseContent(HttpResponse *response) {
+    char *getResponseContent(HttpResponse *response) { // NOLINT
         if (nullptr == response) {
             return nullptr;
         }
@@ -369,7 +366,7 @@ public:
         _cookieFileName = filename;
     }
 
-    int getContentLength() {
+    int getContentLength() const {
         return _contentLength;
     }
 
@@ -569,7 +566,7 @@ private:
         return _responseCookies;
     }
 
-private:
+private: // NOLINT(readability-redundant-access-specifiers)
     HttpClient *_client;
     jobject     _httpURLConnection;
     std::string _requestmethod;
@@ -581,7 +578,7 @@ private:
 
 // Process Response
 void HttpClient::processResponse(HttpResponse *response, char *responseMessage) {
-    auto              request     = response->getHttpRequest();
+    auto *            request     = response->getHttpRequest();
     HttpRequest::Type requestType = request->getRequestType();
 
     if (HttpRequest::Type::GET != requestType &&
@@ -727,7 +724,7 @@ void HttpClient::networkThread() {
 
         _schedulerMutex.lock();
         if (auto sche = _scheduler.lock()) {
-            sche->performFunctionInCocosThread(CC_CALLBACK_0(HttpClient::dispatchResponseCallbacks, this));
+            sche->performFunctionInCocosThread(CC_CALLBACK_0(HttpClient::dispatchResponseCallbacks, this)); // NOLINT
         }
         _schedulerMutex.unlock();
     }
@@ -786,7 +783,7 @@ void HttpClient::destroyInstance() {
 
     CC_LOG_DEBUG("HttpClient::destroyInstance ...");
 
-    auto thiz   = gHttpClient;
+    auto* thiz   = gHttpClient;
     gHttpClient = nullptr;
 
     if (auto sche = thiz->_scheduler.lock()) {
@@ -843,7 +840,7 @@ bool HttpClient::lazyInitThreadSemaphore() {
         return true;
     }
 
-    auto t = std::thread(CC_CALLBACK_0(HttpClient::networkThread, this));
+    auto t = std::thread(CC_CALLBACK_0(HttpClient::networkThread, this)); // NOLINT
     t.detach();
     _isInited = true;
 

@@ -23,8 +23,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
 
-#ifndef __CCSYNC_TASK_POOL_H_
-#define __CCSYNC_TASK_POOL_H_
+#pragma once
 
 #include "application/ApplicationManager.h"
 
@@ -51,7 +50,7 @@ namespace cc {
  */
 class CC_DLL AsyncTaskPool {
 public:
-    typedef std::function<void(void *)> TaskCallBack;
+    using TaskCallBack=std::function<void(void *)>;
 
     enum class TaskType {
         TASK_IO,
@@ -101,8 +100,7 @@ protected:
         };
 
     public:
-        ThreadTasks()
-        : _stop(false) {
+        ThreadTasks() {
             _thread = std::thread(
                 [this] {
                     for (;;) {
@@ -112,8 +110,9 @@ protected:
                             std::unique_lock<std::mutex> lock(this->_queueMutex);
                             this->_condition.wait(lock,
                                                   [this] { return this->_stop || !this->_tasks.empty(); });
-                            if (this->_stop && this->_tasks.empty())
+                            if (this->_stop && this->_tasks.empty()) {
                                 return;
+                            }
                             task = std::move(this->_tasks.front());
                             callback = std::move(this->_taskCallBacks.front());
                             this->_tasks.pop();
@@ -130,20 +129,24 @@ protected:
                 std::unique_lock<std::mutex> lock(_queueMutex);
                 _stop = true;
 
-                while (_tasks.size())
+                while (!_tasks.empty()) {
                     _tasks.pop();
-                while (_taskCallBacks.size())
+                }
+                while (!_taskCallBacks.empty()) {
                     _taskCallBacks.pop();
+                }
             }
             _condition.notify_all();
             _thread.join();
         }
         void clear() {
             std::unique_lock<std::mutex> lock(_queueMutex);
-            while (_tasks.size())
+            while (!_tasks.empty()) {
                 _tasks.pop();
-            while (_taskCallBacks.size())
+            }
+            while (!_taskCallBacks.empty()) {
                 _taskCallBacks.pop();
+            }
         }
         template <class F>
         void enqueue(const TaskCallBack &callback, void *callbackParam, F &&f) {
@@ -177,23 +180,23 @@ protected:
         // synchronization
         std::mutex _queueMutex;
         std::condition_variable _condition;
-        bool _stop;
+        bool _stop{false};
     };
 
     //tasks
-    ThreadTasks _threadTasks[int(TaskType::TASK_MAX_TYPE)];
+    ThreadTasks _threadTasks[static_cast<int>(TaskType::TASK_MAX_TYPE)];
 
-    static AsyncTaskPool *s_asyncTaskPool;
+    static AsyncTaskPool *sAsyncTaskPool;
 };
 
 inline void AsyncTaskPool::stopTasks(TaskType type) {
-    auto &threadTask = _threadTasks[(int)type];
+    auto &threadTask = _threadTasks[static_cast<int>(type)];
     threadTask.clear();
 }
 
 template <class F>
 inline void AsyncTaskPool::enqueue(AsyncTaskPool::TaskType type, const TaskCallBack &callback, void *callbackParam, F &&f) {
-    auto &threadTask = _threadTasks[(int)type];
+    auto &threadTask = _threadTasks[static_cast<int>(type)];
 
     threadTask.enqueue(callback, callbackParam, f);
 }
@@ -201,4 +204,3 @@ inline void AsyncTaskPool::enqueue(AsyncTaskPool::TaskType type, const TaskCallB
 } // namespace cc
 // end group
 /// @}
-#endif //__CCSYNC_TASK_POOL_H_

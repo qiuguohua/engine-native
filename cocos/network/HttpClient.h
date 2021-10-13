@@ -26,8 +26,7 @@
  THE SOFTWARE.
 ****************************************************************************/
 
-#ifndef __CCHTTPCLIENT_H__
-#define __CCHTTPCLIENT_H__
+#pragma once
 
 #include <thread>
 #include <condition_variable>
@@ -171,7 +170,7 @@ private:
     void increaseThreadCount();
     void decreaseThreadCountAndMayDeleteThis();
 
-private:
+private: // NOLINT(readability-redundant-access-specifiers)
     bool _isInited;
 
     int _timeoutForConnect;
@@ -213,5 +212,3 @@ private:
 
 // end group
 /// @}
-
-#endif //__CCHTTPCLIENT_H__

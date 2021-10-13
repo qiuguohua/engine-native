@@ -23,7 +23,7 @@
  THE SOFTWARE.
 ****************************************************************************/
 
-#include "platform/win32/interfaces/Screen.h"
+#include "platform/mac/interfaces/Screen.h"
 
 #import <AppKit/AppKit.h>
 #include <Cocoa/Cocoa.h>
