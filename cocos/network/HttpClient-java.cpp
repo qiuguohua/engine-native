@@ -783,7 +783,7 @@ void HttpClient::destroyInstance() {
 
     CC_LOG_DEBUG("HttpClient::destroyInstance ...");
 
-    auto* thiz   = gHttpClient;
+    auto *thiz  = gHttpClient;
     gHttpClient = nullptr;
 
     if (auto sche = thiz->_scheduler.lock()) {

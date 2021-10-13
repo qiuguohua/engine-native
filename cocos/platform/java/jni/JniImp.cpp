@@ -28,7 +28,6 @@
 #include <jni.h>
 #include "JniHelper.h"
 
-
 #ifndef JCLS_HELPER
     #define JCLS_HELPER "com/cocos/lib/CocosHelper"
 #endif
@@ -53,7 +52,7 @@ int getObbAssetFileDescriptorJNI(const std::string &path, int64_t *startOffset, 
 
     if (JniHelper::getStaticMethodInfo(methodInfo, JCLS_HELPER, "getObbAssetFileDescriptor", "(Ljava/lang/String;)[J")) {
         jstring stringArg   = methodInfo.env->NewStringUTF(path.c_str());
-        auto    newArray    = static_cast<jlongArray>(methodInfo.env->CallStaticObjectMethod(methodInfo.classID, methodInfo.methodID, stringArg));
+        auto *  newArray    = static_cast<jlongArray>(methodInfo.env->CallStaticObjectMethod(methodInfo.classID, methodInfo.methodID, stringArg));
         jsize   theArrayLen = methodInfo.env->GetArrayLength(newArray);
 
         if (3 == theArrayLen) {
