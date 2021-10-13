@@ -51,8 +51,7 @@
 
 namespace {
 
-bool setCanvasCallback(se::Object* global) {
-    CC_UNUSED_PARAM(global);
+bool setCanvasCallback(se::Object* /*global*/) {
     se::AutoHandleScope scope;
     se::ScriptEngine*   se       = se::ScriptEngine::getInstance();
     auto*               window   = CURRENT_ENGINE()->getOSInterface<cc::ISystemWindow>();
@@ -111,7 +110,7 @@ int32_t Engine::init() {
 
     BasePlatform* platform = BasePlatform::getPlatform();
     platform->setHandleEventCallback(
-        std::bind(&Engine::handleEvent, this, std::placeholders::_1));
+        std::bind(&Engine::handleEvent, this, std::placeholders::_1));// NOLINT(modernize-avoid-bind)
 
     se::ScriptEngine::getInstance()->addPermanentRegisterCallback(setCanvasCallback);
     return 0;
@@ -126,11 +125,11 @@ int32_t Engine::run() {
 }
 
 void Engine::pause() {
-    // TODO
+    // TODO(cc) : Follow-up support
 }
 
 void Engine::resume() {
-    // TODO
+    // TODO(cc) : Follow-up support
 }
 
 int Engine::restart() {

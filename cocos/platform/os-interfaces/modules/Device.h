@@ -25,8 +25,7 @@
  THE SOFTWARE.
 ****************************************************************************/
 
-#ifndef __CCDEVICE_H__
-#define __CCDEVICE_H__
+#pragma once
 
 #include "base/Data.h"
 #include "base/Macros.h"
@@ -149,4 +148,3 @@ private:
 
 } // namespace cc
 
-#endif /* __CCDEVICE_H__ */

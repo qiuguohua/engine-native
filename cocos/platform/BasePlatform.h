@@ -60,7 +60,7 @@ public:
     /**
      @brief Main business logic.
      */
-    virtual int32_t loop(void) = 0;
+    virtual int32_t loop() = 0;
 
     /**
      @brief Polling event.
@@ -118,7 +118,7 @@ public:
     template <class T>
     std::enable_if_t<std::is_base_of<OSInterface, T>::value, T*>
     getOSInterface() const {
-        for (auto& it : _osInterfaces) {
+        for (const auto& it : _osInterfaces) {
             T* intf = dynamic_cast<T*>(it.get());
             if (intf) {
                 return intf;

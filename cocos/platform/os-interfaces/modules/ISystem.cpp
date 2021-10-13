@@ -45,7 +45,7 @@ ISystem::Ptr ISystem::createSystemInterface() {
 
 std::string ISystem::getCurrentLanguageToString() {
     LanguageType language    = getCurrentLanguage();
-    std::string  languageStr = "";
+    std::string  languageStr = ""; // NOLINT
     switch (language) {
         case ISystem::LanguageType::ENGLISH:
             languageStr = "en";
