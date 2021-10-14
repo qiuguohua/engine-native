@@ -25,7 +25,6 @@
 
 #include "main.h"
 #include <shellapi.h>
-#include "SimulatorWin.h"
 #include "cocos/platform/BasePlatform.h"
 
 int APIENTRY _tWinMain(HINSTANCE hInstance,

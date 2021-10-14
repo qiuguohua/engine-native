@@ -87,8 +87,8 @@ if(WINDOWS)
         proj.win32/main.cpp
         proj.win32/main.h
         proj.win32/resource.h
-        proj.win32/SimulatorWin.cpp
-        proj.win32/SimulatorWin.h
+        proj.win32/SimulatorApp.cpp
+        proj.win32/SimulatorApp.h
         # proj.win32/stdafx.cpp
         # proj.win32/stdafx.h
         # proj.win32/targetver.h

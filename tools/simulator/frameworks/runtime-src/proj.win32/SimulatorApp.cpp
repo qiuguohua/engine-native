@@ -43,7 +43,7 @@
 #include <sstream>
 #include "cocos/base/UTF8.h"
 
-#include "SimulatorWin.h"
+#include "SimulatorApp.h"
 
 #include "AppLang.h"
 #include "CustomAppEvent.h"
@@ -135,39 +135,39 @@ static bool stringEndWith(const std::string str, const std::string needle) {
     return false;
 }
 
-SimulatorWin* SimulatorWin::_instance = nullptr;
+SimulatorApp* SimulatorApp::_instance = nullptr;
 
-SimulatorWin* SimulatorWin::getInstance() {
+SimulatorApp* SimulatorApp::getInstance() {
     if (!_instance) {
-        _instance = new SimulatorWin();
+        _instance = new SimulatorApp();
     }
     return _instance;
 }
 
-SimulatorWin::SimulatorWin()
+SimulatorApp::SimulatorApp()
 : _hwnd(NULL), _hwndConsole(NULL), _writeDebugLogFile(nullptr) {
 }
 
-SimulatorWin::~SimulatorWin() {
+SimulatorApp::~SimulatorApp() {
     if (_writeDebugLogFile) {
         fclose(_writeDebugLogFile);
     }
 }
 
-void SimulatorWin::quit() {
+void SimulatorApp::quit() {
     CURRENT_ENGINE()->close();
 }
 
-void SimulatorWin::relaunch() {
+void SimulatorApp::relaunch() {
     _project.setWindowOffset(cc::Vec2(getPositionX(), getPositionY()));
     openProjectWithProjectConfig(_project);
 }
 
-void SimulatorWin::openNewPlayer() {
+void SimulatorApp::openNewPlayer() {
     openNewPlayerWithProjectConfig(_project);
 }
 
-void SimulatorWin::openNewPlayerWithProjectConfig(const ProjectConfig& config) {
+void SimulatorApp::openNewPlayerWithProjectConfig(const ProjectConfig& config) {
     static long  taskid = 100;
     stringstream buf;
     buf << taskid++;
@@ -177,7 +177,7 @@ void SimulatorWin::openNewPlayerWithProjectConfig(const ProjectConfig& config) {
     commandLine.append(" ");
     commandLine.append(config.makeCommandLine());
 
-    CC_LOG_DEBUG("SimulatorWin::openNewPlayerWithProjectConfig(): %s", commandLine.c_str());
+    CC_LOG_DEBUG("SimulatorApp::openNewPlayerWithProjectConfig(): %s", commandLine.c_str());
 
     // http://msdn.microsoft.com/en-us/library/windows/desktop/ms682499(v=vs.85).aspx
     SECURITY_ATTRIBUTES sa = {0};
@@ -209,24 +209,24 @@ void SimulatorWin::openNewPlayerWithProjectConfig(const ProjectConfig& config) {
     }
 }
 
-void SimulatorWin::openProjectWithProjectConfig(const ProjectConfig& config) {
+void SimulatorApp::openProjectWithProjectConfig(const ProjectConfig& config) {
     quit();
     openNewPlayerWithProjectConfig(config);
 }
 
-int SimulatorWin::getPositionX() {
+int SimulatorApp::getPositionX() {
     RECT rect;
     GetWindowRect(_hwnd, &rect);
     return rect.left;
 }
 
-int SimulatorWin::getPositionY() {
+int SimulatorApp::getPositionY() {
     RECT rect;
     GetWindowRect(_hwnd, &rect);
     return rect.top;
 }
 
-int SimulatorWin::run() {
+int SimulatorApp::run() {
     INITCOMMONCONTROLSEX InitCtrls;
     InitCtrls.dwSize = sizeof(InitCtrls);
     InitCtrls.dwICC  = ICC_WIN95_CLASSES;
@@ -389,7 +389,7 @@ int SimulatorWin::run() {
     // prepare
     _project.dump();
 
-    g_oldWindowProc = (WNDPROC)SetWindowLong(_hwnd, GWLP_WNDPROC, (LONG)SimulatorWin::windowProc);
+    g_oldWindowProc = (WNDPROC)SetWindowLong(_hwnd, GWLP_WNDPROC, (LONG)SimulatorApp::windowProc);
 
     // update window title
     updateWindowTitle();
@@ -399,7 +399,7 @@ int SimulatorWin::run() {
 
 // services
 
-void SimulatorWin::setupUI() {
+void SimulatorApp::setupUI() {
     auto menuBar = player::PlayerProtocol::getInstance()->getMenuService();
 
     // FILE
@@ -527,11 +527,11 @@ void SimulatorWin::setupUI() {
     EventDispatcher::addCustomEventListener(kAppEventName, listener);
 }
 
-void SimulatorWin::setZoom(float frameScale) {
+void SimulatorApp::setZoom(float frameScale) {
     _project.setFrameScale(frameScale);
 }
 
-void SimulatorWin::updateWindowTitle() {
+void SimulatorApp::updateWindowTitle() {
     std::stringstream title;
     title << "Cocos " << tr("Simulator") << " (" << _project.getFrameScale() * 100 << "%)";
     std::u16string u16title;
@@ -540,7 +540,7 @@ void SimulatorWin::updateWindowTitle() {
 }
 
 // debug log
-void SimulatorWin::writeDebugLog(const char* log) {
+void SimulatorApp::writeDebugLog(const char* log) {
     if (!_writeDebugLogFile) return;
 
     fputs(log, _writeDebugLogFile);
@@ -548,7 +548,7 @@ void SimulatorWin::writeDebugLog(const char* log) {
     fflush(_writeDebugLogFile);
 }
 
-void SimulatorWin::parseCocosProjectConfig(ProjectConfig& config) {
+void SimulatorApp::parseCocosProjectConfig(ProjectConfig& config) {
     // get project directory
     ProjectConfig tmpConfig;
     // load project config from command line args
@@ -610,7 +610,7 @@ void SimulatorWin::parseCocosProjectConfig(ProjectConfig& config) {
 //
 // D:\aaa\bbb\ccc\ddd\abc.txt --> D:/aaa/bbb/ccc/ddd/abc.txt
 //
-std::string SimulatorWin::convertPathFormatToUnixStyle(const std::string& path) {
+std::string SimulatorApp::convertPathFormatToUnixStyle(const std::string& path) {
     std::string ret = path;
     int         len = ret.length();
     for (int i = 0; i < len; ++i) {
@@ -624,7 +624,7 @@ std::string SimulatorWin::convertPathFormatToUnixStyle(const std::string& path) 
 //
 // @return: C:/Users/win8/Documents/
 //
-std::string SimulatorWin::getUserDocumentPath() {
+std::string SimulatorApp::getUserDocumentPath() {
     TCHAR filePath[MAX_PATH];
     SHGetSpecialFolderPath(NULL, filePath, CSIDL_PERSONAL, FALSE);
     int   length     = 2 * wcslen(filePath);
@@ -642,7 +642,7 @@ std::string SimulatorWin::getUserDocumentPath() {
 //
 // convert Unicode/LocalCode TCHAR to Utf8 char
 //
-char* SimulatorWin::convertTCharToUtf8(const TCHAR* src) {
+char* SimulatorApp::convertTCharToUtf8(const TCHAR* src) {
 #ifdef UNICODE
     WCHAR* tmp  = (WCHAR*)src;
     size_t size = wcslen(src) * 3 + 1;
@@ -667,7 +667,7 @@ char* SimulatorWin::convertTCharToUtf8(const TCHAR* src) {
 }
 
 //
-std::string SimulatorWin::getApplicationExePath() {
+std::string SimulatorApp::getApplicationExePath() {
     TCHAR szFileName[MAX_PATH];
     GetModuleFileName(NULL, szFileName, MAX_PATH);
     std::u16string u16ApplicationName;
@@ -678,7 +678,7 @@ std::string SimulatorWin::getApplicationExePath() {
     return path;
 }
 
-std::string SimulatorWin::getApplicationPath() {
+std::string SimulatorApp::getApplicationPath() {
     std::string path = getApplicationExePath();
     size_t      pos;
     while ((pos = path.find_first_of("\\")) != std::string::npos) {
@@ -693,7 +693,7 @@ std::string SimulatorWin::getApplicationPath() {
     return workdir;
 }
 
-LRESULT CALLBACK SimulatorWin::windowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
+LRESULT CALLBACK SimulatorApp::windowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
     if (!_instance) return 0;
 
     switch (uMsg) {
@@ -734,7 +734,7 @@ LRESULT CALLBACK SimulatorWin::windowProc(HWND hWnd, UINT uMsg, WPARAM wParam, L
             PCOPYDATASTRUCT pMyCDS = (PCOPYDATASTRUCT)lParam;
             if (pMyCDS->dwData == 1) {
                 const char* szBuf = (const char*)(pMyCDS->lpData);
-                SimulatorWin::getInstance()->writeDebugLog(szBuf);
+                SimulatorApp::getInstance()->writeDebugLog(szBuf);
                 break;
             }
         }
@@ -747,7 +747,7 @@ LRESULT CALLBACK SimulatorWin::windowProc(HWND hWnd, UINT uMsg, WPARAM wParam, L
     return g_oldWindowProc(hWnd, uMsg, wParam, lParam);
 }
 
-void SimulatorWin::onOpenFile(const std::string& filePath) {
+void SimulatorApp::onOpenFile(const std::string& filePath) {
     string entry = filePath;
     if (entry.empty()) return;
 
@@ -773,13 +773,13 @@ void SimulatorWin::onOpenFile(const std::string& filePath) {
     }
 }
 
-int SimulatorWin::getWidth() const {
+int SimulatorApp::getWidth() const {
     cc::Size frameSize  = _project.getFrameSize();
     float    frameScale = _project.getFrameScale();
     return (int)(frameScale * frameSize.width);
 }
 
-int SimulatorWin::getHegith() const {
+int SimulatorApp::getHegith() const {
     cc::Size frameSize  = _project.getFrameSize();
     float    frameScale = _project.getFrameScale();
     return (int)(frameScale * frameSize.height);

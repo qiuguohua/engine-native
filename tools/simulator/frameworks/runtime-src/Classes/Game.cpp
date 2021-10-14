@@ -32,7 +32,7 @@
 #include "cocos/bindings/manual/jsb_module_register.h"
 
 #if (CC_PLATFORM == CC_PLATFORM_WINDOWS)
-#include "SimulatorWin.h"
+#include "SimulatorApp.h"
 #elif (CC_PLATFORM == CC_PLATFORM_MAC_OSX)
 #include "../proj.ios_mac/mac/SimulatorApp.h"
 #endif

@@ -33,10 +33,10 @@
 
 #include <memory>
 
-class SimulatorWin {
+class SimulatorApp {
 public:
-    static SimulatorWin *getInstance();
-    virtual ~SimulatorWin();
+    static SimulatorApp *getInstance();
+    virtual ~SimulatorApp();
     int run();
 
     virtual void quit();
@@ -52,9 +52,9 @@ public:
     virtual int getHegith() const;
 
 protected:
-    SimulatorWin();
+    SimulatorApp();
 
-    static SimulatorWin *_instance;
+    static SimulatorApp *_instance;
     ProjectConfig        _project;
     HWND                 _hwnd;
     HWND                 _hwndConsole;
