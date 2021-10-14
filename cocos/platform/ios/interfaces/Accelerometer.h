@@ -32,17 +32,17 @@ namespace cc {
 class Accelerometer : public IAccelerometer {
 public:
     /**
-     * To enable or disable accelerometer.
+     * @brief To enable or disable accelerometer.
      */
     void setAccelerometerEnabled(bool isEnabled) override;
 
     /**
-     *  Sets the interval of accelerometer.
+     * @brief Sets the interval of accelerometer.
      */
     void setAccelerometerInterval(float interval) override;
 
     /**
-     *  Gets the motion value of current device.
+     * @brief Gets the motion value of current device.
      */
     const MotionValue &getDeviceMotionValue() override;
 };

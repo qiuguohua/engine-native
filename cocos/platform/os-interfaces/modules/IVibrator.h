@@ -29,9 +29,9 @@
 
 namespace cc {
 
-class IVibrate : public OSInterface {
+class IVibrator : public OSInterface {
 public:
-    IVibrate() = default;
+    IVibrator() = default;
     /**
      * Vibrate for the specified amount of time.
      * If vibrate is not supported, then invoking this method has no effect.
@@ -42,10 +42,10 @@ public:
     virtual void vibrate(float duration) = 0;
 
     /**
-     * @bref Create default vibrate interface.
-     * @return vibrate interface.
+     * @brief Create default Vibrator interface.
+     * @return Vibrator interface.
      */
-    static OSInterface::Ptr createVibrateInterface();
+    static OSInterface::Ptr createVibratorInterface();
 };
 
 } // namespace cc

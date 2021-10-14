@@ -33,20 +33,20 @@ class IOSPlatform : public UniversalPlatform {
 public:
     IOSPlatform() = default;
     /**
-     * Destructor of WindowPlatform.
+     * @brief Destructor of WindowPlatform.
      */
     ~IOSPlatform() override;
     /**
-     * Implementation of Windows platform initialization.
+     * @brief Implementation of Windows platform initialization.
      */
     int32_t init() override;
     
     /**
-     *@bref Start base platform initialization.
+     * @brief Start base platform initialization.
      */
     int32_t run(int argc, const char** argv) override;
     /**
-     *@bref Implement the main logic of the base platform.
+     * @brief Implement the main logic of the base platform.
      */
     int32_t loop() override;
 

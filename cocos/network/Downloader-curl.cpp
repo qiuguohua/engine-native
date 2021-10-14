@@ -628,7 +628,7 @@ DownloaderCURL::DownloaderCURL(const DownloaderHints &hints)
   _currTask(nullptr) {
     DLLOG("Construct DownloaderCURL %p", this);
     _impl->hints = hints;
-    _scheduler   = CURRENT_ENGINE()->getScheduler();
+    _scheduler   = CC_CURRENT_ENGINE()->getScheduler();
 
     _transferDataToBuffer = [this](void *buf, int64_t len) -> int64_t {
         DownloadTaskCURL &coTask = *_currTask;

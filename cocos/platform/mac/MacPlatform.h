@@ -42,11 +42,11 @@ public:
     int32_t init() override;
     
     /**
-     *@bref Start base platform initialization.
+     * @brief Start base platform initialization.
      */
     int32_t run(int argc, const char** argv) override;
     /**
-     *@bref Implement the main logic of the base platform.
+     * @brief Implement the main logic of the base platform.
      */
     int32_t loop() override;
     void setFps(int32_t fps) override;

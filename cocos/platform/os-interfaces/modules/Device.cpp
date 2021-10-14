@@ -29,56 +29,56 @@
 #include "platform/os-interfaces/modules/IBattery.h"
 #include "platform/os-interfaces/modules/INetwork.h"
 #include "platform/os-interfaces/modules/IScreen.h"
-#include "platform/os-interfaces/modules/IVibrate.h"
+#include "platform/os-interfaces/modules/IVibrator.h"
 
 namespace cc {
 
 int Device::getDPI() {
-    return GET_PLATFORM_INTERFACE(IScreen)->getDPI();
+    return CC_GET_PLATFORM_INTERFACE(IScreen)->getDPI();
 }
 
 float Device::getDevicePixelRatio() {
-    return GET_PLATFORM_INTERFACE(IScreen)->getDevicePixelRatio();
+    return CC_GET_PLATFORM_INTERFACE(IScreen)->getDevicePixelRatio();
 }
 
 void Device::setKeepScreenOn(bool keepScreenOn) {
-    return GET_PLATFORM_INTERFACE(IScreen)->setKeepScreenOn(keepScreenOn);
+    return CC_GET_PLATFORM_INTERFACE(IScreen)->setKeepScreenOn(keepScreenOn);
 }
 
 void Device::setAccelerometerEnabled(bool isEnabled) {
-    return GET_PLATFORM_INTERFACE(IAccelerometer)->setAccelerometerEnabled(isEnabled);
+    return CC_GET_PLATFORM_INTERFACE(IAccelerometer)->setAccelerometerEnabled(isEnabled);
 }
 
 void Device::setAccelerometerInterval(float interval) {
-    return GET_PLATFORM_INTERFACE(IAccelerometer)->setAccelerometerInterval(interval);
+    return CC_GET_PLATFORM_INTERFACE(IAccelerometer)->setAccelerometerInterval(interval);
 }
 
 const IAccelerometer::MotionValue &Device::getDeviceMotionValue() {
-    return GET_PLATFORM_INTERFACE(IAccelerometer)->getDeviceMotionValue();
+    return CC_GET_PLATFORM_INTERFACE(IAccelerometer)->getDeviceMotionValue();
 }
 
 IScreen::Orientation Device::getDeviceOrientation() {
-    return GET_PLATFORM_INTERFACE(IScreen)->getDeviceOrientation();
+    return CC_GET_PLATFORM_INTERFACE(IScreen)->getDeviceOrientation();
 }
 
 std::string Device::getDeviceModel() {
-    return GET_PLATFORM_INTERFACE(ISystem)->getDeviceModel();
+    return CC_GET_PLATFORM_INTERFACE(ISystem)->getDeviceModel();
 }
 
 void Device::vibrate(float duration) {
-    return GET_PLATFORM_INTERFACE(IVibrate)->vibrate(duration);
+    return CC_GET_PLATFORM_INTERFACE(IVibrator)->vibrate(duration);
 }
 
 float Device::getBatteryLevel() {
-    return GET_PLATFORM_INTERFACE(IBattery)->getBatteryLevel();
+    return CC_GET_PLATFORM_INTERFACE(IBattery)->getBatteryLevel();
 }
 
 INetwork::NetworkType Device::getNetworkType() {
-    return GET_PLATFORM_INTERFACE(INetwork)->getNetworkType();
+    return CC_GET_PLATFORM_INTERFACE(INetwork)->getNetworkType();
 }
 
 Vec4 Device::getSafeAreaEdge() {
-    return GET_PLATFORM_INTERFACE(IScreen)->getSafeAreaEdge();
+    return CC_GET_PLATFORM_INTERFACE(IScreen)->getSafeAreaEdge();
 }
 
 } // namespace cc

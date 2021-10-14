@@ -25,11 +25,11 @@
 
 #pragma once
 
-#include "platform/os-interfaces/modules/IVibrate.h"
+#include "platform/os-interfaces/modules/IVibrator.h"
 
 namespace cc {
 
-class Vibrate : public IVibrate {
+class Vibrator : public IVibrator {
 public:
     /**
      * Vibrate for the specified amount of time.

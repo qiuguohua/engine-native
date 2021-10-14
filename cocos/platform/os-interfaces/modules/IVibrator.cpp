@@ -23,14 +23,23 @@
  THE SOFTWARE.
 ****************************************************************************/
 
-#include "platform/mac/interfaces/Vibrate.h"
+#include "platform/os-interfaces/modules/IVibrator.h"
 
-#include "base/Macros.h"
+#if (CC_PLATFORM == CC_PLATFORM_WINDOWS)
+    #include "platform/win32/interfaces/Vibrator.h"
+#elif (CC_PLATFORM == CC_PLATFORM_ANDROID || CC_PLATFORM == CC_PLATFORM_OHOS)
+    #include "platform/java/interfaces/Vibrator.h"
+#elif (CC_PLATFORM == CC_PLATFORM_MAC_OSX)
+    #include "platform/mac/interfaces/Vibrator.h"
+#elif (CC_PLATFORM == CC_PLATFORM_MAC_IOS)
+    #include "platform/ios/interfaces/Vibrator.h"
+#endif
 
 namespace cc {
 
-void Vibrate::vibrate(float duration) {
-    CC_UNUSED_PARAM(duration);
+// static
+OSInterface::Ptr IVibrator::createVibratorInterface() {
+    return std::make_shared<Vibrator>();
 }
 
-}
+} // namespace cc

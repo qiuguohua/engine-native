@@ -1,5 +1,5 @@
 /****************************************************************************
- Copyright (c) 2017-2020 Xiamen Yaji Software Co., Ltd.
+ Copyright (c) 2017-2021 Xiamen Yaji Software Co., Ltd.
 
  http://www.cocos.com
 
@@ -21,9 +21,16 @@
  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  THE SOFTWARE.
- ****************************************************************************/
-//#include "Game.h"
+****************************************************************************/
 
-// cc::Application *cocos_main(int width, int height) {
-//    return new Game(width, height);
-// }
+#include "platform/mac/interfaces/Vibrator.h"
+
+#include "base/Macros.h"
+
+namespace cc {
+
+void Vibrator::vibrate(float duration) {
+    CC_UNUSED_PARAM(duration);
+}
+
+}

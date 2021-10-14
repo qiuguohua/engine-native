@@ -54,7 +54,7 @@ namespace {
 bool setCanvasCallback(se::Object* /*global*/) {
     se::AutoHandleScope scope;
     se::ScriptEngine*   se       = se::ScriptEngine::getInstance();
-    auto*               window   = CURRENT_ENGINE()->getOSInterface<cc::ISystemWindow>();
+    auto*               window   = CC_CURRENT_ENGINE()->getOSInterface<cc::ISystemWindow>();
     auto                handler  = window->getWindowHandler();
     auto                viewSize = window->getViewSize();
 
@@ -250,7 +250,7 @@ int32_t Engine::restartVM() {
 
     // start
     cc::EventDispatcher::init();
-    CURRENT_APPLICATION()->init();
+    CC_CURRENT_APPLICATION()->init();
 
     cc::gfx::DeviceManager::addSurfaceEventListener();
     return 0;

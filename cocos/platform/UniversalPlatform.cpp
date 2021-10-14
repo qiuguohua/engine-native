@@ -33,7 +33,7 @@
 #include "platform/os-interfaces/modules/IScreen.h"
 #include "platform/os-interfaces/modules/ISystem.h"
 #include "platform/os-interfaces/modules/ISystemWindow.h"
-#include "platform/os-interfaces/modules/IVibrate.h"
+#include "platform/os-interfaces/modules/IVibrator.h"
 
 extern int  cocos_main(int argc, const char** argv); // NOLINT(readability-identifier-naming)
 extern void cocos_destory();                         // NOLINT(readability-identifier-naming)
@@ -80,7 +80,7 @@ int32_t UniversalPlatform::init() {
     registerOSInterface(INetwork::createNetworkInterface());
     registerOSInterface(IScreen::createScreenInterface());
     registerOSInterface(IBattery::createBatteryInterface());
-    registerOSInterface(IVibrate::createVibrateInterface());
+    registerOSInterface(IVibrator::createVibratorInterface());
     registerOSInterface(IAccelerometer::createAccelerometerInterface());
     return 0;
 }

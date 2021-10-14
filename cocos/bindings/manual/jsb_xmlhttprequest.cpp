@@ -227,7 +227,7 @@ XMLHttpRequest::XMLHttpRequest()
 }
 
 XMLHttpRequest::~XMLHttpRequest() {
-    CURRENT_ENGINE()->getScheduler()->unscheduleAllForTarget(this);
+    CC_CURRENT_ENGINE()->getScheduler()->unscheduleAllForTarget(this);
     // Avoid HttpClient response call a released object!
     _httpRequest->setResponseCallback(nullptr);
     CC_SAFE_RELEASE(_httpRequest);
@@ -376,7 +376,7 @@ void XMLHttpRequest::getHeader(const std::string &header) {
 }
 
 void XMLHttpRequest::onResponse(HttpClient * /*client*/, HttpResponse *response) {
-    CURRENT_ENGINE()->getScheduler()->unscheduleAllForTarget(this);
+    CC_CURRENT_ENGINE()->getScheduler()->unscheduleAllForTarget(this);
     _isSending = false;
 
     if (_isTimeout) {
@@ -477,7 +477,7 @@ void XMLHttpRequest::sendRequest() {
     _isSending = true;
     _isTimeout = false;
     if (_timeoutInMilliseconds > 0) {
-        CURRENT_ENGINE()->getScheduler()->schedule([this](float /* dt */) {
+        CC_CURRENT_ENGINE()->getScheduler()->schedule([this](float /* dt */) {
             if (ontimeout != nullptr) {
                 ontimeout();
             }

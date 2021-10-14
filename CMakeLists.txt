@@ -28,6 +28,7 @@ cc_set_if_undefined(USE_JOB_SYSTEM_TBB       OFF)
 cc_set_if_undefined(USE_PHYSICS_PHYSX        OFF)
 cc_set_if_undefined(USE_MODULES              OFF)
 
+add_definitions()
 
 if(ANDROID OR WINDOWS)
     cc_set_if_undefined(CC_USE_GLES3 ON)
@@ -408,8 +409,8 @@ cocos_source_files(
     cocos/platform/os-interfaces/modules/ISystem.h
     cocos/platform/os-interfaces/modules/ISystemWindow.cpp
     cocos/platform/os-interfaces/modules/ISystemWindow.h
-    cocos/platform/os-interfaces/modules/IVibrate.cpp
-    cocos/platform/os-interfaces/modules/IVibrate.h
+    cocos/platform/os-interfaces/modules/IVibrator.cpp
+    cocos/platform/os-interfaces/modules/IVibrator.h
 )
 
 cocos_source_files(
@@ -446,8 +447,8 @@ if(WINDOWS)
         cocos/platform/win32/interfaces/Screen.h
         cocos/platform/win32/interfaces/Network.cpp
         cocos/platform/win32/interfaces/Network.h
-        cocos/platform/win32/interfaces/Vibrate.cpp
-        cocos/platform/win32/interfaces/Vibrate.h
+        cocos/platform/win32/interfaces/Vibrator.cpp
+        cocos/platform/win32/interfaces/Vibrator.h
         cocos/platform/win32/interfaces/System.cpp
         cocos/platform/win32/interfaces/System.h
         cocos/platform/win32/interfaces/SystemWindow.cpp
@@ -463,8 +464,8 @@ elseif(ANDROID OR OHOS)
         cocos/platform/java/interfaces/CommonScreen.h
         cocos/platform/java/interfaces/Network.cpp
         cocos/platform/java/interfaces/Network.h
-        cocos/platform/java/interfaces/Vibrate.cpp
-        cocos/platform/java/interfaces/Vibrate.h
+        cocos/platform/java/interfaces/Vibrator.cpp
+        cocos/platform/java/interfaces/Vibrator.h
         cocos/platform/java/interfaces/CommonSystem.cpp
         cocos/platform/java/interfaces/CommonSystem.h
         cocos/platform/java/interfaces/SystemWindow.cpp
@@ -495,8 +496,8 @@ elseif(MACOSX)
         cocos/platform/mac/interfaces/Screen.h
         cocos/platform/mac/interfaces/Network.mm
         cocos/platform/mac/interfaces/Network.h
-        cocos/platform/mac/interfaces/Vibrate.mm
-        cocos/platform/mac/interfaces/Vibrate.h
+        cocos/platform/mac/interfaces/Vibrator.mm
+        cocos/platform/mac/interfaces/Vibrator.h
         cocos/platform/mac/interfaces/System.mm
         cocos/platform/mac/interfaces/System.h
         cocos/platform/mac/interfaces/SystemWindow.mm
@@ -512,8 +513,8 @@ elseif(IOS)
         cocos/platform/ios/interfaces/Screen.h
         cocos/platform/ios/interfaces/Network.mm
         cocos/platform/ios/interfaces/Network.h
-        cocos/platform/ios/interfaces/Vibrate.mm
-        cocos/platform/ios/interfaces/Vibrate.h
+        cocos/platform/ios/interfaces/Vibrator.mm
+        cocos/platform/ios/interfaces/Vibrator.h
         cocos/platform/ios/interfaces/System.mm
         cocos/platform/ios/interfaces/System.h
         cocos/platform/ios/interfaces/SystemWindow.mm

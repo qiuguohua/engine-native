@@ -599,7 +599,7 @@ std::string getCurAppName(void)
                     }
                     else if (data == "VIEW_SHOW_FPS")
                     {
-                        IScreen* screenIntf = GET_PLATFORM_INTERFACE(IScreen);
+                        IScreen* screenIntf = CC_GET_PLATFORM_INTERFACE(IScreen);
                         bool displayStats = !screenIntf->isDisplayStats();
                         screenIntf->setDisplayStats(displayStats);
                         menuItem->setTitle(displayStats ? tr("Hide FPS") : tr("Show FPS"));

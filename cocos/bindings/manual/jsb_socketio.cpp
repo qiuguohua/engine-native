@@ -87,7 +87,7 @@ public:
         se::ScriptEngine::getInstance()->clearException();
         se::AutoHandleScope hs;
 
-        if (!CURRENT_APPLICATION()) {
+        if (!CC_CURRENT_APPLICATION()) {
             return;
         }
 

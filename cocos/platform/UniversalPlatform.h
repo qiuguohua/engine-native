@@ -32,77 +32,77 @@ namespace cc {
 class UniversalPlatform : public BasePlatform, public IEventDispatch {
 public:
     /**
-     *@bref Implement basic platform initialization.
+     * @brief Implement basic platform initialization.
      */
     int32_t init() override;
     /**
-     *@bref Start base platform initialization.
+     * @brief Start base platform initialization.
      */
     int32_t run(int argc, const char** argv) override;
 
     /**
-     *@bref Get targe platform type.
+     * @brief Get targe platform type.
      */
     OSType getOSType() const override;
     /**
-     *@bref Set the event handling callback.
+     * @brief Set the event handling callback.
      */
     void setHandleEventCallback(HandleEventCallback cb) override;
     /**
-     *@bref Set the event to handle callbacks by default.
+     * @brief Set the event to handle callbacks by default.
      */
     void setHandleDefaultEventCallback(HandleEventCallback cb) override;
     /**
-     *@bref Implement dispatch event interface.
+     * @brief Implement dispatch event interface.
      */
     void dispatchEvent(const OSEvent& ev) override;
     /**
-     *@bref Implement dispatch touch event interface.
+     * @brief Implement dispatch touch event interface.
      */
     void dispatchTouchEvent(const OSEvent& ev) override;
     /**
-     *@bref Implement handle default event interface.
+     * @brief Implement handle default event interface.
      */
     void handleDefaultEvent(const OSEvent& ev) override;
     /**
-     @brief Get the SDK version for Android.Other systems also have sdk versions, 
+     * @brief Get the SDK version for Android.Other systems also have sdk versions, 
             but they are not currently used.
      */
     int getSdkVersion() const override;
     /**
-     @brief Polling event
+     * @brief Polling event
      */
     void pollEvent() override;
     /**
-     @brief Run the task in the platform thread, 
-     @brief most platforms are the main thread, android is the non-main thread
-     @param task : Tasks running in platform threads
+     * @brief Run the task in the platform thread, 
+     * @brief most platforms are the main thread, android is the non-main thread
+     * @param task : Tasks running in platform threads
      */
     void runInPlatformThread(const ThreadCallback& task) override;
     /**
-     @brief Get task call frequency.
+     * @brief Get task call frequency.
      */
     int32_t getFps() const override;
     /**
-     @brief Set task call frequency.
+     * @brief Set task call frequency.
      */
     void setFps(int32_t fps) override;
 
     virtual void runTask();
     /**
-     @brief Processing pause message
+     * @brief Processing pause message
      */
     virtual void onPause();
     /**
-     @brief Processing resume message
+     * @brief Processing resume message
      */
     virtual void onResume();
     /**
-     @brief Processing close message
+     * @brief Processing close message
      */
     virtual void onClose();
     /**
-     @brief Processing destroy message
+     * @brief Processing destroy message
      */
     virtual void onDestory();
 

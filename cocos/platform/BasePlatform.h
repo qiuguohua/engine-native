@@ -42,78 +42,77 @@ class BasePlatform {
 public:
     BasePlatform();
     /**
-     @brief Destructor of AbstratctPlatform.
+     * @brief Destructor of AbstratctPlatform.
      */
     virtual ~BasePlatform();
     /**
-     @brief Get default system platform.
+     * @brief Get default system platform.
      */
     static BasePlatform* getPlatform();
     /**
-     @brief Initialize system platform.
+     * @brief Initialize system platform.
      */
     virtual int32_t init() = 0;
     /**
-     @brief Run system platform.
+     * @brief Run system platform.
      */
     virtual int32_t run(int argc, const char** argv) = 0;
     /**
-     @brief Main business logic.
+     * @brief Main business logic.
      */
     virtual int32_t loop() = 0;
 
     /**
-     @brief Polling event.
+     * @brief Polling event.
      */
     virtual void pollEvent() = 0;
 
     /**
-     @brief Get target system type.
+     * @brief Get target system type.
      */
     using OSType = ISystem::OSType;
 
     virtual OSType getOSType() const = 0;
 
     /**
-     @brief Set event handling callback function.
+     * @brief Set event handling callback function.
      */
     using HandleEventCallback = std::function<bool(const OSEvent&)>;
 
     virtual void setHandleEventCallback(HandleEventCallback cb) = 0;
 
     /**
-     @brief Set default event handling callback function.
+     * @brief Set default event handling callback function.
      */
     virtual void setHandleDefaultEventCallback(HandleEventCallback cb) = 0;
     /**
-     @brief Default event handling.
+     * @brief Default event handling.
      */
     virtual void handleDefaultEvent(const OSEvent& ev) = 0;
     /**
-     @brief Get the SDK version for Android.Other systems also have sdk versions, 
-            but they are not currently used.
+     * @brief Get the SDK version for Android.Other systems also have sdk versions, 
+              but they are not currently used.
      */
     virtual int getSdkVersion() const = 0;
     /**
-     @brief Run the task in the platform thread, 
-     @brief most platforms are the main thread, android is the non-main thread
-     @param task : Tasks running in platform threads
-     @param fps : Task call frequency
+     * @brief Run the task in the platform thread, 
+     * @brief most platforms are the main thread, android is the non-main thread
+     * @param task : Tasks running in platform threads
+     * @param fps : Task call frequency
      */
     using ThreadCallback                                         = std::function<void(void)>;
     virtual void runInPlatformThread(const ThreadCallback& task) = 0;
     /**
-     @brief Get task call frequency.
+     * @brief Get task call frequency.
      */
     virtual int32_t getFps() const = 0;
     /**
-     @brief Set task call frequency.
+     * @brief Set task call frequency.
      */
     virtual void setFps(int32_t fps) = 0;
 
     /**
-     @brief Get target system interface.
-     @ Non thread safe.
+     * @brief Get target system interface(Non thread safe.).
      */
     template <class T>
     std::enable_if_t<std::is_base_of<OSInterface, T>::value, T*>
@@ -129,7 +128,7 @@ public:
     }
 
     /**
-     @brief Registration system interface.
+     * @brief Registration system interface.
      */
     bool registerOSInterface(const OSInterface::Ptr& osInterface) {
         CC_ASSERT(osInterface != nullptr);
@@ -142,7 +141,7 @@ public:
         return true;
     }
     /**
-     @brief Unregistration system interface.
+     * @brief Unregistration system interface.
      */
     void unRegisterOSInterface(const OSInterface::Ptr& osInterface) {
         CC_ASSERT(osInterface != nullptr);

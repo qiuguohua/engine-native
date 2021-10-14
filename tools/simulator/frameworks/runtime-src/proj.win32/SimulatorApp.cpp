@@ -93,7 +93,7 @@ INT_PTR CALLBACK AboutDialogCallback(HWND hDlg, UINT message, WPARAM wParam, LPA
 }
 
 void onHelpAbout() {
-    ISystemWindow* systemWindowIntf = GET_PLATFORM_INTERFACE(ISystemWindow);
+    ISystemWindow* systemWindowIntf = CC_GET_PLATFORM_INTERFACE(ISystemWindow);
     HWND           windowHandler    = reinterpret_cast<HWND>(systemWindowIntf->getWindowHandler());
     DialogBox(GetModuleHandle(NULL),
               MAKEINTRESOURCE(IDD_DIALOG_ABOUT),
@@ -102,7 +102,7 @@ void onHelpAbout() {
 }
 
 void shutDownApp() {
-    ISystemWindow* systemWindowIntf = GET_PLATFORM_INTERFACE(ISystemWindow);
+    ISystemWindow* systemWindowIntf = CC_GET_PLATFORM_INTERFACE(ISystemWindow);
     HWND           windowHandler    = reinterpret_cast<HWND>(systemWindowIntf->getWindowHandler());
     ::SendMessage(windowHandler, WM_CLOSE, NULL, NULL);
 }
@@ -155,7 +155,7 @@ SimulatorApp::~SimulatorApp() {
 }
 
 void SimulatorApp::quit() {
-    CURRENT_ENGINE()->close();
+    CC_CURRENT_ENGINE()->close();
 }
 
 void SimulatorApp::relaunch() {
@@ -355,7 +355,7 @@ int SimulatorApp::run() {
 
     // path for looking Lang file, Studio Default images
     FileUtils::getInstance()->addSearchPath(getApplicationPath().c_str());
-    ISystemWindow* systemWindowIntf = GET_PLATFORM_INTERFACE(ISystemWindow);
+    ISystemWindow* systemWindowIntf = CC_GET_PLATFORM_INTERFACE(ISystemWindow);
     _hwnd                           = reinterpret_cast<HWND>(systemWindowIntf->getWindowHandler());
     player::PlayerWin::createWithHwnd(_hwnd);
     DragAcceptFiles(_hwnd, TRUE);
@@ -515,7 +515,7 @@ void SimulatorApp::setupUI() {
                     } else if (data == "ABOUT_MENUITEM") {
                         onHelpAbout();
                     } else if (data == "FPS_MENU") {
-                        IScreen* screenIntf   = GET_PLATFORM_INTERFACE(IScreen);
+                        IScreen* screenIntf   = CC_GET_PLATFORM_INTERFACE(IScreen);
                         bool     displayStats = !screenIntf->isDisplayStats();
                         screenIntf->setDisplayStats(displayStats);
                         menuItem->setTitle(displayStats ? tr("Hide FPS") : tr("Show FPS"));

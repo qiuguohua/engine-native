@@ -35,59 +35,59 @@ class ApplicationManager {
 public:
     static ApplicationManager* getInstance();
 
-    using ApplcationPtr = std::shared_ptr<BaseApplication>;
+    using ApplicationPtr = std::shared_ptr<BaseApplication>;
 
-    /*
-     @bref Generate application entry.
+    /**
+     * @brief Generate application entry.
      */
     template <class T>
-    std::enable_if_t<std::is_base_of<BaseApplication, T>::value, ApplcationPtr>
+    std::enable_if_t<std::is_base_of<BaseApplication, T>::value, ApplicationPtr>
     createApplication() {
-        ApplcationPtr app(new T);
+        ApplicationPtr app = std::make_shared<T>();
         _apps.push_back(app);
         _currentApp = app;
-        return std::move(app);
+        return app;
     }
 
-    /*
-     @bref Release all generated applications.
+    /**
+     * @brief Release all generated applications.
      */
-    void releseAllApplcation();
-    /*
-     @bref Get the current application, may get empty.
+    void releseAllApplications();
+    /**
+     * @brief Get the current application, may get empty.
      */
-    ApplcationPtr getCurrentApp() const;
-    /*
-     @bref Get the current application, make sure it is not empty.
-     @bref Used to get the engine.
+    ApplicationPtr getCurrentApp() const;
+    /**
+     * @brief Get the current application, make sure it is not empty.
+     *        Used to get the engine.
      */
-    ApplcationPtr getCurrentAppSafe() const;
+    ApplicationPtr getCurrentAppSafe() const;
 
 private:
     std::weak_ptr<BaseApplication> _currentApp;
-    std::vector<ApplcationPtr>     _apps;
+    std::vector<ApplicationPtr>    _apps;
 };
 } // namespace cc
 
-#define APPLICATION_MANAGER()        cc::ApplicationManager::getInstance()
-#define CURRENT_APPLICATION()        APPLICATION_MANAGER()->getCurrentApp()
-#define CURRENT_APPLICATION_SAFE()   APPLICATION_MANAGER()->getCurrentAppSafe()
-#define CURRENT_ENGINE()             CURRENT_APPLICATION_SAFE()->getEngine()
-#define GET_PLATFORM_INTERFACE(intf) CURRENT_ENGINE()->getOSInterface<intf>()
+#define CC_APPLICATION_MANAGER()        cc::ApplicationManager::getInstance()
+#define CC_CURRENT_APPLICATION()        CC_APPLICATION_MANAGER()->getCurrentApp()
+#define CC_CURRENT_APPLICATION_SAFE()   CC_APPLICATION_MANAGER()->getCurrentAppSafe()
+#define CC_CURRENT_ENGINE()             CC_CURRENT_APPLICATION_SAFE()->getEngine()
+#define CC_GET_PLATFORM_INTERFACE(intf) CC_CURRENT_ENGINE()->getOSInterface<intf>()
 
-/*
- @bref Called at the user-defined main entry
+/**
+ * @brief Called at the user-defined main entry
  */
-#define COCOST_START_APPLICATION(className)                               \
+#define CC_START_APPLICATION(className)                               \
     do {                                                                  \
-        auto app = APPLICATION_MANAGER()->createApplication<className>(); \
+        auto app = CC_APPLICATION_MANAGER()->createApplication<className>(); \
         if (app->init()) {                                                \
             return -1;                                                    \
         }                                                                 \
         return app->run(argc, argv);                                      \
     } while (0)
 
-#define COCOS_APPLICATION_MAIN(className)         \
+#define CC_APPLICATION_MAIN(className)         \
     int cocos_main(int argc, const char** argv) { \
-        COCOST_START_APPLICATION(className);      \
+        CC_START_APPLICATION(className);      \
     }

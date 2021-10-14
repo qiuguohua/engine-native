@@ -210,7 +210,7 @@ Java_com_cocos_lib_JsbBridge_nativeSendToScript(JNIEnv *env, jclass clazz, jstri
     std::string cArg0{cc::JniHelper::jstring2string(arg0)};
     std::string cArg1{cc::JniHelper::jstring2string(arg1)};
 
-    CURRENT_ENGINE()->getScheduler()->performFunctionInCocosThread([=]() {
+    CC_CURRENT_ENGINE()->getScheduler()->performFunctionInCocosThread([=]() {
         ScriptNativeBridge::bridgeCxxInstance->callByNative(cArg0, cArg1);
     });
 }

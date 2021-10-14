@@ -520,8 +520,8 @@ void WsThreadHelper::wsThreadEntryFunc() const {
 }
 
 void WsThreadHelper::sendMessageToCocosThread(const std::function<void()> &cb) {
-    if (CURRENT_APPLICATION() != nullptr) {
-        CURRENT_APPLICATION()->getEngine()->getScheduler()->performFunctionInCocosThread(cb);
+    if (CC_CURRENT_APPLICATION() != nullptr) {
+        CC_CURRENT_APPLICATION()->getEngine()->getScheduler()->performFunctionInCocosThread(cb);
     }
 }
 

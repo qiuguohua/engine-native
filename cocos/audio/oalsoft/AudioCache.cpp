@@ -318,7 +318,7 @@ void AudioCache::invokingLoadCallbacks() {
     auto isDestroyed = _isDestroyed;
 
     BaseEngine::SchedulerPtr scheduler =
-        CURRENT_APPLICATION() ? CURRENT_APPLICATION()->getEngine()->getScheduler() : nullptr;
+        CC_CURRENT_APPLICATION() ? CC_CURRENT_APPLICATION()->getEngine()->getScheduler() : nullptr;
     if (!scheduler) {
         return;
     }

@@ -307,7 +307,7 @@ bool AudioEngineImpl::init() {
 
             // ================ Workaround end ================ //
 
-            _scheduler = CURRENT_ENGINE()->getScheduler();
+            _scheduler = CC_CURRENT_ENGINE()->getScheduler();
             ret = true;
             ALOGI("OpenAL was initialized successfully!");
         }

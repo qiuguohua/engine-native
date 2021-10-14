@@ -64,4 +64,4 @@ void Game::onClose() {
     cc::CocosApplication::onClose();
 }
 
-COCOS_APPLICATION_MAIN(Game);
+CC_APPLICATION_MAIN(Game);

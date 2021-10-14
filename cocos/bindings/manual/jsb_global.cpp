@@ -311,7 +311,7 @@ static bool jsc_dumpRoot(se::State &s) { //NOLINT
 SE_BIND_FUNC(jsc_dumpRoot)
 
 static bool JSBCore_platform(se::State &s) { //NOLINT
-    //Application::Platform platform = CURRENT_ENGINE()->getPlatform();
+    //Application::Platform platform = CC_CURRENT_ENGINE()->getPlatform();
     cc::BasePlatform::OSType type =
         cc::BasePlatform::getPlatform()->getOSType();
     s.rval().setInt32(static_cast<int32_t>(type));
@@ -343,7 +343,7 @@ static bool JSBCore_os(se::State &s) { //NOLINT
 SE_BIND_FUNC(JSBCore_os)
 
 static bool JSBCore_getCurrentLanguage(se::State &s) { //NOLINT
-    ISystem *   systemIntf  = GET_PLATFORM_INTERFACE(ISystem);
+    ISystem *   systemIntf  = CC_GET_PLATFORM_INTERFACE(ISystem);
     std::string languageStr = systemIntf->getCurrentLanguageToString();
     s.rval().setString(languageStr);
     return true;
@@ -351,7 +351,7 @@ static bool JSBCore_getCurrentLanguage(se::State &s) { //NOLINT
 SE_BIND_FUNC(JSBCore_getCurrentLanguage)
 
 static bool JSBCore_getCurrentLanguageCode(se::State &s) { //NOLINT
-    ISystem *   systemIntf = GET_PLATFORM_INTERFACE(ISystem);
+    ISystem *   systemIntf = CC_GET_PLATFORM_INTERFACE(ISystem);
     std::string language   = systemIntf->getCurrentLanguageCode();
     s.rval().setString(language);
     return true;
@@ -359,7 +359,7 @@ static bool JSBCore_getCurrentLanguageCode(se::State &s) { //NOLINT
 SE_BIND_FUNC(JSBCore_getCurrentLanguageCode)
 
 static bool JSB_getOSVersion(se::State &s) { //NOLINT
-    ISystem *   systemIntf    = GET_PLATFORM_INTERFACE(ISystem);
+    ISystem *   systemIntf    = CC_GET_PLATFORM_INTERFACE(ISystem);
     std::string systemVersion = systemIntf->getSystemVersion();
     s.rval().setString(systemVersion);
     return true;
@@ -368,13 +368,13 @@ SE_BIND_FUNC(JSB_getOSVersion)
 
 static bool JSB_core_restartVM(se::State &s) { //NOLINT
     //REFINE: release AudioEngine, waiting HttpClient & WebSocket threads to exit.
-    CURRENT_APPLICATION()->restart();
+    CC_CURRENT_APPLICATION()->restart();
     return true;
 }
 SE_BIND_FUNC(JSB_core_restartVM)
 
 static bool JSB_closeWindow(se::State &s) {
-    CURRENT_APPLICATION()->close();
+    CC_CURRENT_APPLICATION()->close();
     return true;
 }
 SE_BIND_FUNC(JSB_closeWindow)
@@ -403,7 +403,7 @@ static bool JSB_setCursorEnabled(se::State &s) { //NOLINT
     ok &= seval_to_boolean(args[0], &value);
     SE_PRECONDITION2(ok, false, "Error processing arguments");
 
-    auto *systemWindowIntf = GET_PLATFORM_INTERFACE(ISystemWindow);
+    auto *systemWindowIntf = CC_GET_PLATFORM_INTERFACE(ISystemWindow);
     systemWindowIntf->setCursorEnabled(value);
     return true;
 }
@@ -570,7 +570,7 @@ bool jsb_global_load_image(const std::string &path, const se::Value &callbackVal
                 imgInfo = createImageInfo(img);
             }
 
-            CURRENT_ENGINE()->getScheduler()->performFunctionInCocosThread([=]() {
+            CC_CURRENT_ENGINE()->getScheduler()->performFunctionInCocosThread([=]() {
                 se::AutoHandleScope hs;
                 se::ValueArray      seArgs;
                 se::Value           dataVal;
@@ -667,7 +667,7 @@ static bool JSB_openURL(se::State &s) { //NOLINT
         std::string url;
         ok = seval_to_std_string(args[0], &url);
         SE_PRECONDITION2(ok, false, "url is invalid!");
-        ISystem *systemIntf = GET_PLATFORM_INTERFACE(ISystem);
+        ISystem *systemIntf = CC_GET_PLATFORM_INTERFACE(ISystem);
         systemIntf->openURL(url);
         return true;
     }
@@ -685,7 +685,7 @@ static bool JSB_copyTextToClipboard(se::State &s) { //NOLINT
         std::string text;
         ok = seval_to_std_string(args[0], &text);
         SE_PRECONDITION2(ok, false, "text is invalid!");
-        ISystemWindow *systemWindowIntf = GET_PLATFORM_INTERFACE(ISystemWindow);
+        ISystemWindow *systemWindowIntf = CC_GET_PLATFORM_INTERFACE(ISystemWindow);
         systemWindowIntf->copyTextToClipboard(text);
         return true;
     }
@@ -704,7 +704,7 @@ static bool JSB_setPreferredFramesPerSecond(se::State &s) { //NOLINT
         ok = seval_to_int32(args[0], &fps);
         SE_PRECONDITION2(ok, false, "fps is invalid!");
         // cc::log("EMPTY IMPLEMENTATION OF jsb.setPreferredFramesPerSecond");
-        CURRENT_ENGINE()->setPreferredFramesPerSecond(fps);
+        CC_CURRENT_ENGINE()->setPreferredFramesPerSecond(fps);
         return true;
     }
 

@@ -33,33 +33,33 @@ namespace cc {
 class BaseApplication {
 public:
     virtual ~BaseApplication() = default;
-    /*
-     *@bref Application initialization
+    /**
+     * @brief Application initialization
      */
     virtual int32_t init() = 0;
-    /*
-     *@bref Application main business logic.
+    /**
+     * @brief Application main business logic.
      */
     virtual int32_t run(int          argc,
                         const char** argv) = 0;
-    /*
-     *@bref Pause the application.
+    /**
+     * @brief Pause the application.
      */
     virtual void pause() = 0;
-    /*
-     *@bref Resume the application.
+    /**
+     * @brief Resume the application.
      */
     virtual void resume() = 0;
-    /*
-     *@bref Restart the application.
+    /**
+     * @brief Restart the application.
      */
     virtual void restart() = 0;
-    /*
-     *@bref Close the application.
+    /**
+     * @brief Close the application.
      */
     virtual void close() = 0;
-    /*
-     *@bref Get engine.
+    /**
+     * @brief Get engine.
      */
     virtual BaseEngine::Ptr getEngine() const = 0;
 };

@@ -100,7 +100,7 @@ namespace network {
     
     #define RUN_IN_GAMETHREAD(task)                                                              \
         do {                                                                                     \
-            CURRENT_ENGINE()->getScheduler()->performFunctionInCocosThread([=]() {         \
+            CC_CURRENT_ENGINE()->getScheduler()->performFunctionInCocosThread([=]() {         \
                 task;                                                                            \
             });                                                                                  \
         } while (0)

@@ -50,10 +50,10 @@ WNDPROC   g_prevEditWindowProc = nullptr;
 se::Value g_textInputCallback;
 
 HWND getCurrentWindowHwnd() {
-    if (!CURRENT_APPLICATION()) {
+    if (!CC_CURRENT_APPLICATION()) {
         return nullptr;
     }
-    ISystemWindow *systemWindowIntf = GET_PLATFORM_INTERFACE(ISystemWindow);
+    ISystemWindow *systemWindowIntf = CC_GET_PLATFORM_INTERFACE(ISystemWindow);
     if (!systemWindowIntf) {
         return nullptr;
     }

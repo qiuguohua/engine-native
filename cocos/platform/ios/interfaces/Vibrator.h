@@ -23,14 +23,22 @@
  THE SOFTWARE.
 ****************************************************************************/
 
-#include "platform/win32/interfaces/Vibrate.h"
+#pragma once
 
-#include "base/Macros.h"
+#include "platform/os-interfaces/modules/IVibrator.h"
 
 namespace cc {
 
-void Vibrate::vibrate(float duration) {
-    CC_UNUSED_PARAM(duration);
-}
+class Vibrator : public IVibrator {
+public:
+    /**
+     * Vibrate for the specified amount of time.
+     * If vibrate is not supported, then invoking this method has no effect.
+     * Some platforms limit to a maximum duration of 5 seconds.
+     * Duration is ignored on iOS due to API limitations.
+     * @param duration The duration in seconds.
+     */
+    void vibrate(float duration) override;
+};
 
 } // namespace cc

@@ -121,7 +121,7 @@ protected:
                         }
 
                         task();
-                        CURRENT_ENGINE()->getScheduler()->performFunctionInCocosThread([&, callback] { callback.callback(callback.callbackParam); });
+                        CC_CURRENT_ENGINE()->getScheduler()->performFunctionInCocosThread([&, callback] { callback.callback(callback.callbackParam); });
                     }
                 });
         }

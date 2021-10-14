@@ -100,4 +100,4 @@ void Game::handleException(const char* location, const char* message, const char
     //TODO: nothing
 }
 
-COCOS_APPLICATION_MAIN(Game);
+CC_APPLICATION_MAIN(Game);

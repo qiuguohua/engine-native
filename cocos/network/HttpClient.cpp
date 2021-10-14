@@ -363,7 +363,7 @@ HttpClient::HttpClient()
   _requestSentinel(new HttpRequest()) {
     CC_LOG_DEBUG("In the constructor of HttpClient!");
     memset(_responseMessage, 0, RESPONSE_BUFFER_SIZE * sizeof(char));
-    _scheduler = CURRENT_ENGINE()->getScheduler();
+    _scheduler = CC_CURRENT_ENGINE()->getScheduler();
     increaseThreadCount();
 }
 

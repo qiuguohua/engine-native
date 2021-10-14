@@ -62,8 +62,8 @@ public:
         CC_WINDOW_VULKAN             = 0x10000000  /**< window usable for Vulkan surface */
     };
 
-    /*
-     *@bref Create window.
+    /**
+     * @brief Create window.
      *@param title: Window title
      *@param x: x-axis coordinate
      *@param y: y-axis coordinate

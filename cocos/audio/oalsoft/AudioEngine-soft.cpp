@@ -161,7 +161,7 @@ bool AudioEngineImpl::init() {
                 _alSourceUsed[src] = false;
             }
 
-            _scheduler = CURRENT_ENGINE()->getScheduler();
+            _scheduler = CC_CURRENT_ENGINE()->getScheduler();
             ret        = AudioDecoderManager::init();
             CC_LOG_DEBUG("OpenAL was initialized successfully!");
         }

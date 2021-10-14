@@ -33,18 +33,18 @@ ApplicationManager* ApplicationManager::getInstance() {
     return &mgr;
 }
 
-void ApplicationManager::releseAllApplcation() {
+void ApplicationManager::releseAllApplications() {
     _apps.clear();
 }
 
-ApplicationManager::ApplcationPtr ApplicationManager::getCurrentApp() const {
+ApplicationManager::ApplicationPtr ApplicationManager::getCurrentApp() const {
     if (_currentApp.expired()) {
         return nullptr;
     }
     return _currentApp.lock();
 }
 
-ApplicationManager::ApplcationPtr ApplicationManager::getCurrentAppSafe() const {
+ApplicationManager::ApplicationPtr ApplicationManager::getCurrentAppSafe() const {
     CC_ASSERT(!_currentApp.expired());
     return _currentApp.lock();
 }
@@ -52,5 +52,7 @@ ApplicationManager::ApplcationPtr ApplicationManager::getCurrentAppSafe() const 
 
 //
 void cocos_destory() { // NOLINT(readability-identifier-naming)
-    cc::ApplicationManager::getInstance()->releseAllApplcation();
+    // Called in the platform layer, because the platform layer is isolated from the application layer
+    // It is the platform layer to drive applications and reclaim resources.
+    cc::ApplicationManager::getInstance()->releseAllApplications();
 }

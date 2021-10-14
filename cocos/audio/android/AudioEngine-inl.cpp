@@ -75,7 +75,7 @@ void getAudioInfo() {
 class CallerThreadUtils : public ICallerThreadUtils {
 public:
     void performFunctionInCallerThread(const std::function<void()> &func) override {
-        CURRENT_ENGINE()->getScheduler()->performFunctionInCocosThread(func);
+        CC_CURRENT_ENGINE()->getScheduler()->performFunctionInCocosThread(func);
     };
 
     std::thread::id getCallerThreadId() override {

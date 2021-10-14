@@ -545,7 +545,7 @@ void SIOClientImpl::disconnect() {
         _ws->send(s);
     }
 
-    CURRENT_ENGINE()->getScheduler()->unscheduleAllForTarget(this);
+    CC_CURRENT_ENGINE()->getScheduler()->unscheduleAllForTarget(this);
 
     _connected = false;
 
@@ -654,7 +654,7 @@ void SIOClientImpl::onOpen(WebSocket * /*ws*/) {
         _ws->send(s);
     }
 
-     CURRENT_ENGINE()->getScheduler()->schedule([this](auto &&pH1) { heartbeat(std::forward<decltype(pH1)>(pH1)); }, this, (static_cast<float>(_heartbeat) * .9F), false, "heartbeat");
+     CC_CURRENT_ENGINE()->getScheduler()->schedule([this](auto &&pH1) { heartbeat(std::forward<decltype(pH1)>(pH1)); }, this, (static_cast<float>(_heartbeat) * .9F), false, "heartbeat");
 
     for (auto &client : _clients) {
         client.second->onOpen();
@@ -881,8 +881,8 @@ void SIOClientImpl::onClose(WebSocket * /*ws*/) {
         }
         // discard this client
         _connected = false;
-        if (CURRENT_APPLICATION() != nullptr) {
-            CURRENT_APPLICATION()->getEngine()->getScheduler()->unscheduleAllForTarget(this);
+        if (CC_CURRENT_APPLICATION() != nullptr) {
+            CC_CURRENT_APPLICATION()->getEngine()->getScheduler()->unscheduleAllForTarget(this);
         }
 
         SocketIO::getInstance()->removeSocket(_uri.getAuthority());

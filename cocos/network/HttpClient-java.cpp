@@ -826,7 +826,7 @@ HttpClient::HttpClient()
   _requestSentinel(new HttpRequest()) {
     CC_LOG_DEBUG("In the constructor of HttpClient!");
     increaseThreadCount();
-    _scheduler = CURRENT_ENGINE()->getScheduler();
+    _scheduler = CC_CURRENT_ENGINE()->getScheduler();
 }
 
 HttpClient::~HttpClient() {
