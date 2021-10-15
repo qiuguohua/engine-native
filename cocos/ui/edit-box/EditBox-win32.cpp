@@ -27,7 +27,7 @@
 #include "cocos/application/ApplicationManager.h"
 #include "cocos/bindings/jswrapper/SeApi.h"
 #include "cocos/bindings/manual/jsb_global.h"
-#include "cocos/platform/os-interfaces/modules/ISystemWindow.h"
+#include "cocos/platform/interfaces/modules/ISystemWindow.h"
 
 
 #include <stdlib.h>

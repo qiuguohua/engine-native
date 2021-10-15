@@ -47,14 +47,14 @@
 #include "application/BaseApplication.h"
 #include "base/Scheduler.h"
 #include "cocos/network/HttpClient.h"
-#include "platform/os-interfaces/modules/ISystemWindow.h"
+#include "platform/interfaces/modules/ISystemWindow.h"
 
 namespace {
 
 bool setCanvasCallback(se::Object* /*global*/) {
     se::AutoHandleScope scope;
     se::ScriptEngine*   se       = se::ScriptEngine::getInstance();
-    auto*               window   = CC_CURRENT_ENGINE()->getOSInterface<cc::ISystemWindow>();
+    auto*               window   = CC_CURRENT_ENGINE()->getInterface<cc::ISystemWindow>();
     auto                handler  = window->getWindowHandler();
     auto                viewSize = window->getViewSize();
 

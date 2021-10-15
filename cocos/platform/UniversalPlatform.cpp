@@ -25,22 +25,22 @@
 
 #include "platform/UniversalPlatform.h"
 
-#include "platform/os-interfaces/OSInterface.h"
+#include "platform/interfaces/OSInterface.h"
 
-#include "platform/os-interfaces/modules/IAccelerometer.h"
-#include "platform/os-interfaces/modules/IBattery.h"
-#include "platform/os-interfaces/modules/INetwork.h"
-#include "platform/os-interfaces/modules/IScreen.h"
-#include "platform/os-interfaces/modules/ISystem.h"
-#include "platform/os-interfaces/modules/ISystemWindow.h"
-#include "platform/os-interfaces/modules/IVibrator.h"
+#include "platform/interfaces/modules/IAccelerometer.h"
+#include "platform/interfaces/modules/IBattery.h"
+#include "platform/interfaces/modules/INetwork.h"
+#include "platform/interfaces/modules/IScreen.h"
+#include "platform/interfaces/modules/ISystem.h"
+#include "platform/interfaces/modules/ISystemWindow.h"
+#include "platform/interfaces/modules/IVibrator.h"
 
 extern int  cocos_main(int argc, const char** argv); // NOLINT(readability-identifier-naming)
 extern void cocos_destory();                         // NOLINT(readability-identifier-naming)
 
 namespace cc {
 UniversalPlatform::OSType UniversalPlatform::getOSType() const {
-    return getOSInterface<ISystem>()->getOSType();
+    return getInterface<ISystem>()->getOSType();
 }
 
 void UniversalPlatform::dispatchEvent(const OSEvent& ev) {
@@ -75,13 +75,13 @@ void UniversalPlatform::setHandleDefaultEventCallback(HandleEventCallback cb) {
 }
 
 int32_t UniversalPlatform::init() {
-    registerOSInterface(ISystemWindow::createSystemWindowInterface());
-    registerOSInterface(ISystem::createSystemInterface());
-    registerOSInterface(INetwork::createNetworkInterface());
-    registerOSInterface(IScreen::createScreenInterface());
-    registerOSInterface(IBattery::createBatteryInterface());
-    registerOSInterface(IVibrator::createVibratorInterface());
-    registerOSInterface(IAccelerometer::createAccelerometerInterface());
+    registerInterface(ISystemWindow::createSystemWindowInterface());
+    registerInterface(ISystem::createSystemInterface());
+    registerInterface(INetwork::createNetworkInterface());
+    registerInterface(IScreen::createScreenInterface());
+    registerInterface(IBattery::createBatteryInterface());
+    registerInterface(IVibrator::createVibratorInterface());
+    registerInterface(IAccelerometer::createAccelerometerInterface());
     return 0;
 }
 

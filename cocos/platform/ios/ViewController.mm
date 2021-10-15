@@ -26,7 +26,7 @@
 #import "ViewController.h"
 #include "cocos/bindings/event/EventDispatcher.h"
 #include "platform/IEventDispatch.h"
-#include "platform/os-interfaces/modules/IScreen.h"
+#include "platform/interfaces/modules/IScreen.h"
 #include "platform/BasePlatform.h"
 #include "platform/ios/AppDelegate.h"
 //#include "cocos/platform/Device.h"
@@ -81,7 +81,7 @@ cc::IScreen::Orientation _lastOrientation;
     if (_lastOrientation != orientation) {
         cc::DeviceEvent ev;
         cc::BasePlatform* platform = cc::BasePlatform::getPlatform();
-        cc::IScreen* screenIntf = platform->getOSInterface<cc::IScreen>();
+        cc::IScreen* screenIntf = platform->getInterface<cc::IScreen>();
         ev.type           = cc::DeviceEvent::Type::DEVICE_ORIENTATION;
         ev.args[0].intVal = static_cast<int>(screenIntf->getDeviceOrientation());
         AppDelegate* delegate = [[UIApplication sharedApplication] delegate];

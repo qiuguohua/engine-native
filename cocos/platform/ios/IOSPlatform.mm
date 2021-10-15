@@ -24,8 +24,8 @@
 ****************************************************************************/
 
 #include "platform/ios/IOSPlatform.h"
-#include "platform/os-interfaces/OSInterface.h"
-#include "platform/os-interfaces/modules/ISystemWindow.h"
+#include "platform/interfaces/OSInterface.h"
+#include "platform/interfaces/modules/ISystemWindow.h"
 #include "platform/ios/AppDelegate.h"
 
 #import <UIKit/UIKit.h>

@@ -24,8 +24,8 @@
 ****************************************************************************/
 
 #include "platform/mac/MacPlatform.h"
-#include "platform/os-interfaces/OSInterface.h"
-#include "platform/os-interfaces/modules/ISystemWindow.h"
+#include "platform/interfaces/OSInterface.h"
+#include "platform/interfaces/modules/ISystemWindow.h"
 #include "platform/mac/AppDelegate.h"
 
 #import <AppKit/AppKit.h>

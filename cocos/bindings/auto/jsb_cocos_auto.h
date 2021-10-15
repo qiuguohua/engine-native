@@ -4,8 +4,8 @@
 #include "cocos/bindings/jswrapper/SeApi.h"
 #include "cocos/bindings/manual/jsb_conversions.h"
 #include "cocos/platform/FileUtils.h"
-#include "cocos/platform/os-interfaces/modules/canvas/ICanvasRenderingContext2D.h"
-#include "cocos/platform/os-interfaces/modules/Device.h"
+#include "cocos/platform/interfaces/modules/canvas/ICanvasRenderingContext2D.h"
+#include "cocos/platform/interfaces/modules/Device.h"
 #include "cocos/platform/SAXParser.h"
 
 extern se::Object* __jsb_cc_FileUtils_proto;

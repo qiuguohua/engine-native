@@ -35,8 +35,8 @@
 #include "jsb_conversions.h"
 #include "network/HttpClient.h"
 #include "platform/Image.h"
-#include "platform/os-interfaces/modules/ISystem.h"
-#include "platform/os-interfaces/modules/ISystemWindow.h"
+#include "platform/interfaces/modules/ISystem.h"
+#include "platform/interfaces/modules/ISystemWindow.h"
 #include "ui/edit-box/EditBox.h"
 #include "xxtea/xxtea.h"
 

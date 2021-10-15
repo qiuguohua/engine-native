@@ -43,7 +43,7 @@
 #include "cocos/platform/mac/View.h"
 #include "cocos/application/ApplicationManager.h"
 #include "platform/mac/PlayerMac.h"
-#include "platform/os-interfaces/modules/IScreen.h"
+#include "platform/interfaces/modules/IScreen.h"
 #include "CustomAppEvent.h"
 #include "AppLang.h"
 

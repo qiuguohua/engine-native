@@ -26,7 +26,7 @@
 #pragma once
 
 #include "platform/UniversalPlatform.h"
-#include "platform/win32/interfaces/SystemWindow.h"
+#include "platform/win32/modules/SystemWindow.h"
 
 struct SDL_WindowEvent;
 struct SDL_Window;

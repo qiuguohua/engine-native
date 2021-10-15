@@ -73,21 +73,21 @@ private:
 #define CC_CURRENT_APPLICATION()        CC_APPLICATION_MANAGER()->getCurrentApp()
 #define CC_CURRENT_APPLICATION_SAFE()   CC_APPLICATION_MANAGER()->getCurrentAppSafe()
 #define CC_CURRENT_ENGINE()             CC_CURRENT_APPLICATION_SAFE()->getEngine()
-#define CC_GET_PLATFORM_INTERFACE(intf) CC_CURRENT_ENGINE()->getOSInterface<intf>()
+#define CC_GET_PLATFORM_INTERFACE(intf) CC_CURRENT_ENGINE()->getInterface<intf>()
 
 /**
  * @brief Called at the user-defined main entry
  */
-#define CC_START_APPLICATION(className)                               \
-    do {                                                                  \
+#define CC_START_APPLICATION(className)                                      \
+    do {                                                                     \
         auto app = CC_APPLICATION_MANAGER()->createApplication<className>(); \
-        if (app->init()) {                                                \
-            return -1;                                                    \
-        }                                                                 \
-        return app->run(argc, argv);                                      \
+        if (app->init()) {                                                   \
+            return -1;                                                       \
+        }                                                                    \
+        return app->run(argc, argv);                                         \
     } while (0)
 
-#define CC_APPLICATION_MAIN(className)         \
+#define CC_APPLICATION_MAIN(className)            \
     int cocos_main(int argc, const char** argv) { \
-        CC_START_APPLICATION(className);      \
+        CC_START_APPLICATION(className);          \
     }

@@ -27,7 +27,7 @@
 
 #include <iostream>
 #include "application/BaseApplication.h"
-#include "cocos/platform/os-interfaces/modules/ISystemWindow.h"
+#include "cocos/platform/interfaces/modules/ISystemWindow.h"
 
 namespace cc {
 class BaseEngine;

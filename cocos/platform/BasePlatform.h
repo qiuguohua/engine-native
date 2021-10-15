@@ -29,7 +29,7 @@
 #include "base/Macros.h"
 
 #include "bindings/event/EventDispatcher.h"
-#include "platform/os-interfaces/modules/ISystem.h"
+#include "platform/interfaces/modules/ISystem.h"
 
 #include <functional>
 #include <vector>
@@ -116,7 +116,7 @@ public:
      */
     template <class T>
     std::enable_if_t<std::is_base_of<OSInterface, T>::value, T*>
-    getOSInterface() const {
+    getInterface() const {
         for (const auto& it : _osInterfaces) {
             T* intf = dynamic_cast<T*>(it.get());
             if (intf) {
@@ -130,7 +130,7 @@ public:
     /**
      * @brief Registration system interface.
      */
-    bool registerOSInterface(const OSInterface::Ptr& osInterface) {
+    bool registerInterface(const OSInterface::Ptr& osInterface) {
         CC_ASSERT(osInterface != nullptr);
         auto it = std::find(_osInterfaces.begin(), _osInterfaces.end(), osInterface);
         if (it != _osInterfaces.end()) {
@@ -143,7 +143,7 @@ public:
     /**
      * @brief Unregistration system interface.
      */
-    void unRegisterOSInterface(const OSInterface::Ptr& osInterface) {
+    void unregisterInterface(const OSInterface::Ptr& osInterface) {
         CC_ASSERT(osInterface != nullptr);
         auto it = std::find(_osInterfaces.begin(), _osInterfaces.end(), osInterface);
         if (it != _osInterfaces.end()) {

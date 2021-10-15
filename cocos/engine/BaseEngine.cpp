@@ -26,7 +26,7 @@
 #include "cocos/engine/BaseEngine.h"
 #include "cocos/engine/Engine.h"
 #include "cocos/platform/BasePlatform.h"
-#include "cocos/platform/os-interfaces/modules/ISystemWindow.h"
+#include "cocos/platform/interfaces/modules/ISystemWindow.h"
 
 namespace cc {
 

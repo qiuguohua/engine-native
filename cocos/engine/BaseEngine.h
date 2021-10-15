@@ -42,9 +42,9 @@ public:
      @brief Get operating system interface template.
      */
     template <class T>
-    T* getOSInterface() const {
+    T* getInterface() const {
         BasePlatform* platform = BasePlatform::getPlatform();
-        return platform->getOSInterface<T>();
+        return platform->getInterface<T>();
     }
     /**
      @brief Create default engine.

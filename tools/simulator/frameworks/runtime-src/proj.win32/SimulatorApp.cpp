@@ -52,8 +52,8 @@
 
 #include "application/ApplicationManager.h"
 #include "platform/FileUtils.h"
-#include "platform/os-interfaces/modules/IScreen.h"
-#include "platform/os-interfaces/modules/ISystemWindow.h"
+#include "platform/interfaces/modules/IScreen.h"
+#include "platform/interfaces/modules/ISystemWindow.h"
 #include "platform/win32/PlayerMenuServiceWin.h"
 #include "platform/win32/PlayerWin.h"
 

@@ -26,7 +26,7 @@
 #include "cocos/bindings/event/EventDispatcher.h"
 #include "platform/java/jni/JniHelper.h"
 #include "platform/java/jni/glue/JniNativeGlue.h"
-#include "platform/os-interfaces/modules/Device.h"
+#include "platform/interfaces/modules/Device.h"
 
 extern "C" {
 

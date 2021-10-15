@@ -34,7 +34,7 @@
 #include "cocos/bindings/manual/jsb_global.h"
 #include "cocos/bindings/manual/jsb_module_register.h"
 #include "cocos/engine/BaseEngine.h"
-#include "cocos/platform/os-interfaces/modules/IScreen.h"
+#include "cocos/platform/interfaces/modules/IScreen.h"
 
 namespace cc {
 
@@ -42,7 +42,7 @@ namespace cc {
 
 CocosApplication::CocosApplication() {
     _engine      = BaseEngine::createEngine();
-    _systemWidow = _engine->getOSInterface<ISystemWindow>();
+    _systemWidow = _engine->getInterface<ISystemWindow>();
     CC_ASSERT(_systemWidow != nullptr);
 }
 
@@ -69,7 +69,7 @@ int CocosApplication::init() {
 
 #if (CC_PLATFORM == CC_PLATFORM_MAC_IOS)
     auto     logicSize  = _systemWidow->getViewSize();
-    IScreen *screen     = _engine->getOSInterface<IScreen>();
+    IScreen *screen     = _engine->getInterface<IScreen>();
     float    pixelRatio = screen->getDevicePixelRatio();
     cc::EventDispatcher::dispatchResizeEvent(logicSize.x * pixelRatio, logicSize.y * pixelRatio);
 #endif
