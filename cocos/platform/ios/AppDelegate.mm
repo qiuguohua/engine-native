@@ -55,7 +55,7 @@ cc::IOSPlatform *_platform = nullptr;
     [self.window makeKeyAndVisible];
 
     _platform = dynamic_cast<cc::IOSPlatform *>(cc::BasePlatform::getPlatform());
-    CC_ASSERT(_platform != nullptr);
+    CCASSERT(_platform != nullptr);
     _platform->loop();
 
     return YES;

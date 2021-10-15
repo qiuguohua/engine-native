@@ -53,7 +53,7 @@ bool SystemWindow::createWindow(const char *title,
     // Create window
 
     WindowsPlatform *platform = dynamic_cast<WindowsPlatform *>(BasePlatform::getPlatform());
-    CC_ASSERT(platform != nullptr);
+    CCASSERT(platform != nullptr, "Platform pointer can't be null");
     platform->createWindow(title, x, y, w, h, flags);
     _width  = w;
     _height = h;
@@ -63,7 +63,7 @@ bool SystemWindow::createWindow(const char *title,
 uintptr_t SystemWindow::getWindowHandler() const {
     //return _handle;
     WindowsPlatform *platform = dynamic_cast<WindowsPlatform *>(BasePlatform::getPlatform());
-    CC_ASSERT(platform != nullptr);
+    CCASSERT(platform != nullptr, "Platform pointer can't be null");
     return platform->getWindowHandler();
 }
 

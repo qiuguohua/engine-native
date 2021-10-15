@@ -43,7 +43,7 @@ namespace cc {
 CocosApplication::CocosApplication() {
     _engine      = BaseEngine::createEngine();
     _systemWidow = _engine->getInterface<ISystemWindow>();
-    CC_ASSERT(_systemWidow != nullptr);
+    CCASSERT(_systemWidow != nullptr, "Invalid interface pointer");
 }
 
 CocosApplication::~CocosApplication() = default;

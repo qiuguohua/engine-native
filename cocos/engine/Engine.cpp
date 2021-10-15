@@ -184,9 +184,10 @@ void Engine::removeEventCallback(OSEventType evType) {
     auto it = _eventCallbacks.find(evType);
     if (it != _eventCallbacks.end()) {
         _eventCallbacks.erase(it);
+        return;
     }
     // For debugging.
-    CC_ASSERT(false);
+    CCASSERT(false, "Interface does not exist");
 }
 
 void Engine::tick() {
