@@ -55,7 +55,7 @@ public:
     uintptr_t getWindowHandler() const override;
 
 private:
-    void               pollEvent();
+    void               pollEvent() override;
     void               handleWindowEvent(SDL_WindowEvent& wevent);
     bool               _inited{false};
     bool               _quit{false};
