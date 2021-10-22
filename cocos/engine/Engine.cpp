@@ -186,6 +186,7 @@ void Engine::removeEventCallback(OSEventType evType) {
         _eventCallbacks.erase(it);
         return;
     }
+
     // For debugging.
     CCASSERT(false, "Interface does not exist");
 }

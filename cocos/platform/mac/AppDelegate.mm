@@ -47,7 +47,7 @@
 
 - (void)applicationDidFinishLaunching:(NSNotification*)aNotification {
     _platform = dynamic_cast<cc::MacPlatform*>(cc::BasePlatform::getPlatform());
-    CC_ASSERT(_platform != nullptr);
+    CCASSERT(_platform != nullptr, "Platform pointer can't be null");
     _platform->loop();
 }
 
