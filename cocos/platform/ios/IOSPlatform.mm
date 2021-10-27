@@ -28,7 +28,7 @@
 #include "platform/interfaces/modules/ISystemWindow.h"
 
 #import <UIKit/UIKit.h>
-#import <platform/ios/AppDelegate.h>
+#import "platform/ios/AppDelegate.h"
 
 extern int cocos_main(int argc, const char** argv);
 

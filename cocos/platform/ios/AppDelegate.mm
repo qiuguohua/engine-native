@@ -23,7 +23,7 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  THE SOFTWARE.
  ****************************************************************************/
-#import <platform/ios/AppDelegate.h>
+#import "platform/ios/AppDelegate.h"
 #import "ViewController.h"
 #import "platform/ios/View.h"
 
