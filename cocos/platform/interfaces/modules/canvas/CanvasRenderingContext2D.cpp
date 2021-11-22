@@ -373,8 +373,7 @@ void CanvasRenderingContext2D::setGlobalCompositeOperation(const std::string &gl
 
 void CanvasRenderingContext2D::fillImageData(const Data &imageData, float imageWidth, float imageHeight, float offsetX, float offsetY) {
     //SE_LOGE("%s isn't implemented!\n", __FUNCTION__);
-#if CC_PLATFORM == CC_PLATFORM_WINDOWS
-#elif CC_PLATFORM == CC_PLATFORM_ANDROID
+#if CC_PLATFORM == CC_PLATFORM_ANDROID || CC_PLATFORM == CC_PLATFORM_OHOS
     _delegate->fillImageData(imageData, imageWidth, imageHeight, offsetX, offsetY);
     if (_canvasBufferUpdatedCB != nullptr) {
         _canvasBufferUpdatedCB(_delegate->getDataRef());
