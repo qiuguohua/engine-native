@@ -94,6 +94,7 @@ public:
 
     static void addSurfaceEventListener() {
         Device *device = Device::instance;
+		#if(CC_PLATFORM != CC_PLATFORM_OPENHARMONY)
         EventDispatcher::addCustomEventListener(EVENT_DESTROY_WINDOW, [device](const CustomEvent &e) -> void {
             device->destroySurface(e.args->ptrVal);
         });
@@ -101,6 +102,7 @@ public:
         EventDispatcher::addCustomEventListener(EVENT_RECREATE_WINDOW, [device](const CustomEvent &e) -> void {
             device->createSurface(e.args->ptrVal);
         });
+		#endif
     }
 
 private:
@@ -111,10 +113,11 @@ private:
         if (DETACH_DEVICE_THREAD) {
             device = CC_NEW(gfx::DeviceAgent(device));
         }
-
+		#if(CC_PLATFORM != CC_PLATFORM_OPENHARMONY)
         if (CC_DEBUG > 0 && !FORCE_DISABLE_VALIDATION || FORCE_ENABLE_VALIDATION) {
             device = CC_NEW(gfx::DeviceValidator(device));
         }
+        #endif
 
         if (!device->initialize(info)) {
             CC_SAFE_DELETE(device);

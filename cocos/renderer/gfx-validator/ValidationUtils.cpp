@@ -35,7 +35,11 @@ namespace cc {
 namespace utils {
 
 String getStacktraceJS() {
+#if(CC_PLATFORM != CC_PLATFORM_OPENHARMONY)
     return se::ScriptEngine::getInstance()->getCurrentStackTrace();
+#else
+    return "";
+#endif
 }
 
 } // namespace utils
