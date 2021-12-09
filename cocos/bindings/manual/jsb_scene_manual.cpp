@@ -112,12 +112,12 @@ static bool js_scene_Model_setInstancedAttrBlock(se::State& s) // NOLINT(readabi
         cc::scene::InstancedAttributeBlock attrBlock;
         attrBlock.views = std::move(viewsData);
 
-        // attrs
-        CC_UNUSED bool                                    ok   = true;
-        HolderType<std::vector<cc::gfx::Attribute>, true> arg2 = {};
-        ok &= sevalue_to_native(args[2], &arg2, s.thisObject());
-        SE_PRECONDITION2(ok, false, "js_scene_Model_setInstancedAttrBlock : Error processing arguments");
-        cobj->setInstancedAttrBlock(instanceBuff, static_cast<uint32_t>(instanceBufferSize), std::move(attrBlock), arg2.value());
+        // // attrs
+        // CC_UNUSED bool                                    ok   = true;
+        // HolderType<std::vector<cc::gfx::Attribute>, true> arg2 = {};
+        // ok &= sevalue_to_native(args[2], &arg2, s.thisObject());
+        // SE_PRECONDITION2(ok, false, "js_scene_Model_setInstancedAttrBlock : Error processing arguments");
+        // cobj->setInstancedAttrBlock(instanceBuff, static_cast<uint32_t>(instanceBufferSize), std::move(attrBlock), arg2.value());
 
         return true;
     }
@@ -190,11 +190,11 @@ bool register_all_scene_manual(se::Object* obj) // NOLINT(readability-identifier
         obj->setProperty("ns", nsVal);
     }
 
-    __jsb_cc_scene_Model_proto->defineFunction("setInstancedAttrBlock", _SE(js_scene_Model_setInstancedAttrBlock));
+    // __jsb_cc_scene_Model_proto->defineFunction("setInstancedAttrBlock", _SE(js_scene_Model_setInstancedAttrBlock));
 
-    __jsb_cc_scene_SubModel_proto->defineFunction("setSubMeshBuffers", _SE(js_scene_SubModel_setSubMeshBuffers));
-    __jsb_cc_scene_Pass_proto->defineFunction("setRootBufferAndBlock", _SE(js_scene_Pass_setRootBufferAndBlock));
-    __jsb_cc_scene_RenderScene_proto->defineFunction("updateBatches", _SE(js_scene_RenderScene_updateBatches));
+    // __jsb_cc_scene_SubModel_proto->defineFunction("setSubMeshBuffers", _SE(js_scene_SubModel_setSubMeshBuffers));
+    // __jsb_cc_scene_Pass_proto->defineFunction("setRootBufferAndBlock", _SE(js_scene_Pass_setRootBufferAndBlock));
+    // __jsb_cc_scene_RenderScene_proto->defineFunction("updateBatches", _SE(js_scene_RenderScene_updateBatches));
 
     // Impl MQ for DrawBatch2D
     register_all_scene_ext_manual(obj);

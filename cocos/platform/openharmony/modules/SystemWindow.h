@@ -23,29 +23,45 @@
  THE SOFTWARE.
 ****************************************************************************/
 
-#include "platform/interfaces/modules/ISystemWindow.h"
-#if (CC_PLATFORM == CC_PLATFORM_WINDOWS)
-    #include "platform/win32/modules/SystemWindow.h"
-#elif (CC_PLATFORM == CC_PLATFORM_ANDROID || CC_PLATFORM == CC_PLATFORM_OHOS)
-    #include "platform/java/modules/SystemWindow.h"
-#elif (CC_PLATFORM == CC_PLATFORM_MAC_OSX)
-    #include "platform/mac/modules/SystemWindow.h"
-#elif (CC_PLATFORM == CC_PLATFORM_MAC_IOS)
-    #include "platform/ios/modules/SystemWindow.h"
-#elif (CC_PLATFORM == CC_PLATFORM_LINUX)
-    #include "platform/linux/modules/SystemWindow.h"
-#elif (CC_PLATFORM == CC_PLATFORM_QNX)
-    #include "platform/qnx/modules/SystemWindow.h"
-#elif (CC_PLATFORM == CC_PLATFORM_OPENHARMONY)
-    #include "platform/openharmony/modules/SystemWindow.h"
-#endif
+#pragma once
 
+#include <iostream>
+
+#include "platform/interfaces/modules/ISystemWindow.h"
+#include <ace/xcomponent/native_interface_xcomponent.h>
 
 namespace cc {
 
-// static
-OSInterface::Ptr ISystemWindow::createSystemWindowInterface() {
-    return std::make_shared<SystemWindow>();
-}
+class SystemWindow : public ISystemWindow {
+public:
+    SystemWindow();
+    bool createWindow(const char* title,
+                      int x, int y, int w,
+                      int h, int flags) override;
+    static SystemWindow* GetInstance();
+    void SetNativeXComponent(NativeXComponent* component);
+    /**
+     @brief enable/disable(lock) the cursor, default is enabled
+     */
+    void               setCursorEnabled(bool value) override;
+    void               copyTextToClipboard(const std::string& text) override;
+    uintptr_t          getWindowHandler() const override;
+    Size getViewSize() const override;
+        // Callback, called by ACE XComponent
+    void OnSurfaceCreated(NativeXComponent* component, void* window);
+    void OnSurfaceChanged(NativeXComponent* component, void* window);
+    void OnSurfaceDestroyed(NativeXComponent* component, void* window);
+    void DispatchTouchEvent(NativeXComponent* component, void* window);
+
+private:
+    static SystemWindow* instance_;
+
+    NativeXComponent* component_;
+    NativeXComponentCallback callback_;
+    void* windowHandler_{nullptr};
+    std::string id_{""};
+    uint64_t width_{0};
+    uint64_t height_{0};
+};
 
 } // namespace cc

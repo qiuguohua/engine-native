@@ -108,77 +108,77 @@ bool jsb_register_all_modules() {
         cc::PoolManager::getInstance()->getCurrentPool()->clear();
     });
 
-    se->addRegisterCallback(jsb_register_global_variables);
-    se->addRegisterCallback(register_all_engine);
-    se->addRegisterCallback(register_all_cocos_manual);
-    se->addRegisterCallback(register_platform_bindings);
-    se->addRegisterCallback(register_all_gfx);
-    se->addRegisterCallback(register_all_gfx_manual);
+//     se->addRegisterCallback(jsb_register_global_variables);
+//     se->addRegisterCallback(register_all_engine);
+//     se->addRegisterCallback(register_all_cocos_manual);
+//     se->addRegisterCallback(register_platform_bindings);
+//     se->addRegisterCallback(register_all_gfx);
+//     se->addRegisterCallback(register_all_gfx_manual);
 
-    se->addRegisterCallback(register_all_network);
-    se->addRegisterCallback(register_all_network_manual);
-    se->addRegisterCallback(register_all_xmlhttprequest);
-    // extension depend on network
-    se->addRegisterCallback(register_all_extension);
-    se->addRegisterCallback(register_all_dop_bindings);
-    se->addRegisterCallback(register_all_pipeline);
-    se->addRegisterCallback(register_all_pipeline_manual);
-    se->addRegisterCallback(register_all_scene);
-    se->addRegisterCallback(register_all_scene_manual);
+//     se->addRegisterCallback(register_all_network);
+//     se->addRegisterCallback(register_all_network_manual);
+//     se->addRegisterCallback(register_all_xmlhttprequest);
+//     // extension depend on network
+//     se->addRegisterCallback(register_all_extension);
+//     se->addRegisterCallback(register_all_dop_bindings);
+//     se->addRegisterCallback(register_all_pipeline);
+//     se->addRegisterCallback(register_all_pipeline_manual);
+//     se->addRegisterCallback(register_all_scene);
+//     se->addRegisterCallback(register_all_scene_manual);
 
-#if (CC_PLATFORM == CC_PLATFORM_MAC_IOS || CC_PLATFORM == CC_PLATFORM_MAC_OSX)
-    se->addRegisterCallback(register_javascript_objc_bridge);
-    se->addRegisterCallback(register_script_native_bridge);
-#endif
+// #if (CC_PLATFORM == CC_PLATFORM_MAC_IOS || CC_PLATFORM == CC_PLATFORM_MAC_OSX)
+//     se->addRegisterCallback(register_javascript_objc_bridge);
+//     se->addRegisterCallback(register_script_native_bridge);
+// #endif
 
-#if (CC_PLATFORM == CC_PLATFORM_ANDROID || CC_PLATFORM == CC_PLATFORM_OHOS)
-    se->addRegisterCallback(register_javascript_java_bridge);
-    se->addRegisterCallback(register_script_native_bridge);
-#endif
+// #if (CC_PLATFORM == CC_PLATFORM_ANDROID || CC_PLATFORM == CC_PLATFORM_OHOS)
+//     se->addRegisterCallback(register_javascript_java_bridge);
+//     se->addRegisterCallback(register_script_native_bridge);
+// #endif
 
-#if USE_AUDIO
-    se->addRegisterCallback(register_all_audio);
-#endif
+// #if USE_AUDIO
+//     se->addRegisterCallback(register_all_audio);
+// #endif
 
-#if USE_SOCKET
-    se->addRegisterCallback(register_all_websocket);
-    se->addRegisterCallback(register_all_socketio);
-#endif
+// #if USE_SOCKET
+//     se->addRegisterCallback(register_all_websocket);
+//     se->addRegisterCallback(register_all_socketio);
+// #endif
 
-#if USE_MIDDLEWARE
-    se->addRegisterCallback(register_all_editor_support);
+// #if USE_MIDDLEWARE
+//     se->addRegisterCallback(register_all_editor_support);
 
-    #if USE_SPINE
-    se->addRegisterCallback(register_all_spine);
-    se->addRegisterCallback(register_all_spine_manual);
-    #endif
+//     #if USE_SPINE
+//     se->addRegisterCallback(register_all_spine);
+//     se->addRegisterCallback(register_all_spine_manual);
+//     #endif
 
-    #if USE_DRAGONBONES
-    se->addRegisterCallback(register_all_dragonbones);
-    se->addRegisterCallback(register_all_dragonbones_manual);
-    #endif
+//     #if USE_DRAGONBONES
+//     se->addRegisterCallback(register_all_dragonbones);
+//     se->addRegisterCallback(register_all_dragonbones_manual);
+//     #endif
 
-#endif // USE_MIDDLEWARE
+// #endif // USE_MIDDLEWARE
 
-#if USE_PHYSICS_PHYSX
-    se->addRegisterCallback(register_all_physics);
-#endif
+// #if USE_PHYSICS_PHYSX
+//     se->addRegisterCallback(register_all_physics);
+// #endif
 
-#if (CC_PLATFORM == CC_PLATFORM_MAC_IOS || CC_PLATFORM == CC_PLATFORM_ANDROID || CC_PLATFORM == CC_PLATFORM_OHOS)
+// #if (CC_PLATFORM == CC_PLATFORM_MAC_IOS || CC_PLATFORM == CC_PLATFORM_ANDROID || CC_PLATFORM == CC_PLATFORM_OHOS)
 
-    #if USE_VIDEO
-    se->addRegisterCallback(register_all_video);
-    #endif
+//     #if USE_VIDEO
+//     se->addRegisterCallback(register_all_video);
+//     #endif
 
-    #if USE_WEBVIEW
-    se->addRegisterCallback(register_all_webview);
-    #endif
+//     #if USE_WEBVIEW
+//     se->addRegisterCallback(register_all_webview);
+//     #endif
 
-#endif // (CC_PLATFORM == CC_PLATFORM_MAC_IOS || CC_PLATFORM == CC_PLATFORM_ANDROID)
+// #endif // (CC_PLATFORM == CC_PLATFORM_MAC_IOS || CC_PLATFORM == CC_PLATFORM_ANDROID)
 
-#if USE_SOCKET && USE_WEBSOCKET_SERVER
-    se->addRegisterCallback(register_all_websocket_server);
-#endif
+// #if USE_SOCKET && USE_WEBSOCKET_SERVER
+//     se->addRegisterCallback(register_all_websocket_server);
+// #endif
     se->addAfterCleanupHook([]() {
         cc::PoolManager::getInstance()->getCurrentPool()->clear();
         JSBClassType::cleanup();

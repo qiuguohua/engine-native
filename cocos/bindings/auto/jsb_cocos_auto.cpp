@@ -1592,17 +1592,17 @@ se::Class* __jsb_cc_Device_class = nullptr;
 
 static bool js_engine_Device_getDevicePixelRatio(se::State& s) // NOLINT(readability-identifier-naming)
 {
-    const auto& args = s.args();
-    size_t argc = args.size();
-    CC_UNUSED bool ok = true;
-    if (argc == 0) {
-        float result = cc::Device::getDevicePixelRatio();
-        ok &= nativevalue_to_se(result, s.rval(), nullptr /*ctx*/);
-        SE_PRECONDITION2(ok, false, "js_engine_Device_getDevicePixelRatio : Error processing arguments");
-        SE_HOLD_RETURN_VALUE(result, s.thisObject(), s.rval());
-        return true;
-    }
-    SE_REPORT_ERROR("wrong number of arguments: %d, was expecting %d", (int)argc, 0);
+    // const auto& args = s.args();
+    // size_t argc = args.size();
+    // CC_UNUSED bool ok = true;
+    // if (argc == 0) {
+    //     float result = cc::Device::getDevicePixelRatio();
+    //     ok &= nativevalue_to_se(result, s.rval(), nullptr /*ctx*/);
+    //     SE_PRECONDITION2(ok, false, "js_engine_Device_getDevicePixelRatio : Error processing arguments");
+    //     SE_HOLD_RETURN_VALUE(result, s.thisObject(), s.rval());
+    //     return true;
+    // }
+    // SE_REPORT_ERROR("wrong number of arguments: %d, was expecting %d", (int)argc, 0);
     return false;
 }
 SE_BIND_FUNC(js_engine_Device_getDevicePixelRatio)
@@ -1616,7 +1616,7 @@ static bool js_engine_Device_setAccelerometerEnabled(se::State& s) // NOLINT(rea
         HolderType<bool, false> arg0 = {};
         ok &= sevalue_to_native(args[0], &arg0, nullptr);
         SE_PRECONDITION2(ok, false, "js_engine_Device_setAccelerometerEnabled : Error processing arguments");
-        cc::Device::setAccelerometerEnabled(arg0.value());
+        //cc::Device::setAccelerometerEnabled(arg0.value());
         return true;
     }
     SE_REPORT_ERROR("wrong number of arguments: %d, was expecting %d", (int)argc, 1);
@@ -1633,7 +1633,7 @@ static bool js_engine_Device_setAccelerometerInterval(se::State& s) // NOLINT(re
         HolderType<float, false> arg0 = {};
         ok &= sevalue_to_native(args[0], &arg0, nullptr);
         SE_PRECONDITION2(ok, false, "js_engine_Device_setAccelerometerInterval : Error processing arguments");
-        cc::Device::setAccelerometerInterval(arg0.value());
+        //cc::Device::setAccelerometerInterval(arg0.value());
         return true;
     }
     SE_REPORT_ERROR("wrong number of arguments: %d, was expecting %d", (int)argc, 1);
@@ -1650,7 +1650,7 @@ static bool js_engine_Device_vibrate(se::State& s) // NOLINT(readability-identif
         HolderType<float, false> arg0 = {};
         ok &= sevalue_to_native(args[0], &arg0, nullptr);
         SE_PRECONDITION2(ok, false, "js_engine_Device_vibrate : Error processing arguments");
-        cc::Device::vibrate(arg0.value());
+        //cc::Device::vibrate(arg0.value());
         return true;
     }
     SE_REPORT_ERROR("wrong number of arguments: %d, was expecting %d", (int)argc, 1);
@@ -1667,7 +1667,7 @@ static bool js_engine_Device_setKeepScreenOn(se::State& s) // NOLINT(readability
         HolderType<bool, false> arg0 = {};
         ok &= sevalue_to_native(args[0], &arg0, nullptr);
         SE_PRECONDITION2(ok, false, "js_engine_Device_setKeepScreenOn : Error processing arguments");
-        cc::Device::setKeepScreenOn(arg0.value());
+        //cc::Device::setKeepScreenOn(arg0.value());
         return true;
     }
     SE_REPORT_ERROR("wrong number of arguments: %d, was expecting %d", (int)argc, 1);
@@ -1681,10 +1681,10 @@ static bool js_engine_Device_getNetworkType(se::State& s) // NOLINT(readability-
     size_t argc = args.size();
     CC_UNUSED bool ok = true;
     if (argc == 0) {
-        auto result = static_cast<int>(cc::Device::getNetworkType());
-        ok &= nativevalue_to_se(result, s.rval(), nullptr /*ctx*/);
-        SE_PRECONDITION2(ok, false, "js_engine_Device_getNetworkType : Error processing arguments");
-        SE_HOLD_RETURN_VALUE(result, s.thisObject(), s.rval());
+        // auto result = static_cast<int>(cc::Device::getNetworkType());
+        // ok &= nativevalue_to_se(result, s.rval(), nullptr /*ctx*/);
+        // SE_PRECONDITION2(ok, false, "js_engine_Device_getNetworkType : Error processing arguments");
+        // SE_HOLD_RETURN_VALUE(result, s.thisObject(), s.rval());
         return true;
     }
     SE_REPORT_ERROR("wrong number of arguments: %d, was expecting %d", (int)argc, 0);
@@ -1698,10 +1698,10 @@ static bool js_engine_Device_getBatteryLevel(se::State& s) // NOLINT(readability
     size_t argc = args.size();
     CC_UNUSED bool ok = true;
     if (argc == 0) {
-        float result = cc::Device::getBatteryLevel();
-        ok &= nativevalue_to_se(result, s.rval(), nullptr /*ctx*/);
-        SE_PRECONDITION2(ok, false, "js_engine_Device_getBatteryLevel : Error processing arguments");
-        SE_HOLD_RETURN_VALUE(result, s.thisObject(), s.rval());
+        // float result = cc::Device::getBatteryLevel();
+        // ok &= nativevalue_to_se(result, s.rval(), nullptr /*ctx*/);
+        // SE_PRECONDITION2(ok, false, "js_engine_Device_getBatteryLevel : Error processing arguments");
+        // SE_HOLD_RETURN_VALUE(result, s.thisObject(), s.rval());
         return true;
     }
     SE_REPORT_ERROR("wrong number of arguments: %d, was expecting %d", (int)argc, 0);
@@ -1715,10 +1715,10 @@ static bool js_engine_Device_getDeviceOrientation(se::State& s) // NOLINT(readab
     size_t argc = args.size();
     CC_UNUSED bool ok = true;
     if (argc == 0) {
-        auto result = static_cast<int>(cc::Device::getDeviceOrientation());
-        ok &= nativevalue_to_se(result, s.rval(), nullptr /*ctx*/);
-        SE_PRECONDITION2(ok, false, "js_engine_Device_getDeviceOrientation : Error processing arguments");
-        SE_HOLD_RETURN_VALUE(result, s.thisObject(), s.rval());
+        // auto result = static_cast<int>(cc::Device::getDeviceOrientation());
+        // ok &= nativevalue_to_se(result, s.rval(), nullptr /*ctx*/);
+        // SE_PRECONDITION2(ok, false, "js_engine_Device_getDeviceOrientation : Error processing arguments");
+        // SE_HOLD_RETURN_VALUE(result, s.thisObject(), s.rval());
         return true;
     }
     SE_REPORT_ERROR("wrong number of arguments: %d, was expecting %d", (int)argc, 0);
@@ -1732,10 +1732,10 @@ static bool js_engine_Device_getDPI(se::State& s) // NOLINT(readability-identifi
     size_t argc = args.size();
     CC_UNUSED bool ok = true;
     if (argc == 0) {
-        int result = cc::Device::getDPI();
-        ok &= nativevalue_to_se(result, s.rval(), nullptr /*ctx*/);
-        SE_PRECONDITION2(ok, false, "js_engine_Device_getDPI : Error processing arguments");
-        SE_HOLD_RETURN_VALUE(result, s.thisObject(), s.rval());
+        // int result = cc::Device::getDPI();
+        // ok &= nativevalue_to_se(result, s.rval(), nullptr /*ctx*/);
+        // SE_PRECONDITION2(ok, false, "js_engine_Device_getDPI : Error processing arguments");
+        // SE_HOLD_RETURN_VALUE(result, s.thisObject(), s.rval());
         return true;
     }
     SE_REPORT_ERROR("wrong number of arguments: %d, was expecting %d", (int)argc, 0);
@@ -1749,10 +1749,10 @@ static bool js_engine_Device_getSafeAreaEdge(se::State& s) // NOLINT(readability
     size_t argc = args.size();
     CC_UNUSED bool ok = true;
     if (argc == 0) {
-        cc::Vec4 result = cc::Device::getSafeAreaEdge();
-        ok &= nativevalue_to_se(result, s.rval(), nullptr /*ctx*/);
-        SE_PRECONDITION2(ok, false, "js_engine_Device_getSafeAreaEdge : Error processing arguments");
-        SE_HOLD_RETURN_VALUE(result, s.thisObject(), s.rval());
+        // cc::Vec4 result = cc::Device::getSafeAreaEdge();
+        // ok &= nativevalue_to_se(result, s.rval(), nullptr /*ctx*/);
+        // SE_PRECONDITION2(ok, false, "js_engine_Device_getSafeAreaEdge : Error processing arguments");
+        // SE_HOLD_RETURN_VALUE(result, s.thisObject(), s.rval());
         return true;
     }
     SE_REPORT_ERROR("wrong number of arguments: %d, was expecting %d", (int)argc, 0);
@@ -1766,10 +1766,10 @@ static bool js_engine_Device_getDeviceModel(se::State& s) // NOLINT(readability-
     size_t argc = args.size();
     CC_UNUSED bool ok = true;
     if (argc == 0) {
-        std::string result = cc::Device::getDeviceModel();
-        ok &= nativevalue_to_se(result, s.rval(), nullptr /*ctx*/);
-        SE_PRECONDITION2(ok, false, "js_engine_Device_getDeviceModel : Error processing arguments");
-        SE_HOLD_RETURN_VALUE(result, s.thisObject(), s.rval());
+        // std::string result = cc::Device::getDeviceModel();
+        // ok &= nativevalue_to_se(result, s.rval(), nullptr /*ctx*/);
+        // SE_PRECONDITION2(ok, false, "js_engine_Device_getDeviceModel : Error processing arguments");
+        // SE_HOLD_RETURN_VALUE(result, s.thisObject(), s.rval());
         return true;
     }
     SE_REPORT_ERROR("wrong number of arguments: %d, was expecting %d", (int)argc, 0);
@@ -1783,19 +1783,19 @@ bool js_register_engine_Device(se::Object* obj) // NOLINT(readability-identifier
 {
     auto* cls = se::Class::create("Device", obj, nullptr, nullptr);
 
-    cls->defineStaticFunction("getDevicePixelRatio", _SE(js_engine_Device_getDevicePixelRatio));
-    cls->defineStaticFunction("setAccelerometerEnabled", _SE(js_engine_Device_setAccelerometerEnabled));
-    cls->defineStaticFunction("setAccelerometerInterval", _SE(js_engine_Device_setAccelerometerInterval));
-    cls->defineStaticFunction("vibrate", _SE(js_engine_Device_vibrate));
-    cls->defineStaticFunction("setKeepScreenOn", _SE(js_engine_Device_setKeepScreenOn));
-    cls->defineStaticFunction("getNetworkType", _SE(js_engine_Device_getNetworkType));
-    cls->defineStaticFunction("getBatteryLevel", _SE(js_engine_Device_getBatteryLevel));
-    cls->defineStaticFunction("getDeviceOrientation", _SE(js_engine_Device_getDeviceOrientation));
-    cls->defineStaticFunction("getDPI", _SE(js_engine_Device_getDPI));
-    cls->defineStaticFunction("getSafeAreaEdge", _SE(js_engine_Device_getSafeAreaEdge));
-    cls->defineStaticFunction("getDeviceModel", _SE(js_engine_Device_getDeviceModel));
+    // cls->defineStaticFunction("getDevicePixelRatio", _SE(js_engine_Device_getDevicePixelRatio));
+    // cls->defineStaticFunction("setAccelerometerEnabled", _SE(js_engine_Device_setAccelerometerEnabled));
+    // cls->defineStaticFunction("setAccelerometerInterval", _SE(js_engine_Device_setAccelerometerInterval));
+    // cls->defineStaticFunction("vibrate", _SE(js_engine_Device_vibrate));
+    // cls->defineStaticFunction("setKeepScreenOn", _SE(js_engine_Device_setKeepScreenOn));
+    // cls->defineStaticFunction("getNetworkType", _SE(js_engine_Device_getNetworkType));
+    // cls->defineStaticFunction("getBatteryLevel", _SE(js_engine_Device_getBatteryLevel));
+    // cls->defineStaticFunction("getDeviceOrientation", _SE(js_engine_Device_getDeviceOrientation));
+    // cls->defineStaticFunction("getDPI", _SE(js_engine_Device_getDPI));
+    // cls->defineStaticFunction("getSafeAreaEdge", _SE(js_engine_Device_getSafeAreaEdge));
+    // cls->defineStaticFunction("getDeviceModel", _SE(js_engine_Device_getDeviceModel));
     cls->install();
-    JSBClassType::registerClass<cc::Device>(cls);
+    //JSBClassType::registerClass<cc::Device>(cls);
 
     __jsb_cc_Device_proto = cls->getProto();
     __jsb_cc_Device_class = cls;

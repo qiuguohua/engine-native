@@ -64,9 +64,9 @@ void BufferValidator::doInit(const BufferInfo &info) {
     CCASSERT(info.usage != BufferUsageBit::NONE, "invalid buffer param");
     CCASSERT(info.memUsage != MemoryUsageBit::NONE, "invalid buffer param");
     // CCASSERT(info.size, "zero-sized buffer?"); // be more lenient on this for now
-
+	#if(CC_PLATFORM != CC_PLATFORM_OPENHARMONY)
     _initStack = se::ScriptEngine::getInstance()->getCurrentStackTrace();
-
+	#endif
     _creationFrame    = DeviceValidator::getInstance()->currentFrame();
     _totalUpdateTimes = 0U;
 

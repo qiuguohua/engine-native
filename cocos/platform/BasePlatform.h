@@ -29,6 +29,7 @@
 #include "base/Macros.h"
 
 #include "bindings/event/EventDispatcher.h"
+#include "platform/interfaces/OSInterface.h"
 #include "platform/interfaces/modules/ISystem.h"
 
 #include <functional>

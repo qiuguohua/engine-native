@@ -23,29 +23,45 @@
  THE SOFTWARE.
 ****************************************************************************/
 
-#include "platform/interfaces/modules/ISystemWindow.h"
-#if (CC_PLATFORM == CC_PLATFORM_WINDOWS)
-    #include "platform/win32/modules/SystemWindow.h"
-#elif (CC_PLATFORM == CC_PLATFORM_ANDROID || CC_PLATFORM == CC_PLATFORM_OHOS)
-    #include "platform/java/modules/SystemWindow.h"
-#elif (CC_PLATFORM == CC_PLATFORM_MAC_OSX)
-    #include "platform/mac/modules/SystemWindow.h"
-#elif (CC_PLATFORM == CC_PLATFORM_MAC_IOS)
-    #include "platform/ios/modules/SystemWindow.h"
-#elif (CC_PLATFORM == CC_PLATFORM_LINUX)
-    #include "platform/linux/modules/SystemWindow.h"
-#elif (CC_PLATFORM == CC_PLATFORM_QNX)
-    #include "platform/qnx/modules/SystemWindow.h"
-#elif (CC_PLATFORM == CC_PLATFORM_OPENHARMONY)
-    #include "platform/openharmony/modules/SystemWindow.h"
-#endif
+#pragma once
 
+#include "platform/interfaces/modules/ISystem.h"
+
+class ANativeWindow;
 
 namespace cc {
 
-// static
-OSInterface::Ptr ISystemWindow::createSystemWindowInterface() {
-    return std::make_shared<SystemWindow>();
-}
+class System : public ISystem {
+public:
+    System();
+    ~System() override;
+
+    OSType getOSType() const override;
+        /**
+     @brief Get target device model.
+     */
+    std::string getDeviceModel() const override;
+    /**
+     @brief Get current language config.
+     @return Current language config.
+     */
+    LanguageType getCurrentLanguage() const override;
+    /**
+     @brief Get current language iso 639-1 code.
+     @return Current language iso 639-1 code.
+     */
+    std::string getCurrentLanguageCode() const override;
+    /**
+     @brief Get system version.
+     @return system version.
+     */
+    std::string getSystemVersion() const override;
+    /**
+     @brief Open url in default browser.
+     @param String with url to open.
+     @return True if the resource located by the URL was successfully opened; otherwise false.
+     */
+    bool openURL(const std::string& url) override;
+};
 
 } // namespace cc

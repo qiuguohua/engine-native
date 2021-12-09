@@ -90,11 +90,11 @@ static cc::network::Downloader *localDownloader() {
 }
 
 static void localDownloaderCreateTask(const std::string &url, const std::function<void(const std::string &, unsigned char *, int)> &callback) {
-    std::stringstream ss;
-    ss << "jsb_loadimage_" << (gLocalDownloaderTaskId++);
-    std::string key  = ss.str();
-    auto        task = localDownloader()->createDownloadDataTask(url, key);
-    gLocalDownloaderHandlers.emplace(std::make_pair(task->identifier, callback));
+    // std::stringstream ss;
+    // ss << "jsb_loadimage_" << (gLocalDownloaderTaskId++);
+    // std::string key  = ss.str();
+    // auto        task = localDownloader()->createDownloadDataTask(url, key);
+    // gLocalDownloaderHandlers.emplace(std::make_pair(task->identifier, callback));
 }
 
 bool jsb_set_extend_property(const char *ns, const char *clsName) { //NOLINT
@@ -715,95 +715,95 @@ static bool JSB_setPreferredFramesPerSecond(se::State &s) { //NOLINT
 }
 SE_BIND_FUNC(JSB_setPreferredFramesPerSecond)
 
-#if CC_USE_EDITBOX
-static bool JSB_showInputBox(se::State &s) { //NOLINT
-    const auto &args = s.args();
-    size_t      argc = args.size();
-    if (argc == 1) {
-        bool        ok;
-        se::Value   tmp;
-        const auto &obj = args[0].toObject();
+// #if CC_USE_EDITBOX
+// static bool JSB_showInputBox(se::State &s) { //NOLINT
+//     const auto &args = s.args();
+//     size_t      argc = args.size();
+//     if (argc == 1) {
+//         bool        ok;
+//         se::Value   tmp;
+//         const auto &obj = args[0].toObject();
 
-        cc::EditBox::ShowInfo showInfo;
+//         cc::EditBox::ShowInfo showInfo;
 
-        ok = obj->getProperty("defaultValue", &tmp);
-        SE_PRECONDITION2(ok && tmp.isString(), false, "defaultValue is invalid!");
-        showInfo.defaultValue = tmp.toString();
+//         ok = obj->getProperty("defaultValue", &tmp);
+//         SE_PRECONDITION2(ok && tmp.isString(), false, "defaultValue is invalid!");
+//         showInfo.defaultValue = tmp.toString();
 
-        ok = obj->getProperty("maxLength", &tmp);
-        SE_PRECONDITION2(ok && tmp.isNumber(), false, "maxLength is invalid!");
-        showInfo.maxLength = tmp.toInt32();
+//         ok = obj->getProperty("maxLength", &tmp);
+//         SE_PRECONDITION2(ok && tmp.isNumber(), false, "maxLength is invalid!");
+//         showInfo.maxLength = tmp.toInt32();
 
-        ok = obj->getProperty("multiple", &tmp);
-        SE_PRECONDITION2(ok && tmp.isBoolean(), false, "multiple is invalid!");
-        showInfo.isMultiline = tmp.toBoolean();
+//         ok = obj->getProperty("multiple", &tmp);
+//         SE_PRECONDITION2(ok && tmp.isBoolean(), false, "multiple is invalid!");
+//         showInfo.isMultiline = tmp.toBoolean();
 
-        if (obj->getProperty("confirmHold", &tmp)) {
-            SE_PRECONDITION2(tmp.isBoolean(), false, "confirmHold is invalid!");
-            if (!tmp.isUndefined()) {
-                showInfo.confirmHold = tmp.toBoolean();
-            }
-        }
+//         if (obj->getProperty("confirmHold", &tmp)) {
+//             SE_PRECONDITION2(tmp.isBoolean(), false, "confirmHold is invalid!");
+//             if (!tmp.isUndefined()) {
+//                 showInfo.confirmHold = tmp.toBoolean();
+//             }
+//         }
 
-        if (obj->getProperty("confirmType", &tmp)) {
-            SE_PRECONDITION2(tmp.isString(), false, "confirmType is invalid!");
-            if (!tmp.isUndefined()) {
-                showInfo.confirmType = tmp.toString();
-            }
-        }
+//         if (obj->getProperty("confirmType", &tmp)) {
+//             SE_PRECONDITION2(tmp.isString(), false, "confirmType is invalid!");
+//             if (!tmp.isUndefined()) {
+//                 showInfo.confirmType = tmp.toString();
+//             }
+//         }
 
-        if (obj->getProperty("inputType", &tmp)) {
-            SE_PRECONDITION2(tmp.isString(), false, "inputType is invalid!");
-            if (!tmp.isUndefined()) {
-                showInfo.inputType = tmp.toString();
-            }
-        }
+//         if (obj->getProperty("inputType", &tmp)) {
+//             SE_PRECONDITION2(tmp.isString(), false, "inputType is invalid!");
+//             if (!tmp.isUndefined()) {
+//                 showInfo.inputType = tmp.toString();
+//             }
+//         }
 
-        if (obj->getProperty("originX", &tmp)) {
-            SE_PRECONDITION2(tmp.isNumber(), false, "originX is invalid!");
-            if (!tmp.isUndefined()) {
-                showInfo.x = tmp.toInt32();
-            }
-        }
+//         if (obj->getProperty("originX", &tmp)) {
+//             SE_PRECONDITION2(tmp.isNumber(), false, "originX is invalid!");
+//             if (!tmp.isUndefined()) {
+//                 showInfo.x = tmp.toInt32();
+//             }
+//         }
 
-        if (obj->getProperty("originY", &tmp)) {
-            SE_PRECONDITION2(tmp.isNumber(), false, "originY is invalid!");
-            if (!tmp.isUndefined()) {
-                showInfo.y = tmp.toInt32();
-            }
-        }
+//         if (obj->getProperty("originY", &tmp)) {
+//             SE_PRECONDITION2(tmp.isNumber(), false, "originY is invalid!");
+//             if (!tmp.isUndefined()) {
+//                 showInfo.y = tmp.toInt32();
+//             }
+//         }
 
-        if (obj->getProperty("width", &tmp)) {
-            SE_PRECONDITION2(tmp.isNumber(), false, "width is invalid!");
-            if (!tmp.isUndefined()) {
-                showInfo.width = tmp.toInt32();
-            }
-        }
+//         if (obj->getProperty("width", &tmp)) {
+//             SE_PRECONDITION2(tmp.isNumber(), false, "width is invalid!");
+//             if (!tmp.isUndefined()) {
+//                 showInfo.width = tmp.toInt32();
+//             }
+//         }
 
-        if (obj->getProperty("height", &tmp)) {
-            SE_PRECONDITION2(tmp.isNumber(), false, "height is invalid!");
-            if (!tmp.isUndefined()) {
-                showInfo.height = tmp.toInt32();
-            }
-        }
+//         if (obj->getProperty("height", &tmp)) {
+//             SE_PRECONDITION2(tmp.isNumber(), false, "height is invalid!");
+//             if (!tmp.isUndefined()) {
+//                 showInfo.height = tmp.toInt32();
+//             }
+//         }
 
-        EditBox::show(showInfo);
+//         EditBox::show(showInfo);
 
-        return true;
-    }
+//         return true;
+//     }
 
-    SE_REPORT_ERROR("wrong number of arguments: %d, was expecting %d", (int)argc, 1);
-    return false;
-}
-SE_BIND_FUNC(JSB_showInputBox);
+//     SE_REPORT_ERROR("wrong number of arguments: %d, was expecting %d", (int)argc, 1);
+//     return false;
+// }
+// SE_BIND_FUNC(JSB_showInputBox);
 
-static bool JSB_hideInputBox(se::State &s) { //NOLINT
-    EditBox::hide();
-    return true;
-}
-SE_BIND_FUNC(JSB_hideInputBox)
+// static bool JSB_hideInputBox(se::State &s) { //NOLINT
+//     EditBox::hide();
+//     return true;
+// }
+// SE_BIND_FUNC(JSB_hideInputBox)
 
-#endif
+// #endif
 
 bool jsb_register_global_variables(se::Object *global) { //NOLINT
     gThreadPool = LegacyThreadPool::newFixedThreadPool(3);
@@ -824,10 +824,10 @@ bool jsb_register_global_variables(se::Object *global) { //NOLINT
     __jsbObj->defineFunction("copyTextToClipboard", _SE(JSB_copyTextToClipboard));
     __jsbObj->defineFunction("setPreferredFramesPerSecond", _SE(JSB_setPreferredFramesPerSecond));
     __jsbObj->defineFunction("destroyImage", _SE(js_destroyImage));
-#if CC_USE_EDITBOX
-    __jsbObj->defineFunction("showInputBox", _SE(JSB_showInputBox));
-    __jsbObj->defineFunction("hideInputBox", _SE(JSB_hideInputBox));
-#endif
+// #if CC_USE_EDITBOX
+//     __jsbObj->defineFunction("showInputBox", _SE(JSB_showInputBox));
+//     __jsbObj->defineFunction("hideInputBox", _SE(JSB_hideInputBox));
+// #endif
     __jsbObj->defineFunction("setCursorEnabled", _SE(JSB_setCursorEnabled));
     __jsbObj->defineFunction("saveByteCode", _SE(JSB_saveByteCode));
     global->defineFunction("__getPlatform", _SE(JSBCore_platform));

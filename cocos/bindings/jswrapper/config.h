@@ -31,9 +31,11 @@
 #define SCRIPT_ENGINE_V8  2
 #define SCRIPT_ENGINE_JSC 3
 //#define SCRIPT_ENGINE_CHAKRACORE     4
+#define SCRIPT_ENGINE_NAPI 5
 
+#undef SCRIPT_ENGINE_TYPE
 #ifndef SCRIPT_ENGINE_TYPE
-    #define SCRIPT_ENGINE_TYPE SCRIPT_ENGINE_V8
+    #define SCRIPT_ENGINE_TYPE SCRIPT_ENGINE_NAPI
 #endif
 
 #ifndef USE_V8_DEBUGGER
@@ -65,7 +67,7 @@
     #define SE_LOGE(...) __android_log_print(ANDROID_LOG_ERROR, LOG_TAG, __VA_ARGS__)
 #elif __OHOS__
     #if 1
-        #include "cocos/base/Log.h"
+        #include "base/Log.h"
         #define SE_LOGD(...) CC_LOG_DEBUG(__VA_ARGS__)
         #define SE_LOGE(...) CC_LOG_ERROR(__VA_ARGS__)
     #else

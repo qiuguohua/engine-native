@@ -23,29 +23,35 @@
  THE SOFTWARE.
 ****************************************************************************/
 
-#include "platform/interfaces/modules/ISystemWindow.h"
-#if (CC_PLATFORM == CC_PLATFORM_WINDOWS)
-    #include "platform/win32/modules/SystemWindow.h"
-#elif (CC_PLATFORM == CC_PLATFORM_ANDROID || CC_PLATFORM == CC_PLATFORM_OHOS)
-    #include "platform/java/modules/SystemWindow.h"
-#elif (CC_PLATFORM == CC_PLATFORM_MAC_OSX)
-    #include "platform/mac/modules/SystemWindow.h"
-#elif (CC_PLATFORM == CC_PLATFORM_MAC_IOS)
-    #include "platform/ios/modules/SystemWindow.h"
-#elif (CC_PLATFORM == CC_PLATFORM_LINUX)
-    #include "platform/linux/modules/SystemWindow.h"
-#elif (CC_PLATFORM == CC_PLATFORM_QNX)
-    #include "platform/qnx/modules/SystemWindow.h"
-#elif (CC_PLATFORM == CC_PLATFORM_OPENHARMONY)
-    #include "platform/openharmony/modules/SystemWindow.h"
-#endif
+#include "platform/openharmony/modules/System.h"
 
 
 namespace cc {
+System::System() = default;
+System::~System() = default;
 
-// static
-OSInterface::Ptr ISystemWindow::createSystemWindowInterface() {
-    return std::make_shared<SystemWindow>();
+System::OSType System::getOSType() const {
+    return OSType::OHOS;
+}
+
+std::string System::getDeviceModel() const {
+    return "";
+}
+
+ISystem::LanguageType System::getCurrentLanguage() const {
+    return LanguageType::ENGLISH;
+}
+
+std::string System::getCurrentLanguageCode() const {
+    return "";
+}
+
+std::string System::getSystemVersion() const {
+    return "";
+}
+
+bool System::openURL(const std::string& url) {
+    return false;
 }
 
 } // namespace cc

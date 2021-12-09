@@ -1,5 +1,6 @@
 /****************************************************************************
- Copyright (c) 2021 Xiamen Yaji Software Co., Ltd.
+ Copyright (c) 2016 Chukong Technologies Inc.
+ Copyright (c) 2017-2021 Xiamen Yaji Software Co., Ltd.
 
  http://www.cocos.com
 
@@ -23,29 +24,24 @@
  THE SOFTWARE.
 ****************************************************************************/
 
-#include "platform/interfaces/modules/ISystemWindow.h"
-#if (CC_PLATFORM == CC_PLATFORM_WINDOWS)
-    #include "platform/win32/modules/SystemWindow.h"
-#elif (CC_PLATFORM == CC_PLATFORM_ANDROID || CC_PLATFORM == CC_PLATFORM_OHOS)
-    #include "platform/java/modules/SystemWindow.h"
-#elif (CC_PLATFORM == CC_PLATFORM_MAC_OSX)
-    #include "platform/mac/modules/SystemWindow.h"
-#elif (CC_PLATFORM == CC_PLATFORM_MAC_IOS)
-    #include "platform/ios/modules/SystemWindow.h"
-#elif (CC_PLATFORM == CC_PLATFORM_LINUX)
-    #include "platform/linux/modules/SystemWindow.h"
-#elif (CC_PLATFORM == CC_PLATFORM_QNX)
-    #include "platform/qnx/modules/SystemWindow.h"
-#elif (CC_PLATFORM == CC_PLATFORM_OPENHARMONY)
-    #include "platform/openharmony/modules/SystemWindow.h"
-#endif
+#pragma once
 
+#include "../config.h"
+#include "Object.h"
+namespace se {
 
-namespace cc {
+namespace internal {
 
-// static
-OSInterface::Ptr ISystemWindow::createSystemWindowInterface() {
-    return std::make_shared<SystemWindow>();
-}
+using target_value = napi_value;
+struct PrivateData {
+    void *  data;
+    Object *seObj;
+};
 
-} // namespace cc
+bool setReturnValue(const Value &data, target_value &argv);
+void jsToSeValue(const target_value &value, Value *v);
+void jsToSeArgs(size_t argc, target_value *argv, ValueArray *outArr);
+bool seToJsValue(const Value &v, target_value *jsval);
+void seToJsArgs(napi_env env, const ValueArray &args, std::vector<target_value> *outArr);
+} // namespace internal
+} // namespace se
