@@ -1,8 +1,8 @@
 #include "ScriptEngine.h"
 #include <sstream>
+#include "../MappingUtils.h"
 #include "Class.h"
 #include "CommonHeader.h"
-#include "../MappingUtils.h"
 
 namespace se {
 ScriptEngine *gSriptEngineInstance = nullptr;

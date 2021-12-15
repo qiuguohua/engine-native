@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Class.h"
-#include "Object.h"
 #include "HelperMacros.h"
-#include "Utils.h"
+#include "Object.h"
 #include "ScriptEngine.h"
+#include "Utils.h"
