@@ -57,8 +57,10 @@ bool ScriptEngine::init() {
     napi_status status;
     napi_value  result;
     NativePtrToObjectMap::init();
+    NonRefNativePtrCreatedByCtorMap::init();
     NODE_API_CALL(status, ScriptEngine::getEnv(), napi_get_global(ScriptEngine::getEnv(), &result));
     _globalObj = Object::_createJSObject(ScriptEngine::getEnv(), result, nullptr);
+    _globalObj->root();
     return true;
 }
 
@@ -67,8 +69,21 @@ Object *ScriptEngine::getGlobalObject() const {
 }
 
 bool ScriptEngine::start() {
+    bool ok = true;
     init();
-    return true;
+
+    for (auto cb : _registerCallbackArray) {
+        ok = cb(_globalObj);
+        assert(ok);
+        if (!ok) {
+            break;
+        }
+    }
+
+    // After ScriptEngine is started, _registerCallbackArray isn't needed. Therefore, clear it here.
+    _registerCallbackArray.clear();
+
+    return ok;
 }
 
 void ScriptEngine::cleanup() {
@@ -84,7 +99,8 @@ void ScriptEngine::addAfterCleanupHook(const std::function<void()> &hook) {
 }
 
 void ScriptEngine::addRegisterCallback(RegisterCallback cb) {
-    return;
+    assert(std::find(_registerCallbackArray.begin(), _registerCallbackArray.end(), cb) == _registerCallbackArray.end());
+    _registerCallbackArray.push_back(cb);
 }
 
 napi_env ScriptEngine::getEnv() {

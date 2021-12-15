@@ -25,6 +25,7 @@ namespace se {
 
         ~Class();
         bool init(const std::string &clsName, Object *parent, Object *parentProto, napi_callback ctor = nullptr);
+        static napi_value _defaultCtor(napi_env env, napi_callback_info info);
 
     private:
         static napi_value                     *_exports;

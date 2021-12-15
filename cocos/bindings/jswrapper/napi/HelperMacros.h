@@ -1,7 +1,7 @@
 #pragma once
 
 #include "CommonHeader.h"
-#if defined(_WIN)
+#if !defined(_WIN)
 #include <Hilog/log.h>
 
 #ifndef LOGI

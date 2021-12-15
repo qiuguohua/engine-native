@@ -236,6 +236,7 @@ private:
     ScriptEngine();
     ~ScriptEngine();
     FileOperationDelegate _fileOperationDelegate;
+    std::vector<RegisterCallback> _registerCallbackArray;
 
     Object *_globalObj = nullptr;
     napi_env _env = nullptr;

@@ -9,7 +9,7 @@ namespace se {
     Class::Class() : _parent(nullptr),
     _proto(nullptr),
     _parentProto(nullptr),
-    _ctorFunc(nullptr){};
+    _ctorFunc(Class::_defaultCtor){};
 
     Class::~Class() {
     }
@@ -33,9 +33,15 @@ namespace se {
 
         if (_parentProto != nullptr)
             _parentProto->incRef();
-        _ctorFunc = ctor;
+        if (ctor) {
+            _ctorFunc = ctor;
+        }
 
         return true;
+    }
+
+    napi_value Class::_defaultCtor(napi_env env, napi_callback_info info) {
+        return nullptr;
     }
 
     void Class::defineProperty(const std::string &name, napi_callback g, napi_callback s) {
@@ -66,7 +72,7 @@ namespace se {
     void Class::install() {
         napi_value cons;
         napi_status status;
-        NODE_API_CALL_RETURN_VOID(ScriptEngine::getEnv(), napi_define_class(
+        NODE_API_CALL(status, ScriptEngine::getEnv(), napi_define_class(
                 ScriptEngine::getEnv(), _name.c_str(), -1, _ctorFunc, nullptr,
                 _properties.size(),
                 _properties.data(), &cons));
