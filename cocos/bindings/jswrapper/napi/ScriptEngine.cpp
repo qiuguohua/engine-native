@@ -56,6 +56,7 @@ bool ScriptEngine::evalString(const char *scriptStr, ssize_t length, Value *ret,
 bool ScriptEngine::init() {
     napi_status status;
     napi_value  result;
+    Object::setup();
     NativePtrToObjectMap::init();
     NonRefNativePtrCreatedByCtorMap::init();
     NODE_API_CALL(status, ScriptEngine::getEnv(), napi_get_global(ScriptEngine::getEnv(), &result));

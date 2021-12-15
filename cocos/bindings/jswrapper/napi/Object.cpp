@@ -361,12 +361,11 @@ void Object::setPrivateData(void* data) {
     //issue https://github.com/nodejs/node/issues/23999
     auto tmpThis = _objRef.getValue(_env);
     //_objRef.deleteRef();
-    napi_ref     result   = nullptr;
-    static char* s_counts = 0;
+    napi_ref result = nullptr;
     NODE_API_CALL(status, _env,
-                  napi_wrap(_env, tmpThis, data, _cls->_getFinalizeFunction(),
-                            (void*)s_counts++ /* finalize_hint */, &result));
-    _objRef.setWeakref(_env, result);
+                  napi_wrap(_env, tmpThis, data, weakCallback,
+                            (void*)this /* finalize_hint */, &result));
+    //_objRef.setWeakref(_env, result);
     setProperty("__native_ptr__", se::Value(static_cast<uint64_t>(reinterpret_cast<uintptr_t>(data))));
 
     return;
@@ -481,7 +480,32 @@ napi_value Object::_getJSObject() const {
 void Object::weakCallback(napi_env env, void* nativeObject, void* finalizeHint /*finalize_hint*/) {
     if (finalizeHint) {
         Object* obj = reinterpret_cast<Object*>(finalizeHint);
+
+        if (nativeObject == nullptr) {
+            return;
+        }
+
+        auto iter = NativePtrToObjectMap::find(nativeObject);
+        if (iter != NativePtrToObjectMap::end()) {
+            Object* obj = iter->second;
+            if (obj->_finalizeCb != nullptr) {
+                obj->_finalizeCb(env, nativeObject, finalizeHint);
+            } else {
+                assert(obj->_getClass() != nullptr);
+                if (obj->_getClass()->_getFinalizeFunction() != nullptr) {
+                    obj->_getClass()->_getFinalizeFunction()(env, nativeObject, finalizeHint);
+                }
+            }
+            obj->decRef();
+            NativePtrToObjectMap::erase(iter);
+        } else {
+            //            assert(false);
+        }
     }
+}
+
+void Object::setup() {
+    __objectMap = std::make_unique<std::unordered_map<Object*, void*>>();
 }
 
 Object* Object::createJSONObject(const std::string& jsonStr) {

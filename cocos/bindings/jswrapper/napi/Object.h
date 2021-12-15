@@ -346,6 +346,7 @@ public:
 
 private:
     static void weakCallback(napi_env env, void *nativeObject, void * /*finalize_hint*/);
+    static void setup();
 
 private:
     ObjectRef     _objRef;
@@ -354,5 +355,7 @@ private:
     napi_env      _env         = nullptr;
     Class *       _cls         = nullptr;
     uint32_t      _rootCount   = 0;
+
+    friend class ScriptEngine;
 };
 }; // namespace se
