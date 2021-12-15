@@ -73,31 +73,58 @@ void Class::install() {
     napi_value  cons;
     napi_status status;
     NODE_API_CALL(status, ScriptEngine::getEnv(), napi_define_class(ScriptEngine::getEnv(), _name.c_str(), -1, _ctorFunc, nullptr, _properties.size(), _properties.data(), &cons));
-
+    if (_parentProto) {
+        inherit(ScriptEngine::getEnv(), cons, _parentProto->_getJSObject());
+    }
     NODE_API_CALL(status, ScriptEngine::getEnv(),
                   napi_create_reference(ScriptEngine::getEnv(), cons, 1, &_constructor));
 
     NODE_API_CALL(status, ScriptEngine::getEnv(),
                   napi_set_named_property(ScriptEngine::getEnv(), _parent->_getJSObject(), _name.c_str(), cons));
 
-    napi_valuetype valType;
-    NODE_API_CALL(status, ScriptEngine::getEnv()(), napi_typeof(ScriptEngine::getEnv(), cons, &valType));
-
-    napi_value result;
-    status = napi_coerce_to_object(ScriptEngine::getEnv(), cons, &result);
-    NODE_API_CALL(status, ScriptEngine::getEnv()(), napi_typeof(ScriptEngine::getEnv(), result, &valType));
-
     napi_value proto;
-    NODE_API_CALL(status, ScriptEngine::getEnv(),
-                  napi_get_prototype(ScriptEngine::getEnv(), cons, &proto));
-
-    NODE_API_CALL(status, ScriptEngine::getEnv()(), napi_typeof(ScriptEngine::getEnv(), proto, &valType));
+    NODE_API_CALL(status, ScriptEngine::getEnv(), napi_get_named_property(ScriptEngine::getEnv(), cons, "prototype", &proto));
 
     if (status == napi_ok) {
         _proto = Object::_createJSObject(ScriptEngine::getEnv(), proto, nullptr);
         _proto->root();
     }
 }
+
+    napi_status Class::inherit(napi_env env, napi_value subclass, napi_value superProto)
+    {
+        napi_value global, objectClass, setProto;
+        napi_value argv[2];
+        napi_value callbackResult = nullptr;
+
+        LOGI("napi_inherit begin");
+        napi_get_global(env, &global);
+        napi_status status = napi_get_named_property(env, global, "Object", &objectClass);
+        if (status != napi_ok) {
+            LOGE("ace zbclog napi_get_named_property Object %{public}d", status);
+            return napi_ok;
+        }
+        status = napi_get_named_property(env, objectClass, "setPrototypeOf", &setProto);
+        if (status != napi_ok) {
+            LOGE("ace zbclog napi_get_named_property setPrototypeOf %{public}d", status);
+            return napi_ok;
+        }
+
+        status = napi_get_named_property(env, subclass, "prototype", &argv[0]);
+        if (status != napi_ok) {
+            LOGE("ace zbclog napi_get_named_property prototype arg0 %{public}d", status);
+            return napi_ok;
+        }
+        argv[1] = superProto;
+        status = napi_call_function(env, objectClass, setProto, 2, argv, &callbackResult);
+        if (status != napi_ok) {
+            LOGE("ace zbclog napi_call_function setProto 1 %{public}d", status);
+            return napi_ok;
+        }
+        LOGI("napi_inherit end");
+
+        return napi_ok;
+    }
 
 napi_value Class::_createJSObjectWithClass(Class *cls) {
     //not impl

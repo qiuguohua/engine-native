@@ -16,6 +16,7 @@ public:
     napi_value    _createJSObjectWithClass(Class *cls);
     Object *      getProto() const;
     void          install();
+    napi_status   inherit(napi_env env, napi_value subclass, napi_value superclass);
     napi_ref      _getCtorRef() const;
     const char *  getName() const { return ""; }
     static void   setExports(napi_value *expPtr) { _exports = expPtr; }
