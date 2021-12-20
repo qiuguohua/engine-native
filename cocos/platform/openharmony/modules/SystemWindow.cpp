@@ -45,8 +45,12 @@ void OnSurfaceCreatedCB(NativeXComponent* component, void* window) {
         return;
     }
 
-    auto sysWindow = cc::SystemWindow::GetInstance();
-    sysWindow->OnSurfaceCreated(component, window);
+    // auto sysWindow = cc::SystemWindow::GetInstance();
+    // sysWindow->OnSurfaceCreated(component, window);
+    cc::OpenharmonyPlatform* platform = dynamic_cast<cc::OpenharmonyPlatform*>(cc::BasePlatform::getPlatform());
+    CCASSERT(platform != nullptr, "Only supports openharmony platform");
+    platform->workerMessageQ_.EnQueue(component);
+    uv_async_send(&(platform->workerOnMessageSignal_));
 }
 
 void DispatchTouchEventCB(NativeXComponent* component, void* window) {
@@ -98,7 +102,7 @@ SystemWindow* SystemWindow::GetInstance() {
 }
 
 SystemWindow::SystemWindow() {
-    instance_                     = this;
+    instance_                    = this;
     callback_.OnSurfaceCreated   = OnSurfaceCreatedCB;
     callback_.OnSurfaceChanged   = OnSurfaceChangedCB;
     callback_.OnSurfaceDestroyed = OnSurfaceDestroyedCB;
@@ -162,15 +166,15 @@ void SystemWindow::DispatchTouchEvent(NativeXComponent* component, void* window)
     if (ret != XCOMPONENT_RESULT_SUCCESS) {
         return;
     }
-    
+
     OpenharmonyPlatform* platform = dynamic_cast<OpenharmonyPlatform*>(BasePlatform::getPlatform());
     CCASSERT(platform != nullptr, "Only supports openharmony platform");
     TouchEvent ev;
-    if(touchInfo.type == DOWN) {
+    if (touchInfo.type == DOWN) {
         ev.type = cc::TouchEvent::Type::BEGAN;
-    } else if(touchInfo.type == MOVE) {
+    } else if (touchInfo.type == MOVE) {
         ev.type = cc::TouchEvent::Type::MOVED;
-    } else if(touchInfo.type == UP) {
+    } else if (touchInfo.type == UP) {
         ev.type = cc::TouchEvent::Type::ENDED;
     }
     ev.touches.emplace_back(touchInfo.x, touchInfo.y, touchInfo.id);

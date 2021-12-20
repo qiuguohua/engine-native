@@ -12,14 +12,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+#include <ace/xcomponent/native_interface_xcomponent.h>
+#include <napi/js_native_api.h>
+#include <napi/native_api.h>
+#include <napi/node_api.h>
 #include "platform/openharmony/OpenharmonyPlatform.h"
 #include "platform/openharmony/common/PluginCommon.h"
 
 /*
  * function for module exports
  */
-static napi_value Init(napi_env env, napi_value exports)
-{
+static napi_value Init(napi_env env, napi_value exports) {
+    napi_property_descriptor desc[] = {
+        DECLARE_NAPI_FUNCTION("getContext", cc::OpenharmonyPlatform::GetContext),
+    };
+    NAPI_CALL(env, napi_define_properties(env, exports, sizeof(desc) / sizeof(desc[0]), desc));
+
     cc::OpenharmonyPlatform* platform = dynamic_cast<cc::OpenharmonyPlatform*>(cc::BasePlatform::getPlatform());
     CCASSERT(platform != nullptr, "Only supports openharmony platform");
     bool ret = platform->Export(env, exports);
@@ -32,19 +40,18 @@ static napi_value Init(napi_env env, napi_value exports)
 /*
  * Napi Module define
  */
-static napi_module nativerenderModule = {
-.nm_version = 1,
-.nm_flags = 0,
-.nm_filename = nullptr,
-.nm_register_func = Init,  // called by ACE XComponent
-.nm_modname = "cocos2d",
-.nm_priv = ((void*)0),
-.reserved = { 0 },
+static napi_module cocos2dModule = {
+    .nm_version       = 1,
+    .nm_flags         = 0,
+    .nm_filename      = nullptr,
+    .nm_register_func = Init, // called by ACE XComponent
+    .nm_modname       = "cocos2d",
+    .nm_priv          = ((void*)0),
+    .reserved         = {0},
 };
 /*
  * Module register function
  */
-extern "C" __attribute__((constructor)) void RegisterModule(void)
-{
-    napi_module_register(&nativerenderModule);
+extern "C" __attribute__((constructor)) void RegisterModule(void) {
+    napi_module_register(&cocos2dModule);
 }
