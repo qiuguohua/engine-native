@@ -27,8 +27,8 @@
 
 #include "platform/interfaces/OSInterface.h"
 
-#include "platform/interfaces/modules/ISystemWindow.h"
 #include "platform/interfaces/modules/ISystem.h"
+#include "platform/interfaces/modules/ISystemWindow.h"
 
 #include "platform/interfaces/modules/IAccelerometer.h"
 #include "platform/interfaces/modules/IBattery.h"

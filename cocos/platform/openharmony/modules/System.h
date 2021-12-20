@@ -37,7 +37,7 @@ public:
     ~System() override;
 
     OSType getOSType() const override;
-        /**
+    /**
      @brief Get target device model.
      */
     std::string getDeviceModel() const override;

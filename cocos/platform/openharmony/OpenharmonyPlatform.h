@@ -26,13 +26,16 @@
 #pragma once
 
 #include "platform/UniversalPlatform.h"
-#include "platform/openharmony/render/PluginRender.h"
 
 #include <ace/xcomponent/native_interface_xcomponent.h>
 #include <napi/js_native_api.h>
 #include <napi/node_api.h>
+#include <uv.h>
 #include <string>
 #include <unordered_map>
+#include "platform/openharmony/message_queue.h"
+
+#define _ARKUI_DECLARATIVE_ 1
 
 namespace cc {
 class OpenharmonyPlatform : public UniversalPlatform {
@@ -40,7 +43,32 @@ public:
     OpenharmonyPlatform();
 
     static OpenharmonyPlatform* getInstance();
-    // JS API : Lifecycle
+
+    static napi_value GetContext(napi_env env, napi_callback_info info);
+
+    /******************************APP Lifecycle******************************/
+    static napi_value NapiOnCreate(napi_env env, napi_callback_info info);
+    static napi_value NapiOnShow(napi_env env, napi_callback_info info);
+    static napi_value NapiOnHide(napi_env env, napi_callback_info info);
+    static napi_value NapiOnDestroy(napi_env env, napi_callback_info info);
+
+    void OnCreateNative(napi_env env, uv_loop_t* loop);
+    void OnShowNative();
+    void OnHideNative();
+    void OnDestroyNative();
+    /*********************************************************************/
+#ifdef _ARKUI_DECLARATIVE_
+    /******************************声明式范式******************************/
+    /**                      JS Page : Lifecycle                        **/
+    static napi_value NapiOnPageShow(napi_env env, napi_callback_info info);
+    static napi_value NapiOnPageHide(napi_env env, napi_callback_info info);
+    void              OnPageShowNative();
+    void              OnPageHideNative();
+    /*************************************************************************/
+
+#else
+    /******************************类 Web范式******************************/
+    /**                      JS Page : Lifecycle                        **/
     static napi_value NapiOnInit(napi_env env, napi_callback_info info);
     static napi_value NapiOnReady(napi_env env, napi_callback_info info);
     static napi_value NapiOnShow(napi_env env, napi_callback_info info);
@@ -49,14 +77,21 @@ public:
     static napi_value NapiOnActive(napi_env env, napi_callback_info info);
     static napi_value NapiOnInactive(napi_env env, napi_callback_info info);
 
-    // Native logic : Lifecycle
-    int32_t OnInitNative();
+    void OnInitNative();
     void OnReadyNative();
     void OnShowNative();
     void OnHideNative();
     void OnDestroyNative();
     void OnActiveNative();
     void OnInactiveNative();
+    /*************************************************************************/
+#endif
+    /*************************Worker Func*************************************/
+    static napi_value NapiWorkerInit(napi_env env, napi_callback_info info);
+    static napi_value NapiASend(napi_env env, napi_callback_info info);
+
+    void WorkerInit(napi_env env, uv_loop_t* loop);
+    /*************************************************************************/
 
     // Napi export
     bool Export(napi_env env, napi_value exports);
@@ -68,9 +103,22 @@ public:
     int32_t loop() override;
 
 private:
-    static bool isInit;
-    bool isRunning{false};
-    void waitWindowInitialized();
+    static void MainOnMessage(const uv_async_t* req);
+    static void WorkerOnMessage(const uv_async_t* req);
+    bool        isRunning{false};
+    void        waitWindowInitialized();
     std::string id_;
+
+public:
+    napi_env   mainEnv_  = nullptr;
+    uv_loop_t* mainLoop_ = nullptr;
+    uv_async_t mainOnMessageSignal_{};
+
+    napi_env   workerEnv_  = nullptr;
+    uv_loop_t* workerLoop_ = nullptr;
+    uv_async_t workerOnMessageSignal_{};
+    uv_async_t workerChangeColorSignal_{};
+
+    MessageQueue workerMessageQ_;
 };
 } // namespace cc

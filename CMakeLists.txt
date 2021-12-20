@@ -404,8 +404,8 @@ elseif(OPENHARMONY)
     cocos_source_files(
         cocos/platform/openharmony/common/PluginCommon.h
         cocos/platform/openharmony/napi/NapiInit.cpp
-        cocos/platform/openharmony/render/PluginRender.h
-        cocos/platform/openharmony/render/PluginRender.cpp
+        cocos/platform/openharmony/message_queue.cpp
+        cocos/platform/openharmony/message_queue.h
         cocos/platform/openharmony/OpenharmonyPlatform.cpp
         cocos/platform/openharmony/OpenharmonyPlatform.h
     )
