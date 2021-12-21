@@ -48,7 +48,7 @@ bool ScriptEngine::evalString(const char *scriptStr, ssize_t length, Value *ret,
     napi_value  result;
     length = length < 0 ? NAPI_AUTO_LENGTH : length;
     status = napi_create_string_utf8(ScriptEngine::getEnv(), scriptStr, length, &script);
-
+    LOGI("eval :%s", scriptStr);
     NODE_API_CALL(status, ScriptEngine::getEnv(), napi_run_script(ScriptEngine::getEnv(), script, &result));
     return true;
 }
@@ -62,6 +62,8 @@ bool ScriptEngine::init() {
     NODE_API_CALL(status, ScriptEngine::getEnv(), napi_get_global(ScriptEngine::getEnv(), &result));
     _globalObj = Object::_createJSObject(ScriptEngine::getEnv(), result, nullptr);
     _globalObj->root();
+    _globalObj->setProperty("window", Value(_globalObj));
+    _globalObj->setProperty("scriptEngineType", se::Value("napi"));
     return true;
 }
 
@@ -71,7 +73,16 @@ Object *ScriptEngine::getGlobalObject() const {
 
 bool ScriptEngine::start() {
     bool ok = true;
-    init();
+    if (!init()) {
+        return false;
+    }
+    for (auto cb : _permRegisterCallbackArray) {
+        ok = cb(_globalObj);
+        assert(ok);
+        if (!ok) {
+            break;
+        }
+    }
 
     for (auto cb : _registerCallbackArray) {
         ok = cb(_globalObj);
@@ -113,8 +124,9 @@ void ScriptEngine::setEnv(napi_env env) {
 }
 
 void ScriptEngine::addPermanentRegisterCallback(RegisterCallback cb) {
-    //not impl
-    return;
+    if (std::find(_permRegisterCallbackArray.begin(), _permRegisterCallbackArray.end(), cb) == _permRegisterCallbackArray.end()) {
+        _permRegisterCallbackArray.push_back(cb);
+    }
 }
 
 void ScriptEngine::setExceptionCallback(const ExceptionCallback &cb) {

@@ -50,7 +50,6 @@
     #include "cocos/bindings/manual/jsb_socketio.h"
     #include "cocos/bindings/manual/jsb_websocket.h"
 #endif // USE_SOCKET
-
 #if USE_AUDIO
     #include "cocos/bindings/auto/jsb_audio_auto.h"
 #endif
@@ -99,6 +98,7 @@
 #endif
 
 bool jsb_register_all_modules() {
+    LOGI("jsb_register_all_modules");
     se::ScriptEngine *se = se::ScriptEngine::getInstance();
 
     se->addBeforeCleanupHook([se]() {
@@ -108,12 +108,12 @@ bool jsb_register_all_modules() {
         cc::PoolManager::getInstance()->getCurrentPool()->clear();
     });
 
-//     se->addRegisterCallback(jsb_register_global_variables);
+     se->addRegisterCallback(jsb_register_global_variables);
 //     se->addRegisterCallback(register_all_engine);
 //     se->addRegisterCallback(register_all_cocos_manual);
 //     se->addRegisterCallback(register_platform_bindings);
-//     se->addRegisterCallback(register_all_gfx);
-//     se->addRegisterCallback(register_all_gfx_manual);
+     se->addRegisterCallback(register_all_gfx);
+     se->addRegisterCallback(register_all_gfx_manual);
 
 //     se->addRegisterCallback(register_all_network);
 //     se->addRegisterCallback(register_all_network_manual);
@@ -136,9 +136,9 @@ bool jsb_register_all_modules() {
 //     se->addRegisterCallback(register_script_native_bridge);
 // #endif
 
-// #if USE_AUDIO
-//     se->addRegisterCallback(register_all_audio);
-// #endif
+ #if USE_AUDIO
+     se->addRegisterCallback(register_all_audio);
+ #endif
 
 // #if USE_SOCKET
 //     se->addRegisterCallback(register_all_websocket);

@@ -1531,6 +1531,13 @@ cocos_source_files(
 )
 
 ######## auto
+#for test
+cocos_source_files(
+    NO_WERROR    cocos/bindings/auto/jsb_gfx_auto.cpp
+                 cocos/bindings/auto/jsb_gfx_auto.h
+    NO_WERROR    cocos/bindings/manual/jsb_gfx_manual.cpp
+                 cocos/bindings/manual/jsb_gfx_manual.h)
+
 if(NOT OPENHARMONY)
 cocos_source_files(
     NO_WERROR    cocos/bindings/auto/jsb_cocos_auto.cpp
