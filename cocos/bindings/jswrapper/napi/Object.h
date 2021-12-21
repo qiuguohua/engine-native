@@ -1,85 +1,86 @@
 #pragma once
+#include <cassert>
 #include "../RefCounter.h"
 #include "../Value.h"
 #include "../config.h"
 #include "CommonHeader.h"
 #include "HelperMacros.h"
-#include <cassert>
 
 namespace se {
 class Class;
 
-        class ObjectRef {
-        private:
-            napi_ref _ref = nullptr;
-            int _refCounts = 0;
-            napi_env _env = nullptr;
-            napi_value _obj = nullptr;
-        public:
-            ~ObjectRef() {
-                deleteRef();
-            }
-            napi_value getValue(napi_env env) const {
-                if (!_ref){
-                    return _obj;
-                }
-                napi_value result;
-                napi_status status;
-                NODE_API_CALL(status, env, napi_get_reference_value(env, _ref, &result));
-                assert(status == napi_ok);
-                return result;
-            }
-            void initWeakref(napi_env env, napi_value obj) {
-                assert(_ref == nullptr);
-                _obj = obj;
-                _env = env;
-                return;
-                napi_create_reference(env, obj, 0, &_ref);
-            }
-            void setWeakref(napi_env env, napi_ref ref) {
-                assert(_ref == nullptr);
-                _ref = ref;
-            }
-            void initStrongRef(napi_env env, napi_value obj) {
-                assert(_ref == nullptr);
-                _refCounts = 1;
-                _obj = obj;
-                napi_create_reference(env, obj, _refCounts, &_ref);
-                _env = env;
-            }
-            void incRef(napi_env env) {
-                assert(_ref == nullptr);
-                assert(_refCounts == 0);
-                _refCounts = 1;
-                napi_create_reference(env, _obj, _refCounts, &_ref);
-                return;
-                if (_refCounts == 0){
-                    uint32_t result = 0;
-                    _refCounts = 1;
-                    napi_reference_ref(env, _ref,  &result);
-                }
-            }
-            void decRef(napi_env env) {
-                assert(_refCounts == 1);
-                deleteRef();
-                return;
-                uint32_t result = 0;
-                if (_refCounts > 0) {
-                    _refCounts--;
-                    napi_reference_unref(env, _ref,  &result);
-                }
-            }
-            void deleteRef() {
-                if (!_ref) {
-                    return;
-                }
-                _refCounts = 0;
-                napi_delete_reference(_env, _ref);
-                _ref = nullptr;
-            }
-        };
+class ObjectRef {
+private:
+    napi_ref   _ref       = nullptr;
+    int        _refCounts = 0;
+    napi_env   _env       = nullptr;
+    napi_value _obj       = nullptr;
 
-        class Object;
+public:
+    ~ObjectRef() {
+        deleteRef();
+    }
+    napi_value getValue(napi_env env) const {
+        if (!_ref) {
+            return _obj;
+        }
+        napi_value  result;
+        napi_status status;
+        NODE_API_CALL(status, env, napi_get_reference_value(env, _ref, &result));
+        assert(status == napi_ok);
+        return result;
+    }
+    void initWeakref(napi_env env, napi_value obj) {
+        assert(_ref == nullptr);
+        _obj = obj;
+        _env = env;
+        return;
+        napi_create_reference(env, obj, 0, &_ref);
+    }
+    void setWeakref(napi_env env, napi_ref ref) {
+        assert(_ref == nullptr);
+        _ref = ref;
+    }
+    void initStrongRef(napi_env env, napi_value obj) {
+        assert(_ref == nullptr);
+        _refCounts = 1;
+        _obj       = obj;
+        napi_create_reference(env, obj, _refCounts, &_ref);
+        _env = env;
+    }
+    void incRef(napi_env env) {
+        assert(_ref == nullptr);
+        assert(_refCounts == 0);
+        _refCounts = 1;
+        napi_create_reference(env, _obj, _refCounts, &_ref);
+        return;
+        if (_refCounts == 0) {
+            uint32_t result = 0;
+            _refCounts      = 1;
+            napi_reference_ref(env, _ref, &result);
+        }
+    }
+    void decRef(napi_env env) {
+        assert(_refCounts == 1);
+        deleteRef();
+        return;
+        uint32_t result = 0;
+        if (_refCounts > 0) {
+            _refCounts--;
+            napi_reference_unref(env, _ref, &result);
+        }
+    }
+    void deleteRef() {
+        if (!_ref) {
+            return;
+        }
+        _refCounts = 0;
+        napi_delete_reference(_env, _ref);
+        _ref = nullptr;
+    }
+};
+
+class Object;
 
 class Object : public RefCounter {
 public:
@@ -345,13 +346,16 @@ public:
 
 private:
     static void weakCallback(napi_env env, void *nativeObject, void * /*finalize_hint*/);
+    static void setup();
 
 private:
-    ObjectRef    _objRef;
+    ObjectRef     _objRef;
     napi_finalize _finalizeCb  = nullptr;
     void *        _privateData = nullptr;
     napi_env      _env         = nullptr;
     Class *       _cls         = nullptr;
     uint32_t      _rootCount   = 0;
+
+    friend class ScriptEngine;
 };
 }; // namespace se

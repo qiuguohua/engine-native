@@ -202,6 +202,7 @@ bool OpenharmonyPlatform::Export(napi_env env, napi_value exports) {
 
     status = napi_unwrap(env, exportInstance, reinterpret_cast<void**>(&nativeXComponent));
     if (status != napi_ok) {
+        LOGE("napi_unwrap %d", status);
         return false;
     }
 
@@ -312,6 +313,7 @@ void OpenharmonyPlatform::WorkerInit(napi_env env, uv_loop_t* loop) {
     workerEnv_  = env;
     workerLoop_ = loop;
     LOGE("kee cocos PluginManager::WorkerInit workerEnv = %p, workerLoop = %p", workerEnv_, workerLoop_);
+    se::ScriptEngine::setEnv(env);
     if (workerLoop_) {
         LOGE("kee cocos WorkerInit uv_async_init");
         uv_async_init(workerLoop_, &workerOnMessageSignal_, reinterpret_cast<uv_async_cb>(OpenharmonyPlatform::WorkerOnMessage));

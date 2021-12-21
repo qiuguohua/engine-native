@@ -3,9 +3,9 @@
 
 #include <functional>
 #include <thread>
-#include "CommonHeader.h"
 #include "../Value.h"
 #include "../config.h"
+#include "CommonHeader.h"
 
 using HandleScope = int;
 namespace se {
@@ -171,7 +171,7 @@ public:
     Object *getGlobalObject() const;
 
     static napi_env getEnv();
-    static void setEnv(napi_env env);
+    static void     setEnv(napi_env env);
 
     /**
          *  @brief Adds a callback for registering a native binding module.
@@ -235,9 +235,11 @@ public:
 private:
     ScriptEngine();
     ~ScriptEngine();
-    FileOperationDelegate _fileOperationDelegate;
+    FileOperationDelegate         _fileOperationDelegate;
+    std::vector<RegisterCallback> _registerCallbackArray;
+    std::vector<RegisterCallback>         _permRegisterCallbackArray;
 
-    Object *_globalObj = nullptr;
-    napi_env _env = nullptr;
+    Object * _globalObj = nullptr;
+    napi_env _env       = nullptr;
 };
 }; // namespace se

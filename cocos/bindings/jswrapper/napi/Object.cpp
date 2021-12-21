@@ -1,15 +1,14 @@
 #include "Object.h"
-#include "Class.h"
-#include "Utils.h"
-#include "ScriptEngine.h"
 #include <memory>
 #include <unordered_map>
 #include "../MappingUtils.h"
-
+#include "Class.h"
+#include "ScriptEngine.h"
+#include "Utils.h"
 
 #define MAX_STRING_LEN 512
 namespace se {
-    std::unique_ptr<std::unordered_map<Object *, void *>> __objectMap; // Currently, the value `void*` is always nullptr
+std::unique_ptr<std::unordered_map<Object*, void*>> __objectMap; // Currently, the value `void*` is always nullptr
 
 Object::Object() {}
 Object::~Object() {
@@ -19,7 +18,7 @@ Object::~Object() {
 }
 
 Object* Object::createObjectWithClass(Class* cls) {
-//not impl
+    //not impl
     return nullptr;
 }
 
@@ -34,10 +33,10 @@ bool Object::setProperty(const char* name, const Value& data) {
 bool Object::getProperty(const char* name, Value* d) {
     napi_status status;
     napi_value  jsVal;
-    Value data;
+    Value       data;
     NODE_API_CALL(status, _env, napi_get_named_property(_env, _objRef.getValue(_env), name, &jsVal));
     internal::jsToSeValue(jsVal, &data);
-    if (data.isUndefined()){
+    if (data.isUndefined()) {
         return false;
     }
     *d = data;
@@ -87,8 +86,7 @@ Object::TypedArrayType Object::getTypedArrayType() const {
     napi_value           inputBuffer;
     size_t               byteOffset;
     size_t               length;
-    NODE_API_CALL(status, _env, napi_get_typedarray_info(
-                            _env, _objRef.getValue(_env), &type, &length, NULL, &inputBuffer, &byteOffset));
+    NODE_API_CALL(status, _env, napi_get_typedarray_info(_env, _objRef.getValue(_env), &type, &length, NULL, &inputBuffer, &byteOffset));
 
     TypedArrayType ret = TypedArrayType::NONE;
     switch (type) {
@@ -131,19 +129,17 @@ bool Object::getTypedArrayData(uint8_t** ptr, size_t* length) const {
     napi_value           inputBuffer;
     size_t               byteOffset;
     size_t               len;
-    NODE_API_CALL(status, _env, napi_get_typedarray_info(
-                            _env, _objRef.getValue(_env), &type, &len, NULL, &inputBuffer, &byteOffset));
+    NODE_API_CALL(status, _env, napi_get_typedarray_info(_env, _objRef.getValue(_env), &type, &len, NULL, &inputBuffer, &byteOffset));
 
     void*  data;
     size_t byteLength;
-    NODE_API_CALL(status, _env, napi_get_arraybuffer_info(
-                            _env, inputBuffer, &data, &byteLength));
+    NODE_API_CALL(status, _env, napi_get_arraybuffer_info(_env, inputBuffer, &data, &byteLength));
     *ptr = (uint8_t*)(data) + byteOffset;
     return true;
 }
 
 bool Object::isArrayBuffer() const {
-    bool ret = false;
+    bool        ret = false;
     napi_status status;
     NODE_API_CALL(status, _env, napi_is_arraybuffer(_env, _objRef.getValue(_env), &ret));
     return ret;
@@ -169,8 +165,7 @@ Object* Object::createTypedArray(Object::TypedArrayType type, const void* data, 
     napi_typedarray_type napiType;
     napi_value           outputBuffer;
     void*                outputPtr = nullptr;
-    NODE_API_CALL(status, ScriptEngine::getEnv(), napi_create_arraybuffer(
-                                       ScriptEngine::getEnv(), byteLength, &outputPtr, &outputBuffer));
+    NODE_API_CALL(status, ScriptEngine::getEnv(), napi_create_arraybuffer(ScriptEngine::getEnv(), byteLength, &outputPtr, &outputBuffer));
     size_t sizeOfEle = 0;
     switch (type) {
         case TypedArrayType::INT8:
@@ -208,8 +203,7 @@ Object* Object::createTypedArray(Object::TypedArrayType type, const void* data, 
     }
     size_t     eleCounts = byteLength / sizeOfEle;
     napi_value outputArray;
-    NODE_API_CALL(status, ScriptEngine::getEnv(), napi_create_typedarray(
-                                       ScriptEngine::getEnv(), napiType, eleCounts, outputBuffer, 0, &outputArray));
+    NODE_API_CALL(status, ScriptEngine::getEnv(), napi_create_typedarray(ScriptEngine::getEnv(), napiType, eleCounts, outputBuffer, 0, &outputArray));
 
     Object* obj = Object::_createJSObject(ScriptEngine::getEnv(), outputArray, nullptr);
     return obj;
@@ -223,7 +217,7 @@ bool Object::isFunction() const {
 }
 
 bool Object::defineFunction(const char* funcName, napi_callback func) {
-    napi_value fn;
+    napi_value  fn;
     napi_status status;
     NODE_API_CALL(status, _env, napi_create_function(_env, funcName, NAPI_AUTO_LENGTH, func, NULL, &fn));
     NODE_API_CALL(status, _env, napi_set_named_property(_env, _objRef.getValue(_env), funcName, fn));
@@ -261,7 +255,7 @@ Object* Object::createPlainObject() {
 Object* Object::createArrayObject(size_t length) {
     napi_value  result;
     napi_status status;
-    NODE_API_CALL(status, ScriptEngine::getEnv(), napi_create_array_with_length(ScriptEngine::getEnv(),length, &result));
+    NODE_API_CALL(status, ScriptEngine::getEnv(), napi_create_array_with_length(ScriptEngine::getEnv(), length, &result));
     Object* obj = _createJSObject(ScriptEngine::getEnv(), result, nullptr);
     return obj;
 }
@@ -269,22 +263,21 @@ Object* Object::createArrayObject(size_t length) {
 Object* Object::createArrayBufferObject(void* data, size_t byteLength) {
     napi_value  result;
     napi_status status;
-    void*       retData ;
+    void*       retData;
     Object*     obj = nullptr;
     NODE_API_CALL(status, ScriptEngine::getEnv(), napi_create_arraybuffer(ScriptEngine::getEnv(), byteLength, &retData, &result));
     if (status == napi_ok) {
         if (byteLength > 0) {
             memcpy(retData, data, byteLength);
         }
-       obj = _createJSObject(ScriptEngine::getEnv(), result, nullptr);
-    
+        obj = _createJSObject(ScriptEngine::getEnv(), result, nullptr);
     }
     return obj;
 }
 
 bool Object::getAllKeys(std::vector<std::string>* allKeys) const {
     napi_status status;
-    napi_value names;
+    napi_value  names;
 
     NODE_API_CALL(status, _env, napi_get_property_names(_env, _objRef.getValue(_env), &names));
     if (status != napi_ok) {
@@ -310,8 +303,8 @@ bool Object::getAllKeys(std::vector<std::string>* allKeys) const {
 
 bool Object::init(napi_env env, napi_value js_object, Class* cls) {
     assert(env);
-    _cls  = cls;
-    _env  = env;
+    _cls = cls;
+    _env = env;
     _objRef.initWeakref(env, js_object);
 
     if (__objectMap) {
@@ -330,11 +323,11 @@ bool Object::call(const ValueArray& args, Object* thisObject, Value* rval) {
     argv.reserve(10);
     argc = args.size();
     internal::seToJsArgs(_env, args, &argv);
-    napi_value return_val;
+    napi_value  return_val;
     napi_status status;
-assert(isFunction());
+    assert(isFunction());
     status =
-                  napi_call_function(_env, thisObject->_getJSObject(), _getJSObject(), argc, argv.data(), &return_val);
+        napi_call_function(_env, thisObject->_getJSObject(), _getJSObject(), argc, argv.data(), &return_val);
     if (rval) {
         internal::jsToSeValue(return_val, rval);
     }
@@ -347,7 +340,7 @@ void Object::_setFinalizeCallback(napi_finalize finalizeCb) {
 }
 
 void* Object::getPrivateData() const {
-    void* obj;
+    void*       obj;
     napi_status status;
     NODE_API_CALL(status, _env, napi_unwrap(_env, _objRef.getValue(_env), reinterpret_cast<void**>(&obj)));
     return nullptr;
@@ -361,20 +354,19 @@ void Object::setPrivateData(void* data) {
     napi_status status;
     _privateData = data;
 
-napi_valuetype valType;
-NODE_API_CALL(status, ScriptEngine::getEnv(), napi_typeof(ScriptEngine::getEnv(), _objRef.getValue(_env), &valType));
-LOGI("this type is %d, native this:%p", valType, data);
+    napi_valuetype valType;
+    NODE_API_CALL(status, ScriptEngine::getEnv(), napi_typeof(ScriptEngine::getEnv(), _objRef.getValue(_env), &valType));
+    LOGI("this type is %d, native this:%p", valType, data);
 
-//issue https://github.com/nodejs/node/issues/23999
-auto tmpThis = _objRef.getValue(_env);
-//_objRef.deleteRef();
-napi_ref result = nullptr;
-static char* s_counts = 0;
-NODE_API_CALL(status, _env,
-                  napi_wrap(_env, tmpThis, data, _cls->_getFinalizeFunction(),
-(void*)s_counts++ /* finalize_hint */, &result));
-_objRef.setWeakref(_env, result);
-setProperty("__native_ptr__", se::Value(static_cast<uint64_t>(reinterpret_cast<uintptr_t>(data))));
+    //issue https://github.com/nodejs/node/issues/23999
+    auto tmpThis = _objRef.getValue(_env);
+    //_objRef.deleteRef();
+    napi_ref result = nullptr;
+    NODE_API_CALL(status, _env,
+                  napi_wrap(_env, tmpThis, data, weakCallback,
+                            (void*)this /* finalize_hint */, &result));
+    //_objRef.setWeakref(_env, result);
+    setProperty("__native_ptr__", se::Value(static_cast<uint64_t>(reinterpret_cast<uintptr_t>(data))));
 
     return;
 }
@@ -472,23 +464,48 @@ Class* Object::_getClass() const {
 }
 
 Object* Object::getObjectWithPtr(void* ptr) {
-Object *obj  = nullptr;
-auto    iter = NativePtrToObjectMap::find(ptr);
-if (iter != NativePtrToObjectMap::end()) {
-obj = iter->second;
-obj->incRef();
-}
-return obj;
+    Object* obj  = nullptr;
+    auto    iter = NativePtrToObjectMap::find(ptr);
+    if (iter != NativePtrToObjectMap::end()) {
+        obj = iter->second;
+        obj->incRef();
+    }
+    return obj;
 }
 
 napi_value Object::_getJSObject() const {
     return _objRef.getValue(_env);
 }
 
-void Object::weakCallback(napi_env env, void *nativeObject, void *finalizeHint /*finalize_hint*/) {
+void Object::weakCallback(napi_env env, void* nativeObject, void* finalizeHint /*finalize_hint*/) {
     if (finalizeHint) {
-Object* obj = reinterpret_cast <Object*>(finalizeHint);
+        Object* obj = reinterpret_cast<Object*>(finalizeHint);
+
+        if (nativeObject == nullptr) {
+            return;
+        }
+
+        auto iter = NativePtrToObjectMap::find(nativeObject);
+        if (iter != NativePtrToObjectMap::end()) {
+            Object* obj = iter->second;
+            if (obj->_finalizeCb != nullptr) {
+                obj->_finalizeCb(env, nativeObject, finalizeHint);
+            } else {
+                assert(obj->_getClass() != nullptr);
+                if (obj->_getClass()->_getFinalizeFunction() != nullptr) {
+                    obj->_getClass()->_getFinalizeFunction()(env, nativeObject, finalizeHint);
+                }
+            }
+            obj->decRef();
+            NativePtrToObjectMap::erase(iter);
+        } else {
+            //            assert(false);
+        }
+    }
 }
+
+void Object::setup() {
+    __objectMap = std::make_unique<std::unordered_map<Object*, void*>>();
 }
 
 Object* Object::createJSONObject(const std::string& jsonStr) {

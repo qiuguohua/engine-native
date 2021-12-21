@@ -309,7 +309,8 @@ void EventDispatcher::doDispatchEvent(const char *eventName, const char *jsFunct
     if (!se::ScriptEngine::getInstance()->isValid()) {
         return;
     }
-
+    LOGI("call event name : %s"  , jsFunctionName);
+    return;
     if (eventName) {
         CustomEvent event;
         event.name = eventName;
