@@ -157,32 +157,21 @@ int OpenharmonyPlatform::getSdkVersion() const {
 }
 
 int32_t OpenharmonyPlatform::run(int argc, const char** argv) {
-    std::thread mainLogicThread([this, argc, argv]() {
-        CC_START_APPLICATION(CocosApplication);
-        UniversalPlatform::run(argc, argv);
-        onDestory();
-    });
-    mainLogicThread.detach();
+    CC_START_APPLICATION(CocosApplication);
+    if (workerLoop_) {
+        uv_timer_init(workerLoop_, &timerHandle_);
+        // 1s = 1000ms = 60fps;
+        // 1000ms / 60fps = 16 ms/fps
+        uv_timer_start(&timerHandle_, &OpenharmonyPlatform::TimerCb, 16, true);
+    }
     return 0;
 }
 
 void OpenharmonyPlatform::waitWindowInitialized() {
 }
 
-int32_t OpenharmonyPlatform::loop() {
-    while (isRunning) {
-        pollEvent();
-        runTask();
-    }
-    return 0;
-}
-
-void OpenharmonyPlatform::pollEvent() {
-}
-
 napi_value OpenharmonyPlatform::NapiWorkerInit(napi_env env, napi_callback_info info) {
-    uv_loop_t*  loop  = nullptr;
-    uv_check_t* check = new uv_check_t;
+    uv_loop_t* loop = nullptr;
     NAPI_CALL(env, napi_get_uv_event_loop(env, &loop));
     OpenharmonyPlatform::getInstance()->WorkerInit(env, loop);
     return nullptr;
@@ -193,49 +182,6 @@ napi_value OpenharmonyPlatform::NapiASend(napi_env env, napi_callback_info info)
     uv_async_send(&(OpenharmonyPlatform::getInstance()->workerOnMessageSignal_));
     return nullptr;
 }
-
-// int32_t OpenharmonyPlatform::OnInitNative() {
-//     isRunning = true;
-//     START_PLATFORM(0, nullptr);
-// }
-
-// void OpenharmonyPlatform::OnReadyNative() {
-//     LOGE("COCOS PluginManager::OnReadyNative");
-//     return;
-// }
-
-// void OpenharmonyPlatform::OnShowNative() {
-//     LOGE("COCOS PluginManager::OnShowNative");
-//     // WindowEvent ev;
-//     // ev.type = WindowEvent::Type::SHOW;
-//     // dispatchEvent(ev);
-//     return;
-// }
-
-// void OpenharmonyPlatform::OnHideNative() {
-//     WindowEvent ev;
-//     ev.type = WindowEvent::Type::HIDDEN;
-//     dispatchEvent(ev);
-//     return;
-// }
-
-// void OpenharmonyPlatform::OnDestroyNative() {
-//     WindowEvent ev;
-//     ev.type = WindowEvent::Type::CLOSE;
-//     dispatchEvent(ev);
-//     isRunning = false;
-//     return;
-// }
-
-// void OpenharmonyPlatform::OnActiveNative() {
-//     LOGE("COCOS PluginManager::OnActiveNative");
-//     return;
-// }
-
-// void OpenharmonyPlatform::OnInactiveNative() {
-//     LOGE("COCOS PluginManager::OnInactiveNative");
-//     return;
-// }
 
 // NAPI Interface
 bool OpenharmonyPlatform::Export(napi_env env, napi_value exports) {
@@ -299,8 +245,7 @@ void OpenharmonyPlatform::WorkerOnMessage(const uv_async_t* req) {
 }
 
 napi_value OpenharmonyPlatform::NapiOnCreate(napi_env env, napi_callback_info info) {
-    uv_loop_t*  loop  = nullptr;
-    uv_check_t* check = new uv_check_t;
+    uv_loop_t* loop = nullptr;
     NAPI_CALL(env, napi_get_uv_event_loop(env, &loop));
     OpenharmonyPlatform::getInstance()->OnCreateNative(env, loop);
     return nullptr;
@@ -357,6 +302,11 @@ void OpenharmonyPlatform::OnPageHideNative() {
     LOGE("kee cocos PluginManager::OnPageHideNative");
 }
 
+void OpenharmonyPlatform::TimerCb(uv_timer_t* handle) {
+    LOGE("qgh cocos : timer callback");
+    OpenharmonyPlatform::getInstance()->runTask();
+}
+
 void OpenharmonyPlatform::WorkerInit(napi_env env, uv_loop_t* loop) {
     LOGE("kee cocos PluginManager::WorkerInit");
     workerEnv_  = env;
@@ -366,6 +316,10 @@ void OpenharmonyPlatform::WorkerInit(napi_env env, uv_loop_t* loop) {
         LOGE("kee cocos WorkerInit uv_async_init");
         uv_async_init(workerLoop_, &workerOnMessageSignal_, reinterpret_cast<uv_async_cb>(OpenharmonyPlatform::WorkerOnMessage));
     }
+}
+
+int32_t OpenharmonyPlatform::loop() {
+    return 0;
 }
 #endif
 
