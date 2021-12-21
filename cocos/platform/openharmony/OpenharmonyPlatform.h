@@ -97,12 +97,12 @@ public:
     bool Export(napi_env env, napi_value exports);
     void SetNativeXComponent(NativeXComponent* component);
 
-    void    pollEvent() override;
     int32_t run(int argc, const char** argv) override;
     int     getSdkVersion() const override;
     int32_t loop() override;
 
 private:
+    static void TimerCb(uv_timer_t* handle);
     static void MainOnMessage(const uv_async_t* req);
     static void WorkerOnMessage(const uv_async_t* req);
     bool        isRunning{false};
@@ -110,12 +110,13 @@ private:
     std::string id_;
 
 public:
-    napi_env   mainEnv_  = nullptr;
-    uv_loop_t* mainLoop_ = nullptr;
+    uv_timer_t timerHandle_;
+    napi_env   mainEnv_{nullptr};
+    uv_loop_t* mainLoop_{nullptr};
     uv_async_t mainOnMessageSignal_{};
 
-    napi_env   workerEnv_  = nullptr;
-    uv_loop_t* workerLoop_ = nullptr;
+    napi_env   workerEnv_{nullptr};
+    uv_loop_t* workerLoop_{nullptr};
     uv_async_t workerOnMessageSignal_{};
     uv_async_t workerChangeColorSignal_{};
 
