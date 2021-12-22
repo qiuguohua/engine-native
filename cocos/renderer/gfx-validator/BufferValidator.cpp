@@ -64,7 +64,7 @@ void BufferValidator::doInit(const BufferInfo &info) {
     CCASSERT(info.usage != BufferUsageBit::NONE, "invalid buffer param");
     CCASSERT(info.memUsage != MemoryUsageBit::NONE, "invalid buffer param");
     CCASSERT(info.size, "zero-sized buffer?");
-    CCASSERT(info.size / info.stride * info.stride == info.size, "size is not multiple of stride?");
+   // CCASSERT(info.size / info.stride * info.stride == info.size, "size is not multiple of stride?");
 
     _initStack = se::ScriptEngine::getInstance()->getCurrentStackTrace();
 

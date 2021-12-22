@@ -26,7 +26,38 @@
 
 #pragma once
 
-#if CC_PLATFORM == CC_PLATFORM_WINDOWS
+#if (CC_PLATFORM == CC_PLATFORM_NX)
+    #include <math.h>
+    #include <string.h>
+    #include <stdarg.h>
+    #include <stdio.h>
+    #include <stdlib.h>
+    #include <time.h>
+
+    #if _MSC_VER >= 1600
+        #include <stdint.h>
+    #else
+        #include "platform/win32/compat/stdint.h"
+    #endif
+
+    // Conflicted with ParticleSystem::PositionType::RELATIVE, so we need to undef it.
+    #ifdef RELATIVE
+        #undef RELATIVE
+    #endif
+
+    // Conflicted with CCBReader::SizeType::RELATIVE and CCBReader::ScaleType::RELATIVE, so we need to undef it.
+    #ifdef ABSOLUTE
+        #undef ABSOLUTE
+    #endif
+
+    // Conflicted with HttpRequest::Type::DELETE, so we need to undef it.
+    #ifdef DELETE
+        #undef DELETE
+    #endif
+
+    #undef min
+    #undef max
+#elif (CC_PLATFORM == CC_PLATFORM_WINDOWS)
 
     #define WIN32_LEAN_AND_MEAN
     #include <Windows.h>

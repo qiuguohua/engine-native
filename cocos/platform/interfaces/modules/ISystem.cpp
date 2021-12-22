@@ -38,6 +38,8 @@
     #include "platform/linux/modules/System.h"
 #elif (CC_PLATFORM == CC_PLATFORM_QNX)
     #include "platform/qnx/modules/System.h"
+#elif (CC_PLATFORM == CC_PLATFORM_NX)
+    #include "platform/nx/modules/System.h"
 #endif
 
 namespace cc {

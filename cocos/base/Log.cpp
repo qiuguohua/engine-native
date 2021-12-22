@@ -30,7 +30,7 @@
 #include <cstdarg>
 #include <ctime>
 
-#if (CC_PLATFORM == CC_PLATFORM_WINDOWS)
+#if (CC_PLATFORM == CC_PLATFORM_WINDOWS || CC_PLATFORM == CC_PLATFORM_WINDOWS)
     #ifndef WIN32_LEAN_AND_MEAN
         #define WIN32_LEAN_AND_MEAN
     #endif

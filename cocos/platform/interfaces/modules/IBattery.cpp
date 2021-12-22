@@ -37,6 +37,8 @@
     #include "platform/linux/modules/Battery.h"
 #elif (CC_PLATFORM == CC_PLATFORM_QNX)
     #include "platform/qnx/modules/Battery.h"
+#elif (CC_PLATFORM == CC_PLATFORM_NX)
+    #include "platform/nx/modules/Battery.h"
 #endif
 
 namespace cc {

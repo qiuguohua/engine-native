@@ -39,7 +39,7 @@ namespace cc {
 
 namespace network {
 
-#if (CC_PLATFORM == CC_PLATFORM_WINDOWS)
+#if (CC_PLATFORM == CC_PLATFORM_WINDOWS || CC_PLATFORM == CC_PLATFORM_NX)
 typedef int int32_t;
 #endif
 

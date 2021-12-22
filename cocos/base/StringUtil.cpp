@@ -28,13 +28,6 @@
 #include <string>
 #include <cstdarg>
 
-#if (CC_PLATFORM == CC_PLATFORM_WINDOWS)
-    #ifndef WIN32_LEAN_AND_MEAN
-        #define WIN32_LEAN_AND_MEAN
-    #endif
-    #include <Windows.h>
-#endif
-
 namespace cc {
 
 #if defined(_WIN32)

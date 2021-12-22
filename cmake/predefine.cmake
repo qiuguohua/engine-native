@@ -22,13 +22,8 @@ if(NX)
         message(FATAL_ERROR "Only windows environment is supported")
         return()
     endif()
-
-    if (CC_NX_WINDOWS) # windows reference
-        set(WINDOWS TRUE)
-        set(CC_PLATFORM ${CC_PLATFORM_WINDOWS})
-    else()
-        set(CC_PLATFORM ${CC_PLATFORM_NX})
-    endif()
+    set(CC_PLATFORM ${CC_PLATFORM_NX})
+    
 elseif(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
     set(WINDOWS TRUE)
     set(PLATFORM_FOLDER win32)
