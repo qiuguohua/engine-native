@@ -128,13 +128,13 @@ bool Object::getTypedArrayData(uint8_t** ptr, size_t* length) const {
     napi_typedarray_type type;
     napi_value           inputBuffer;
     size_t               byteOffset;
-    size_t               len;
-    NODE_API_CALL(status, _env, napi_get_typedarray_info(_env, _objRef.getValue(_env), &type, &len, NULL, &inputBuffer, &byteOffset));
-
-    void*  data;
-    size_t byteLength;
-    NODE_API_CALL(status, _env, napi_get_arraybuffer_info(_env, inputBuffer, &data, &byteLength));
+    size_t               byteLength;
+    void*                data = nullptr;
+    NODE_API_CALL(status, _env, napi_get_typedarray_info(_env, _objRef.getValue(_env), &type, &byteLength, &data, &inputBuffer, &byteOffset));
     *ptr = (uint8_t*)(data) + byteOffset;
+    if (length) {
+        *length = byteLength;
+    }
     return true;
 }
 
@@ -147,7 +147,11 @@ bool Object::isArrayBuffer() const {
 
 bool Object::getArrayBufferData(uint8_t** ptr, size_t* length) const {
     napi_status status;
-    NODE_API_CALL(status, _env, napi_get_arraybuffer_info(_env, _objRef.getValue(_env), reinterpret_cast<void**>(ptr), length));
+    size_t      len = 0;
+    NODE_API_CALL(status, _env, napi_get_arraybuffer_info(_env, _objRef.getValue(_env), reinterpret_cast<void**>(ptr), &len));
+    if (length) {
+        *length = len;
+    }
     return true;
 }
 
@@ -267,7 +271,7 @@ Object* Object::createArrayBufferObject(void* data, size_t byteLength) {
     Object*     obj = nullptr;
     NODE_API_CALL(status, ScriptEngine::getEnv(), napi_create_arraybuffer(ScriptEngine::getEnv(), byteLength, &retData, &result));
     if (status == napi_ok) {
-        if (byteLength > 0) {
+        if (data) {
             memcpy(retData, data, byteLength);
         }
         obj = _createJSObject(ScriptEngine::getEnv(), result, nullptr);

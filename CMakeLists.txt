@@ -1536,7 +1536,11 @@ cocos_source_files(
     NO_WERROR    cocos/bindings/auto/jsb_gfx_auto.cpp
                  cocos/bindings/auto/jsb_gfx_auto.h
     NO_WERROR    cocos/bindings/manual/jsb_gfx_manual.cpp
-                 cocos/bindings/manual/jsb_gfx_manual.h)
+                 cocos/bindings/manual/jsb_gfx_manual.h
+    NO_WERROR    cocos/bindings/auto/jsb_pipeline_auto.cpp
+                 cocos/bindings/auto/jsb_pipeline_auto.h
+    NO_WERROR    cocos/bindings/auto/jsb_scene_auto.cpp
+                 cocos/bindings/auto/jsb_scene_auto.h)
 
 if(NOT OPENHARMONY)
 cocos_source_files(
@@ -1874,6 +1878,8 @@ if(OPENHARMONY)
         NO_WERROR    cocos/bindings/manual/jsb_scene_manual.cpp
         NO_WERROR    cocos/bindings/manual/jsb_scene_manual_ext.cpp
                      cocos/bindings/manual/jsb_scene_manual.h
+        NO_WERROR    cocos/bindings/manual/jsb_pipeline_manual.cpp
+                     cocos/bindings/manual/jsb_pipeline_manual.h
     )
 endif()
 
