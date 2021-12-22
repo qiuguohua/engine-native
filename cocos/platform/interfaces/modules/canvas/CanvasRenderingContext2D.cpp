@@ -34,7 +34,7 @@
 #include "math/Math.h"
 #include "platform/FileUtils.h"
 
-#if (CC_PLATFORM == CC_PLATFORM_WINDOWS)
+#if (CC_PLATFORM == CC_PLATFORM_WINDOWS || CC_PLATFORM == CC_PLATFORM_NX)
     #include "platform/win32/modules/CanvasRenderingContext2DDelegate.h"
 #elif (CC_PLATFORM == CC_PLATFORM_ANDROID || CC_PLATFORM == CC_PLATFORM_OHOS)
     #include "platform/java/modules/CanvasRenderingContext2DDelegate.h"
@@ -84,9 +84,7 @@ void CanvasGradient::addColorStop(float offset, const std::string &color) {
 CanvasRenderingContext2D::CanvasRenderingContext2D(float width, float height)
 : _width(width),
   _height(height) {
-#if (CC_PLATFORM != CC_PLATFORM_NX)
       _delegate = new CanvasRenderingContext2DDelegate();
-#endif   
     //SE_LOGD("CanvasRenderingContext2D constructor: %p, width: %f, height: %f\n", this, width, height);
 }
 

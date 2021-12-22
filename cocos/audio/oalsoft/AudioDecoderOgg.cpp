@@ -57,7 +57,7 @@ AudioDecoderOgg::~AudioDecoderOgg() {
 
 bool AudioDecoderOgg::open(const char *path) {
     std::string fullPath = FileUtils::getInstance()->fullPathForFilename(path);
-#if CC_PLATFORM == CC_PLATFORM_WINDOWS
+#if CC_PLATFORM == CC_PLATFORM_WINDOWS || CC_PLATFORM == CC_PLATFORM_NX
     if (0 == ov_fopen(FileUtils::getInstance()->getSuitableFOpen(fullPath).c_str(), &_vf)) {
 #elif CC_PLATFORM == CC_PLATFORM_LINUX || CC_PLATFORM == CC_PLATFORM_QNX
     if (0 == ov_fopen(FileUtils::getInstance()->getSuitableFOpen(fullPath).c_str(), &_vf)) {
@@ -87,7 +87,7 @@ void AudioDecoderOgg::close() {
 uint32_t AudioDecoderOgg::read(uint32_t framesToRead, char *pcmBuf) {
     int  currentSection = 0;
     auto bytesToRead    = framesToRead * _bytesPerFrame;
-#if CC_PLATFORM == CC_PLATFORM_WINDOWS
+#if CC_PLATFORM == CC_PLATFORM_WINDOWS || CC_PLATFORM == CC_PLATFORM_NX
     auto bytesRead = ov_read(&_vf, pcmBuf, bytesToRead, 0, 2, 1, &currentSection);
 #elif CC_PLATFORM == CC_PLATFORM_OHOS
     int  bitstream = 0;

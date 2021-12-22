@@ -133,7 +133,7 @@ if(USE_AUDIO)
                      cocos/audio/include/AudioEngine.h
                      cocos/audio/include/Export.h
     )
-    if(WINDOWS)
+    if(WINDOWS OR NX)
         cocos_source_files(
             cocos/audio/oalsoft/AudioCache.cpp
             cocos/audio/oalsoft/AudioCache.h
@@ -338,7 +338,9 @@ cocos_source_files(
 
 ############ main
 if(NX)
-    # 
+    cocos_source_files(
+        cocos/main/main-win32.cpp
+    )
 elseif(WINDOWS)
     cocos_source_files(
         cocos/main/main-win32.cpp
@@ -370,6 +372,10 @@ cocos_source_files(
     cocos/platform/UniversalPlatform.h
 )
 if(NX)
+    cocos_source_files(
+        cocos/platform/win32/WindowsPlatform.cpp
+        cocos/platform/win32/WindowsPlatform.h
+    )
 elseif(WINDOWS)
     cocos_source_files(
         cocos/platform/win32/WindowsPlatform.cpp
@@ -452,6 +458,10 @@ cocos_source_files(
     cocos/platform/interfaces/modules/canvas/ICanvasRenderingContext2D.h
 )
 if(NX)
+    cocos_source_files(
+        cocos/platform/win32/modules/CanvasRenderingContext2DDelegate.cpp
+        cocos/platform/win32/modules/CanvasRenderingContext2DDelegate.h
+    )
 elseif(WINDOWS)
     cocos_source_files(
         cocos/platform/win32/modules/CanvasRenderingContext2DDelegate.cpp
@@ -481,7 +491,22 @@ endif()
 
 ############ platform : Interface implementation of windows
 if(NX)
-
+    cocos_source_files(
+        cocos/platform/win32/modules/Accelerometer.cpp
+        cocos/platform/win32/modules/Accelerometer.h
+        cocos/platform/win32/modules/Battery.cpp
+        cocos/platform/win32/modules/Battery.h
+        cocos/platform/win32/modules/Screen.cpp
+        cocos/platform/win32/modules/Screen.h
+        cocos/platform/win32/modules/Network.cpp
+        cocos/platform/win32/modules/Network.h
+        cocos/platform/win32/modules/Vibrator.cpp
+        cocos/platform/win32/modules/Vibrator.h
+        cocos/platform/win32/modules/System.cpp
+        cocos/platform/win32/modules/System.h
+        cocos/platform/win32/modules/SystemWindow.cpp
+        cocos/platform/win32/modules/SystemWindow.h
+    )
 elseif(WINDOWS)
     cocos_source_files(
         cocos/platform/win32/modules/Accelerometer.cpp
@@ -602,7 +627,7 @@ elseif(QNX)
 endif()
 
 ############ module log
-if(NOT NX)
+if(NX)
 cocos_source_files(MODULE cclog
     cocos/base/Log.cpp
     cocos/base/Log.h
@@ -787,6 +812,10 @@ if(NOT APPLE AND USE_SOCKET)
 endif()
 
 if(NX)
+    cocos_source_files(
+        NO_WERROR    cocos/network/Downloader-curl.cpp
+                    cocos/network/Downloader-curl.h
+    )
 elseif(WINDOWS OR LINUX OR QNX)
     cocos_source_files(
         NO_WERROR    cocos/network/Downloader-curl.cpp
@@ -795,6 +824,9 @@ elseif(WINDOWS OR LINUX OR QNX)
 endif()
 
 if(NX)
+    cocos_source_files(
+        NO_WERROR    cocos/network/HttpClient.cpp
+    )
 elseif(WINDOWS OR MACOSX OR LINUX OR QNX)
     cocos_source_files(
         NO_WERROR    cocos/network/HttpClient.cpp
@@ -827,14 +859,18 @@ cocos_source_files(MODULE ccutils
 )
 
 ########## module ccfilesystem
-if(NOT NX)
-cocos_source_files(MODULE ccfilesystem
-    cocos/platform/FileUtils.cpp
-    cocos/platform/FileUtils.h
-)
+if(NX)
+    cocos_source_files(MODULE ccfilesystem
+        cocos/platform/FileUtils.cpp
+        cocos/platform/FileUtils.h
+    )
 endif()
 
 if(NX)
+    cocos_source_files(MODULE ccutils
+        cocos/platform/win32/Utils-win32.cpp
+        cocos/platform/win32/Utils-win32.h
+    )
 elseif(WINDOWS)
     cocos_source_files(MODULE ccutils
         cocos/platform/win32/Utils-win32.cpp
@@ -843,6 +879,16 @@ elseif(WINDOWS)
 endif()
 
 if(NX)
+    cocos_source_files(
+                     cocos/platform/win32/compat
+                     cocos/platform/win32/compat/stdint.h
+                     cocos/platform/win32/inet_pton_mingw.cpp
+                     cocos/platform/win32/inet_pton_mingw.h
+    )
+    cocos_source_files(MODULE ccfilesystem
+        cocos/platform/win32/FileUtils-win32.cpp
+        cocos/platform/win32/FileUtils-win32.h
+    )
 elseif(WINDOWS)
     cocos_source_files(
                      cocos/platform/win32/compat
@@ -2361,8 +2407,27 @@ target_include_directories(cocos2d PUBLIC
 )
 
 if(NX)
+    target_link_libraries(cocos2d PUBLIC
+        ws2_32 userenv psapi winmm Iphlpapi
+        ${CC_EXTERNAL_LIBS}
+    )
     include(${CMAKE_CURRENT_LIST_DIR}/platform-nx/setup.cmake)
     cc_win32_definations(cocos2d)
+    if(USE_MODULES)
+        cc_win32_definations(ccmath)
+        cc_win32_definations(cclog)
+        cc_win32_definations(ccunzip)
+        cc_win32_definations(ccfilesystem)
+        cc_win32_definations(ccutils)
+        cc_win32_definations(ccbindings)
+
+        target_link_libraries(ccutils PUBLIC
+            ws2_32 psapi userenv Iphlpapi
+        )
+        target_link_libraries(ccbindings PUBLIC
+            ws2_32
+        )
+    endif()
 elseif(WINDOWS)
     target_link_libraries(cocos2d PUBLIC
         ws2_32 userenv psapi winmm Iphlpapi

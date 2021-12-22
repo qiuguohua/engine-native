@@ -23,7 +23,6 @@ if(NX)
         return()
     endif()
     set(CC_PLATFORM ${CC_PLATFORM_NX})
-    
 elseif(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
     set(WINDOWS TRUE)
     set(PLATFORM_FOLDER win32)

@@ -30,6 +30,7 @@
 #include <sstream>
 #include "base/Log.h"
 
+#include <Windows.h>
 namespace cc {
 
 std::wstring StringUtf8ToWideChar(const std::string &strUtf8) {

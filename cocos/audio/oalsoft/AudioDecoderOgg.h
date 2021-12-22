@@ -28,7 +28,7 @@
 
 #include "audio/oalsoft/AudioDecoder.h"
 
-#if CC_PLATFORM == CC_PLATFORM_WINDOWS
+#if CC_PLATFORM == CC_PLATFORM_WINDOWS || CC_PLATFORM == CC_PLATFORM_NX
     #include "vorbis/vorbisfile.h"
 #elif CC_PLATFORM == CC_PLATFORM_OHOS
     #include "ivorbisfile.h"
