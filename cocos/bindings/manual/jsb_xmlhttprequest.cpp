@@ -227,7 +227,15 @@ XMLHttpRequest::XMLHttpRequest()
 }
 
 XMLHttpRequest::~XMLHttpRequest() {
-    CC_CURRENT_ENGINE()->getScheduler()->unscheduleAllForTarget(this);
+    if (CC_CURRENT_APPLICATION()) {
+        // Temporary solution, this is a design problem, 
+        // the application has been released, but it still needs to be called
+        BaseEngine::Ptr engine = CC_CURRENT_APPLICATION()->getEngine();
+        if (engine) {
+            engine->getScheduler()->unscheduleAllForTarget(this);
+        }
+    }
+        
     // Avoid HttpClient response call a released object!
     _httpRequest->setResponseCallback(nullptr);
     CC_SAFE_RELEASE(_httpRequest);
