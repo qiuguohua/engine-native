@@ -194,6 +194,8 @@ private:
 
     cc::Data _responseData;
 
+    using SchedulerWeakPtr = std::weak_ptr<Scheduler>;
+    SchedulerWeakPtr          _scheduler;
     cc::network::HttpRequest *_httpRequest;
     //    cc::EventListenerCustom* _resetDirectorListener;
 
@@ -227,13 +229,8 @@ XMLHttpRequest::XMLHttpRequest()
 }
 
 XMLHttpRequest::~XMLHttpRequest() {
-    if (CC_CURRENT_APPLICATION()) {
-        // Temporary solution, this is a design problem, 
-        // the application has been released, but it still needs to be called
-        BaseEngine::Ptr engine = CC_CURRENT_APPLICATION()->getEngine();
-        if (engine) {
-            engine->getScheduler()->unscheduleAllForTarget(this);
-        }
+    if (!_scheduler.expired()) {
+        _scheduler.lock()->unscheduleAllForTarget(this);
     }
         
     // Avoid HttpClient response call a released object!
@@ -384,7 +381,10 @@ void XMLHttpRequest::getHeader(const std::string &header) {
 }
 
 void XMLHttpRequest::onResponse(HttpClient * /*client*/, HttpResponse *response) {
-    CC_CURRENT_ENGINE()->getScheduler()->unscheduleAllForTarget(this);
+    if (!_scheduler.expired()) {
+        _scheduler.lock()->unscheduleAllForTarget(this);
+    }
+    
     _isSending = false;
 
     if (_isTimeout) {
@@ -484,15 +484,21 @@ void XMLHttpRequest::sendRequest() {
     }
     _isSending = true;
     _isTimeout = false;
+    
+    _scheduler.reset();
+    _scheduler = CC_CURRENT_ENGINE()->getScheduler();
+
     if (_timeoutInMilliseconds > 0) {
-        CC_CURRENT_ENGINE()->getScheduler()->schedule([this](float /* dt */) {
-            if (ontimeout != nullptr) {
-                ontimeout();
-            }
-            _isTimeout  = true;
-            _readyState = ReadyState::UNSENT;
-        },
-                                                             this, _timeoutInMilliseconds / 1000.0F, 0, 0.0F, false, "XMLHttpRequest");
+        if (!_scheduler.expired()) {
+            _scheduler.lock()->schedule([this](float /* dt */) {
+                if (ontimeout != nullptr) {
+                    ontimeout();
+                }
+                _isTimeout  = true;
+                _readyState = ReadyState::UNSENT;
+            },
+                                                          this, _timeoutInMilliseconds / 1000.0F, 0, 0.0F, false, "XMLHttpRequest");
+        }
     }
     setHttpRequestHeader();
 
