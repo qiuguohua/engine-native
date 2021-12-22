@@ -1,3 +1,6 @@
+# Ignore platform-nx
+platform-nx
+
 # Ignore thumbnails created by windows
 Thumbs.db
 
