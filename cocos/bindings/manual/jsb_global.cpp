@@ -808,7 +808,7 @@ SE_BIND_FUNC(JSB_setPreferredFramesPerSecond)
 bool jsb_register_global_variables(se::Object *global) { //NOLINT
     gThreadPool = LegacyThreadPool::newFixedThreadPool(3);
 
-    global->defineFunction("require", _SE(require));
+    //global->defineFunction("require", _SE(require));
     global->defineFunction("requireModule", _SE(moduleRequire));
 
     getOrCreatePlainObject_r("jsb", global, &__jsbObj);
