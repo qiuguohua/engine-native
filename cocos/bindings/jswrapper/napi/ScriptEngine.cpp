@@ -3,6 +3,7 @@
 #include "../MappingUtils.h"
 #include "Class.h"
 #include "CommonHeader.h"
+#include <napi/native_api.h>
 
 namespace se {
 ScriptEngine *gSriptEngineInstance = nullptr;
@@ -37,8 +38,10 @@ void ScriptEngine::destroyInstance() {
 
 bool ScriptEngine::runScript(const std::string &path, Value *ret /* = nullptr */) {
     assert(!path.empty());
-    assert(_fileOperationDelegate.isValid());
-
+    napi_status status;
+    napi_value result;
+    //not impl
+    //NODE_API_CALL(status, ScriptEngine::getEnv(), napi_run_script_path(ScriptEngine::getEnv(), path.c_str(), &result));
     return false;
 }
 

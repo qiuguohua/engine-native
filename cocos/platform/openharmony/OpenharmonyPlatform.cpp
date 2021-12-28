@@ -119,10 +119,10 @@ napi_value OpenharmonyPlatform::GetContext(napi_env env, napi_callback_info info
         } break;
         case NATIVE_RENDER_API: {
             LOGE("kee cocos GetContext NATIVE_RENDER_API");
-            //napi_property_descriptor desc[] = {
-            //    DECLARE_NAPI_FUNCTION("changeColor", OpenharmonyPlatform::NapiChangeColorWorker),
-            //};
-            //NAPI_CALL(env, napi_define_properties(env, exports, sizeof(desc) / sizeof(desc[0]), desc));
+            napi_property_descriptor desc[] = {
+                DECLARE_NAPI_FUNCTION("loadSurface", OpenharmonyPlatform::NapiLoadSurface),
+            };
+            NAPI_CALL(env, napi_define_properties(env, exports, sizeof(desc) / sizeof(desc[0]), desc));
         } break;
         case WORKER_INIT: {
             LOGE("kee cocos GetContext WORKER_INIT");
@@ -157,7 +157,6 @@ int OpenharmonyPlatform::getSdkVersion() const {
 }
 
 int32_t OpenharmonyPlatform::run(int argc, const char** argv) {
-    CC_START_APPLICATION(CocosApplication);
     if (workerLoop_) {
         uv_timer_init(workerLoop_, &timerHandle_);
         // 1s = 1000ms = 60fps;
@@ -180,6 +179,29 @@ napi_value OpenharmonyPlatform::NapiWorkerInit(napi_env env, napi_callback_info 
 napi_value OpenharmonyPlatform::NapiASend(napi_env env, napi_callback_info info) {
     LOGE("kee cocos OpenharmonyPlatform::NapiASend");
     uv_async_send(&(OpenharmonyPlatform::getInstance()->workerOnMessageSignal_));
+    return nullptr;
+}
+
+napi_value OpenharmonyPlatform::NapiLoadSurface(napi_env env, napi_callback_info info){
+    LOGE("kee cocos NapiLoadSurface Triggered");
+    NativeXComponent* nativexcomponet = nullptr;
+    void*             window          = nullptr;
+    OpenharmonyPlatform::getInstance()->workerMessageQ_.DeQueue(reinterpret_cast<MessageDataType*>(&nativexcomponet));
+    LOGE("kee cocos NapiLoadSurface nativexcomponent = %p", nativexcomponet);
+    int32_t  ret;
+    char     idStr[XCOMPONENT_ID_LEN_MAX + 1] = {};
+    uint64_t idSize                           = XCOMPONENT_ID_LEN_MAX + 1;
+    ret                                       = NativeXComponent_GetXComponentId(nativexcomponet, idStr, &idSize);
+    if (ret != XCOMPONENT_RESULT_SUCCESS) {
+        return nullptr;
+    }
+    ret = NativeXComponent_GetNativeWindow(nativexcomponet, &window);
+    if (ret != XCOMPONENT_RESULT_SUCCESS) {
+        return nullptr;
+    }
+    SystemWindow* systemWindowIntf = getPlatform()->getInterface<SystemWindow>();
+    CCASSERT(systemWindowIntf, "Invalid interface pointer");
+    systemWindowIntf->OnSurfaceCreated(nativexcomponet, window);
     return nullptr;
 }
 
@@ -224,25 +246,6 @@ void OpenharmonyPlatform::MainOnMessage(const uv_async_t* req) {
 // static
 void OpenharmonyPlatform::WorkerOnMessage(const uv_async_t* req) {
     LOGE("kee cocos WorkerOnMessage Triggered");
-    NativeXComponent* nativexcomponet = nullptr;
-    void*             window          = nullptr;
-    OpenharmonyPlatform::getInstance()->workerMessageQ_.DeQueue(reinterpret_cast<MessageDataType*>(&nativexcomponet));
-    LOGE("kee cocos WorkerOnMessage nativexcomponent = %p", nativexcomponet);
-    int32_t  ret;
-    char     idStr[XCOMPONENT_ID_LEN_MAX + 1] = {};
-    uint64_t idSize                           = XCOMPONENT_ID_LEN_MAX + 1;
-    ret                                       = NativeXComponent_GetXComponentId(nativexcomponet, idStr, &idSize);
-    if (ret != XCOMPONENT_RESULT_SUCCESS) {
-        return;
-    }
-    ret = NativeXComponent_GetNativeWindow(nativexcomponet, &window);
-    if (ret != XCOMPONENT_RESULT_SUCCESS) {
-        return;
-    }
-    SystemWindow* systemWindowIntf = getPlatform()->getInterface<SystemWindow>();
-    CCASSERT(systemWindowIntf, "Invalid interface pointer");
-    systemWindowIntf->OnSurfaceCreated(nativexcomponet, window);
-    getPlatform()->run(0, nullptr);
 }
 
 napi_value OpenharmonyPlatform::NapiOnCreate(napi_env env, napi_callback_info info) {
@@ -308,12 +311,18 @@ void OpenharmonyPlatform::TimerCb(uv_timer_t* handle) {
     OpenharmonyPlatform::getInstance()->runTask();
 }
 
+int OpenharmonyPlatform::EnginInit(int argc, const char** argv) {
+    CC_START_APPLICATION(CocosApplication);
+    getPlatform()->run(0, nullptr);
+}
+
 void OpenharmonyPlatform::WorkerInit(napi_env env, uv_loop_t* loop) {
     LOGE("kee cocos PluginManager::WorkerInit");
     workerEnv_  = env;
     workerLoop_ = loop;
-    LOGE("kee cocos PluginManager::WorkerInit workerEnv = %p, workerLoop = %p", workerEnv_, workerLoop_);
     se::ScriptEngine::setEnv(env);
+    EnginInit(0, nullptr);
+    LOGE("kee cocos PluginManager::WorkerInit workerEnv = %p, workerLoop = %p", workerEnv_, workerLoop_);
     if (workerLoop_) {
         LOGE("kee cocos WorkerInit uv_async_init");
         uv_async_init(workerLoop_, &workerOnMessageSignal_, reinterpret_cast<uv_async_cb>(OpenharmonyPlatform::WorkerOnMessage));
