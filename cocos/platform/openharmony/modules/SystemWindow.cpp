@@ -34,6 +34,7 @@
 #include "base/Log.h"
 #include "base/Macros.h"
 #include "platform/openharmony/OpenharmonyPlatform.h"
+#include "platform/openharmony/common/PluginCommon.h"
 
 namespace {
 void OnSurfaceCreatedCB(NativeXComponent* component, void* window) {
@@ -41,6 +42,7 @@ void OnSurfaceCreatedCB(NativeXComponent* component, void* window) {
     char     idStr[XCOMPONENT_ID_LEN_MAX + 1] = {};
     uint64_t idSize                           = XCOMPONENT_ID_LEN_MAX + 1;
     ret                                       = NativeXComponent_GetXComponentId(component, idStr, &idSize);
+    LOGI("OnSurfaceCreatedCB");
     if (ret != XCOMPONENT_RESULT_SUCCESS) {
         return;
     }
@@ -50,7 +52,6 @@ void OnSurfaceCreatedCB(NativeXComponent* component, void* window) {
     cc::OpenharmonyPlatform* platform = dynamic_cast<cc::OpenharmonyPlatform*>(cc::BasePlatform::getPlatform());
     CCASSERT(platform != nullptr, "Only supports openharmony platform");
     platform->workerMessageQ_.EnQueue(component);
-    uv_async_send(&(platform->workerOnMessageSignal_));
 }
 
 void DispatchTouchEventCB(NativeXComponent* component, void* window) {

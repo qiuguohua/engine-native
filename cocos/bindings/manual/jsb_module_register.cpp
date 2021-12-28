@@ -120,7 +120,7 @@ bool jsb_register_all_modules() {
 //     se->addRegisterCallback(register_all_xmlhttprequest);
 //     // extension depend on network
 //     se->addRegisterCallback(register_all_extension);
-//     se->addRegisterCallback(register_all_dop_bindings);
+     se->addRegisterCallback(register_all_dop_bindings);
      se->addRegisterCallback(register_all_pipeline);
      se->addRegisterCallback(register_all_pipeline_manual);
      se->addRegisterCallback(register_all_scene);
