@@ -161,7 +161,7 @@ std::string FileUtilsOHOS::getWritablePath() const {
 //        return "./";
 //    }
 //    return tmp.append("/");
-    return nullptr;
+    return "";
 }
 
 bool FileUtilsOHOS::isFileExistInternal(const std::string &strFilePath) const {

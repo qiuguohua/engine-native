@@ -477,6 +477,8 @@ elseif(OPENHARMONY)
         cocos/platform/interfaces/modules/ISystem.h
         cocos/platform/interfaces/modules/ISystemWindow.cpp
         cocos/platform/interfaces/modules/ISystemWindow.h
+        cocos/platform/interfaces/modules/Device.cpp
+        cocos/platform/interfaces/modules/Device.h
     )
 endif()
 
@@ -1540,7 +1542,17 @@ cocos_source_files(
     NO_WERROR    cocos/bindings/auto/jsb_pipeline_auto.cpp
                  cocos/bindings/auto/jsb_pipeline_auto.h
     NO_WERROR    cocos/bindings/auto/jsb_scene_auto.cpp
-                 cocos/bindings/auto/jsb_scene_auto.h)
+                 cocos/bindings/auto/jsb_scene_auto.h
+
+    NO_WERROR    cocos/bindings/auto/jsb_cocos_auto.cpp
+                 cocos/bindings/auto/jsb_cocos_auto.h
+                 cocos/platform/interfaces/modules/canvas/CanvasRenderingContext2D.cpp
+                 cocos/platform/interfaces/modules/canvas/CanvasRenderingContext2D.h
+                 cocos/platform/interfaces/modules/canvas/ICanvasRenderingContext2D.cpp
+                 cocos/platform/interfaces/modules/canvas/ICanvasRenderingContext2D.h
+                 cocos/platform/openharmony/modules/CanvasRenderingContext2DDelegate.cpp
+                 cocos/platform/openharmony/modules/CanvasRenderingContext2DDelegate.h
+                )
 
 if(NOT OPENHARMONY)
 cocos_source_files(
@@ -1866,7 +1878,7 @@ if(USE_MIDDLEWARE)
     endif()
 endif()
 
-######## manual
+######## manual for test
 if(OPENHARMONY)
     cocos_source_files(
         NO_WERROR    cocos/bindings/manual/jsb_classtype.cpp
@@ -1880,6 +1892,8 @@ if(OPENHARMONY)
                      cocos/bindings/manual/jsb_scene_manual.h
         NO_WERROR    cocos/bindings/manual/jsb_pipeline_manual.cpp
                      cocos/bindings/manual/jsb_pipeline_manual.h
+        NO_WERROR    cocos/bindings/manual/jsb_cocos_manual.cpp
+                     cocos/bindings/manual/jsb_cocos_manual.h
     )
 endif()
 
