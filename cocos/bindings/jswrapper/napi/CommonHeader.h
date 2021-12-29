@@ -46,21 +46,21 @@
         }                                          \
     } while (0)
 
-// Returns NULL if the_call doesn't return napi_ok.
+// Returns nullptr if the_call doesn't return napi_ok.
 #define NODE_API_CALL(status, env, the_call) \
     status = the_call;                       \
     LOGI("error:%d", status);                \
-    NODE_API_CALL_BASE(env, status, NULL)
+    NODE_API_CALL_BASE(env, status, nullptr)
 
 // Returns empty if the_call doesn't return napi_ok.
 #define NODE_API_CALL_RETURN_VOID(env, the_call) \
     NODE_API_CALL_BASE(env, the_call, NODE_API_RETVAL_NOTHING)
 
 #define DECLARE_NODE_API_PROPERTY(name, func) \
-    { (name), NULL, (func), NULL, NULL, NULL, napi_default, NULL }
+    { (name), nullptr, (func), nullptr, nullptr, nullptr, napi_default, nullptr }
 
 #define DECLARE_NODE_API_GETTER(name, func) \
-    { (name), NULL, NULL, (func), NULL, NULL, napi_default, NULL }
+    { (name), nullptr, nullptr, (func), nullptr, nullptr, napi_default, nullptr }
 
 void add_returned_status(napi_env    env,
                          const char* key,
