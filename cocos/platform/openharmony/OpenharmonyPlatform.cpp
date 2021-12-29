@@ -36,6 +36,8 @@
 #include "bindings/jswrapper/SeApi.h"
 #include "platform/UniversalPlatform.h"
 #include "platform/openharmony/modules/SystemWindow.h"
+#include <sstream>
+#include <chrono>
 
 enum ContextType {
     APP_LIFECYCLE = 0,
@@ -202,6 +204,26 @@ napi_value OpenharmonyPlatform::NapiLoadSurface(napi_env env, napi_callback_info
     SystemWindow* systemWindowIntf = getPlatform()->getInterface<SystemWindow>();
     CCASSERT(systemWindowIntf, "Invalid interface pointer");
     systemWindowIntf->OnSurfaceCreated(nativexcomponet, window);
+
+    //pass to worker js
+    se::ScriptEngine* se       = se::ScriptEngine::getInstance();
+    auto*             sysWindow   = CC_CURRENT_ENGINE()->getInterface<cc::ISystemWindow>();
+    auto              handler  = sysWindow->getWindowHandler();
+    auto              viewSize = sysWindow->getViewSize();
+
+    std::stringstream ss;
+    {
+        ss << "window.innerWidth = " << static_cast<int>(viewSize.x) << ";";
+        ss << "window.innerHeight = " << static_cast<int>(viewSize.y) << ";";
+        ss << "window.windowHandler = ";
+        if (sizeof(handler) == 8) { // use bigint
+            ss << static_cast<uint64_t>(handler) << "n;";
+        }
+        if (sizeof(handler) == 4) {
+            ss << static_cast<uint32_t>(handler) << ";";
+        }
+    }
+    se->evalString(ss.str().c_str());
     return nullptr;
 }
 
@@ -320,6 +342,7 @@ void OpenharmonyPlatform::WorkerInit(napi_env env, uv_loop_t* loop) {
     LOGE("kee cocos PluginManager::WorkerInit");
     workerEnv_  = env;
     workerLoop_ = loop;
+    std::this_thread::sleep_for(std::chrono::seconds(2));
     se::ScriptEngine::setEnv(env);
     EnginInit(0, nullptr);
     LOGE("kee cocos PluginManager::WorkerInit workerEnv = %p, workerLoop = %p", workerEnv_, workerLoop_);
