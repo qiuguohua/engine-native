@@ -18,8 +18,9 @@ Object::~Object() {
 }
 
 Object* Object::createObjectWithClass(Class* cls) {
-    //not impl
-    return nullptr;
+    napi_value jsobj = Class::_createJSObjectWithClass(cls);
+    Object*    obj   = Object::_createJSObject(ScriptEngine::getEnv(), jsobj, cls);
+    return obj;
 }
 
 bool Object::setProperty(const char* name, const Value& data) {
