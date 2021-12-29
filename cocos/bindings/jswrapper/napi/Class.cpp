@@ -127,7 +127,7 @@ void Class::install() {
     }
 
 napi_value Class::_createJSObjectWithClass(Class *cls) {
-    napi_value obj;
+    napi_value obj = nullptr;
     napi_status status;
     assert(cls);
     napi_value clsCtor = cls->_getCtorFunc();
