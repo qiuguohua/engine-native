@@ -53,7 +53,7 @@ void Class::defineStaticProperty(const std::string &name, napi_callback g, napi_
 }
 
 void Class::defineFunction(const std::string &name, napi_callback func) {
-    _properties.push_back({name.c_str(), NULL, func, NULL, NULL, NULL, napi_default_method, NULL});
+    _properties.push_back({name.c_str(), nullptr, func, nullptr, nullptr, nullptr, napi_default_method, nullptr});
 }
 
 void Class::defineStaticFunction(const std::string &name, napi_callback func) {
