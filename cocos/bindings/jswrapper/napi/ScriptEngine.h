@@ -237,9 +237,19 @@ private:
     ~ScriptEngine();
     FileOperationDelegate         _fileOperationDelegate;
     std::vector<RegisterCallback> _registerCallbackArray;
-    std::vector<RegisterCallback>         _permRegisterCallbackArray;
+    std::vector<RegisterCallback> _permRegisterCallbackArray;
+
+    std::vector<std::function<void()>> _beforeInitHookArray;
+    std::vector<std::function<void()>> _afterInitHookArray;
+    std::vector<std::function<void()>> _beforeCleanupHookArray;
+    std::vector<std::function<void()>> _afterCleanupHookArray;
 
     Object * _globalObj = nullptr;
     napi_env _env       = nullptr;
+
+    bool _isValid;
+    bool _isGarbageCollecting;
+    bool _isInCleanup;
+    bool _isErrorHandleWorking;
 };
 }; // namespace se

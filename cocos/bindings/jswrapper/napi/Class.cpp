@@ -5,11 +5,14 @@
 namespace se {
 
 napi_value *Class::_exports = nullptr;
+std::vector<Class *> __allClasses;
 
 Class::Class() : _parent(nullptr),
                  _proto(nullptr),
                  _parentProto(nullptr),
-                 _ctorFunc(Class::_defaultCtor){};
+                 _ctorFunc(Class::_defaultCtor){
+    __allClasses.push_back(this);
+                 };
 
 Class::~Class() {
 }
@@ -154,5 +157,24 @@ napi_value Class::_getCtorFunc() const {
     napi_status status;
     NODE_API_CALL(status, ScriptEngine::getEnv(), napi_get_reference_value(ScriptEngine::getEnv(), _constructor, &result));
     return result;
+}
+
+void Class::destroy() {
+    SAFE_DEC_REF(_parent);
+    SAFE_DEC_REF(_proto);
+    SAFE_DEC_REF(_parentProto);
+}
+
+void Class::cleanup() {
+    for (auto cls : __allClasses) {
+        cls->destroy();
+    }
+
+    se::ScriptEngine::getInstance()->addAfterCleanupHook([]() {
+        for (auto cls : __allClasses) {
+            delete cls;
+        }
+        __allClasses.clear();
+    });
 }
 }; // namespace se
