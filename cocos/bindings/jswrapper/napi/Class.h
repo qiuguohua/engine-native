@@ -7,17 +7,18 @@ namespace se {
 class Class {
 public:
     static Class *create(const std::string &clsName, se::Object *parent, Object *parentProto, napi_callback ctor = nullptr);
+    static napi_value    _createJSObjectWithClass(Class *cls);
     void          defineProperty(const std::string &name, napi_callback g, napi_callback s);
     void          defineStaticProperty(const std::string &name, napi_callback g, napi_callback s);
     void          defineFinalizeFunction(napi_finalize func);
     napi_finalize _getFinalizeFunction() const;
     void          defineFunction(const std::string &name, napi_callback func);
     void          defineStaticFunction(const std::string &name, napi_callback func);
-    napi_value    _createJSObjectWithClass(Class *cls);
     Object *      getProto() const;
     void          install();
     napi_status   inherit(napi_env env, napi_value subclass, napi_value superclass);
     napi_ref      _getCtorRef() const;
+    napi_value    _getCtorFunc() const;
     const char *  getName() const { return ""; }
     static void   setExports(napi_value *expPtr) { _exports = expPtr; }
 

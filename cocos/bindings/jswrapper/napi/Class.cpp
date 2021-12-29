@@ -127,8 +127,16 @@ void Class::install() {
     }
 
 napi_value Class::_createJSObjectWithClass(Class *cls) {
-    //not impl
-    return nullptr;
+    napi_value obj = nullptr;
+    napi_status status;
+    assert(cls);
+    napi_value clsCtor = cls->_getCtorFunc();
+    if (!clsCtor) {
+        LOGE("get ctor func err");
+        return nullptr;
+    }
+    NODE_API_CALL(status, ScriptEngine::getEnv(), napi_new_instance( ScriptEngine::getEnv(), clsCtor, 0, nullptr, &obj));
+    return obj;
 }
 
 Object *Class::getProto() const {
@@ -140,4 +148,11 @@ napi_ref Class::_getCtorRef() const {
     return _constructor;
 }
 
+napi_value Class::_getCtorFunc() const {
+    assert(_constructor);
+    napi_value  result = nullptr;
+    napi_status status;
+    NODE_API_CALL(status, ScriptEngine::getEnv(), napi_get_reference_value(ScriptEngine::getEnv(), _constructor, &result));
+    return result;
+}
 }; // namespace se
