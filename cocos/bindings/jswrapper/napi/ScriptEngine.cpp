@@ -59,6 +59,11 @@ bool ScriptEngine::evalString(const char *scriptStr, ssize_t length, Value *ret,
 bool ScriptEngine::init() {
     napi_status status;
     napi_value  result;
+
+    for (const auto &hook : _beforeInitHookArray) {
+        hook();
+    }
+
     Object::setup();
     NativePtrToObjectMap::init();
     NonRefNativePtrCreatedByCtorMap::init();
@@ -67,6 +72,16 @@ bool ScriptEngine::init() {
     _globalObj->root();
     _globalObj->setProperty("window", Value(_globalObj));
     _globalObj->setProperty("scriptEngineType", se::Value("napi"));
+
+        _isValid = true;
+
+    for (const auto &hook : _afterInitHookArray) {
+        hook();
+    }
+    _afterInitHookArray.clear();
+
+    return _isValid;
+
     return true;
 }
 
@@ -102,14 +117,46 @@ bool ScriptEngine::start() {
 }
 
 void ScriptEngine::cleanup() {
-    return;
+    if (!_isValid) {
+        return;
+    }
+
+    SE_LOGD("ScriptEngine::cleanup begin ...\n");
+    _isInCleanup = true;
+
+    for (const auto &hook : _beforeCleanupHookArray) {
+        hook();
+    }
+    _beforeCleanupHookArray.clear();
+
+    SAFE_DEC_REF(_globalObj);
+    Object::cleanup();
+    Class::cleanup();
+    garbageCollect();
+
+    _globalObj = nullptr;
+    _isValid   = false;
+
+    _registerCallbackArray.clear();
+
+    for (const auto &hook : _afterCleanupHookArray) {
+        hook();
+    }
+    _afterCleanupHookArray.clear();
+
+    _isInCleanup = false;
+    NativePtrToObjectMap::destroy();
+    NonRefNativePtrCreatedByCtorMap::destroy();
+    SE_LOGD("ScriptEngine::cleanup end ...\n");
 }
 
 void ScriptEngine::addBeforeCleanupHook(const std::function<void()> &hook) {
+    _beforeCleanupHookArray.push_back(hook);
     return;
 }
 
 void ScriptEngine::addAfterCleanupHook(const std::function<void()> &hook) {
+    _afterCleanupHookArray.push_back(hook);
     return;
 }
 
@@ -143,8 +190,7 @@ const std::chrono::steady_clock::time_point &ScriptEngine::getStartTime() const 
 }
 
 bool ScriptEngine::isValid() const {
-    //not impl
-    return true;
+    return _isValid;
 }
 
 void ScriptEngine::enableDebugger(const std::string &serverAddr, uint32_t port, bool isWait) {
@@ -173,7 +219,7 @@ void ScriptEngine::setJSExceptionCallback(const ExceptionCallback &cb) {
 }
 
 void ScriptEngine::addAfterInitHook(const std::function<void()> &hook) {
-    //not impl
+    _afterInitHookArray.push_back(hook);
     return;
 }
 

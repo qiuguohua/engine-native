@@ -21,12 +21,13 @@ public:
     napi_value    _getCtorFunc() const;
     const char *  getName() const { return ""; }
     static void   setExports(napi_value *expPtr) { _exports = expPtr; }
+    static void cleanup();
 
 private:
     Class();
-
     ~Class();
     bool              init(const std::string &clsName, Object *parent, Object *parentProto, napi_callback ctor = nullptr);
+    void              destroy();
     static napi_value _defaultCtor(napi_env env, napi_callback_info info);
 
 private:

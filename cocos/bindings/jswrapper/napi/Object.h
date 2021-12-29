@@ -347,6 +347,7 @@ public:
 private:
     static void weakCallback(napi_env env, void *nativeObject, void * /*finalize_hint*/);
     static void setup();
+    static void cleanup();
 
 private:
     ObjectRef     _objRef;

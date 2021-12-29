@@ -513,6 +513,50 @@ void Object::setup() {
     __objectMap = std::make_unique<std::unordered_map<Object*, void*>>();
 }
 
+void Object::cleanup() {
+    void*   nativeObj = nullptr;
+    Object* obj       = nullptr;
+    Class*  cls       = nullptr;
+
+    const auto& nativePtrToObjectMap = NativePtrToObjectMap::instance();
+    for (const auto& e : nativePtrToObjectMap) {
+        nativeObj = e.first;
+        obj       = e.second;
+
+        if (obj->_finalizeCb != nullptr) {
+            obj->_finalizeCb(ScriptEngine::getEnv(), nativeObj, nullptr);
+        } else {
+            if (obj->_getClass() != nullptr) {
+                if (obj->_getClass()->_getFinalizeFunction() != nullptr) {
+                    obj->_getClass()->_getFinalizeFunction()(ScriptEngine::getEnv(), nativeObj, nullptr);
+                }
+            }
+        }
+        obj->decRef();
+    }
+
+    NativePtrToObjectMap::clear();
+    NonRefNativePtrCreatedByCtorMap::clear();
+
+    if (__objectMap) {
+        std::vector<Object*> toReleaseObjects;
+        for (const auto& e : *__objectMap) {
+            obj = e.first;
+            cls = obj->_getClass();
+            obj->_rootCount = 0;
+
+            if (cls != nullptr && cls->getName() == "__PrivateData") {
+                toReleaseObjects.push_back(obj);
+            }
+        }
+        for (auto* e : toReleaseObjects) {
+            e->decRef();
+        }
+    }
+
+    __objectMap.reset();
+}
+
 Object* Object::createJSONObject(const std::string& jsonStr) {
     //not impl
     return nullptr;
