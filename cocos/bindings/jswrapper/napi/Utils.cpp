@@ -97,7 +97,7 @@ bool seToJsValue(const Value& v, target_value* outJsVal) {
     assert(outJsVal != nullptr);
     LOGI("seToJsValue");
     bool        ret = false;
-    napi_status status;
+    napi_status status = napi_ok;
     switch (v.getType()) {
         case Value::Type::Number:
             NODE_API_CALL(status, ScriptEngine::getEnv(), napi_create_double(ScriptEngine::getEnv(), v.toDouble(), outJsVal));
@@ -113,7 +113,7 @@ bool seToJsValue(const Value& v, target_value* outJsVal) {
             break;
         case Value::Type::Object:
             *outJsVal = v.toObject()->_getJSObject();
-            ret       = (status == napi_ok);
+            ret       = (outJsVal != nullptr);
             break;
         case Value::Type::Null:
             NODE_API_CALL(status, ScriptEngine::getEnv(), napi_get_null(ScriptEngine::getEnv(), outJsVal));
