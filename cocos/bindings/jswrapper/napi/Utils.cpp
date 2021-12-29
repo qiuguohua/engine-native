@@ -11,7 +11,6 @@ void jsToSeValue(const target_value& value, Value* v) {
     assert(v != nullptr);
     napi_status    status;
     napi_valuetype valType;
-    NODE_API_CALL(status, ScriptEngine::getEnv(), napi_typeof(ScriptEngine::getEnv(), value, &valType));
     int64_t iRet      = 0;
     double  dRet      = 0.F;
     bool    bRet      = false;
@@ -19,6 +18,12 @@ void jsToSeValue(const target_value& value, Value* v) {
     size_t  len       = 0;
     void*   nativePtr = nullptr;
     Object* obj       = nullptr;
+
+    if (!value) {
+        valType = napi_valuetype::napi_undefined;
+    }else {
+        NODE_API_CALL(status, ScriptEngine::getEnv(), napi_typeof(ScriptEngine::getEnv(), value, &valType));
+    }
 
     switch (valType) {
         case napi_valuetype::napi_undefined:
