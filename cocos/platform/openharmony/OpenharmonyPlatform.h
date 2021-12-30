@@ -33,7 +33,7 @@
 #include <uv.h>
 #include <string>
 #include <unordered_map>
-#include "platform/openharmony/message_queue.h"
+#include "platform/openharmony/MessageQueue.h"
 
 #define _ARKUI_DECLARATIVE_ 1
 
