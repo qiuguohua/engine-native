@@ -13,28 +13,30 @@
  * limitations under the License.
  */
 
-#ifndef FOUNDATION_CCRUNTIME_JSAPI_WORKER_MESSAGE_QUEUE_H
-#define FOUNDATION_CCRUNTIME_JSAPI_WORKER_MESSAGE_QUEUE_H
+#include "message_queue.h"
 
-//#include <mutex>
-#include <queue>
-namespace cc {
 
-using MessageDataType = void*;
-class MessageQueue final {
-public:
-    void EnQueue(MessageDataType data);
-    bool DeQueue(MessageDataType *data);
-    bool IsEmpty() const;
-    size_t GetSize() const
-    {
-        return queue_.size();
-    }
-
-private:
-//    std::mutex queueLock_;
-    std::queue<MessageDataType> queue_;
-};
-
+void MessageQueue::EnQueue(MessageDataType data)
+{
+//    queueLock_.lock();
+    queue_.push(data);
+//    queueLock_.unlock();
 }
-#endif // FOUNDATION_CCRUNTIME_JSAPI_WORKER_MESSAGE_QUEUE_H
+
+bool MessageQueue::DeQueue(MessageDataType *data)
+{
+//    queueLock_.lock();
+    if (queue_.empty()) {
+//        queueLock_.unlock();
+        return false;
+    }
+    *data = queue_.front();
+    queue_.pop();
+//    queueLock_.unlock();
+    return true;
+}
+
+bool MessageQueue::IsEmpty() const
+{
+    return queue_.empty();
+}
