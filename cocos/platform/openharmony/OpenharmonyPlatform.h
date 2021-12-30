@@ -89,7 +89,7 @@ public:
     /*************************Worker Func*************************************/
     static napi_value NapiWorkerInit(napi_env env, napi_callback_info info);
     static napi_value NapiASend(napi_env env, napi_callback_info info);
-    static napi_value NapiLoadSurface(napi_env env, napi_callback_info info);
+    static napi_value NapiNativeEngineInit(napi_env env, napi_callback_info info);
 
     void WorkerInit(napi_env env, uv_loop_t* loop);
     int EnginInit(int argc, const char **argv);

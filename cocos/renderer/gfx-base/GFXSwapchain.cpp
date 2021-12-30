@@ -27,6 +27,10 @@
 
 #include "GFXSwapchain.h"
 
+//test yangchao
+#include "application/ApplicationManager.h"
+#include "platform/interfaces/modules/ISystemWindow.h"
+
 namespace cc {
 namespace gfx {
 
@@ -37,9 +41,10 @@ Swapchain::Swapchain()
 Swapchain::~Swapchain() = default;
 
 void Swapchain::initialize(const SwapchainInfo &info) {
-    CCASSERT(info.windowHandle, "Invalid window handle");
+    auto*               window   = CC_CURRENT_ENGINE()->getInterface<cc::ISystemWindow>();
+    //CCASSERT(info.windowHandle, "Invalid window handle");
 
-    _windowHandle = info.windowHandle;
+    const_cast<SwapchainInfo *>(&info)->windowHandle = reinterpret_cast < void* >(window->getWindowHandler());
     _vsyncMode    = info.vsyncMode;
 
     doInit(info);
