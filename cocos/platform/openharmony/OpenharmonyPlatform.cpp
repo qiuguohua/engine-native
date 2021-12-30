@@ -122,7 +122,7 @@ napi_value OpenharmonyPlatform::GetContext(napi_env env, napi_callback_info info
         case NATIVE_RENDER_API: {
             LOGE("kee cocos GetContext NATIVE_RENDER_API");
             napi_property_descriptor desc[] = {
-                DECLARE_NAPI_FUNCTION("loadSurface", OpenharmonyPlatform::NapiLoadSurface),
+                DECLARE_NAPI_FUNCTION("nativeEngineInit", OpenharmonyPlatform::NapiNativeEngineInit),
             };
             NAPI_CALL(env, napi_define_properties(env, exports, sizeof(desc) / sizeof(desc[0]), desc));
         } break;
@@ -184,12 +184,12 @@ napi_value OpenharmonyPlatform::NapiASend(napi_env env, napi_callback_info info)
     return nullptr;
 }
 
-napi_value OpenharmonyPlatform::NapiLoadSurface(napi_env env, napi_callback_info info){
-    LOGE("kee cocos NapiLoadSurface Triggered");
+napi_value OpenharmonyPlatform::NapiNativeEngineInit(napi_env env, napi_callback_info info){
+    LOGE("kee cocos NapiNativeEngineInit Triggered");
     NativeXComponent* nativexcomponet = nullptr;
     void*             window          = nullptr;
     OpenharmonyPlatform::getInstance()->workerMessageQ_.DeQueue(reinterpret_cast<MessageDataType*>(&nativexcomponet));
-    LOGE("kee cocos NapiLoadSurface nativexcomponent = %p", nativexcomponet);
+    LOGE("kee cocos NapiNativeEngineInit nativexcomponent = %p", nativexcomponet);
     int32_t  ret;
     char     idStr[XCOMPONENT_ID_LEN_MAX + 1] = {};
     uint64_t idSize                           = XCOMPONENT_ID_LEN_MAX + 1;
@@ -205,25 +205,9 @@ napi_value OpenharmonyPlatform::NapiLoadSurface(napi_env env, napi_callback_info
     CCASSERT(systemWindowIntf, "Invalid interface pointer");
     systemWindowIntf->OnSurfaceCreated(nativexcomponet, window);
 
-    //pass to worker js
-    se::ScriptEngine* se       = se::ScriptEngine::getInstance();
-    auto*             sysWindow   = CC_CURRENT_ENGINE()->getInterface<cc::ISystemWindow>();
-    auto              handler  = sysWindow->getWindowHandler();
-    auto              viewSize = sysWindow->getViewSize();
+    se::ScriptEngine::setEnv(env);
+    OpenharmonyPlatform::getInstance()->EnginInit(0, nullptr);
 
-    std::stringstream ss;
-    {
-        ss << "window.innerWidth = " << static_cast<int>(viewSize.x) << ";";
-        ss << "window.innerHeight = " << static_cast<int>(viewSize.y) << ";";
-        ss << "window.windowHandler = ";
-        if (sizeof(handler) == 8) { // use bigint
-            ss << static_cast<uint64_t>(handler) << "n;";
-        }
-        if (sizeof(handler) == 4) {
-            ss << static_cast<uint32_t>(handler) << ";";
-        }
-    }
-    se->evalString(ss.str().c_str());
     return nullptr;
 }
 
@@ -343,8 +327,6 @@ void OpenharmonyPlatform::WorkerInit(napi_env env, uv_loop_t* loop) {
     workerEnv_  = env;
     workerLoop_ = loop;
     std::this_thread::sleep_for(std::chrono::seconds(2));
-    se::ScriptEngine::setEnv(env);
-    EnginInit(0, nullptr);
     LOGE("kee cocos PluginManager::WorkerInit workerEnv = %p, workerLoop = %p", workerEnv_, workerLoop_);
     if (workerLoop_) {
         LOGE("kee cocos WorkerInit uv_async_init");
