@@ -55,7 +55,10 @@ bool Object::getArrayLength(uint32_t* length) const {
     napi_status status;
     uint32_t    len = 0;
     NODE_API_CALL(status, _env, napi_get_array_length(_env, _objRef.getValue(_env), &len));
-    return len;
+    if (length) {
+        *length = len;
+    }
+    return true;
 }
 
 bool Object::getArrayElement(uint32_t index, Value* data) const {
