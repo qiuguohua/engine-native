@@ -15,7 +15,6 @@
 
 #include "platform/openharmony/MessageQueue.h"
 
-namespace cc {
 void MessageQueue::EnQueue(MessageDataType data)
 {
 //    queueLock_.lock();
@@ -39,5 +38,4 @@ bool MessageQueue::DeQueue(MessageDataType *data)
 bool MessageQueue::IsEmpty() const
 {
     return queue_.empty();
-}
 }
