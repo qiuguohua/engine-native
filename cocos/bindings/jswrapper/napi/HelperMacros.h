@@ -117,6 +117,9 @@ constexpr inline T *SE_THIS_OBJECT(STATE &s) { // NOLINT(readability-identifier-
         size_t     argc = 10;                                                                         \
         napi_value args[10];                                                                          \
         NODE_API_CALL(status, env, napi_get_cb_info(env, info, &argc, args, &_this, NULL));           \
+        if (!se::ScriptEngine::getInstance()->_needCallConstructor()) {                               \
+            return _this;                                                                             \
+        }                                                                                             \
         se::internal::jsToSeArgs(argc, args, &seArgs);                                                \
         se::Object *thisObject = se::Object::_createJSObject(env, _this, cls);                        \
         thisObject->_setFinalizeCallback(_SE(finalizeCb));                                            \
