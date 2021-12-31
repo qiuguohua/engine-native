@@ -18,7 +18,6 @@
 
 //#include <mutex>
 #include <queue>
-namespace cc {
 
 using MessageDataType = void*;
 class MessageQueue final {
@@ -36,5 +35,4 @@ private:
     std::queue<MessageDataType> queue_;
 };
 
-}
 #endif // FOUNDATION_CCRUNTIME_JSAPI_WORKER_MESSAGE_QUEUE_H
