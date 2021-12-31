@@ -227,4 +227,12 @@ std::string ScriptEngine::getCurrentStackTrace() {
     //not impl
     return "";
 }
+
+void ScriptEngine::_setNeedCallConstructor(bool need) {
+    _isneedCallConstructor = need;
+}
+
+bool ScriptEngine::_needCallConstructor() {
+    return _isneedCallConstructor;
+}
 }; // namespace se

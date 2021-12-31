@@ -138,7 +138,9 @@ napi_value Class::_createJSObjectWithClass(Class *cls) {
         LOGE("get ctor func err");
         return nullptr;
     }
+    se::ScriptEngine::getInstance()->_setNeedCallConstructor(false);
     NODE_API_CALL(status, ScriptEngine::getEnv(), napi_new_instance( ScriptEngine::getEnv(), clsCtor, 0, nullptr, &obj));
+    se::ScriptEngine::getInstance()->_setNeedCallConstructor(true);
     return obj;
 }
 

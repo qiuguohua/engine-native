@@ -232,6 +232,16 @@ public:
      */
     void throwException(const std::string &errorMessage);
 
+     /**
+     * @brief for napi_new_instance, skip constructor.
+     */
+    void _setNeedCallConstructor(bool need);
+
+     /**
+     * @brief for napi_new_instance, skip constructor.
+     */
+    bool _needCallConstructor();
+
 private:
     ScriptEngine();
     ~ScriptEngine();
@@ -251,5 +261,6 @@ private:
     bool _isGarbageCollecting;
     bool _isInCleanup;
     bool _isErrorHandleWorking;
+    bool _isneedCallConstructor = true;
 };
 }; // namespace se
