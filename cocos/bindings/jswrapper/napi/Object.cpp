@@ -348,7 +348,7 @@ void* Object::getPrivateData() const {
     void*       obj;
     napi_status status;
     NODE_API_CALL(status, _env, napi_unwrap(_env, _objRef.getValue(_env), reinterpret_cast<void**>(&obj)));
-    return nullptr;
+    return obj;
 }
 
 void Object::setPrivateData(void* data) {
