@@ -8,7 +8,6 @@
 
 namespace se {
 class Class;
-
 class ObjectRef {
 private:
     napi_ref   _ref       = nullptr;
@@ -21,20 +20,17 @@ public:
         deleteRef();
     }
     napi_value getValue(napi_env env) const {
-        if (!_ref) {
-            return _obj;
-        }
         napi_value  result;
         napi_status status;
         NODE_API_CALL(status, env, napi_get_reference_value(env, _ref, &result));
         assert(status == napi_ok);
+        assert(result != nullptr);
         return result;
     }
     void initWeakref(napi_env env, napi_value obj) {
         assert(_ref == nullptr);
         _obj = obj;
         _env = env;
-        return;
         napi_create_reference(env, obj, 0, &_ref);
     }
     void setWeakref(napi_env env, napi_ref ref) {
@@ -49,11 +45,7 @@ public:
         _env = env;
     }
     void incRef(napi_env env) {
-        assert(_ref == nullptr);
         assert(_refCounts == 0);
-        _refCounts = 1;
-        napi_create_reference(env, _obj, _refCounts, &_ref);
-        return;
         if (_refCounts == 0) {
             uint32_t result = 0;
             _refCounts      = 1;
@@ -62,8 +54,6 @@ public:
     }
     void decRef(napi_env env) {
         assert(_refCounts == 1);
-        deleteRef();
-        return;
         uint32_t result = 0;
         if (_refCounts > 0) {
             _refCounts--;
@@ -71,10 +61,10 @@ public:
         }
     }
     void deleteRef() {
+        _refCounts = 0;
         if (!_ref) {
             return;
         }
-        _refCounts = 0;
         napi_delete_reference(_env, _ref);
         _ref = nullptr;
     }

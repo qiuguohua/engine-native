@@ -48,7 +48,7 @@ napi_value Class::_defaultCtor(napi_env env, napi_callback_info info) {
 }
 
 void Class::defineProperty(const std::string &name, napi_callback g, napi_callback s) {
-    _properties.push_back({name.c_str(), nullptr, nullptr, g, s, 0, napi_default, 0});
+    _properties.push_back({name.c_str(), nullptr, nullptr, g, s, 0, napi_default_jsproperty, 0});
 }
 
 void Class::defineStaticProperty(const std::string &name, napi_callback g, napi_callback s) {
