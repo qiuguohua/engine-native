@@ -261,6 +261,6 @@ private:
     bool _isGarbageCollecting;
     bool _isInCleanup;
     bool _isErrorHandleWorking;
-    bool _isneedCallConstructor = true;
+    bool _isneedCallConstructor{true};
 };
 }; // namespace se
