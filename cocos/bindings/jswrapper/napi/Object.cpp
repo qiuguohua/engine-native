@@ -37,10 +37,10 @@ bool Object::getProperty(const char* name, Value* d) {
     Value       data;
     NODE_API_CALL(status, _env, napi_get_named_property(_env, _objRef.getValue(_env), name, &jsVal));
     internal::jsToSeValue(jsVal, &data);
+    *d = data;
     if (data.isUndefined()) {
         return false;
     }
-    *d = data;
     return true;
 }
 
