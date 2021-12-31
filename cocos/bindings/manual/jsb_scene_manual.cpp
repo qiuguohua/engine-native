@@ -190,11 +190,11 @@ bool register_all_scene_manual(se::Object* obj) // NOLINT(readability-identifier
         obj->setProperty("ns", nsVal);
     }
 
-    // __jsb_cc_scene_Model_proto->defineFunction("setInstancedAttrBlock", _SE(js_scene_Model_setInstancedAttrBlock));
+    __jsb_cc_scene_Model_proto->defineFunction("setInstancedAttrBlock", _SE(js_scene_Model_setInstancedAttrBlock));
 
-    // __jsb_cc_scene_SubModel_proto->defineFunction("setSubMeshBuffers", _SE(js_scene_SubModel_setSubMeshBuffers));
-    // __jsb_cc_scene_Pass_proto->defineFunction("setRootBufferAndBlock", _SE(js_scene_Pass_setRootBufferAndBlock));
-    // __jsb_cc_scene_RenderScene_proto->defineFunction("updateBatches", _SE(js_scene_RenderScene_updateBatches));
+    __jsb_cc_scene_SubModel_proto->defineFunction("setSubMeshBuffers", _SE(js_scene_SubModel_setSubMeshBuffers));
+    __jsb_cc_scene_Pass_proto->defineFunction("setRootBufferAndBlock", _SE(js_scene_Pass_setRootBufferAndBlock));
+    __jsb_cc_scene_RenderScene_proto->defineFunction("updateBatches", _SE(js_scene_RenderScene_updateBatches));
 
     // Impl MQ for DrawBatch2D
     register_all_scene_ext_manual(obj);
