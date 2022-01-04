@@ -151,7 +151,10 @@ void Engine::close() { // NOLINT
 //#if USE_SOCKET
 //    cc::network::WebSocket::closeAllConnections();
 //#endif
+
+#if (CC_PLATFORM != CC_PLATFORM_OPENHARMONY)
     cc::network::HttpClient::destroyInstance();
+#endif
 
     _scheduler->removeAllFunctionsToBePerformedInCocosThread();
     _scheduler->unscheduleAll();
@@ -242,7 +245,9 @@ int32_t Engine::restartVM() {
 //#if USE_SOCKET
 //    cc::network::WebSocket::closeAllConnections();
 //#endif
+#if (CC_PLATFORM != CC_PLATFORM_OPENHARMONY)
     cc::network::HttpClient::destroyInstance();
+#endif
 
     _scheduler->removeAllFunctionsToBePerformedInCocosThread();
     _scheduler->unscheduleAll();
