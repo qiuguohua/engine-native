@@ -317,21 +317,26 @@ void OpenharmonyPlatform::TimerCb(uv_timer_t* handle) {
     OpenharmonyPlatform::getInstance()->runTask();
 }
 
-int OpenharmonyPlatform::EnginInit(int argc, const char** argv) {
+int OpenharmonyPlatform::StartApplication(int argc, const char** argv) {
     CC_START_APPLICATION(CocosApplication);
-    getPlatform()->run(0, nullptr);
+}
+
+int OpenharmonyPlatform::EnginInit(int argc, const char** argv) {
+    StartApplication(argc, argv);
+    OpenharmonyPlatform::getInstance()->run(0, nullptr);
+    return 0;
 }
 
 void OpenharmonyPlatform::WorkerInit(napi_env env, uv_loop_t* loop) {
     LOGE("kee cocos PluginManager::WorkerInit");
     workerEnv_  = env;
     workerLoop_ = loop;
-    std::this_thread::sleep_for(std::chrono::seconds(2));
-    LOGE("kee cocos PluginManager::WorkerInit workerEnv = %p, workerLoop = %p", workerEnv_, workerLoop_);
     if (workerLoop_) {
         LOGE("kee cocos WorkerInit uv_async_init");
         uv_async_init(workerLoop_, &workerOnMessageSignal_, reinterpret_cast<uv_async_cb>(OpenharmonyPlatform::WorkerOnMessage));
     }
+    std::this_thread::sleep_for(std::chrono::seconds(2));
+	LOGE("kee cocos PluginManager::WorkerInit workerEnv = %p, workerLoop = %p", workerEnv_, workerLoop_);
 }
 
 int32_t OpenharmonyPlatform::loop() {
