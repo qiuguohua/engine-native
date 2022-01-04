@@ -104,6 +104,7 @@ public:
     int32_t loop() override;
 
 private:
+    int StartApplication(int argc, const char** argv);
     static void TimerCb(uv_timer_t* handle);
     static void MainOnMessage(const uv_async_t* req);
     static void WorkerOnMessage(const uv_async_t* req);
