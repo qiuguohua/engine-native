@@ -334,8 +334,9 @@ bool Object::call(const ValueArray& args, Object* thisObject, Value* rval) {
     napi_value  return_val;
     napi_status status;
     assert(isFunction());
+    napi_value thisObj = thisObject ? thisObject->_getJSObject() : nullptr;
     status =
-        napi_call_function(_env, thisObject->_getJSObject(), _getJSObject(), argc, argv.data(), &return_val);
+        napi_call_function(_env, thisObj, _getJSObject(), argc, argv.data(), &return_val);
     if (rval) {
         internal::jsToSeValue(return_val, rval);
     }
