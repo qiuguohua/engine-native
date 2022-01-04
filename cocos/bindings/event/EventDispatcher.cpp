@@ -239,6 +239,10 @@ void EventDispatcher::dispatchTickEvent(float /*dt*/) {
     if (tickVal.isUndefined()) {
         se::ScriptEngine::getInstance()->getGlobalObject()->getProperty("gameTick", &tickVal);
     }
+    
+    if(tickVal.isUndefined()) {
+        return;
+    }
 
     static std::chrono::steady_clock::time_point prevTime;
     prevTime = std::chrono::steady_clock::now();
