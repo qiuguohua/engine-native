@@ -77,18 +77,22 @@ void UniversalPlatform::setHandleDefaultEventCallback(HandleEventCallback cb) {
 int32_t UniversalPlatform::init() {
     registerInterface(ISystemWindow::createSystemWindowInterface());
     registerInterface(ISystem::createSystemInterface());
+#if (CC_PLATFORM != CC_PLATFORM_OPENHARMONY)
     registerInterface(INetwork::createNetworkInterface());
     registerInterface(IScreen::createScreenInterface());
     registerInterface(IBattery::createBatteryInterface());
     registerInterface(IVibrator::createVibratorInterface());
     registerInterface(IAccelerometer::createAccelerometerInterface());
+#endif
     return 0;
 }
 
 int32_t UniversalPlatform::run(int argc, const char** argv) {
+#if (CC_PLATFORM != CC_PLATFORM_OPENHARMONY)
     if (cocos_main(argc, argv) != 0) {
         return -1;
     }
+#endif
     return loop();
 }
 
@@ -127,7 +131,9 @@ void UniversalPlatform::onClose() {
 }
 
 void UniversalPlatform::onDestory() {
+#if (CC_PLATFORM != CC_PLATFORM_OPENHARMONY)
     cocos_destory();
+#endif
 }
 
 } // namespace cc

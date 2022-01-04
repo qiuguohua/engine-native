@@ -1,6 +1,5 @@
 /****************************************************************************
- Copyright (c) 2016 Chukong Technologies Inc.
- Copyright (c) 2017-2021 Xiamen Yaji Software Co., Ltd.
+ Copyright (c) 2021 Xiamen Yaji Software Co., Ltd.
 
  http://www.cocos.com
 
@@ -26,25 +25,43 @@
 
 #pragma once
 
-#include "config.h"
+#include "platform/interfaces/modules/ISystem.h"
 
-#if SCRIPT_ENGINE_TYPE == SCRIPT_ENGINE_SM
-    #include "sm/Object.h"
-#endif
+class ANativeWindow;
 
-#if SCRIPT_ENGINE_TYPE == SCRIPT_ENGINE_V8
-    #include "v8/Object.h"
-#endif
+namespace cc {
 
-#if SCRIPT_ENGINE_TYPE == SCRIPT_ENGINE_JSC
-    #include "jsc/Object.h"
-#endif
+class System : public ISystem {
+public:
+    System();
+    ~System() override;
 
-#if SCRIPT_ENGINE_TYPE == SCRIPT_ENGINE_CHAKRACORE
-    #include "chakracore/Object.h"
-#endif
+    OSType getOSType() const override;
+    /**
+     @brief Get target device model.
+     */
+    std::string getDeviceModel() const override;
+    /**
+     @brief Get current language config.
+     @return Current language config.
+     */
+    LanguageType getCurrentLanguage() const override;
+    /**
+     @brief Get current language iso 639-1 code.
+     @return Current language iso 639-1 code.
+     */
+    std::string getCurrentLanguageCode() const override;
+    /**
+     @brief Get system version.
+     @return system version.
+     */
+    std::string getSystemVersion() const override;
+    /**
+     @brief Open url in default browser.
+     @param String with url to open.
+     @return True if the resource located by the URL was successfully opened; otherwise false.
+     */
+    bool openURL(const std::string& url) override;
+};
 
-
-#if SCRIPT_ENGINE_TYPE == SCRIPT_ENGINE_NAPI
-    #include "napi/Object.h"
-#endif
+} // namespace cc

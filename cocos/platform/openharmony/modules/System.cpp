@@ -1,6 +1,5 @@
 /****************************************************************************
- Copyright (c) 2016 Chukong Technologies Inc.
- Copyright (c) 2017-2021 Xiamen Yaji Software Co., Ltd.
+ Copyright (c) 2021 Xiamen Yaji Software Co., Ltd.
 
  http://www.cocos.com
 
@@ -24,27 +23,35 @@
  THE SOFTWARE.
 ****************************************************************************/
 
-#pragma once
-
-#include "config.h"
-
-#if SCRIPT_ENGINE_TYPE == SCRIPT_ENGINE_SM
-    #include "sm/Object.h"
-#endif
-
-#if SCRIPT_ENGINE_TYPE == SCRIPT_ENGINE_V8
-    #include "v8/Object.h"
-#endif
-
-#if SCRIPT_ENGINE_TYPE == SCRIPT_ENGINE_JSC
-    #include "jsc/Object.h"
-#endif
-
-#if SCRIPT_ENGINE_TYPE == SCRIPT_ENGINE_CHAKRACORE
-    #include "chakracore/Object.h"
-#endif
+#include "platform/openharmony/modules/System.h"
 
 
-#if SCRIPT_ENGINE_TYPE == SCRIPT_ENGINE_NAPI
-    #include "napi/Object.h"
-#endif
+namespace cc {
+System::System() = default;
+System::~System() = default;
+
+System::OSType System::getOSType() const {
+    return OSType::OHOS;
+}
+
+std::string System::getDeviceModel() const {
+    return "";
+}
+
+ISystem::LanguageType System::getCurrentLanguage() const {
+    return LanguageType::ENGLISH;
+}
+
+std::string System::getCurrentLanguageCode() const {
+    return "";
+}
+
+std::string System::getSystemVersion() const {
+    return "";
+}
+
+bool System::openURL(const std::string& url) {
+    return false;
+}
+
+} // namespace cc
