@@ -8,12 +8,12 @@ class Class {
 public:
     static Class *create(const std::string &clsName, se::Object *parent, Object *parentProto, napi_callback ctor = nullptr);
     static napi_value    _createJSObjectWithClass(Class *cls);
-    void          defineProperty(const std::string &name, napi_callback g, napi_callback s);
-    void          defineStaticProperty(const std::string &name, napi_callback g, napi_callback s);
+    void          defineProperty(const char* name, napi_callback g, napi_callback s);
+    void          defineStaticProperty(const char* name, napi_callback g, napi_callback s);
     void          defineFinalizeFunction(napi_finalize func);
     napi_finalize _getFinalizeFunction() const;
-    void          defineFunction(const std::string &name, napi_callback func);
-    void          defineStaticFunction(const std::string &name, napi_callback func);
+    void          defineFunction(const char* name, napi_callback func);
+    void          defineStaticFunction(const char* name, napi_callback func);
     Object *      getProto() const;
     void          install();
     napi_status   inherit(napi_env env, napi_value subclass, napi_value superclass);
@@ -38,8 +38,6 @@ private:
     Object *                              _parentProto;
     napi_callback                         _ctorFunc;
     napi_ref                              _constructor;
-    using safeString = std::unique_ptr<std::string>;
-    std::vector<safeString>              _propertyNames;
     std::vector<napi_property_descriptor> _properties;
     napi_finalize                         _finalizeFunc = nullptr;
 };
