@@ -70,7 +70,8 @@ if(NOT ANDROID AND NOT IOS AND NOT OHOS)
 endif()
 
 if(OPENHARMONY)
-#    set(USE_SE_V8 OFF)
+    set(USE_SE_V8 OFF)
+    set(USE_SE_NAPI ON)
     set(USE_VIDEO OFF)
     set(USE_AUDIO OFF)
     set(USE_SOCKET OFF)
@@ -118,7 +119,6 @@ cc_inspect_values(
     USE_DRAGONBONES
     USE_SPINE
     USE_WEBSOCKET_SERVER
-    USE_SE_V8
     USE_V8_DEBUGGER
     USE_PHYSICS_PHYSX
     USE_JOB_SYSTEM_TBB
@@ -1959,7 +1959,6 @@ endif()
 
 ############# module bindings
 if(USE_SE_V8)
-if(NOT OPENHARMONY)
     cocos_source_files(MODULE ccbindings
                      cocos/bindings/jswrapper/v8/Base.h
                      cocos/bindings/jswrapper/v8/Class.cpp
@@ -1978,21 +1977,6 @@ if(NOT OPENHARMONY)
                      cocos/bindings/jswrapper/v8/MissingSymbols.cpp
                      cocos/bindings/jswrapper/v8/MissingSymbols.h
     )
-elseif(OPENHARMONY)
-    cocos_source_files(MODULE ccbindings
-                     cocos/bindings/jswrapper/napi/Class.cpp
-                     cocos/bindings/jswrapper/napi/Class.h
-                     cocos/bindings/jswrapper/napi/CommonHeader.h
-                     cocos/bindings/jswrapper/napi/HelperMacros.h
-                     cocos/bindings/jswrapper/napi/Object.cpp
-                     cocos/bindings/jswrapper/napi/Object.h
-        NO_WERROR    cocos/bindings/jswrapper/napi/ScriptEngine.cpp
-                     cocos/bindings/jswrapper/napi/ScriptEngine.h
-                     cocos/bindings/jswrapper/napi/SeApi.h
-        NO_WERROR    cocos/bindings/jswrapper/napi/Utils.cpp
-                     cocos/bindings/jswrapper/napi/Utils.h
-    )
-endif()
     if(USE_V8_DEBUGGER)
     cocos_source_files(MODULE ccbindings
                      cocos/bindings/jswrapper/v8/debugger/base64.h
@@ -2042,6 +2026,22 @@ if(USE_SE_JSC)
         NO_WERROR    cocos/bindings/jswrapper/jsc/Class.cpp
                      cocos/bindings/jswrapper/jsc/Utils.h
                      cocos/bindings/jswrapper/jsc/Base.h
+    )
+endif()
+
+if(USE_SE_NAPI)
+    cocos_source_files(MODULE ccbindings
+                     cocos/bindings/jswrapper/napi/Class.cpp
+                     cocos/bindings/jswrapper/napi/Class.h
+                     cocos/bindings/jswrapper/napi/CommonHeader.h
+                     cocos/bindings/jswrapper/napi/HelperMacros.h
+                     cocos/bindings/jswrapper/napi/Object.cpp
+                     cocos/bindings/jswrapper/napi/Object.h
+        NO_WERROR    cocos/bindings/jswrapper/napi/ScriptEngine.cpp
+                     cocos/bindings/jswrapper/napi/ScriptEngine.h
+                     cocos/bindings/jswrapper/napi/SeApi.h
+        NO_WERROR    cocos/bindings/jswrapper/napi/Utils.cpp
+                     cocos/bindings/jswrapper/napi/Utils.h
     )
 endif()
 
