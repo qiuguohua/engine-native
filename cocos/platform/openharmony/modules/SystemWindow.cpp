@@ -37,61 +37,30 @@
 #include "platform/openharmony/common/PluginCommon.h"
 
 namespace {
-void OnSurfaceCreatedCB(NativeXComponent* component, void* window) {
-    int32_t  ret;
-    char     idStr[XCOMPONENT_ID_LEN_MAX + 1] = {};
-    uint64_t idSize                           = XCOMPONENT_ID_LEN_MAX + 1;
-    ret                                       = NativeXComponent_GetXComponentId(component, idStr, &idSize);
-    LOGI("OnSurfaceCreatedCB");
-    if (ret != XCOMPONENT_RESULT_SUCCESS) {
-        return;
-    }
 
-    // auto sysWindow = cc::SystemWindow::GetInstance();
-    // sysWindow->OnSurfaceCreated(component, window);
+void SendToWorker(const cc::WorkerMessageType& type, NativeXComponent* component) {
     cc::OpenharmonyPlatform* platform = dynamic_cast<cc::OpenharmonyPlatform*>(cc::BasePlatform::getPlatform());
     CCASSERT(platform != nullptr, "Only supports openharmony platform");
-    platform->workerMessageQ_.EnQueue(component);
+    cc::WorkerMessageData data{type, static_cast<void*>(component)};
+    platform->workerMessageQ_.EnQueue(data);
+    if(type != cc::WorkerMessageType::WM_XCOMPONENT_SURFACE_CREATED)
+        uv_async_send(&(cc::OpenharmonyPlatform::getInstance()->workerOnMessageSignal_));
+}
+
+void OnSurfaceCreatedCB(NativeXComponent* component, void* window) {
+    SendToWorker(cc::WorkerMessageType::WM_XCOMPONENT_SURFACE_CREATED, component);
 }
 
 void DispatchTouchEventCB(NativeXComponent* component, void* window) {
-    int32_t  ret;
-    char     idStr[XCOMPONENT_ID_LEN_MAX + 1] = {};
-    uint64_t idSize                           = XCOMPONENT_ID_LEN_MAX + 1;
-    ret                                       = NativeXComponent_GetXComponentId(component, idStr, &idSize);
-
-    if (ret != XCOMPONENT_RESULT_SUCCESS) {
-        return;
-    }
-
-    auto sysWindow = cc::SystemWindow::GetInstance();
-    sysWindow->DispatchTouchEvent(component, window);
+    SendToWorker(cc::WorkerMessageType::WM_XCOMPONENT_TOUCH_EVENT, component);
 }
 
 void OnSurfaceChangedCB(NativeXComponent* component, void* window) {
-    int32_t  ret;
-    char     idStr[XCOMPONENT_ID_LEN_MAX + 1] = {};
-    uint64_t idSize                           = XCOMPONENT_ID_LEN_MAX + 1;
-    ret                                       = NativeXComponent_GetXComponentId(component, idStr, &idSize);
-    if (ret != XCOMPONENT_RESULT_SUCCESS) {
-        return;
-    }
-
-    auto sysWindow = cc::SystemWindow::GetInstance();
-    sysWindow->OnSurfaceChanged(component, window);
+    SendToWorker(cc::WorkerMessageType::WM_XCOMPONENT_SURFACE_CHANGED, component);
 }
 
 void OnSurfaceDestroyedCB(NativeXComponent* component, void* window) {
-    int32_t  ret;
-    char     idStr[XCOMPONENT_ID_LEN_MAX + 1] = {};
-    uint64_t idSize                           = XCOMPONENT_ID_LEN_MAX + 1;
-    ret                                       = NativeXComponent_GetXComponentId(component, idStr, &idSize);
-    if (ret != XCOMPONENT_RESULT_SUCCESS) {
-        return;
-    }
-
-    auto sysWindow = cc::SystemWindow::GetInstance();
-    sysWindow->OnSurfaceDestroyed(component, window);
+    SendToWorker(cc::WorkerMessageType::WM_XCOMPONENT_SURFACE_DESTROY, component);
 }
 } // namespace
 

@@ -23,25 +23,38 @@
  THE SOFTWARE.
 ****************************************************************************/
 
-#include "platform/openharmony/WorkMessageQueue.h"
+#pragma once
+
+//#include <mutex>
+#include <queue>
+
+
 
 namespace cc {
-    
-void WorkMessageQueue::EnQueue(MessageDataType data) {
-    queue_.push(data);
-}
 
-bool WorkMessageQueue::DeQueue(MessageDataType *data) {
-    if (queue_.empty()) {
-        return false;
+enum class WorkerMessageType {
+    WM_XCOMPONENT_SURFACE_CREATED = 0,
+    WM_XCOMPONENT_TOUCH_EVENT,
+    WM_XCOMPONENT_SURFACE_CHANGED,
+    WM_XCOMPONENT_SURFACE_DESTROY,
+};
+
+struct WorkerMessageData {
+    WorkerMessageType type;
+    void* data;
+};
+
+class WorkerMessageQueue final {
+public:
+    void   EnQueue(const WorkerMessageData& data);
+    bool   DeQueue(WorkerMessageData *data);
+    bool   IsEmpty() const;
+    size_t GetSize() const {
+        return queue_.size();
     }
-    *data = queue_.front();
-    queue_.pop();
-    return true;
-}
 
-bool WorkMessageQueue::IsEmpty() const {
-    return queue_.empty();
-}
+private:
+    std::queue<WorkerMessageData> queue_;
+};
 
 } // namespace cc

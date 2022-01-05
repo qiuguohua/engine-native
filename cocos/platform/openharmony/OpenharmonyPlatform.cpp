@@ -23,6 +23,7 @@
  THE SOFTWARE.
 ****************************************************************************/
 #include "platform/openharmony/OpenharmonyPlatform.h"
+#include "base/Macros.h"
 #include "platform/openharmony/common/PluginCommon.h"
 #include "platform/openharmony/render/PluginRender.h"
 
@@ -186,17 +187,12 @@ napi_value OpenharmonyPlatform::NapiASend(napi_env env, napi_callback_info info)
 
 napi_value OpenharmonyPlatform::NapiNativeEngineInit(napi_env env, napi_callback_info info){
     LOGE("kee cocos NapiNativeEngineInit Triggered");
-    NativeXComponent* nativexcomponet = nullptr;
     void*             window          = nullptr;
-    OpenharmonyPlatform::getInstance()->workerMessageQ_.DeQueue(reinterpret_cast<MessageDataType*>(&nativexcomponet));
+    WorkerMessageData msgData;
+    OpenharmonyPlatform::getInstance()->workerMessageQ_.DeQueue(reinterpret_cast<WorkerMessageData*>(&msgData));
+    NativeXComponent* nativexcomponet = reinterpret_cast<NativeXComponent*>(msgData.data);
     LOGE("kee cocos NapiNativeEngineInit nativexcomponent = %p", nativexcomponet);
     int32_t  ret;
-    char     idStr[XCOMPONENT_ID_LEN_MAX + 1] = {};
-    uint64_t idSize                           = XCOMPONENT_ID_LEN_MAX + 1;
-    ret                                       = NativeXComponent_GetXComponentId(nativexcomponet, idStr, &idSize);
-    if (ret != XCOMPONENT_RESULT_SUCCESS) {
-        return nullptr;
-    }
     ret = NativeXComponent_GetNativeWindow(nativexcomponet, &window);
     if (ret != XCOMPONENT_RESULT_SUCCESS) {
         return nullptr;
@@ -250,8 +246,30 @@ void OpenharmonyPlatform::MainOnMessage(const uv_async_t* req) {
 }
 
 // static
-void OpenharmonyPlatform::WorkerOnMessage(const uv_async_t* req) {
-    LOGE("kee cocos WorkerOnMessage Triggered");
+void OpenharmonyPlatform::WorkerOnMessage(const uv_async_t* /* req */) {
+    void*             window          = nullptr;
+    WorkerMessageData msgData;
+    OpenharmonyPlatform::getInstance()->workerMessageQ_.DeQueue(reinterpret_cast<WorkerMessageData*>(&msgData));
+
+    NativeXComponent* nativexcomponet = reinterpret_cast<NativeXComponent*>(msgData.data);
+    CCASSERT(nativexcomponet != nullptr, "nativexcomponent cannot be empty");
+    int32_t ret = NativeXComponent_GetNativeWindow(nativexcomponet, &window);
+    if (ret != XCOMPONENT_RESULT_SUCCESS) {
+        return;
+    }
+
+    SystemWindow* systemWindowIntf = getPlatform()->getInterface<SystemWindow>();
+    if(msgData.type == WorkerMessageType::WM_XCOMPONENT_SURFACE_CREATED) {
+        CCASSERT(systemWindowIntf, "Invalid interface pointer");
+        systemWindowIntf->OnSurfaceCreated(nativexcomponet, window);
+    } else if(msgData.type == WorkerMessageType::WM_XCOMPONENT_TOUCH_EVENT) {
+        systemWindowIntf->DispatchTouchEvent(nativexcomponet, window);
+    } else if(msgData.type == WorkerMessageType::WM_XCOMPONENT_SURFACE_CHANGED) {
+        systemWindowIntf->OnSurfaceChanged(nativexcomponet, window);
+    } else if(msgData.type == WorkerMessageType::WM_XCOMPONENT_SURFACE_DESTROY) {
+        systemWindowIntf->OnSurfaceDestroyed(nativexcomponet, window);
+    }
+    
 }
 
 napi_value OpenharmonyPlatform::NapiOnCreate(napi_env env, napi_callback_info info) {
