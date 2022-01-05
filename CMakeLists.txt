@@ -1870,7 +1870,7 @@ if(USE_MIDDLEWARE)
     endif()
 endif()
 
-######## manual for test
+######## manual
 if(NOT OPENHARMONY)
     cocos_source_files(
         NO_WERROR    cocos/bindings/manual/jsb_network_manual.cpp
