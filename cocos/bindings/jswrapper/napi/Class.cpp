@@ -1,4 +1,5 @@
 #include "Class.h"
+#include <string>
 #include "CommonHeader.h"
 #include "ScriptEngine.h"
 
@@ -48,19 +49,23 @@ napi_value Class::_defaultCtor(napi_env env, napi_callback_info info) {
 }
 
 void Class::defineProperty(const std::string &name, napi_callback g, napi_callback s) {
-    _properties.push_back({name.c_str(), nullptr, nullptr, g, s, 0, napi_default_jsproperty, 0});
+    _propertyNames.push_back(std::make_unique<std::string>(name));
+    _properties.push_back({_propertyNames.back()->c_str(), nullptr, nullptr, g, s, 0, napi_default_jsproperty, 0});
 }
 
 void Class::defineStaticProperty(const std::string &name, napi_callback g, napi_callback s) {
-    _properties.push_back({name.c_str(), nullptr, nullptr, g, s, 0, napi_static, 0});
+    _propertyNames.push_back(std::make_unique<std::string>(name));
+    _properties.push_back({_propertyNames.back()->c_str(), nullptr, nullptr, g, s, 0, napi_static, 0});
 }
 
 void Class::defineFunction(const std::string &name, napi_callback func) {
-    _properties.push_back({name.c_str(), nullptr, func, nullptr, nullptr, nullptr, napi_default_method, nullptr});
+    _propertyNames.push_back(std::make_unique<std::string>(name));
+    _properties.push_back({_propertyNames.back()->c_str(), nullptr, func, nullptr, nullptr, nullptr, napi_default_method, nullptr});
 }
 
 void Class::defineStaticFunction(const std::string &name, napi_callback func) {
-    _properties.push_back({name.c_str(), nullptr, func, nullptr, nullptr, 0, napi_static, 0});
+    _propertyNames.push_back(std::make_unique<std::string>(name));
+    _properties.push_back({_propertyNames.back()->c_str(), nullptr, func, nullptr, nullptr, 0, napi_static, 0});
 }
 
 void Class::defineFinalizeFunction(napi_finalize func) {

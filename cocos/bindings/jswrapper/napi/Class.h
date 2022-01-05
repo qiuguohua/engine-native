@@ -38,6 +38,8 @@ private:
     Object *                              _parentProto;
     napi_callback                         _ctorFunc;
     napi_ref                              _constructor;
+    using safeString = std::unique_ptr<std::string>;
+    std::vector<safeString>              _propertyNames;
     std::vector<napi_property_descriptor> _properties;
     napi_finalize                         _finalizeFunc = nullptr;
 };
