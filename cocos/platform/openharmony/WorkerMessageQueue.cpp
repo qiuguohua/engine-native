@@ -23,25 +23,25 @@
  THE SOFTWARE.
 ****************************************************************************/
 
-#pragma once
+#include "platform/openharmony/WorkerMessageQueue.h"
 
-//#include <mutex>
-#include <queue>
-
-using MessageDataType = void *;
 namespace cc {
+    
+void WorkerMessageQueue::EnQueue(const WorkerMessageData& data) {
+    queue_.push(data);
+}
 
-class WorkMessageQueue final {
-public:
-    void   EnQueue(MessageDataType data);
-    bool   DeQueue(MessageDataType *data);
-    bool   IsEmpty() const;
-    size_t GetSize() const {
-        return queue_.size();
+bool WorkerMessageQueue::DeQueue(WorkerMessageData *data) {
+    if (IsEmpty()) {
+        return false;
     }
+    *data = queue_.front();
+    queue_.pop();
+    return true;
+}
 
-private:
-    std::queue<MessageDataType> queue_;
-};
+bool WorkerMessageQueue::IsEmpty() const {
+    return queue_.empty();
+}
 
 } // namespace cc

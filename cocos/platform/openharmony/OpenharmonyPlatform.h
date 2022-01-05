@@ -33,7 +33,7 @@
 #include <uv.h>
 #include <string>
 #include <unordered_map>
-#include "platform/openharmony/WorkMessageQueue.h"
+#include "platform/openharmony/WorkerMessageQueue.h"
 
 #define _ARKUI_DECLARATIVE_ 1
 
@@ -123,6 +123,6 @@ public:
     uv_async_t workerOnMessageSignal_{};
     uv_async_t workerChangeColorSignal_{};
 
-    WorkMessageQueue workerMessageQ_;
+    WorkerMessageQueue workerMessageQ_;
 };
 } // namespace cc
