@@ -262,5 +262,6 @@ private:
     bool _isInCleanup;
     bool _isErrorHandleWorking;
     bool _isneedCallConstructor{true};
+    std::chrono::steady_clock::time_point _startTime;
 };
 }; // namespace se

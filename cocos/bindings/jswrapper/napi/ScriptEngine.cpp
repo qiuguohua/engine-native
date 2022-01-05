@@ -94,6 +94,7 @@ bool ScriptEngine::start() {
     if (!init()) {
         return false;
     }
+    _startTime = std::chrono::steady_clock::now();
     for (auto cb : _permRegisterCallbackArray) {
         ok = cb(_globalObj);
         assert(ok);
@@ -185,8 +186,7 @@ void ScriptEngine::setExceptionCallback(const ExceptionCallback &cb) {
 }
 
 const std::chrono::steady_clock::time_point &ScriptEngine::getStartTime() const {
-    //not  impl
-    return std::chrono::steady_clock::time_point();
+    return _startTime;
 }
 
 bool ScriptEngine::isValid() const {
