@@ -41,10 +41,9 @@ Swapchain::Swapchain()
 Swapchain::~Swapchain() = default;
 
 void Swapchain::initialize(const SwapchainInfo &info) {
-    auto*               window   = CC_CURRENT_ENGINE()->getInterface<cc::ISystemWindow>();
-    //CCASSERT(info.windowHandle, "Invalid window handle");
+    CCASSERT(info.windowHandle, "Invalid window handle");
 
-    const_cast<SwapchainInfo *>(&info)->windowHandle = reinterpret_cast < void* >(window->getWindowHandler());
+    _windowHandle = info.windowHandle;
     _vsyncMode    = info.vsyncMode;
 
     doInit(info);
