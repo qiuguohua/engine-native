@@ -63,15 +63,18 @@ if(OHOS)
     set(CC_USE_GLES2 OFF)
 endif()
 
-if(OPENHARMONY)
-#    set(USE_SE_V8 OFF)
-    set(USE_AUDIO OFF)
-    set(USE_SOCKET OFF)
-endif()
-
 ## disable videoplay on non-mobile platforms
 if(NOT ANDROID AND NOT IOS AND NOT OHOS)
     set(USE_VIDEO OFF)
+    set(USE_WEBVIEW OFF)
+endif()
+
+if(OPENHARMONY)
+    set(USE_SE_V8 OFF)
+    set(USE_SE_NAPI ON)
+    set(USE_VIDEO OFF)
+    set(USE_AUDIO OFF)
+    set(USE_SOCKET OFF)
     set(USE_WEBVIEW OFF)
 endif()
 
@@ -116,7 +119,6 @@ cc_inspect_values(
     USE_DRAGONBONES
     USE_SPINE
     USE_WEBSOCKET_SERVER
-    USE_SE_V8
     USE_V8_DEBUGGER
     USE_PHYSICS_PHYSX
     USE_JOB_SYSTEM_TBB
@@ -440,40 +442,30 @@ cocos_source_files(
 )
 
 ############ platform : Interface definition
-if(NOT OPENHARMONY)
-    cocos_source_files(
-        cocos/platform/interfaces/modules/Device.cpp
-        cocos/platform/interfaces/modules/Device.h
-        cocos/platform/interfaces/modules/IAccelerometer.cpp
-        cocos/platform/interfaces/modules/IAccelerometer.h
-        cocos/platform/interfaces/modules/IBattery.cpp
-        cocos/platform/interfaces/modules/IBattery.h
-        cocos/platform/interfaces/modules/IScreen.cpp
-        cocos/platform/interfaces/modules/IScreen.h
-        cocos/platform/interfaces/modules/INetwork.cpp
-        cocos/platform/interfaces/modules/INetwork.h
+cocos_source_files(
         cocos/platform/interfaces/modules/ISystem.cpp
         cocos/platform/interfaces/modules/ISystem.h
         cocos/platform/interfaces/modules/ISystemWindow.cpp
         cocos/platform/interfaces/modules/ISystemWindow.h
-        cocos/platform/interfaces/modules/IVibrator.cpp
-        cocos/platform/interfaces/modules/IVibrator.h
-    )
-
-    cocos_source_files(
+        cocos/platform/interfaces/modules/Device.cpp
+        cocos/platform/interfaces/modules/Device.h
         cocos/platform/interfaces/modules/canvas/CanvasRenderingContext2D.cpp
         cocos/platform/interfaces/modules/canvas/CanvasRenderingContext2D.h
         cocos/platform/interfaces/modules/canvas/ICanvasRenderingContext2D.cpp
         cocos/platform/interfaces/modules/canvas/ICanvasRenderingContext2D.h
-    )
-elseif(OPENHARMONY)
+)
+if(NOT OPENHARMONY)
     cocos_source_files(
-        cocos/platform/interfaces/modules/ISystem.cpp
-        cocos/platform/interfaces/modules/ISystem.h
-        cocos/platform/interfaces/modules/ISystemWindow.cpp
-        cocos/platform/interfaces/modules/ISystemWindow.h
-        cocos/platform/interfaces/modules/Device.cpp
-        cocos/platform/interfaces/modules/Device.h
+    cocos/platform/interfaces/modules/IAccelerometer.cpp
+    cocos/platform/interfaces/modules/IAccelerometer.h
+    cocos/platform/interfaces/modules/IBattery.cpp
+    cocos/platform/interfaces/modules/IBattery.h
+    cocos/platform/interfaces/modules/IScreen.cpp
+    cocos/platform/interfaces/modules/IScreen.h
+    cocos/platform/interfaces/modules/INetwork.cpp
+    cocos/platform/interfaces/modules/INetwork.h
+    cocos/platform/interfaces/modules/IVibrator.cpp
+    cocos/platform/interfaces/modules/IVibrator.h
     )
 endif()
 
@@ -483,7 +475,10 @@ if(WINDOWS)
         cocos/platform/win32/modules/CanvasRenderingContext2DDelegate.h
     )
 elseif(OPENHARMONY)
-    # Because there will be a definition of OHOS in harmonyos, it is necessary to define the macro of OPENHARMONY.
+    cocos_source_files(
+        cocos/platform/openharmony/modules/CanvasRenderingContext2DDelegate.cpp
+        cocos/platform/openharmony/modules/CanvasRenderingContext2DDelegate.h
+    )
 elseif(ANDROID OR OHOS)
     cocos_source_files(
         cocos/platform/java/modules/CanvasRenderingContext2DDelegate.cpp
@@ -1545,42 +1540,27 @@ cocos_source_files(
 )
 
 ######## auto
-#for test
-cocos_source_files(
-    NO_WERROR    cocos/bindings/auto/jsb_gfx_auto.cpp
-                 cocos/bindings/auto/jsb_gfx_auto.h
-    NO_WERROR    cocos/bindings/manual/jsb_gfx_manual.cpp
-                 cocos/bindings/manual/jsb_gfx_manual.h
-    NO_WERROR    cocos/bindings/auto/jsb_pipeline_auto.cpp
-                 cocos/bindings/auto/jsb_pipeline_auto.h
-    NO_WERROR    cocos/bindings/auto/jsb_scene_auto.cpp
-                 cocos/bindings/auto/jsb_scene_auto.h
-
-    NO_WERROR    cocos/bindings/auto/jsb_cocos_auto.cpp
-                 cocos/bindings/auto/jsb_cocos_auto.h
-                 cocos/platform/interfaces/modules/canvas/CanvasRenderingContext2D.cpp
-                 cocos/platform/interfaces/modules/canvas/CanvasRenderingContext2D.h
-                 cocos/platform/interfaces/modules/canvas/ICanvasRenderingContext2D.cpp
-                 cocos/platform/interfaces/modules/canvas/ICanvasRenderingContext2D.h
-                 cocos/platform/openharmony/modules/CanvasRenderingContext2DDelegate.cpp
-                 cocos/platform/openharmony/modules/CanvasRenderingContext2DDelegate.h
-                )
 
 if(NOT OPENHARMONY)
 cocos_source_files(
-    NO_WERROR    cocos/bindings/auto/jsb_cocos_auto.cpp
-                 cocos/bindings/auto/jsb_cocos_auto.h
     NO_WERROR    cocos/bindings/auto/jsb_extension_auto.cpp
-                 cocos/bindings/auto/jsb_extension_auto.h
-    NO_WERROR    cocos/bindings/auto/jsb_gfx_auto.cpp
-                 cocos/bindings/auto/jsb_gfx_auto.h
+        cocos/bindings/auto/jsb_extension_auto.h
     NO_WERROR    cocos/bindings/auto/jsb_network_auto.cpp
-                 cocos/bindings/auto/jsb_network_auto.h
-    NO_WERROR    cocos/bindings/auto/jsb_pipeline_auto.cpp
-                 cocos/bindings/auto/jsb_pipeline_auto.h
-    NO_WERROR    cocos/bindings/auto/jsb_scene_auto.cpp
-                 cocos/bindings/auto/jsb_scene_auto.h
+        cocos/bindings/auto/jsb_network_auto.h
 )
+endif()
+
+cocos_source_files(
+        NO_WERROR    cocos/bindings/auto/jsb_gfx_auto.cpp
+                     cocos/bindings/auto/jsb_gfx_auto.h
+        NO_WERROR    cocos/bindings/auto/jsb_pipeline_auto.cpp
+                     cocos/bindings/auto/jsb_pipeline_auto.h
+        NO_WERROR    cocos/bindings/auto/jsb_scene_auto.cpp
+                     cocos/bindings/auto/jsb_scene_auto.h
+        NO_WERROR    cocos/bindings/auto/jsb_cocos_auto.cpp
+                     cocos/bindings/auto/jsb_cocos_auto.h
+)
+
 
 if(USE_AUDIO)
     cocos_source_files(
@@ -1602,7 +1582,7 @@ if(USE_WEBVIEW)
                      cocos/bindings/auto/jsb_webview_auto.h
     )
 endif()
-endif()
+
 
 if(USE_MIDDLEWARE)
     cocos_source_files(
@@ -1890,27 +1870,27 @@ if(USE_MIDDLEWARE)
     endif()
 endif()
 
-######## manual for test
-if(OPENHARMONY)
-    cocos_source_files(
-        NO_WERROR    cocos/bindings/manual/jsb_classtype.cpp
-                     cocos/bindings/manual/jsb_classtype.h
-        NO_WERROR    cocos/bindings/manual/jsb_global.cpp
-                     cocos/bindings/manual/jsb_global.h
-        NO_WERROR    cocos/bindings/manual/jsb_conversions.cpp
-                     cocos/bindings/manual/jsb_conversions.h
-        NO_WERROR    cocos/bindings/manual/jsb_scene_manual.cpp
-        NO_WERROR    cocos/bindings/manual/jsb_scene_manual_ext.cpp
-                     cocos/bindings/manual/jsb_scene_manual.h
-        NO_WERROR    cocos/bindings/manual/jsb_pipeline_manual.cpp
-                     cocos/bindings/manual/jsb_pipeline_manual.h
-        NO_WERROR    cocos/bindings/manual/jsb_cocos_manual.cpp
-                     cocos/bindings/manual/jsb_cocos_manual.h
-    )
-endif()
-
+######## manual
 if(NOT OPENHARMONY)
     cocos_source_files(
+        NO_WERROR    cocos/bindings/manual/jsb_network_manual.cpp
+        cocos/bindings/manual/jsb_network_manual.h
+        NO_WERROR    cocos/bindings/manual/jsb_xmlhttprequest.cpp
+        cocos/bindings/manual/jsb_xmlhttprequest.h
+    )
+endif()
+    cocos_source_files(
+        NO_WERROR    cocos/bindings/manual/jsb_helper.cpp
+                    cocos/bindings/manual/jsb_helper.h
+                    cocos/bindings/manual/jsb_module_register.h
+        NO_WERROR    cocos/bindings/manual/jsb_module_register.cpp
+                    cocos/bindings/manual/jsb_platform.h
+        NO_WERROR    cocos/bindings/manual/jsb_scene_manual.cpp
+        NO_WERROR    cocos/bindings/manual/jsb_scene_manual_ext.cpp
+                    cocos/bindings/manual/jsb_scene_manual.h
+                    cocos/bindings/manual/jsb_pipeline_manual.h
+        NO_WERROR    cocos/bindings/manual/jsb_pipeline_manual.cpp
+        
         NO_WERROR    cocos/bindings/manual/jsb_classtype.cpp
                     cocos/bindings/manual/jsb_classtype.h
         #NO_WERROR   cocos/bindings/manual/jsb_extension_manual.cpp
@@ -1923,20 +1903,6 @@ if(NOT OPENHARMONY)
                     cocos/bindings/manual/jsb_gfx_manual.h
         NO_WERROR    cocos/bindings/manual/jsb_global.cpp
                     cocos/bindings/manual/jsb_global.h
-        NO_WERROR    cocos/bindings/manual/jsb_helper.cpp
-                    cocos/bindings/manual/jsb_helper.h
-                    cocos/bindings/manual/jsb_module_register.h
-        NO_WERROR    cocos/bindings/manual/jsb_module_register.cpp
-                    cocos/bindings/manual/jsb_platform.h
-        NO_WERROR    cocos/bindings/manual/jsb_scene_manual.cpp
-        NO_WERROR    cocos/bindings/manual/jsb_scene_manual_ext.cpp
-                    cocos/bindings/manual/jsb_scene_manual.h
-        NO_WERROR    cocos/bindings/manual/jsb_network_manual.cpp
-                    cocos/bindings/manual/jsb_network_manual.h
-        NO_WERROR    cocos/bindings/manual/jsb_xmlhttprequest.cpp
-                    cocos/bindings/manual/jsb_xmlhttprequest.h
-                    cocos/bindings/manual/jsb_pipeline_manual.h
-        NO_WERROR    cocos/bindings/manual/jsb_pipeline_manual.cpp
     )
 
     if(USE_SOCKET)
@@ -1954,13 +1920,6 @@ if(NOT OPENHARMONY)
                         cocos/bindings/manual/jsb_websocket_server.h
         )
     endif()
-
-elseif(OPENHARMONY)
-    cocos_source_files(
-        cocos/bindings/manual/jsb_module_register.h
-        NO_WERROR    cocos/bindings/manual/jsb_module_register.cpp
-    )
-endif()
 
 if(ANDROID)
     cocos_source_files(
@@ -2000,7 +1959,6 @@ endif()
 
 ############# module bindings
 if(USE_SE_V8)
-if(NOT OPENHARMONY)
     cocos_source_files(MODULE ccbindings
                      cocos/bindings/jswrapper/v8/Base.h
                      cocos/bindings/jswrapper/v8/Class.cpp
@@ -2019,21 +1977,6 @@ if(NOT OPENHARMONY)
                      cocos/bindings/jswrapper/v8/MissingSymbols.cpp
                      cocos/bindings/jswrapper/v8/MissingSymbols.h
     )
-elseif(OPENHARMONY)
-    cocos_source_files(MODULE ccbindings
-                     cocos/bindings/jswrapper/napi/Class.cpp
-                     cocos/bindings/jswrapper/napi/Class.h
-                     cocos/bindings/jswrapper/napi/CommonHeader.h
-                     cocos/bindings/jswrapper/napi/HelperMacros.h
-                     cocos/bindings/jswrapper/napi/Object.cpp
-                     cocos/bindings/jswrapper/napi/Object.h
-        NO_WERROR    cocos/bindings/jswrapper/napi/ScriptEngine.cpp
-                     cocos/bindings/jswrapper/napi/ScriptEngine.h
-                     cocos/bindings/jswrapper/napi/SeApi.h
-        NO_WERROR    cocos/bindings/jswrapper/napi/Utils.cpp
-                     cocos/bindings/jswrapper/napi/Utils.h
-    )
-endif()
     if(USE_V8_DEBUGGER)
     cocos_source_files(MODULE ccbindings
                      cocos/bindings/jswrapper/v8/debugger/base64.h
@@ -2083,6 +2026,22 @@ if(USE_SE_JSC)
         NO_WERROR    cocos/bindings/jswrapper/jsc/Class.cpp
                      cocos/bindings/jswrapper/jsc/Utils.h
                      cocos/bindings/jswrapper/jsc/Base.h
+    )
+endif()
+
+if(USE_SE_NAPI)
+    cocos_source_files(MODULE ccbindings
+                     cocos/bindings/jswrapper/napi/Class.cpp
+                     cocos/bindings/jswrapper/napi/Class.h
+                     cocos/bindings/jswrapper/napi/CommonHeader.h
+                     cocos/bindings/jswrapper/napi/HelperMacros.h
+                     cocos/bindings/jswrapper/napi/Object.cpp
+                     cocos/bindings/jswrapper/napi/Object.h
+        NO_WERROR    cocos/bindings/jswrapper/napi/ScriptEngine.cpp
+                     cocos/bindings/jswrapper/napi/ScriptEngine.h
+                     cocos/bindings/jswrapper/napi/SeApi.h
+        NO_WERROR    cocos/bindings/jswrapper/napi/Utils.cpp
+                     cocos/bindings/jswrapper/napi/Utils.h
     )
 endif()
 
