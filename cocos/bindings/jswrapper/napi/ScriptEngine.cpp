@@ -2,6 +2,7 @@
 #include <sstream>
 #include "../MappingUtils.h"
 #include "Class.h"
+#include "Utils.h"
 #include "CommonHeader.h"
 #include <napi/native_api.h>
 
@@ -39,9 +40,12 @@ void ScriptEngine::destroyInstance() {
 bool ScriptEngine::runScript(const std::string &path, Value *ret /* = nullptr */) {
     assert(!path.empty());
     napi_status status;
-    napi_value result;
-    //not impl
-    //NODE_API_CALL(status, ScriptEngine::getEnv(), napi_run_script_path(ScriptEngine::getEnv(), path.c_str(), &result));
+    napi_value result = nullptr;
+    LOGI("run script :", path.c_str());
+    NODE_API_CALL(status, ScriptEngine::getEnv(), napi_run_script_path(ScriptEngine::getEnv(), path.c_str(), &result));
+    if (ret && result) {
+        internal::jsToSeValue(result, ret);
+    }
     return false;
 }
 
