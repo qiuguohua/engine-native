@@ -146,6 +146,8 @@ void SystemWindow::DispatchTouchEvent(NativeXComponent* component, void* window)
         ev.type = cc::TouchEvent::Type::MOVED;
     } else if (touchInfo.type == UP) {
         ev.type = cc::TouchEvent::Type::ENDED;
+    } else if (touchInfo.type == CANCEL) {
+        ev.type = cc::TouchEvent::Type::CANCELLED;
     }
     ev.touches.emplace_back(touchInfo.x, touchInfo.y, touchInfo.id);
     platform->dispatchEvent(ev);
