@@ -331,7 +331,6 @@ void OpenharmonyPlatform::OnPageHideNative() {
 }
 
 void OpenharmonyPlatform::TimerCb(uv_timer_t* handle) {
-    LOGE("qgh cocos : timer callback");
     OpenharmonyPlatform::getInstance()->runTask();
 }
 
