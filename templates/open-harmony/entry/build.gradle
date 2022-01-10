@@ -1,0 +1,44 @@
+apply plugin: 'com.huawei.ohos.hap'
+apply plugin: 'com.huawei.ohos.decctest'
+//For instructions on signature configuration, see https://developer.harmonyos.com/cn/docs/documentation/doc-guides/ide_debug_device-0000001053822404#section1112183053510
+ohos {
+    signingConfigs {
+        debug {
+            storeFile file('C:\\Users\\l\\.ohos\\config\\auto_debug_test_30086000539966845.p12')
+            storePassword '00000018AD871E58EAD5B11B0FD9029657DB51723987CB72F38E741A522F84BC8DD023D1790D184A'
+            keyAlias = 'debugKey'
+            keyPassword '0000001899BC50F05A04B37167217D0C39058DEBCD54069E8ED45A45C4E012560472130C5A249928'
+            signAlg = 'SHA256withECDSA'
+            profile file('C:\\Users\\l\\.ohos\\config\\auto_debug_test_30086000539966845.p7b')
+            certpath file('C:\\Users\\l\\.ohos\\config\\auto_debug_test_30086000539966845.cer')
+        }
+    }
+    compileSdkVersion 7
+    defaultConfig {
+        compatibleSdkVersion 7
+    }
+    buildTypes {
+        release {
+            proguardOpt {
+                proguardEnabled false
+                rulesFiles 'proguard-rules.pro'
+            }
+        }
+        arkEnabled = false
+    }
+    externalNativeBuild {
+        path "../CMakeLists.txt"
+        arguments "-v", "-DRES_DIR=${RES_PATH}", "-DCOCOS_X_PATH=${ENGINE_ROOT}", "-DCOMMON_DIR=${COMMON_DIR}"
+        abiFilters "arm64-v8a"
+        cppFlags "-std=c++14"
+    }
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar', '*.har'])
+    testImplementation 'junit:junit:4.13.1'
+    ohosTestImplementation 'com.huawei.ohos.testkit:runner:1.0.0.200'
+}
+decc {
+    supportType = ['html', 'xml']
+}
