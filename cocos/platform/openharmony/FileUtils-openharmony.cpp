@@ -1,4 +1,4 @@
-#include "cocos/platform/ohos/FileUtils-ohos.h"
+#include "cocos/platform/openharmony/FileUtils-openharmony.h"
 #include <hilog/log.h>
 #include <sys/stat.h>
 #include <cstdio>
@@ -16,7 +16,8 @@
 #include <sys/syscall.h>
 #include <unistd.h>
 
-#define ASSETS_FOLDER_NAME "@assets/"
+#define ASSETS_FOLDER_NAME "/sdcard/cocos/xcsample"
+#define ASSETS_FOLDER_WriteablePath "/sdcard/cocos/writeablepath"
 
 #ifndef JCLS_HELPER
     #define JCLS_HELPER "com/cocos/lib/CocosHelper"
@@ -93,98 +94,58 @@ bool FileUtilsOHOS::init() {
     return FileUtils::init();
 }
 
-FileUtils::Status FileUtilsOHOS::getContents(const std::string &filename, ResizableBuffer *buffer) {
-    if (filename.empty()) {
-        return FileUtils::Status::NOT_EXISTS;
-    }
-
-    std::string fullPath = "/sdcard/gfx/" + filename;//fullPathForFilename(filename);
-    if (fullPath.empty()) {
-        return FileUtils::Status::NOT_EXISTS;
-    }
-
-    //if (fullPath[0] == '/') {
-    //    return FileUtils::getContents(fullPath, buffer);
-    //}
-
-//    std::string relativePath;
-//    size_t      position = fullPath.find(ASSETS_FOLDER_NAME);
-//    if (0 == position) {
-//        // "@assets/" is at the beginning of the path and we don't want it
-//        relativePath = rawfilePrefix + fullPath.substr(strlen(ASSETS_FOLDER_NAME));
-//    } else {
-//        relativePath = fullPath;
-//    }
-//
-//    if (nullptr == ohosResourceMgr) {
-//        HILOG_ERROR(LOG_APP, "... FileUtilsAndroid::assetmanager is nullptr");
-//        return FileUtils::Status::NOT_INITIALIZED;
-//    }
-    FILE *fp = fopen(fullPath.c_str(), "rb");
-    if (!fp) {
-        fp = fopen(fullPath.c_str(), "r");
-        if(!fp) {
-            int fd = open(fullPath.c_str(), O_RDONLY);
-            if(fd == -1) {
-                return Status::OPEN_FAILED;
-            }
-        }
-    }
-
-    auto descriptor = fileno(fp);
-    struct stat statBuf;
-    if (fstat(descriptor, &statBuf) == -1) {
-        fclose(fp);
-        return Status::READ_FAILED;
-    }
-    size_t size = statBuf.st_size;
-
-    buffer->resize(size);
-    size_t readsize = fread(buffer->buffer(), 1, size, fp);
-    fclose(fp);
-
-    if (readsize < size) {
-        buffer->resize(readsize);
-        return Status::READ_FAILED;
-    }
-
-    return Status::OK;
-}
-
 bool FileUtilsOHOS::isAbsolutePath(const std::string &strPath) const {
     return !strPath.empty() && (strPath[0] == '/' || strPath.find(ASSETS_FOLDER_NAME) == 0);
 }
 
+std::string FileUtilsOHOS::getSuitableFOpen(const std::string &filenameUtf8) const {
+    return filenameUtf8;
+}
+
+long FileUtilsOHOS::getFileSize(const std::string &filepath) {
+    if (filepath.empty()) {
+        return 0;
+    }
+
+    auto *fs = FileUtils::getInstance();
+
+    std::string fullPath = fs->fullPathForFilename(filepath);
+    if (fullPath.empty()) {
+        return 0;
+    }
+
+    FILE *fp = fopen(getSuitableFOpen(fullPath).c_str(), "rb");
+    if (!fp) {
+        return 0;
+    }
+    struct stat statBuf;
+    auto descriptor = fileno(fp);
+    if (fstat(descriptor, &statBuf) == -1) {
+        fclose(fp);
+        return 0;
+    }
+    fclose(fp);
+    return statBuf.st_size;
+}
+
 std::string FileUtilsOHOS::getWritablePath() const {
-//    auto tmp = cc::JniHelper::callStaticStringMethod(JCLS_HELPER, "getWritablePath");
-//    if (tmp.empty()) {
-//        return "./";
-//    }
-//    return tmp.append("/");
-    return "";
+    return ASSETS_FOLDER_WriteablePath;
 }
 
 bool FileUtilsOHOS::isFileExistInternal(const std::string &strFilePath) const {
-//    if (strFilePath.empty()) return false;
-//    auto filePath  = strFilePath;
-//    auto fileFound = false;
-//
-//    if (strFilePath[0] == '/') { // absolute path
-//        struct stat info;
-//        return ::stat(filePath.c_str(), &info) == 0;
-//    }
-//
-//    // relative path
-//    if (strFilePath.find(_defaultResRootPath) == 0) {
-//        filePath = rawfilePrefix + filePath.substr(_defaultResRootPath.length());
-//    }
-//
-//    auto rawFile = OpenRawFile(ohosResourceMgr, filePath.c_str());
-//    if (rawFile != nullptr) {
-//        CloseRawFile(rawFile);
-//        return true;
-//    }
-    return false;
+    if (strFilePath.empty()) {
+        return false;
+    }
+    std::string strPath = strFilePath;
+    if (!isAbsolutePath(strPath)) { // Not absolute path, add the default root path at the beginning.
+        strPath.insert(0, _defaultResRootPath);
+    }
+    FILE *fp = fopen(getSuitableFOpen(strPath).c_str(), "rb");
+    if (!fp) {
+        return false;
+    }
+    fclose(fp);
+    return true;
 }
 
 bool FileUtilsOHOS::isDirectoryExistInternal(const std::string &dirPath) const {

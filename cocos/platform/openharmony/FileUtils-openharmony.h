@@ -14,7 +14,6 @@ class CC_DLL FileUtilsOHOS : public FileUtils {
 public:
     //        FileUtilsOHOS();
     //        virtual ~FileUtilsOHOS();
-
     static bool initResourceManager(ResourceManager *mgr, const std::string &assetPath, const std::string &moduleName);
 
     static void setRawfilePrefix(const std::string &prefix);
@@ -23,8 +22,6 @@ public:
 
     bool init() override;
 
-    FileUtils::Status getContents(const std::string &filename, ResizableBuffer *buffer) override;
-
     bool isAbsolutePath(const std::string &strPath) const override;
 
     std::string getWritablePath() const override;
@@ -32,7 +29,10 @@ public:
     std::string expandPath(const std::string &input, bool *isRawFile) const;
 
     std::pair<int, std::function<void()>> getFd(const std::string &path) const;
+    
+    long getFileSize(const std::string &filepath) override;
 
+    std::string getSuitableFOpen(const std::string &filenameUtf8) const override;
 private:
     bool isFileExistInternal(const std::string &strFilePath) const override;
 
