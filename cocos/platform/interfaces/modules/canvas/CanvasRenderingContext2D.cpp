@@ -34,7 +34,7 @@
 #include "math/Math.h"
 #include "platform/FileUtils.h"
 
-#if (CC_PLATFORM == CC_PLATFORM_WINDOWS || CC_PLATFORM == CC_PLATFORM_NX)
+#if (CC_PLATFORM == CC_PLATFORM_WINDOWS)
     #include "platform/win32/modules/CanvasRenderingContext2DDelegate.h"
 #elif (CC_PLATFORM == CC_PLATFORM_ANDROID || CC_PLATFORM == CC_PLATFORM_OHOS)
     #include "platform/java/modules/CanvasRenderingContext2DDelegate.h"
@@ -44,6 +44,8 @@
     #include "platform/linux/modules/CanvasRenderingContext2DDelegate.h"
 #elif (CC_PLATFORM == CC_PLATFORM_QNX)
     #include "platform/qnx/modules/CanvasRenderingContext2DDelegate.h"
+#elif (CC_PLATFORM == CC_PLATFORM_NX_WINDOWS)
+    #include "platform/nx/modules/CanvasRenderingContext2DDelegate.h"
 #endif
 
 using Vec2    = std::array<float, 2>;
@@ -252,6 +254,27 @@ void CanvasRenderingContext2D::rect(float x, float y, float w, float h) {
 
 void CanvasRenderingContext2D::setFont(const std::string &font) {
 #if CC_PLATFORM == CC_PLATFORM_WINDOWS
+    if (_font != font) {
+        _font = font;
+
+        std::string boldStr;
+        std::string fontName    = "Arial";
+        std::string fontSizeStr = "30";
+
+        // support get font name from `60px American` or `60px "American abc-abc_abc"`
+        std::regex                                      re("(bold)?\\s*((\\d+)([\\.]\\d+)?)px\\s+([\\w-]+|\"[\\w -]+\"$)");
+        std::match_results<std::string::const_iterator> results;
+        if (std::regex_search(_font.cbegin(), _font.cend(), results, re)) {
+            boldStr     = results[1].str();
+            fontSizeStr = results[2].str();
+            fontName    = results[5].str();
+        }
+
+        auto fontSize = static_cast<float>(atof(fontSizeStr.c_str()));
+        //SE_LOGD("CanvasRenderingContext2D::set_font: %s, Size: %f, isBold: %b\n", fontName.c_str(), fontSize, !boldStr.empty());
+        _delegate->updateFont(fontName, fontSize, !boldStr.empty(), false, false, false);
+    }
+#elif CC_PLATFORM == CC_PLATFORM_NX_WINDOWS
     if (_font != font) {
         _font = font;
 

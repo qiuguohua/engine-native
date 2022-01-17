@@ -36,12 +36,11 @@
     #include "platform/linux/modules/SystemWindow.h"
 #elif (CC_PLATFORM == CC_PLATFORM_QNX)
     #include "platform/qnx/modules/SystemWindow.h"
-#elif (CC_PLATFORM == CC_PLATFORM_NX)
+#elif (CC_PLATFORM == CC_PLATFORM_NX_WINDOWS)
     #include "platform/nx/modules/SystemWindow.h"
 #endif
 
 namespace cc {
-
 // static
 OSInterface::Ptr ISystemWindow::createSystemWindowInterface() {
     return std::make_shared<SystemWindow>();

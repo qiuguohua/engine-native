@@ -37,7 +37,7 @@
     #include "platform/linux/modules/Network.h"
 #elif (CC_PLATFORM == CC_PLATFORM_QNX)
     #include "platform/qnx/modules/Network.h"
-#elif (CC_PLATFORM == CC_PLATFORM_NX)
+#elif (CC_PLATFORM == CC_PLATFORM_NX_WINDOWS)
     #include "platform/nx/modules/Network.h"
 #endif
 

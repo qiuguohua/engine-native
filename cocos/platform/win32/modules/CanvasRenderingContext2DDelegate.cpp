@@ -160,7 +160,7 @@ void CanvasRenderingContext2DDelegate::fillText(const std::string &text, float x
     SIZE  textSize    = {0, 0};
     Point offsetPoint = convertDrawPoint(Point{x, y}, text);
 
-    drawText(text, (int)offsetPoint[0], (int)offsetPoint[1]);
+    drawText(text, static_cast<int>(offsetPoint[0]), static_cast<int>(offsetPoint[1]));
     fillTextureData();
 }
 

@@ -26,7 +26,7 @@
 
 #pragma once
 
-#if (CC_PLATFORM == CC_PLATFORM_NX)
+#if (CC_PLATFORM == CC_PLATFORM_NX_WINDOWS)
     #include <math.h>
     #include <string.h>
     #include <stdarg.h>

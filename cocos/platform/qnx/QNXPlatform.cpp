@@ -199,7 +199,7 @@ int32_t QnxPlatform::loop() {
             runTask();
             //SDL_GL_SwapWindow(_handle);
         } else {
-            usleep((desiredInterval - curTime + lastTime) * 1000);
+            usleep((desiredInterval - actualInterval) * 1000);
         }
     }
 

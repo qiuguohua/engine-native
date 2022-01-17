@@ -32,6 +32,7 @@ if(NX)
     cc_set_if_undefined(CC_USE_VULKAN ON)
     cc_set_if_undefined(CC_USE_GLES3 OFF)
     cc_set_if_undefined(CC_USE_GLES2 OFF)
+    set(USE_AUDIO OFF)
 elseif(ANDROID OR WINDOWS OR OHOS)
     cc_set_if_undefined(CC_USE_GLES3 ON)
     cc_set_if_undefined(CC_USE_VULKAN OFF)
@@ -133,7 +134,7 @@ if(USE_AUDIO)
                      cocos/audio/include/AudioEngine.h
                      cocos/audio/include/Export.h
     )
-    if(WINDOWS OR NX)
+    if(WINDOWS OR NX_WINDOWS)
         cocos_source_files(
             cocos/audio/oalsoft/AudioCache.cpp
             cocos/audio/oalsoft/AudioCache.h
@@ -337,10 +338,7 @@ cocos_source_files(
 )
 
 ############ main
-if(NX)
-    cocos_source_files(
-        cocos/main/main-win32.cpp
-    )
+if(NX OR NX_WINDOWS)
 elseif(WINDOWS)
     cocos_source_files(
         cocos/main/main-win32.cpp
@@ -371,11 +369,8 @@ cocos_source_files(
     cocos/platform/UniversalPlatform.cpp
     cocos/platform/UniversalPlatform.h
 )
-if(NX)
-    cocos_source_files(
-        cocos/platform/win32/WindowsPlatform.cpp
-        cocos/platform/win32/WindowsPlatform.h
-    )
+if(NX OR NX_WINDOWS)
+
 elseif(WINDOWS)
     cocos_source_files(
         cocos/platform/win32/WindowsPlatform.cpp
@@ -457,11 +452,7 @@ cocos_source_files(
     cocos/platform/interfaces/modules/canvas/ICanvasRenderingContext2D.cpp
     cocos/platform/interfaces/modules/canvas/ICanvasRenderingContext2D.h
 )
-if(NX)
-    cocos_source_files(
-        cocos/platform/win32/modules/CanvasRenderingContext2DDelegate.cpp
-        cocos/platform/win32/modules/CanvasRenderingContext2DDelegate.h
-    )
+if(NX OR NX_WINDOWS)
 elseif(WINDOWS)
     cocos_source_files(
         cocos/platform/win32/modules/CanvasRenderingContext2DDelegate.cpp
@@ -490,23 +481,7 @@ elseif(LINUX)
 endif()
 
 ############ platform : Interface implementation of windows
-if(NX)
-    cocos_source_files(
-        cocos/platform/win32/modules/Accelerometer.cpp
-        cocos/platform/win32/modules/Accelerometer.h
-        cocos/platform/win32/modules/Battery.cpp
-        cocos/platform/win32/modules/Battery.h
-        cocos/platform/win32/modules/Screen.cpp
-        cocos/platform/win32/modules/Screen.h
-        cocos/platform/win32/modules/Network.cpp
-        cocos/platform/win32/modules/Network.h
-        cocos/platform/win32/modules/Vibrator.cpp
-        cocos/platform/win32/modules/Vibrator.h
-        cocos/platform/win32/modules/System.cpp
-        cocos/platform/win32/modules/System.h
-        cocos/platform/win32/modules/SystemWindow.cpp
-        cocos/platform/win32/modules/SystemWindow.h
-    )
+if(NX OR NX_WINDOWS)
 elseif(WINDOWS)
     cocos_source_files(
         cocos/platform/win32/modules/Accelerometer.cpp
@@ -627,7 +602,7 @@ elseif(QNX)
 endif()
 
 ############ module log
-if(NX)
+if(NX OR NX_WINDOWS)
 cocos_source_files(MODULE cclog
     cocos/base/Log.cpp
     cocos/base/Log.h
@@ -811,7 +786,7 @@ if(NOT APPLE AND USE_SOCKET)
     )
 endif()
 
-if(NX)
+if(NX OR NX_WINDOWS)
     cocos_source_files(
         NO_WERROR    cocos/network/Downloader-curl.cpp
                     cocos/network/Downloader-curl.h
@@ -823,7 +798,7 @@ elseif(WINDOWS OR LINUX OR QNX)
     )
 endif()
 
-if(NX)
+if(NX OR NX_WINDOWS)
     cocos_source_files(
         NO_WERROR    cocos/network/HttpClient.cpp
     )
@@ -859,14 +834,14 @@ cocos_source_files(MODULE ccutils
 )
 
 ########## module ccfilesystem
-if(NX)
+if(NX OR NX_WINDOWS)
     cocos_source_files(MODULE ccfilesystem
         cocos/platform/FileUtils.cpp
         cocos/platform/FileUtils.h
     )
 endif()
 
-if(NX)
+if(NX OR NX_WINDOWS)
     cocos_source_files(MODULE ccutils
         cocos/platform/win32/Utils-win32.cpp
         cocos/platform/win32/Utils-win32.h
@@ -878,7 +853,7 @@ elseif(WINDOWS)
     )
 endif()
 
-if(NX)
+if(NX OR NX_WINDOWS)
     cocos_source_files(
                      cocos/platform/win32/compat
                      cocos/platform/win32/compat/stdint.h
@@ -1454,7 +1429,7 @@ if(CC_USE_VULKAN)
     endif()
 endif()
 
-if(NX)
+if(NX OR NX_WINDOWS)
     include(${CMAKE_CURRENT_LIST_DIR}/platform-nx/source.cmake)
 endif()
 
@@ -2358,8 +2333,8 @@ if(CC_USE_VULKAN)
 
     if(WIN32)
         target_compile_definitions(cocos2d PUBLIC VK_USE_PLATFORM_WIN32_KHR)
-    elseif(NX)
-        target_compile_definitions(cocos2d PUBLIC VK_USE_PLATFORM_VI_NN)
+    elseif(NX OR NX_WINDOWS)
+        #target_compile_definitions(cocos2d PUBLIC VK_USE_PLATFORM_VI_NN)
     elseif(ANDROID)
         target_compile_definitions(cocos2d PUBLIC VK_USE_PLATFORM_ANDROID_KHR)
     elseif(IOS)
@@ -2406,11 +2381,12 @@ target_include_directories(cocos2d PUBLIC
     ${CWD}/external/sources/khronos
 )
 
-if(NX)
+if(NX OR NX_WINDOWS)
     target_link_libraries(cocos2d PUBLIC
         ws2_32 userenv psapi winmm Iphlpapi
         ${CC_EXTERNAL_LIBS}
     )
+    
     include(${CMAKE_CURRENT_LIST_DIR}/platform-nx/setup.cmake)
     cc_win32_definations(cocos2d)
     if(USE_MODULES)

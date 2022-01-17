@@ -38,7 +38,7 @@
     #include "audio/android/AudioEngine-inl.h"
 #elif CC_PLATFORM == CC_PLATFORM_MAC_IOS || CC_PLATFORM == CC_PLATFORM_MAC_OSX
     #include "audio/apple/AudioEngine-inl.h"
-#elif CC_PLATFORM == CC_PLATFORM_WINDOWS || CC_PLATFORM == CC_PLATFORM_OHOS || CC_PLATFORM == CC_PLATFORM_NX
+#elif CC_PLATFORM == CC_PLATFORM_WINDOWS || CC_PLATFORM == CC_PLATFORM_OHOS || CC_PLATFORM == CC_PLATFORM_NX_WINDOWS
     #include "audio/oalsoft/AudioEngine-soft.h"
 #elif CC_PLATFORM == CC_PLATFORM_WINRT
     #include "audio/winrt/AudioEngine-winrt.h"

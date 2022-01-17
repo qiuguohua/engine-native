@@ -31,7 +31,7 @@
 
 #include <cstdint>
 
-#if (CC_PLATFORM == CC_PLATFORM_WINDOWS || CC_PLATFORM == CC_PLATFORM_NX)
+#if (CC_PLATFORM == CC_PLATFORM_WINDOWS || CC_PLATFORM == CC_PLATFORM_NX_WINDOWS)
     #include <BaseTsd.h>
     #if !defined(__SSIZE_T) && !defined(_SSIZE_T_)
         #define __SSIZE_T
@@ -67,7 +67,7 @@ typedef SSIZE_T ssize_t;
     #define CC_ASSERT(cond) assert(cond)
 #endif
 
-#if (CC_PLATFORM == CC_PLATFORM_WINDOWS || CC_PLATFORM == CC_PLATFORM_NX)
+#if (CC_PLATFORM == CC_PLATFORM_WINDOWS || CC_PLATFORM == CC_PLATFORM_NX_WINDOWS)
     #if defined(CC_STATIC)
         #define CC_DLL
     #else
@@ -292,7 +292,7 @@ It should work same as apples CFSwapInt32LittleToHost(..)
     #error "Unknown compiler. Abort!"
 #endif
 
-#if (CC_PLATFORM == CC_PLATFORM_WINDOWS || CC_PLATFORM == CC_PLATFORM_NX)
+#if (CC_PLATFORM == CC_PLATFORM_WINDOWS || CC_PLATFORM == CC_PLATFORM_NX_WINDOWS)
     #define CC_ENDIAN CC_ENDIAN_LITTLE
 #else
     #if (CC_PLATFORM == CC_PLATFORM_MAC_OSX)

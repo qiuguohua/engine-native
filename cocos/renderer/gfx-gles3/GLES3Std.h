@@ -27,7 +27,7 @@
 
 #include "base/CoreStd.h"
 
-#if (CC_PLATFORM == CC_PLATFORM_WINDOWS || CC_PLATFORM == CC_PLATFORM_NX)
+#if (CC_PLATFORM == CC_PLATFORM_WINDOWS || CC_PLATFORM == CC_PLATFORM_NX_WINDOWS)
     #if defined(CC_STATIC)
         #define CC_GLES3_API
     #else

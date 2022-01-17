@@ -25,7 +25,7 @@
  THE SOFTWARE.
 ****************************************************************************/
 
-#if CC_PLATFORM == CC_PLATFORM_WINDOWS || CC_PLATFORM == CC_PLATFORM_NX
+#if CC_PLATFORM == CC_PLATFORM_WINDOWS || CC_PLATFORM == CC_PLATFORM_NX_WINDOWS
 
     #include "platform/win32/FileUtils-win32.h"
     #include "platform/win32/Utils-win32.h"

@@ -30,7 +30,7 @@
 #ifdef OPENAL_PLAIN_INCLUDES
     #include "alc.h"
     #include "alext.h"
-#elif CC_PLATFORM == CC_PLATFORM_WINDOWS || CC_PLATFORM == CC_PLATFORM_NX
+#elif CC_PLATFORM == CC_PLATFORM_WINDOWS || CC_PLATFORM == CC_PLATFORM_NX_WINDOWS
     #include "OpenalSoft/alc.h"
     #include "OpenalSoft/alext.h"
 #elif CC_PLATFORM == CC_PLATFORM_OHOS
@@ -46,7 +46,7 @@
 #include "application/ApplicationManager.h"
 #include "platform/FileUtils.h"
 
-#if CC_PLATFORM == CC_PLATFORM_WINDOWS || CC_PLATFORM == CC_PLATFORM_NX
+#if CC_PLATFORM == CC_PLATFORM_WINDOWS || CC_PLATFORM == CC_PLATFORM_NX_WINDOWS
     #include <windows.h>
 
 // log, CC_LOG_DEBUG aren't threadsafe, since we uses sub threads for parsing pcm data, threadsafe log output

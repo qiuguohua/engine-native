@@ -28,7 +28,7 @@
 #ifndef __CC_FILEUTILS_WIN32_H__
 #define __CC_FILEUTILS_WIN32_H__
 
-#if CC_PLATFORM == CC_PLATFORM_WINDOWS || CC_PLATFORM == CC_PLATFORM_NX
+#if CC_PLATFORM == CC_PLATFORM_WINDOWS || CC_PLATFORM == CC_PLATFORM_NX_WINDOWS
 
     #include "platform/FileUtils.h"
     #include "base/Macros.h"

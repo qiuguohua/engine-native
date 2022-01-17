@@ -33,7 +33,7 @@
 #include <thread>
 #ifdef OPENAL_PLAIN_INCLUDES
     #include <al.h>
-#elif CC_PLATFORM == CC_PLATFORM_WINDOWS || CC_PLATFORM == CC_PLATFORM_NX
+#elif CC_PLATFORM == CC_PLATFORM_WINDOWS || CC_PLATFORM == CC_PLATFORM_NX_WINDOWS
     #include <OpenalSoft/al.h>
 #elif CC_PLATFORM == CC_PLATFORM_OHOS
     #include <AL/al.h>
