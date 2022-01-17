@@ -33,18 +33,18 @@
 #include <vector>
 #include "base/Log.h"
 #include "base/Macros.h"
-#include "platform/openharmony/OpenharmonyPlatform.h"
+#include "platform/openharmony/OpenHarmonyPlatform.h"
 #include "platform/openharmony/common/PluginCommon.h"
 
 namespace {
 
 void SendToWorker(const cc::WorkerMessageType& type, NativeXComponent* component) {
-    cc::OpenharmonyPlatform* platform = dynamic_cast<cc::OpenharmonyPlatform*>(cc::BasePlatform::getPlatform());
+    cc::OpenHarmonyPlatform* platform = dynamic_cast<cc::OpenHarmonyPlatform*>(cc::BasePlatform::getPlatform());
     CCASSERT(platform != nullptr, "Only supports openharmony platform");
     cc::WorkerMessageData data{type, static_cast<void*>(component)};
     platform->workerMessageQ_.EnQueue(data);
     if(type != cc::WorkerMessageType::WM_XCOMPONENT_SURFACE_CREATED)
-        uv_async_send(&(cc::OpenharmonyPlatform::getInstance()->workerOnMessageSignal_));
+        uv_async_send(&(cc::OpenHarmonyPlatform::getInstance()->workerOnMessageSignal_));
 }
 
 void OnSurfaceCreatedCB(NativeXComponent* component, void* window) {
@@ -137,7 +137,7 @@ void SystemWindow::DispatchTouchEvent(NativeXComponent* component, void* window)
         return;
     }
 
-    OpenharmonyPlatform* platform = dynamic_cast<OpenharmonyPlatform*>(BasePlatform::getPlatform());
+    OpenHarmonyPlatform* platform = dynamic_cast<OpenHarmonyPlatform*>(BasePlatform::getPlatform());
     CCASSERT(platform != nullptr, "Only supports openharmony platform");
     TouchEvent ev;
     if (touchInfo.type == DOWN) {

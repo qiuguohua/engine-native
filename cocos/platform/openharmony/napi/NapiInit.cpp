@@ -16,7 +16,7 @@
 #include <napi/js_native_api.h>
 #include <napi/native_api.h>
 #include <napi/node_api.h>
-#include "platform/openharmony/OpenharmonyPlatform.h"
+#include "platform/openharmony/OpenHarmonyPlatform.h"
 #include "platform/openharmony/common/PluginCommon.h"
 
 /*
@@ -24,11 +24,11 @@
  */
 static napi_value Init(napi_env env, napi_value exports) {
     napi_property_descriptor desc[] = {
-        DECLARE_NAPI_FUNCTION("getContext", cc::OpenharmonyPlatform::GetContext),
+        DECLARE_NAPI_FUNCTION("getContext", cc::OpenHarmonyPlatform::GetContext),
     };
     NAPI_CALL(env, napi_define_properties(env, exports, sizeof(desc) / sizeof(desc[0]), desc));
 
-    cc::OpenharmonyPlatform* platform = dynamic_cast<cc::OpenharmonyPlatform*>(cc::BasePlatform::getPlatform());
+    cc::OpenHarmonyPlatform* platform = dynamic_cast<cc::OpenHarmonyPlatform*>(cc::BasePlatform::getPlatform());
     CCASSERT(platform != nullptr, "Only supports openharmony platform");
     bool ret = platform->Export(env, exports);
     if (!ret) {

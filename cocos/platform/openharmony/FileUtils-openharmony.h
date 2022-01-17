@@ -10,15 +10,13 @@
 
 namespace cc {
 
-class CC_DLL FileUtilsOHOS : public FileUtils {
+class CC_DLL FileUtilsOpenHarmony : public FileUtils {
 public:
-    //        FileUtilsOHOS();
-    //        virtual ~FileUtilsOHOS();
+    //        FileUtilsOpenHarmony();
+    //        virtual ~FileUtilsOpenHarmony();
     static bool initResourceManager(ResourceManager *mgr, const std::string &assetPath, const std::string &moduleName);
 
     static void setRawfilePrefix(const std::string &prefix);
-
-    static ResourceManager *getResourceManager();
 
     bool init() override;
 
@@ -37,10 +35,6 @@ private:
     bool isFileExistInternal(const std::string &strFilePath) const override;
 
     bool isDirectoryExistInternal(const std::string &dirPath) const override;
-
-    /* weak ref, do not need release */
-    static ResourceManager *ohosResourceMgr;
-    static std::string      ohosAssetPath;
 
     friend class FileUtils;
 };

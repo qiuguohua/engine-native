@@ -1,4 +1,4 @@
-#include "cocos/platform/openharmony/FileUtils-openharmony.h"
+#include "cocos/platform/openharmony/FileUtils-OpenHarmony.h"
 #include <hilog/log.h>
 #include <sys/stat.h>
 #include <cstdio>
@@ -15,18 +15,17 @@
 
 #include <sys/syscall.h>
 #include <unistd.h>
+#include "platform/openharmony/common/PluginCommon.h"
 
-#define ASSETS_FOLDER_NAME "/sdcard/cocos/xcsample"
-#define ASSETS_FOLDER_WriteablePath "/sdcard/cocos/writeablepath"
+//#define ASSETS_FOLDER_NAME "/sdcard/cocos/xcsample/"
+#define ASSETS_FOLDER_NAME "/data/data/ohos.example.xcomponent1/files/"
+#define ASSETS_FOLDER_WriteablePath "/sdcard/cocos/writeable_path"
 
 #ifndef JCLS_HELPER
     #define JCLS_HELPER "com/cocos/lib/CocosHelper"
 #endif
 
 namespace cc {
-
-ResourceManager *FileUtilsOHOS::ohosResourceMgr = {};
-std::string      FileUtilsOHOS::ohosAssetPath   = {};
 
 namespace {
 
@@ -55,7 +54,7 @@ void printRawfiles(ResourceManager *mgr, const std::string &path) {
 }
 } // namespace
 
-bool FileUtilsOHOS::initResourceManager(ResourceManager *mgr, const std::string &assetPath, const std::string &moduleName) {
+bool FileUtilsOpenHarmony::initResourceManager(ResourceManager *mgr, const std::string &assetPath, const std::string &moduleName) {
 //    CCASSERT(mgr, "ResourceManager should not be empty!");
 //    ohosResourceMgr = mgr;
 //    if (!assetPath.empty() && assetPath[assetPath.length() - 1] != '/') {
@@ -69,17 +68,14 @@ bool FileUtilsOHOS::initResourceManager(ResourceManager *mgr, const std::string 
     return true;
 }
 
-void FileUtilsOHOS::setRawfilePrefix(const std::string &prefix) {
+void FileUtilsOpenHarmony::setRawfilePrefix(const std::string &prefix) {
     //rawfilePrefix = prefix;
 }
 
-ResourceManager *FileUtilsOHOS::getResourceManager() {
-    return ohosResourceMgr;
-}
 
 FileUtils *FileUtils::getInstance() {
     if (FileUtils::sharedFileUtils == nullptr) {
-        FileUtils::sharedFileUtils = new FileUtilsOHOS();
+        FileUtils::sharedFileUtils = new FileUtilsOpenHarmony();
         if (!FileUtils::sharedFileUtils->init()) {
             delete FileUtils::sharedFileUtils;
             FileUtils::sharedFileUtils = nullptr;
@@ -89,20 +85,20 @@ FileUtils *FileUtils::getInstance() {
     return FileUtils::sharedFileUtils;
 }
 
-bool FileUtilsOHOS::init() {
+bool FileUtilsOpenHarmony::init() {
     _defaultResRootPath = ASSETS_FOLDER_NAME;
     return FileUtils::init();
 }
 
-bool FileUtilsOHOS::isAbsolutePath(const std::string &strPath) const {
+bool FileUtilsOpenHarmony::isAbsolutePath(const std::string &strPath) const {
     return !strPath.empty() && (strPath[0] == '/' || strPath.find(ASSETS_FOLDER_NAME) == 0);
 }
 
-std::string FileUtilsOHOS::getSuitableFOpen(const std::string &filenameUtf8) const {
+std::string FileUtilsOpenHarmony::getSuitableFOpen(const std::string &filenameUtf8) const {
     return filenameUtf8;
 }
 
-long FileUtilsOHOS::getFileSize(const std::string &filepath) {
+long FileUtilsOpenHarmony::getFileSize(const std::string &filepath) {
     if (filepath.empty()) {
         return 0;
     }
@@ -128,11 +124,11 @@ long FileUtilsOHOS::getFileSize(const std::string &filepath) {
     return statBuf.st_size;
 }
 
-std::string FileUtilsOHOS::getWritablePath() const {
+std::string FileUtilsOpenHarmony::getWritablePath() const {
     return ASSETS_FOLDER_WriteablePath;
 }
 
-bool FileUtilsOHOS::isFileExistInternal(const std::string &strFilePath) const {
+bool FileUtilsOpenHarmony::isFileExistInternal(const std::string &strFilePath) const {
     if (strFilePath.empty()) {
         return false;
     }
@@ -140,7 +136,7 @@ bool FileUtilsOHOS::isFileExistInternal(const std::string &strFilePath) const {
     if (!isAbsolutePath(strPath)) { // Not absolute path, add the default root path at the beginning.
         strPath.insert(0, _defaultResRootPath);
     }
-    FILE *fp = fopen(getSuitableFOpen(strPath).c_str(), "rb");
+    FILE *fp = fopen(getSuitableFOpen(strPath).c_str(), "r");
     if (!fp) {
         return false;
     }
@@ -148,7 +144,7 @@ bool FileUtilsOHOS::isFileExistInternal(const std::string &strFilePath) const {
     return true;
 }
 
-bool FileUtilsOHOS::isDirectoryExistInternal(const std::string &dirPath) const {
+bool FileUtilsOpenHarmony::isDirectoryExistInternal(const std::string &dirPath) const {
 //    if (dirPath.empty()) return false;
 //    std::string dirPathMf = dirPath[dirPath.length() - 1] == '/' ? dirPath.substr(0, dirPath.length() - 1) : dirPath;
 //
@@ -169,7 +165,7 @@ bool FileUtilsOHOS::isDirectoryExistInternal(const std::string &dirPath) const {
     return false;
 }
 
-std::string FileUtilsOHOS::expandPath(const std::string &input, bool *isRawFile) const {
+std::string FileUtilsOpenHarmony::expandPath(const std::string &input, bool *isRawFile) const {
 //    if (!input.empty() && input[0] == '/') {
 //        if (isRawFile) *isRawFile = false;
 //        return input;
@@ -187,7 +183,7 @@ std::string FileUtilsOHOS::expandPath(const std::string &input, bool *isRawFile)
     return "";
 }
 
-std::pair<int, std::function<void()>> FileUtilsOHOS::getFd(const std::string &path) const {
+std::pair<int, std::function<void()>> FileUtilsOpenHarmony::getFd(const std::string &path) const {
 //    bool       isRawFile = false;
 //    const auto fullpath  = expandPath(path, &isRawFile);
 //    if (isRawFile) {

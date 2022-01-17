@@ -38,11 +38,11 @@
 #define _ARKUI_DECLARATIVE_ 1
 
 namespace cc {
-class OpenharmonyPlatform : public UniversalPlatform {
+class OpenHarmonyPlatform : public UniversalPlatform {
 public:
-    OpenharmonyPlatform();
+    OpenHarmonyPlatform();
 
-    static OpenharmonyPlatform* getInstance();
+    static OpenHarmonyPlatform* getInstance();
 
     static napi_value GetContext(napi_env env, napi_callback_info info);
 
