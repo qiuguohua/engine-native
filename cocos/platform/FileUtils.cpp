@@ -46,6 +46,7 @@
 #endif
 #include <sys/stat.h>
 #include <regex>
+#include "platform/openharmony/common/PluginCommon.h"
 
 namespace cc {
 

@@ -24,7 +24,7 @@
  ****************************************************************************/
 
 #include "platform/openharmony/modules/CanvasRenderingContext2DDelegate.h"
-#include "platform/openharmony/OpenharmonyPlatform.h"
+#include "platform/openharmony/OpenHarmonyPlatform.h"
 
 namespace {
 #define RGB(r, g, b)     (int)((int)r | (((int)g) << 8) | (((int)b) << 16))

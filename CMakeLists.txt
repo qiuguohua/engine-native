@@ -403,8 +403,8 @@ elseif(OPENHARMONY)
         cocos/platform/openharmony/napi/NapiInit.cpp
         cocos/platform/openharmony/WorkerMessageQueue.cpp
         cocos/platform/openharmony/WorkerMessageQueue.h
-        cocos/platform/openharmony/OpenharmonyPlatform.cpp
-        cocos/platform/openharmony/OpenharmonyPlatform.h
+        cocos/platform/openharmony/OpenHarmonyPlatform.cpp
+        cocos/platform/openharmony/OpenHarmonyPlatform.h
     )
 elseif(OHOS)
     cocos_source_files(
@@ -901,8 +901,8 @@ elseif(ANDROID)
 elseif(OPENHARMONY)
     # Because there will be a definition of OHOS in harmonyos, it is necessary to define the macro of OPENHARMONY.
     cocos_source_files(MODULE ccfilesystem
-        cocos/platform/openharmony/FileUtils-openharmony.cpp
-        cocos/platform/openharmony/FileUtils-openharmony.h
+        cocos/platform/openharmony/FileUtils-OpenHarmony.cpp
+        cocos/platform/openharmony/FileUtils-OpenHarmony.h
     )
 elseif(OHOS)
     set(CC_JNI_SRC_FILES
