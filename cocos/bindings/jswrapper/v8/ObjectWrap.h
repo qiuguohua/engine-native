@@ -59,7 +59,7 @@ class ObjectWrap {
 public:
     ObjectWrap();
     ~ObjectWrap();
-
+    #if (CC_PLATFORM != CC_PLATFORM_NX)
     bool init(v8::Local<v8::Object> handle);
     void setFinalizeCallback(V8FinalizeFunc finalizeCb);
 
@@ -69,7 +69,7 @@ public:
 
     void wrap(void *nativeObj);
     static void *unwrap(v8::Local<v8::Object> handle);
-
+    #endif
     /* Ref() marks the object as being attached to an event loop.
          * Refed objects will not be garbage collected, even if
          * all references are lost.
@@ -88,11 +88,15 @@ public:
     void unref();
 
 private:
+    #if (CC_PLATFORM != CC_PLATFORM_NX)
     static void weakCallback(const v8::WeakCallbackInfo<ObjectWrap> &data);
+    #endif
     void makeWeak();
 
     int refs_; // ro
+    #if (CC_PLATFORM != CC_PLATFORM_NX)
     v8::Persistent<v8::Object> handle_;
+    #endif
     void *_nativeObj;
     V8FinalizeFunc _finalizeCb;
 };

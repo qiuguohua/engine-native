@@ -29,7 +29,6 @@
 #include <cstdint>
 #include <regex>
 #include "base/csscolorparser.h"
-#include "cocos/bindings/jswrapper/SeApi.h"
 #include "cocos/bindings/manual/jsb_platform.h"
 #include "math/Math.h"
 #include "platform/FileUtils.h"
@@ -44,7 +43,7 @@
     #include "platform/linux/modules/CanvasRenderingContext2DDelegate.h"
 #elif (CC_PLATFORM == CC_PLATFORM_QNX)
     #include "platform/qnx/modules/CanvasRenderingContext2DDelegate.h"
-#elif (CC_PLATFORM == CC_PLATFORM_NX_WINDOWS)
+#elif (CC_PLATFORM == CC_PLATFORM_NX_WINDOWS || CC_PLATFORM == CC_PLATFORM_NX)
     #include "platform/nx/modules/CanvasRenderingContext2DDelegate.h"
 #endif
 

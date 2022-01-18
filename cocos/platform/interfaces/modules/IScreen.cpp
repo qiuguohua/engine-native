@@ -39,7 +39,7 @@
     #include "platform/linux/modules/Screen.h"
 #elif (CC_PLATFORM == CC_PLATFORM_QNX)
     #include "platform/qnx/modules/Screen.h"
-#elif (CC_PLATFORM == CC_PLATFORM_NX_WINDOWS)
+#elif (CC_PLATFORM == CC_PLATFORM_NX_WINDOWS || CC_PLATFORM == CC_PLATFORM_NX)
     #include "platform/nx/modules/Screen.h"
 #endif
 

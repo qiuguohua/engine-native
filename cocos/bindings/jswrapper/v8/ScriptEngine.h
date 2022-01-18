@@ -63,12 +63,18 @@ extern Class *__jsb_CCPrivateData_class; //NOLINT
 class AutoHandleScope {
 public:
     AutoHandleScope()
+    #if (CC_PLATFORM != CC_PLATFORM_NX)
     : _handleScope(v8::Isolate::GetCurrent()) {
+    #else 
+      {
+    #endif
     }
     ~AutoHandleScope() = default;
 
 private:
+    #if (CC_PLATFORM != CC_PLATFORM_NX)
     v8::HandleScope _handleScope;
+    #endif
 };
 
 /**
@@ -308,7 +314,9 @@ public:
     // Private API used in wrapper
     void                   _retainScriptObject(void *owner, void *target);  //NOLINT(readability-identifier-naming)
     void                   _releaseScriptObject(void *owner, void *target); //NOLINT(readability-identifier-naming)
+    #if (CC_PLATFORM != CC_PLATFORM_NX)
     v8::Local<v8::Context> _getContext() const;                             //NOLINT(readability-identifier-naming)
+    #endif
     void                   _setGarbageCollecting(bool isGarbageCollecting); //NOLINT(readability-identifier-naming)
     //
 private:
@@ -318,8 +326,10 @@ private:
 
     static void onFatalErrorCallback(const char *location, const char *message);
     static void onOOMErrorCallback(const char *location, bool isHeapOom);
+    #if (CC_PLATFORM != CC_PLATFORM_NX)
     static void onMessageCallback(v8::Local<v8::Message> message, v8::Local<v8::Value> data);
     static void onPromiseRejectCallback(v8::PromiseRejectMessage msg);
+    #endif
 
     /**
          *  @brief Load the bytecode file and set the return value
@@ -337,11 +347,12 @@ private:
     std::vector<std::function<void()>>    _afterInitHookArray;
     std::vector<std::function<void()>>    _beforeCleanupHookArray;
     std::vector<std::function<void()>>    _afterCleanupHookArray;
-
+    #if (CC_PLATFORM != CC_PLATFORM_NX)
     v8::Persistent<v8::Context> _context;
 
     v8::Isolate *    _isolate;
     v8::HandleScope *_handleScope;
+    #endif
     Object *         _globalObj;
     Value            _gcFuncValue;
     Object *         _gcFunc = nullptr;

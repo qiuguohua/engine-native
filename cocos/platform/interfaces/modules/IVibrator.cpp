@@ -37,7 +37,7 @@
     #include "platform/linux/modules/Vibrator.h"
 #elif (CC_PLATFORM == CC_PLATFORM_QNX)
     #include "platform/qnx/modules/Vibrator.h"
-#elif (CC_PLATFORM == CC_PLATFORM_NX_WINDOWS)
+#elif (CC_PLATFORM == CC_PLATFORM_NX || CC_PLATFORM == CC_PLATFORM_NX_WINDOWS)
     #include "platform/nx/modules/Vibrator.h"
 #endif
 

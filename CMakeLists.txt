@@ -33,6 +33,18 @@ if(NX)
     cc_set_if_undefined(CC_USE_GLES3 OFF)
     cc_set_if_undefined(CC_USE_GLES2 OFF)
     set(USE_AUDIO OFF)
+    set(USE_SOCKET OFF)
+    set(USE_SE_V8 OFF)
+    set(USE_VIDEO OFF)
+    set(USE_V8_DEBUGGER OFF)
+    set(USE_SE_V8 OFF)
+    set(USE_EDIT_BOX OFF)
+
+    set(USE_VIDEO OFF)
+    set(USE_WEBVIEW OFF)
+    set(USE_MIDDLEWARE OFF)
+    set(USE_DRAGONBONES OFF)
+    set(USE_SPINE OFF)
 elseif(ANDROID OR WINDOWS OR OHOS)
     cc_set_if_undefined(CC_USE_GLES3 ON)
     cc_set_if_undefined(CC_USE_VULKAN OFF)
@@ -91,6 +103,10 @@ if(USE_JOB_SYSTEM_TASKFLOW)
     endif()
 endif()
 
+if(NX)
+set(USE_JOB_SYSTEM_TASKFLOW OFF)
+set(USE_JOB_SYSTEM_TBB OFF)
+endif()
 ################################# list all option values ##############################
 
 cc_inspect_values(
@@ -786,7 +802,7 @@ if(NOT APPLE AND USE_SOCKET)
     )
 endif()
 
-if(NX OR NX_WINDOWS)
+if(NX_WINDOWS)
     cocos_source_files(
         NO_WERROR    cocos/network/Downloader-curl.cpp
                     cocos/network/Downloader-curl.h
@@ -798,7 +814,7 @@ elseif(WINDOWS OR LINUX OR QNX)
     )
 endif()
 
-if(NX OR NX_WINDOWS)
+if(NX_WINDOWS)
     cocos_source_files(
         NO_WERROR    cocos/network/HttpClient.cpp
     )
@@ -841,7 +857,7 @@ if(NX OR NX_WINDOWS)
     )
 endif()
 
-if(NX OR NX_WINDOWS)
+if(NX_WINDOWS)
     cocos_source_files(MODULE ccutils
         cocos/platform/win32/Utils-win32.cpp
         cocos/platform/win32/Utils-win32.h
@@ -853,7 +869,7 @@ elseif(WINDOWS)
     )
 endif()
 
-if(NX OR NX_WINDOWS)
+if(NX_WINDOWS)
     cocos_source_files(
                      cocos/platform/win32/compat
                      cocos/platform/win32/compat/stdint.h
@@ -1520,6 +1536,7 @@ if(USE_PHYSICS_PHYSX)
     )
 endif()
 
+if(NOT NX)
 ##### script bindings
 ######## dop
 cocos_source_files(
@@ -1567,6 +1584,7 @@ if(USE_WEBVIEW)
         NO_WERROR    cocos/bindings/auto/jsb_webview_auto.cpp
                      cocos/bindings/auto/jsb_webview_auto.h
     )
+endif()
 endif()
 
 if(USE_MIDDLEWARE)
@@ -1855,6 +1873,7 @@ if(USE_MIDDLEWARE)
     endif()
 endif()
 
+if(NOT NX)
 ######## manual
 cocos_source_files(
     NO_WERROR    cocos/bindings/manual/jsb_classtype.cpp
@@ -1921,7 +1940,7 @@ elseif(APPLE)
                     cocos/platform/apple/JsbBridge.h
                     cocos/platform/apple/JsbBridge.mm
     )
-elseif(WIN32)
+elseif(WINDOWS)
     cocos_source_files(
         NO_WERROR    cocos/bindings/manual/jsb_platfrom_win32.cpp
     )
@@ -2031,6 +2050,7 @@ cocos_source_files(
                  cocos/bindings/event/EventDispatcher.cpp
                  cocos/bindings/event/EventDispatcher.h
 )
+endif()
 
 #### storage
 cocos_source_files(
@@ -2121,7 +2141,7 @@ elseif(IOS)
             NO_WERROR    cocos/ui/webview/WebViewImpl-ios.mm
        )
    endif()
-elseif(WIN32)
+elseif(WINDOWS OR NX_WINDOWS)
     if(USE_EDIT_BOX)
         cocos_source_files(
             NO_WERROR    cocos/ui/edit-box/EditBox-win32.cpp
@@ -2331,10 +2351,10 @@ if(CC_USE_VULKAN)
     target_compile_definitions(cocos2d PUBLIC VK_NO_PROTOTYPES)
     target_compile_definitions(cocos2d PUBLIC CC_USE_VULKAN)
 
-    if(WIN32)
+    if(NX)
+        target_compile_definitions(cocos2d PUBLIC VK_USE_PLATFORM_VI_NN)
+    elseif(WINDOWS OR NX_WINDOWS)
         target_compile_definitions(cocos2d PUBLIC VK_USE_PLATFORM_WIN32_KHR)
-    elseif(NX OR NX_WINDOWS)
-        #target_compile_definitions(cocos2d PUBLIC VK_USE_PLATFORM_VI_NN)
     elseif(ANDROID)
         target_compile_definitions(cocos2d PUBLIC VK_USE_PLATFORM_ANDROID_KHR)
     elseif(IOS)
@@ -2381,7 +2401,7 @@ target_include_directories(cocos2d PUBLIC
     ${CWD}/external/sources/khronos
 )
 
-if(NX OR NX_WINDOWS)
+if(NX_WINDOWS)
     target_link_libraries(cocos2d PUBLIC
         ws2_32 userenv psapi winmm Iphlpapi
         ${CC_EXTERNAL_LIBS}
@@ -2404,6 +2424,23 @@ if(NX OR NX_WINDOWS)
             ws2_32
         )
     endif()
+elseif(NX)
+    target_link_libraries(cocos2d PUBLIC
+        ws2_32 userenv psapi winmm Iphlpapi
+        ${CC_EXTERNAL_LIBS}
+    )
+
+    include(${CMAKE_CURRENT_LIST_DIR}/platform-nx/setup.cmake)
+
+    target_compile_definitions(cocos2d PUBLIC
+        CC_STATIC
+        NOMINMAX
+        _USE_MATH_DEFINES
+        _CRT_SECURE_NO_WARNINGS
+        _SCL_SECURE_NO_WARNINGS
+        _USRLIBSIMSTATIC
+        SE_ENABLE_INSPECTOR
+    )
 elseif(WINDOWS)
     target_link_libraries(cocos2d PUBLIC
         ws2_32 userenv psapi winmm Iphlpapi
