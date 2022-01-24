@@ -150,6 +150,7 @@ bool jsb_register_all_modules() {
     se->addRegisterCallback(register_all_websocket);
     se->addRegisterCallback(register_all_socketio);
 #endif
+#endif
 
 #if USE_MIDDLEWARE
     se->addRegisterCallback(register_all_editor_support);
@@ -166,6 +167,7 @@ bool jsb_register_all_modules() {
 
 #endif // USE_MIDDLEWARE
 
+#if CC_PLATFORM != CC_PLATFORM_OPENHARMONY
 #if USE_PHYSICS_PHYSX
     se->addRegisterCallback(register_all_physics);
 #endif
