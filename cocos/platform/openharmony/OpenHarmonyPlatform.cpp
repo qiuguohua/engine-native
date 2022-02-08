@@ -191,7 +191,7 @@ napi_value OpenHarmonyPlatform::NapiNativeEngineInit(napi_env env, napi_callback
     WorkerMessageData msgData;
     OpenHarmonyPlatform::getInstance()->workerMessageQ_.DeQueue(reinterpret_cast<WorkerMessageData*>(&msgData));
     NativeXComponent* nativexcomponet = reinterpret_cast<NativeXComponent*>(msgData.data);
-    LOGE("kee 111  qgh cocos NapiNativeEngineInit nativexcomponent = %p", nativexcomponet);
+    LOGE("kee cocos NapiNativeEngineInit nativexcomponent = %p", nativexcomponet);
     int32_t  ret;
     ret = NativeXComponent_GetNativeWindow(nativexcomponet, &window);
     if (ret != XCOMPONENT_RESULT_SUCCESS) {

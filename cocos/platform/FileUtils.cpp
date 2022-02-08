@@ -46,7 +46,9 @@
 #endif
 #include <sys/stat.h>
 #include <regex>
+#if (CC_PLATFORM == CC_PLATFORM_OPENHARMONY)
 #include "platform/openharmony/common/PluginCommon.h"
+#endif
 
 namespace cc {
 
@@ -512,6 +514,18 @@ bool FileUtils::writeDataToFile(const Data &data, const std::string &fullPath) {
     do {
         // Read the file from hardware
         FILE *fp = fopen(fileutils->getSuitableFOpen(fullPath).c_str(), mode);
+#if (CC_PLATFORM == CC_PLATFORM_OPENHARMONY)
+        LOGE("qgh cocos writeDataToFile1 %s", fileutils->getSuitableFOpen(fullPath).c_str());
+#endif
+        if(!fp) {
+#if (CC_PLATFORM == CC_PLATFORM_OPENHARMONY)
+            LOGE("qgh cocos writeDataToFile2 %s", fileutils->getSuitableFOpen(fullPath).c_str());
+#endif
+            return false;
+        }
+#if (CC_PLATFORM == CC_PLATFORM_OPENHARMONY)
+        LOGE("qgh cocos writeDataToFile3 %s", fileutils->getSuitableFOpen(fullPath).c_str());
+#endif
         CC_BREAK_IF(!fp);
         size = data.getSize();
 
@@ -548,6 +562,9 @@ Data FileUtils::getDataFromFile(const std::string &filename) {
 
 FileUtils::Status FileUtils::getContents(const std::string &filename, ResizableBuffer *buffer) {
     if (filename.empty()) {
+#if (CC_PLATFORM == CC_PLATFORM_OPENHARMONY)
+        LOGE("qgh cocos getContents01 %s", filename.c_str());
+#endif
         return Status::NOT_EXISTS;
     }
 
@@ -555,14 +572,25 @@ FileUtils::Status FileUtils::getContents(const std::string &filename, ResizableB
 
     std::string fullPath = fs->fullPathForFilename(filename);
     if (fullPath.empty()) {
+#if (CC_PLATFORM == CC_PLATFORM_OPENHARMONY)
+        LOGE("qgh cocos getContents0 %s", fullPath.c_str());
+#endif
         return Status::NOT_EXISTS;
     }
 
     FILE *fp = fopen(fs->getSuitableFOpen(fullPath).c_str(), "rb");
+#if (CC_PLATFORM == CC_PLATFORM_OPENHARMONY)
+    LOGE("qgh cocos getContents1 %s", getSuitableFOpen(fullPath).c_str());
+#endif
     if (!fp) {
+#if (CC_PLATFORM == CC_PLATFORM_OPENHARMONY)
+        LOGE("qgh cocos getContents2 %s", getSuitableFOpen(fullPath).c_str());
+#endif
         return Status::OPEN_FAILED;
     }
-
+#if (CC_PLATFORM == CC_PLATFORM_OPENHARMONY)
+    LOGE("qgh cocos getContents3 %s", getSuitableFOpen(fullPath).c_str());
+#endif
 #if defined(_MSC_VER)
     auto descriptor = _fileno(fp);
 #else

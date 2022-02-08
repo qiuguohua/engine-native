@@ -317,7 +317,6 @@ bool Engine::dispatchWindowEvent(const WindowEvent& ev) {
         onClose();
         isHandled = true;
     } else if (ev.type == WindowEvent::Type::QUIT) {
-        onClose();
         isHandled = true;
     }
     return isHandled;
