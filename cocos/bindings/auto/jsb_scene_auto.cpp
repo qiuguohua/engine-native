@@ -2069,6 +2069,29 @@ static bool js_scene_Model_setWorldBoundBuffer(se::State& s) // NOLINT(readabili
 }
 SE_BIND_FUNC(js_scene_Model_setWorldBoundBuffer)
 
+static bool js_scene_Model_updateLightingmap(se::State& s) // NOLINT(readability-identifier-naming)
+{
+    auto* cobj = SE_THIS_OBJECT<cc::scene::Model>(s);
+    SE_PRECONDITION2(cobj, false, "js_scene_Model_updateLightingmap : Invalid Native Object");
+    const auto& args = s.args();
+    size_t argc = args.size();
+    CC_UNUSED bool ok = true;
+    if (argc == 3) {
+        HolderType<cc::Vec4, true> arg0 = {};
+        HolderType<cc::gfx::Sampler*, false> arg1 = {};
+        HolderType<cc::gfx::Texture*, false> arg2 = {};
+        ok &= sevalue_to_native(args[0], &arg0, s.thisObject());
+        ok &= sevalue_to_native(args[1], &arg1, s.thisObject());
+        ok &= sevalue_to_native(args[2], &arg2, s.thisObject());
+        SE_PRECONDITION2(ok, false, "js_scene_Model_updateLightingmap : Error processing arguments");
+        cobj->updateLightingmap(arg0.value(), arg1.value(), arg2.value());
+        return true;
+    }
+    SE_REPORT_ERROR("wrong number of arguments: %d, was expecting %d", (int)argc, 3);
+    return false;
+}
+SE_BIND_FUNC(js_scene_Model_updateLightingmap)
+
 static bool js_scene_Model_updateTransform(se::State& s) // NOLINT(readability-identifier-naming)
 {
     auto* cobj = SE_THIS_OBJECT<cc::scene::Model>(s);
@@ -2179,6 +2202,7 @@ bool js_register_scene_Model(se::Object* obj) // NOLINT(readability-identifier-n
     cls->defineFunction("setSubModel", _SE(js_scene_Model_setSubModel));
     cls->defineFunction("setTransform", _SE(js_scene_Model_setTransform));
     cls->defineFunction("setWorldBoundBuffer", _SE(js_scene_Model_setWorldBoundBuffer));
+    cls->defineFunction("updateLightingmap", _SE(js_scene_Model_updateLightingmap));
     cls->defineFunction("updateTransform", _SE(js_scene_Model_updateTransform));
     cls->defineFunction("updateUBOs", _SE(js_scene_Model_updateUBOs));
     cls->defineFunction("updateWorldBoundUBOs", _SE(js_scene_Model_updateWorldBoundUBOs));
@@ -9161,37 +9185,37 @@ bool register_all_scene(se::Object* obj)
     }
     se::Object* ns = nsVal.toObject();
 
-    js_register_scene_BaseNode(ns);
-    js_register_scene_Scene(ns);
-    js_register_scene_Node(ns);
+    js_register_scene_RenderScene(ns);
+    js_register_scene_Camera(ns);
     js_register_scene_Light(ns);
     js_register_scene_DirectionalLight(ns);
-    js_register_scene_Plane(ns);
+    js_register_scene_Fog(ns);
+    js_register_scene_BaseNode(ns);
+    js_register_scene_Node(ns);
     js_register_scene_Frustum(ns);
-    js_register_scene_AABB(ns);
-    js_register_scene_SpotLight(ns);
+    js_register_scene_DrawBatch2D(ns);
     js_register_scene_SphereLight(ns);
     js_register_scene_Model(ns);
-    js_register_scene_Fog(ns);
-    js_register_scene_Shadow(ns);
-    js_register_scene_Skybox(ns);
-    js_register_scene_Ambient(ns);
-    js_register_scene_OctreeInfo(ns);
-    js_register_scene_PipelineSharedSceneData(ns);
-    js_register_scene_Root(ns);
-    js_register_scene_SubModel(ns);
-    js_register_scene_Pass(ns);
-    js_register_scene_BakedAnimInfo(ns);
-    js_register_scene_BakedJointInfo(ns);
     js_register_scene_BakedSkinningModel(ns);
-    js_register_scene_DrawBatch2D(ns);
+    js_register_scene_Plane(ns);
     js_register_scene_JointTransform(ns);
-    js_register_scene_JointInfo(ns);
-    js_register_scene_SkinningModel(ns);
-    js_register_scene_RenderScene(ns);
     js_register_scene_RenderWindow(ns);
-    js_register_scene_Camera(ns);
+    js_register_scene_Shadow(ns);
+    js_register_scene_SubModel(ns);
+    js_register_scene_BakedJointInfo(ns);
+    js_register_scene_AABB(ns);
+    js_register_scene_Ambient(ns);
+    js_register_scene_SkinningModel(ns);
+    js_register_scene_OctreeInfo(ns);
+    js_register_scene_JointInfo(ns);
+    js_register_scene_Root(ns);
+    js_register_scene_Scene(ns);
     js_register_scene_Sphere(ns);
+    js_register_scene_BakedAnimInfo(ns);
+    js_register_scene_Pass(ns);
+    js_register_scene_Skybox(ns);
+    js_register_scene_PipelineSharedSceneData(ns);
+    js_register_scene_SpotLight(ns);
     return true;
 }
 

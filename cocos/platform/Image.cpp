@@ -584,6 +584,7 @@ bool Image::initWithJpgData(const unsigned char *data, ssize_t dataLen) {
 
     return ret;
 #endif // CC_USE_JPEG
+return false;
 }
 
 bool Image::initWithPngData(const unsigned char *data, ssize_t dataLen) {
@@ -710,6 +711,7 @@ bool Image::initWithPngData(const unsigned char *data, ssize_t dataLen) {
     }
     return ret;
 #endif //CC_USE_PNG
+return false;
 }
 
 bool Image::initWithPVRv2Data(const unsigned char *data, ssize_t dataLen) {
@@ -919,6 +921,7 @@ bool Image::initWithWebpData(const unsigned char *data, ssize_t dataLen) {
     } while (false);
     return ret;
 #endif // CC_USE_WEBP
+return false;
 }
 
 bool Image::initWithRawData(const unsigned char *data, ssize_t /*dataLen*/, int width, int height, int /*bitsPerComponent*/, bool /*preMulti*/) {
