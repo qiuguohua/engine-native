@@ -2501,14 +2501,9 @@ if(OPENHARMONY)
     find_library( libace-lib
                 libace_ndk.z )
 
-    find_library( # Sets the name of the path variable.
-                zgraphic.z-lib
-                # Specifies the name of the NDK library that
-                # you want CMake to locate.
-                zgraphic.z )
 
     target_link_libraries(cocos2d PUBLIC
-        ${EGL-lib} ${GLESv3-lib} ${hilog-lib} ${zgraphic.z-lib} libace_napi.z.so libace_ndk.z.so libc++.a 
+        ${EGL-lib} ${GLESv3-lib} ${hilog-lib} libace_napi.z.so libace_ndk.z.so libc++.a 
         ${CC_EXTERNAL_LIBS}
     )
 endif()

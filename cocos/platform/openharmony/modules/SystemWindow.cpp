@@ -25,7 +25,6 @@
 
 #include "platform/openharmony/modules/SystemWindow.h"
 #include <fcntl.h>
-#include <jni.h>
 #include <unistd.h>
 #include <cstddef>
 #include <functional>

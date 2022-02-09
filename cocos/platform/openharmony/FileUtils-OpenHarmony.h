@@ -4,7 +4,7 @@
 //clang-format on
 #include <rawfile/raw_dir.h>
 #include <rawfile/raw_file.h>
-#include <rawfile/resource_manager.h>
+#include <rawfile/raw_file_manager.h>
 #include "base/Macros.h"
 #include "cocos/platform/FileUtils.h"
 
@@ -14,7 +14,7 @@ class CC_DLL FileUtilsOpenHarmony : public FileUtils {
 public:
     //        FileUtilsOpenHarmony();
     //        virtual ~FileUtilsOpenHarmony();
-    static bool initResourceManager(ResourceManager *mgr, const std::string &assetPath, const std::string &moduleName);
+    static bool initResourceManager(NativeResourceManager *mgr, const std::string &assetPath, const std::string &moduleName);
 
     static void setRawfilePrefix(const std::string &prefix);
 

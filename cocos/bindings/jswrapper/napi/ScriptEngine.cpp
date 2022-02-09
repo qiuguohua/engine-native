@@ -42,7 +42,7 @@ bool ScriptEngine::runScript(const std::string &path, Value *ret /* = nullptr */
     napi_status status;
     napi_value result = nullptr;
     LOGI("run script : %s", path.c_str());
-    NODE_API_CALL(status, ScriptEngine::getEnv(), napi_run_script_path(ScriptEngine::getEnv(), path.c_str(), &result));
+    //NODE_API_CALL(status, ScriptEngine::getEnv(), napi_run_script_path(ScriptEngine::getEnv(), path.c_str(), &result));
     if (ret && result) {
         internal::jsToSeValue(result, ret);
     }
