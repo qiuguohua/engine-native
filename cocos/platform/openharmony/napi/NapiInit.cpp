@@ -13,9 +13,7 @@
  * limitations under the License.
  */
 #include <ace/xcomponent/native_interface_xcomponent.h>
-#include <napi/js_native_api.h>
-#include <napi/native_api.h>
-#include <napi/node_api.h>
+#include "bindings/jswrapper/SeApi.h"
 #include "platform/openharmony/OpenHarmonyPlatform.h"
 #include "platform/openharmony/common/PluginCommon.h"
 

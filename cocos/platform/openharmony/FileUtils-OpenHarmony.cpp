@@ -11,7 +11,6 @@
 #include <stdio.h>
 
 #include "cocos/base/Log.h"
-#include "cocos/platform/java/jni/JniHelper.h"
 
 #include <sys/syscall.h>
 #include <unistd.h>
@@ -32,7 +31,7 @@ namespace {
 
 std::string rawfilePrefix = "entry/resources/rawfile/";
 
-void printRawfiles(ResourceManager *mgr, const std::string &path) {
+void printRawfiles(NativeResourceManager *mgr, const std::string &path) {
 //    auto *file = OpenRawFile(mgr, path.c_str());
 //    if (file) {
 //        HILOG_DEBUG(LOG_APP, "PrintRawfile %{public}s", path.c_str());
@@ -55,7 +54,7 @@ void printRawfiles(ResourceManager *mgr, const std::string &path) {
 }
 } // namespace
 
-bool FileUtilsOpenHarmony::initResourceManager(ResourceManager *mgr, const std::string &assetPath, const std::string &moduleName) {
+bool FileUtilsOpenHarmony::initResourceManager(NativeResourceManager *mgr, const std::string &assetPath, const std::string &moduleName) {
 //    CCASSERT(mgr, "ResourceManager should not be empty!");
 //    ohosResourceMgr = mgr;
 //    if (!assetPath.empty() && assetPath[assetPath.length() - 1] != '/') {

@@ -1,33 +1,9 @@
 #pragma once
-#include <napi/js_native_api.h>
-#include <napi/node_api.h>
+#include <napi/native_api.h>
+#include "native_common.h"
 
 // Empty value so that macros here are able to return NULL or void
 #define NODE_API_RETVAL_NOTHING // Intentionally blank #define
-
-#define GET_AND_THROW_LAST_ERROR(env)                                                                                          \
-    do {                                                                                                                       \
-        const napi_extended_error_info* error_info;                                                                            \
-        napi_get_last_error_info((env), &error_info);                                                                          \
-        bool is_pending;                                                                                                       \
-        napi_is_exception_pending((env), &is_pending);                                                                         \
-        /* If an exception is already pending, don't rethrow it */                                                             \
-        if (!is_pending) {                                                                                                     \
-            const char* error_message = error_info->error_message != NULL ? error_info->error_message : "empty error message"; \
-            napi_throw_error((env), NULL, error_message);                                                                      \
-        }                                                                                                                      \
-    } while (0)
-
-#define NODE_API_ASSERT_BASE(env, assertion, message, ret_val)  \
-    do {                                                        \
-        if (!(assertion)) {                                     \
-            napi_throw_error(                                   \
-                (env),                                          \
-                NULL,                                           \
-                "assertion (" #assertion ") failed: " message); \
-            return ret_val;                                     \
-        }                                                       \
-    } while (0)
 
 // Returns NULL on failed assertion.
 // This is meant to be used inside napi_callback methods.
