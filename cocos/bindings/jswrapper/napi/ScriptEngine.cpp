@@ -9,7 +9,7 @@
 namespace se {
 ScriptEngine *gSriptEngineInstance = nullptr;
 
-ScriptEngine::ScriptEngine() = default;
+ScriptEngine::ScriptEngine() {};
 
 ScriptEngine::~ScriptEngine() = default;
 
@@ -77,7 +77,7 @@ bool ScriptEngine::init() {
     _globalObj->setProperty("window", Value(_globalObj));
     _globalObj->setProperty("scriptEngineType", se::Value("napi"));
 
-        _isValid = true;
+    _isValid = true;
 
     for (const auto &hook : _afterInitHookArray) {
         hook();
@@ -85,8 +85,6 @@ bool ScriptEngine::init() {
     _afterInitHookArray.clear();
 
     return _isValid;
-
-    return true;
 }
 
 Object *ScriptEngine::getGlobalObject() const {

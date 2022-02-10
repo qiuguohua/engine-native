@@ -257,10 +257,10 @@ private:
     Object * _globalObj = nullptr;
     napi_env _env       = nullptr;
 
-    bool _isValid;
-    bool _isGarbageCollecting;
-    bool _isInCleanup;
-    bool _isErrorHandleWorking;
+    bool _isValid{false};
+    bool _isGarbageCollecting{false};
+    bool _isInCleanup{false};
+    bool _isErrorHandleWorking{false};
     bool _isneedCallConstructor{true};
     std::chrono::steady_clock::time_point _startTime;
 };
