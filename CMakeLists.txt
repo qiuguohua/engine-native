@@ -2501,9 +2501,8 @@ if(OPENHARMONY)
     find_library( libace-lib
                 libace_ndk.z )
 
-
     target_link_libraries(cocos2d PUBLIC
-        ${EGL-lib} ${GLESv3-lib} ${hilog-lib} libace_napi.z.so libace_ndk.z.so libc++.a 
+        ${EGL-lib} ${GLESv3-lib} ${hilog-lib} libace_napi.z.so libace_ndk.z.so libz.so
         ${CC_EXTERNAL_LIBS}
     )
 endif()
