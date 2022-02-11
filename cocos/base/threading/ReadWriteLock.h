@@ -29,7 +29,9 @@
 #include "base/Macros.h"
 // clang-format on
 
+#if(CC_PLATFORM != CC_PLATFORM_NX)
 #include <uv.h>
+#endif
 #include <functional>
 #if (CC_PLATFORM != CC_PLATFORM_NX)
 #include <uv.h>

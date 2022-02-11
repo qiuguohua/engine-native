@@ -88,11 +88,17 @@ public:
     void unref();
 
 private:
-    static void weakCallback(const v8::WeakCallbackInfo<ObjectWrap> &data);
+#if(CC_PLATFORM == CC_PLATFORM_NX)
+static void weakCallback(const std::vector<ObjectWrap> &data);
+    std::vector<int> handle_;
+#else
+static void weakCallback(const v8::WeakCallbackInfo<ObjectWrap> &data);
+v8::Persistent<v8::Object> handle_;
+#endif
+    
     void        makeWeak();
 
     int                        refs_; // ro
-    v8::Persistent<v8::Object> handle_;
     void *                     _nativeObj;
     V8FinalizeFunc             _finalizeCb;
 };
