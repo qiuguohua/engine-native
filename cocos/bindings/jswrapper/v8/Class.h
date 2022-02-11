@@ -1,6 +1,6 @@
 /****************************************************************************
  Copyright (c) 2016 Chukong Technologies Inc.
- Copyright (c) 2017-2021 Xiamen Yaji Software Co., Ltd.
+ Copyright (c) 2017-2022 Xiamen Yaji Software Co., Ltd.
 
  http://www.cocos.com
 
@@ -131,18 +131,17 @@ private:
     #if (CC_PLATFORM != CC_PLATFORM_NX)
     //        static v8::Local<v8::Object> _createJSObject(const std::string &clsName, Class** outCls);
     static v8::Local<v8::Object> _createJSObjectWithClass(Class *cls);
-    static void setIsolate(v8::Isolate *isolate);
+    static void                  setIsolate(v8::Isolate *isolate);
     #endif
     std::string _name;
-    Object *_parent;
-    Object *_parentProto;
-    Object *_proto;
+    Object *    _parent;
+    Object *    _parentProto;
+    Object *    _proto;
     #if (CC_PLATFORM != CC_PLATFORM_NX)
-    v8::FunctionCallback _ctor;
+    v8::FunctionCallback                       _ctor;
     v8::UniquePersistent<v8::FunctionTemplate> _ctorTemplate;
-    #endif
-    V8FinalizeFunc _finalizeFunc;
-    bool _createProto;
+    V8FinalizeFunc                             _finalizeFunc;
+    bool                                       _createProto;
 
     friend class ScriptEngine;
     friend class Object;

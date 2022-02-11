@@ -1,5 +1,5 @@
 /****************************************************************************
- Copyright (c) 2019-2021 Xiamen Yaji Software Co., Ltd.
+ Copyright (c) 2019-2022 Xiamen Yaji Software Co., Ltd.
 
  http://www.cocos.com
 
@@ -79,6 +79,11 @@ CCMTLSampler* CCMTLSampler::getDefaultSampler() {
     }
     return defaultSampler;
 }
-
+void CCMTLSampler::deleteDefaultSampler(){
+    if(defaultSampler){
+        delete defaultSampler;
+        defaultSampler = nullptr;
+    }
+}
 } // namespace gfx
 } // namespace cc
