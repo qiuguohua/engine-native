@@ -52,9 +52,9 @@ public:
         if (_refCounts == 0) {
             uint32_t result = 0;
             _refCounts      = 1;
-        napi_delete_reference(_env, _ref);
-        _ref = nullptr;
-        initStrongRef(env, _obj);
+            napi_delete_reference(_env, _ref);
+            _ref = nullptr;
+            initStrongRef(env, _obj);
         }
     }
     void decRef(napi_env env) {
