@@ -1,5 +1,5 @@
 /****************************************************************************
- Copyright (c) 2020-2021 Xiamen Yaji Software Co., Ltd.
+ Copyright (c) 2020-2022 Xiamen Yaji Software Co., Ltd.
 
  http://www.cocos.com
 
@@ -25,8 +25,8 @@
 
 #pragma once
 
-#include <functional>
 #include <cmath>
+#include <functional>
 #include "base/Object.h"
 #include "base/TypeDef.h"
 #include "base/Value.h"
@@ -132,8 +132,8 @@ struct CC_DLL InternalBindingInst : public InternalBindingDesc {
 };
 
 struct CC_DLL RenderQueueCreateInfo {
-    bool                                                          isTransparent     = false;
-    uint                                                          phases            = 0;
+    bool                                                          isTransparent = false;
+    uint                                                          phases        = 0;
     std::function<bool(const RenderPass &a, const RenderPass &b)> sortFunc;
 };
 
@@ -151,8 +151,8 @@ enum class CC_DLL RenderQueueSortMode {
 CC_ENUM_CONVERSION_OPERATOR(RenderQueueSortMode)
 
 struct CC_DLL RenderQueueDesc {
-    bool                isTransparent     = false;
-    RenderQueueSortMode sortMode          = RenderQueueSortMode::FRONT_TO_BACK;
+    bool                isTransparent = false;
+    RenderQueueSortMode sortMode      = RenderQueueSortMode::FRONT_TO_BACK;
     StringArray         stages;
 };
 using RenderQueueDescList = std::vector<RenderQueueDesc>;
@@ -222,9 +222,6 @@ enum class CC_DLL PipelineGlobalBindings {
 };
 CC_ENUM_CONVERSION_OPERATOR(PipelineGlobalBindings)
 
-extern CC_DLL int globalUBOCount;
-extern CC_DLL int globalSamplerCount;
-
 enum class CC_DLL ModelLocalBindings {
     UBO_LOCAL,
     UBO_FORWARD_LIGHTS,
@@ -240,14 +237,12 @@ enum class CC_DLL ModelLocalBindings {
     SAMPLER_LIGHTMAP,
     SAMPLER_SPRITE,
     SAMPLER_REFLECTION,
+
     STORAGE_REFLECTION,
 
     COUNT,
 };
 CC_ENUM_CONVERSION_OPERATOR(ModelLocalBindings)
-
-extern CC_DLL int localUBOCount;
-extern CC_DLL int localSamplerCount;
 
 enum class CC_DLL SetIndex {
     GLOBAL,
@@ -452,7 +447,8 @@ struct CC_DLL UBOShadow : public Object {
     static constexpr uint                        SHADOW_WIDTH_HEIGHT_PCF_BIAS_INFO_OFFSET      = UBOShadow::SHADOW_NEAR_FAR_LINEAR_SATURATION_INFO_OFFSET + 4;
     static constexpr uint                        SHADOW_LIGHT_PACKING_NBIAS_NULL_INFO_OFFSET   = UBOShadow::SHADOW_WIDTH_HEIGHT_PCF_BIAS_INFO_OFFSET + 4;
     static constexpr uint                        SHADOW_COLOR_OFFSET                           = UBOShadow::SHADOW_LIGHT_PACKING_NBIAS_NULL_INFO_OFFSET + 4;
-    static constexpr uint                        COUNT                                         = UBOShadow::SHADOW_COLOR_OFFSET + 4;
+    static constexpr uint                        PLANAR_NORMAL_DISTANCE_INFO_OFFSET            = UBOShadow::SHADOW_COLOR_OFFSET + 4;
+    static constexpr uint                        COUNT                                         = UBOShadow::PLANAR_NORMAL_DISTANCE_INFO_OFFSET + 4;
     static constexpr uint                        SIZE                                          = UBOShadow::COUNT * 4;
     static constexpr uint                        BINDING                                       = static_cast<uint>(PipelineGlobalBindings::UBO_SHADOW);
     static const gfx::DescriptorSetLayoutBinding DESCRIPTOR;
@@ -490,9 +486,9 @@ const uint CAMERA_DEFAULT_MASK = ~static_cast<uint>(LayerList::UI_2D) & ~static_
 
 uint nextPow2(uint val);
 
-bool supportsHalfFloatTexture(gfx::Device *device);
+bool supportsR16HalfFloatTexture(gfx::Device *device);
 
-bool supportsFloatTexture(gfx::Device *device);
+bool supportsR32FloatTexture(gfx::Device *device);
 
 extern CC_DLL uint skyboxFlag;
 

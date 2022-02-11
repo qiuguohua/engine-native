@@ -1,5 +1,5 @@
 /****************************************************************************
- Copyright (c) 2020-2021 Xiamen Yaji Software Co., Ltd.
+ Copyright (c) 2020-2022 Xiamen Yaji Software Co., Ltd.
 
  http://www.cocos.com
 
@@ -67,6 +67,7 @@ private:
 
     void *              _buffer{nullptr};
     size_t              _capacity{0};
+    size_t              _alignment{1};
     std::atomic<size_t> _usedSize{0};
 };
 

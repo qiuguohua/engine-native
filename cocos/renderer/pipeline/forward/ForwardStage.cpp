@@ -1,5 +1,5 @@
 /****************************************************************************
- Copyright (c) 2020-2021 Xiamen Yaji Software Co., Ltd.
+ Copyright (c) 2020-2022 Xiamen Yaji Software Co., Ltd.
 
  http://www.cocos.com
 
@@ -163,8 +163,8 @@ void ForwardStage::render(scene::Camera *camera) {
         framegraph::Texture::Descriptor colorTexInfo;
         colorTexInfo.format = sharedData->isHDR ? gfx::Format::RGBA16F : gfx::Format::RGBA8;
         colorTexInfo.usage  = gfx::TextureUsageBit::COLOR_ATTACHMENT;
-        colorTexInfo.width  = static_cast<uint>(pipeline->getWidth() * shadingScale);
-        colorTexInfo.height = static_cast<uint>(pipeline->getHeight() * shadingScale);
+        colorTexInfo.width  = static_cast<uint>(camera->window->getWidth() * shadingScale);
+        colorTexInfo.height = static_cast<uint>(camera->window->getHeight() * shadingScale);
         if (shadingScale != 1.F) {
             colorTexInfo.usage |= gfx::TextureUsageBit::TRANSFER_SRC;
         }
@@ -178,29 +178,32 @@ void ForwardStage::render(scene::Camera *camera) {
             if (hasFlag(clearFlags, static_cast<gfx::ClearFlagBit>(skyboxFlag))) {
                 colorAttachmentInfo.loadOp = gfx::LoadOp::DISCARD;
             } else {
-                colorAttachmentInfo.loadOp        = gfx::LoadOp::LOAD;
-                colorAttachmentInfo.beginAccesses = {gfx::AccessType::COLOR_ATTACHMENT_WRITE};
+                colorAttachmentInfo.loadOp = gfx::LoadOp::LOAD;
             }
         }
-        colorAttachmentInfo.endAccesses = {gfx::AccessType::COLOR_ATTACHMENT_WRITE};
-        data.outputTex                  = builder.write(data.outputTex, colorAttachmentInfo);
+        colorAttachmentInfo.beginAccesses = colorAttachmentInfo.endAccesses = {gfx::AccessType::COLOR_ATTACHMENT_WRITE};
+
+        data.outputTex = builder.write(data.outputTex, colorAttachmentInfo);
         builder.writeToBlackboard(RenderPipeline::fgStrHandleOutColorTexture, data.outputTex);
         // depth
         gfx::TextureInfo depthTexInfo{
             gfx::TextureType::TEX2D,
             gfx::TextureUsageBit::DEPTH_STENCIL_ATTACHMENT,
             gfx::Format::DEPTH_STENCIL,
-            static_cast<uint>(pipeline->getWidth() * shadingScale),
-            static_cast<uint>(pipeline->getHeight() * shadingScale),
+            static_cast<uint>(camera->window->getWidth() * shadingScale),
+            static_cast<uint>(camera->window->getHeight() * shadingScale),
         };
 
         framegraph::RenderTargetAttachment::Descriptor depthAttachmentInfo;
-        depthAttachmentInfo.usage        = framegraph::RenderTargetAttachment::Usage::DEPTH_STENCIL;
-        depthAttachmentInfo.loadOp       = gfx::LoadOp::CLEAR;
-        depthAttachmentInfo.clearDepth   = camera->clearDepth;
-        depthAttachmentInfo.clearStencil = camera->clearStencil;
-        depthAttachmentInfo.endAccesses  = {gfx::AccessType::DEPTH_STENCIL_ATTACHMENT_WRITE};
-
+        depthAttachmentInfo.usage         = framegraph::RenderTargetAttachment::Usage::DEPTH_STENCIL;
+        depthAttachmentInfo.loadOp        = gfx::LoadOp::CLEAR;
+        depthAttachmentInfo.clearDepth    = camera->clearDepth;
+        depthAttachmentInfo.clearStencil  = camera->clearStencil;
+        depthAttachmentInfo.beginAccesses = {gfx::AccessType::DEPTH_STENCIL_ATTACHMENT_WRITE};
+        depthAttachmentInfo.endAccesses   = {gfx::AccessType::DEPTH_STENCIL_ATTACHMENT_WRITE};
+        if (static_cast<gfx::ClearFlagBit>(clearFlags & gfx::ClearFlagBit::DEPTH_STENCIL) != gfx::ClearFlagBit::DEPTH_STENCIL && (!hasFlag(clearFlags, gfx::ClearFlagBit::DEPTH) || !hasFlag(clearFlags, gfx::ClearFlagBit::STENCIL))) {
+            depthAttachmentInfo.loadOp = gfx::LoadOp::LOAD;
+        }
         data.depth = builder.create(RenderPipeline::fgStrHandleOutDepthTexture, depthTexInfo);
         data.depth = builder.write(data.depth, depthAttachmentInfo);
         builder.writeToBlackboard(RenderPipeline::fgStrHandleOutDepthTexture, data.depth);

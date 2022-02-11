@@ -1,5 +1,5 @@
 /****************************************************************************
- Copyright (c) 2021 Xiamen Yaji Software Co., Ltd.
+ Copyright (c) 2021-2022 Xiamen Yaji Software Co., Ltd.
 
  http://www.cocos.com
 
@@ -29,6 +29,7 @@
 #include "base/Macros.h"
 // clang-format on
 
+#include <uv.h>
 #include <functional>
 #if (CC_PLATFORM != CC_PLATFORM_NX)
 #include <uv.h>

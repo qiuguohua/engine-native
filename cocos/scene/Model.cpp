@@ -1,8 +1,8 @@
 /****************************************************************************
- Copyright (c) 2021 Xiamen Yaji Software Co., Ltd.
- 
+ Copyright (c) 2021-2022 Xiamen Yaji Software Co., Ltd.
+
  http://www.cocos.com
- 
+
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated engine source code (the "Software"), a limited,
  worldwide, royalty-free, non-assignable, revocable and non-exclusive license
@@ -10,10 +10,10 @@
  not use Cocos Creator software for developing other software or tools that's
  used for developing games. You are not granted to publish, distribute,
  sublicense, and/or sell copies of Cocos Creator.
- 
+
  The software or tools in this License Agreement are licensed, not sold.
  Xiamen Yaji Software Co., Ltd. reserves all rights not expressly granted to you.
- 
+
  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -21,9 +21,11 @@
  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  THE SOFTWARE.
- ****************************************************************************/
+****************************************************************************/
+
 #include "scene/Model.h"
 #include "renderer/pipeline/Define.h"
+#include "renderer/pipeline/RenderPipeline.h"
 #include "scene/RenderScene.h"
 #include "scene/SubModel.h"
 
@@ -78,19 +80,39 @@ void Model::updateUBOs(uint32_t stamp) {
         memcpy(bufferView.data() + pipeline::UBOLocal::MAT_WORLD_OFFSET, worldMatrix.m, sizeof(Mat4));
         Mat4::inverseTranspose(worldMatrix, &mat4);
         memcpy(bufferView.data() + pipeline::UBOLocal::MAT_WORLD_IT_OFFSET, mat4.m, sizeof(Mat4));
+        const float lightmapUVParam[4] = {_lightmapSettings._lightmapUVParam.x, _lightmapSettings._lightmapUVParam.y,
+                                          _lightmapSettings._lightmapUVParam.z, _lightmapSettings._lightmapUVParam.w};
+        memcpy(bufferView.data() + pipeline::UBOLocal::LIGHTINGMAP_UVPARAM, lightmapUVParam, sizeof(lightmapUVParam));
         _localBuffer->update(bufferView.data(), pipeline::UBOLocal::SIZE);
 
-        updateWorldBoundUBOs();
+        const bool enableOcclusionQuery = pipeline::RenderPipeline::getInstance()->getOcclusionQueryEnabled();
+        if (enableOcclusionQuery) {
+            updateWorldBoundUBOs();
+        }
+    }
+}
+
+void Model::updateLightingmap(const Vec4 &lightmapUVParam, gfx::Sampler *sampler, gfx::Texture *lightmap) {
+    _lightmapSettings._lightmapUVParam = lightmapUVParam;
+    _lightmapSettings._sampler         = sampler;
+    _lightmapSettings._lightmap        = lightmap;
+    for (const SubModel *subModel : _subModels) {
+        if (sampler && lightmap) {
+            gfx::DescriptorSet *descriptorSet = subModel->getDescriptorSet();
+            descriptorSet->bindSampler(pipeline::LIGHTMAPTEXTURE::BINDING, sampler);
+            descriptorSet->bindTexture(pipeline::LIGHTMAPTEXTURE::BINDING, lightmap);
+            descriptorSet->update();
+        }
     }
 }
 
 void Model::updateWorldBoundUBOs() {
     if (_worldBoundBuffer) {
         std::array<float, pipeline::UBOWorldBound::COUNT> worldBoundBufferView;
-        const Vec3 &                                           center      = _worldBounds ? _worldBounds->getCenter() : Vec3{0.0F, 0.0F, 0.0F};
-        const Vec3 &                                           halfExtents = _worldBounds ? _worldBounds->getHalfExtents() : Vec3{1.0F, 1.0F, 1.0F};
-        const Vec4                                             worldBoundCenter{center.x, center.y, center.z, 0.0F};
-        const Vec4                                             worldBoundHalfExtents{halfExtents.x, halfExtents.y, halfExtents.z, 1.0F};
+        const Vec3 &                                      center      = _worldBounds ? _worldBounds->getCenter() : Vec3{0.0F, 0.0F, 0.0F};
+        const Vec3 &                                      halfExtents = _worldBounds ? _worldBounds->getHalfExtents() : Vec3{1.0F, 1.0F, 1.0F};
+        const Vec4                                        worldBoundCenter{center.x, center.y, center.z, 0.0F};
+        const Vec4                                        worldBoundHalfExtents{halfExtents.x, halfExtents.y, halfExtents.z, 1.0F};
         memcpy(worldBoundBufferView.data() + pipeline::UBOWorldBound::WORLD_BOUND_CENTER, &worldBoundCenter.x, sizeof(Vec4));
         memcpy(worldBoundBufferView.data() + pipeline::UBOWorldBound::WORLD_BOUND_HALF_EXTENTS, &worldBoundHalfExtents.x, sizeof(Vec4));
         _worldBoundBuffer->update(worldBoundBufferView.data(), pipeline::UBOWorldBound::SIZE);

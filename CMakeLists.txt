@@ -1922,9 +1922,9 @@ endif()
 
 if(ANDROID)
     cocos_source_files(
-                     cocos/bindings/manual/jsb_platform_android.cpp
-                     cocos/bindings/manual/JavaScriptJavaBridge.cpp
-                     cocos/bindings/manual/JavaScriptJavaBridge.h
+                    cocos/bindings/manual/jsb_platform_android.cpp
+                    cocos/bindings/manual/JavaScriptJavaBridge.cpp
+                    cocos/bindings/manual/JavaScriptJavaBridge.h
     )
 elseif(OHOS)
     cocos_source_files(
@@ -1939,8 +1939,10 @@ elseif(APPLE)
                     cocos/bindings/manual/JavaScriptObjCBridge.mm
                     cocos/platform/apple/JsbBridge.h
                     cocos/platform/apple/JsbBridge.mm
+                    cocos/platform/apple/JsbBridgeWrapper.h
+                    cocos/platform/apple/JsbBridgeWrapper.mm
     )
-elseif(WINDOWS)
+elseif(WINDOWS OR NX_WINDOWS)
     cocos_source_files(
         NO_WERROR    cocos/bindings/manual/jsb_platfrom_win32.cpp
     )
