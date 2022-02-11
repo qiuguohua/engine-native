@@ -4,6 +4,7 @@ include(${CMAKE_CURRENT_LIST_DIR}/cmake/predefine.cmake)
 set(CWD ${CMAKE_CURRENT_LIST_DIR})
 set(COCOS2D_SOURCE_LIST)
 
+
 # Should be enable someday in the future
 # set(CMAKE_CXX_FLAGS "${WERROR_FLAGS}")
 
