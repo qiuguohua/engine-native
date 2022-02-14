@@ -25,7 +25,8 @@
 // Returns nullptr if the_call doesn't return napi_ok.
 #define NODE_API_CALL(status, env, the_call) \
     status = the_call;                       \
-    LOGI("error:%d", status);                \
+    if (status != napi_ok)                   \
+        LOGI("error:%d", status);            \
     NODE_API_CALL_BASE(env, status, nullptr)
 
 // Returns empty if the_call doesn't return napi_ok.

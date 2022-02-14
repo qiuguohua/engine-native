@@ -100,7 +100,6 @@ void jsToSeArgs(size_t argc, target_value* argv, ValueArray* outArr) {
 
 bool seToJsValue(const Value& v, target_value* outJsVal) {
     assert(outJsVal != nullptr);
-    LOGI("seToJsValue");
     bool        ret = false;
     napi_status status = napi_ok;
     switch (v.getType()) {
@@ -137,7 +136,7 @@ bool seToJsValue(const Value& v, target_value* outJsVal) {
             assert(false);
             break;
     }
-    LOGI("type :%d", v.getType());
+    //LOGI("type :%d", v.getType());
     return ret;
 }
 
