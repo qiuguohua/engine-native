@@ -55,7 +55,7 @@ bool ScriptEngine::evalString(const char *scriptStr, ssize_t length, Value *ret,
     napi_value  result;
     length = length < 0 ? NAPI_AUTO_LENGTH : length;
     status = napi_create_string_utf8(ScriptEngine::getEnv(), scriptStr, length, &script);
-    LOGI("eval :%s", scriptStr);
+    LOGI("eval :%{public}s", scriptStr);
     NODE_API_CALL(status, ScriptEngine::getEnv(), napi_run_script(ScriptEngine::getEnv(), script, &result));
     return true;
 }
