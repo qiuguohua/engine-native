@@ -105,6 +105,23 @@ public:
      */
     SchedulerPtr getScheduler() const override;
 
+    void setXXTeaKey(const std::string& key) override;
+    /**
+     * @brief Run the js code file
+     * @param filePath:Js file path.
+     */
+    void runJsScript(const std::string& filePath) override;
+    /**
+     * @brief Run the js code file
+     * @param filePath:Js file path.
+     */
+    void setJsDebugIpAndPort(const std::string& serverAddr, uint32_t port, bool isWaitForConnect) override;
+    /**
+     @brief Set exception callback.
+     */
+    void setExceptionCallback(const se::ScriptEngine::ExceptionCallback& cb) override;
+    
+
 private:
     void    tick();
     bool    dispatchWindowEvent(const WindowEvent& ev);
@@ -115,16 +132,16 @@ private:
     void    onClose();
     int32_t restartVM();
 
-    bool                       _close{false};
-    bool                       _pause{false};
-    bool                       _resune{false};
-    std::shared_ptr<Scheduler> _scheduler{nullptr};
-    int64_t                    _prefererredNanosecondsPerFrame{NANOSECONDS_60FPS};
-    uint                       _totalFrames{0};
-    cc::Vec2                   _viewLogicalSize{0, 0};
-    bool                       _needRestart{false};
-
-    std::map<OSEventType, EventCb> _eventCallbacks;
+    bool                                _close{false};
+    bool                                _pause{false};
+    bool                                _resune{false};
+    std::shared_ptr<Scheduler>          _scheduler{nullptr};
+    int64_t                             _prefererredNanosecondsPerFrame{NANOSECONDS_60FPS};
+    uint                                _totalFrames{0};
+    cc::Vec2                            _viewLogicalSize{0, 0};
+    bool                                _needRestart{false};
+    se::ScriptEngine::ExceptionCallback _seExceptionCallback{nullptr};
+    std::map<OSEventType, EventCb>      _eventCallbacks;
     CC_DISABLE_COPY_AND_MOVE_SEMANTICS(Engine);
 };
 

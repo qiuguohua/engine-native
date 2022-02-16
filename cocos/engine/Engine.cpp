@@ -46,8 +46,10 @@
 #include "application/ApplicationManager.h"
 #include "application/BaseApplication.h"
 #include "base/Scheduler.h"
+#include "cocos/bindings/manual/jsb_global.h"
 #include "cocos/network/HttpClient.h"
 #include "platform/interfaces/modules/ISystemWindow.h"
+#include "cocos/bindings/manual/jsb_module_register.h"
 
 namespace {
 
@@ -102,17 +104,52 @@ Engine::~Engine() {
     platform->setHandleEventCallback(nullptr);
 }
 
+void Engine::setJsDebugIpAndPort(const std::string& serverAddr, uint32_t port, bool isWaitForConnect) {
+#if defined(CC_DEBUG) && (CC_DEBUG > 0)
+    // Enable debugger here
+    jsb_enable_debugger(serverAddr, port, isWaitForConnect);
+#endif
+}
+
+
+void Engine::setExceptionCallback(const se::ScriptEngine::ExceptionCallback& cb) {
+    se::ScriptEngine* se = se::ScriptEngine::getInstance();
+    se->setExceptionCallback(_seExceptionCallback);
+}
+
+void Engine::runJsScript(const std::string& filePath) {
+    jsb_run_script(filePath);
+}
+
+void Engine::setXXTeaKey(const std::string& key) {
+    jsb_set_xxtea_key(key);
+}
+
 int32_t Engine::init() {
     _scheduler->removeAllFunctionsToBePerformedInCocosThread();
     _scheduler->unscheduleAll();
 
-    se::ScriptEngine::getInstance()->cleanup();
+    se::ScriptEngine* se = se::ScriptEngine::getInstance();
+    se->cleanup();
 
     BasePlatform* platform = BasePlatform::getPlatform();
     platform->setHandleEventCallback(
         std::bind(&Engine::handleEvent, this, std::placeholders::_1)); // NOLINT(modernize-avoid-bind)
 
-    se::ScriptEngine::getInstance()->addPermanentRegisterCallback(setCanvasCallback);
+    se->addPermanentRegisterCallback(setCanvasCallback);
+
+    jsb_init_file_operation_delegate();
+
+    jsb_register_all_modules();
+
+    se->start();
+
+#if (CC_PLATFORM == CC_PLATFORM_MAC_IOS)
+    auto     logicSize  = _systemWidow->getViewSize();
+    IScreen* screen     = _engine->getInterface<IScreen>();
+    float    pixelRatio = screen->getDevicePixelRatio();
+    cc::EventDispatcher::dispatchResizeEvent(logicSize.x * pixelRatio, logicSize.y * pixelRatio);
+#endif
     return 0;
 }
 

@@ -30,6 +30,7 @@
 #include "base/Scheduler.h"
 #include "base/TypeDef.h"
 #include "platform/BasePlatform.h"
+#include "cocos/bindings/jswrapper/SeApi.h"
 
 namespace cc {
 
@@ -94,6 +95,24 @@ public:
      @brief Remove listening event callback.
      */
     virtual void removeEventCallback(OSEventType evtype) = 0;
+
+    virtual void setXXTeaKey(const std::string& key) = 0;
+    /**
+     * @brief Run the js code file
+     * @param filePath:Js file path.
+     */
+    virtual void runJsScript(const std::string& filePath) = 0;
+    /**
+     * @brief Set the js debugging server Addr and port
+     * @param serverAddr:Server address.
+     * @param port:Server port.
+     * @param isWaitForConnect:Is Wait for connect.
+     */
+    virtual void setJsDebugIpAndPort(const std::string& serverAddr, uint32_t port, bool isWaitForConnect) = 0;
+    /**
+     @brief Set exception callback.
+     */
+    virtual void setExceptionCallback(const se::ScriptEngine::ExceptionCallback& cb) = 0;
 
     using SchedulerPtr = std::shared_ptr<Scheduler>;
     /**

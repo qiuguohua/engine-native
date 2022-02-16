@@ -91,6 +91,14 @@ public:
                               int32_t x, int32_t y, int32_t w,
                               int32_t h, int32_t flags);
     /**
+     * @brief Js exception handling
+     * @param location,Exception location
+     * @param message,Exception message
+     * @param stack,Exception stack
+     */
+    virtual void handleException(const char* location, const char* message, const char* stack);
+
+    /**
      * @brief Set the js debugging server Addr and port
      * @param serverAddr:Server address.
      * @param port:Server port.
@@ -102,19 +110,18 @@ public:
      * @param filePath:Js file path.
      */
     virtual void runJsScript(const std::string& filePath);
-    /**
-     * @brief Js exception handling
-     * @param location,Exception location
-     * @param message,Exception message
-     * @param stack,Exception stack
-     */
-    virtual void handleException(const char* location, const char* message, const char* stack);
+
     virtual void setXXTeaKey(const std::string& key);
 
-private:
+protected:
+    /**
+     * @brief Handling app event requests.
+     * @param event.
+     */
     void handleAppEvent(const OSEvent& ev);
 
-    ISystemWindow*  _systemWidow{nullptr};
+private:
+
     BaseEngine::Ptr _engine{nullptr};
 };
 } // namespace cc
