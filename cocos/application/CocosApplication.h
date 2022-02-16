@@ -28,11 +28,13 @@
 #include <iostream>
 #include "application/BaseApplication.h"
 #include "cocos/platform/interfaces/modules/ISystemWindow.h"
+#include "engine/EngineObserver.h"
 
 namespace cc {
 class BaseEngine;
 
-class CocosApplication : public BaseApplication {
+class CocosApplication : public BaseApplication,
+                         public EngineObserver {
 public:
     CocosApplication();
     ~CocosApplication() override;
@@ -66,18 +68,12 @@ public:
      */
     BaseEngine::Ptr getEngine() const override;
 
-    /**
-     * @brief Processing pause events..
-     */
-    virtual void onPause();
-    /**
-     * @brief Processing recovery events.
-     */
-    virtual void onResume();
-    /**
-     * @brief Processing close events.
-     */
-    virtual void onClose();
+    // EngineObserver overrides:
+    void onStart() override;
+    void onPause() override;
+    void onResume() override;
+    void onClose() override;
+
     /**
      * @brief Create window.
      * @param title: Window title
@@ -91,6 +87,14 @@ public:
                               int32_t x, int32_t y, int32_t w,
                               int32_t h, int32_t flags);
     /**
+     * @brief Js exception handling
+     * @param location,Exception location
+     * @param message,Exception message
+     * @param stack,Exception stack
+     */
+    virtual void handleException(const char *location, const char *message, const char *stack);
+
+    /**
      * @brief Set the js debugging server Addr and port
      * @param serverAddr:Server address.
      * @param port:Server port.
@@ -102,19 +106,10 @@ public:
      * @param filePath:Js file path.
      */
     virtual void runJsScript(const std::string &filePath);
-    /**
-     * @brief Js exception handling
-     * @param location,Exception location
-     * @param message,Exception message
-     * @param stack,Exception stack
-     */
-    virtual void handleException(const char *location, const char *message, const char *stack);
+
     virtual void setXXTeaKey(const std::string &key);
 
 private:
-    void handleAppEvent(const OSEvent &ev);
-
-    ISystemWindow * _systemWidow{nullptr};
     BaseEngine::Ptr _engine{nullptr};
 };
 } // namespace cc

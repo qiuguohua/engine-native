@@ -29,10 +29,11 @@
 
 #include "base/Scheduler.h"
 #include "base/TypeDef.h"
+#include "cocos/bindings/jswrapper/SeApi.h"
 #include "platform/BasePlatform.h"
 
 namespace cc {
-
+class EngineObserver;
 class BaseEngine : public std::enable_shared_from_this<BaseEngine> {
 public:
     virtual ~BaseEngine();
@@ -84,6 +85,14 @@ public:
      * @param fps The preferred frame rate for main loop callback.
      */
     virtual void setPreferredFramesPerSecond(int fps) = 0;
+    /**
+     * @brief Register an observer
+     */
+    virtual void registrObserver(EngineObserver *observer) = 0;
+    /**
+     * @brief Unregister an observer
+     */
+    virtual void unregistrObserver(EngineObserver *observer) = 0;
 
     using EventCb = std::function<void(const OSEvent &)>;
     /**
@@ -95,11 +104,34 @@ public:
      */
     virtual void removeEventCallback(OSEventType evtype) = 0;
 
+    virtual void setXXTeaKey(const std::string &key) = 0;
+    /**
+     * @brief Run the js code file
+     * @param filePath:Js file path.
+     */
+    virtual void runJsScript(const std::string &filePath) = 0;
+    /**
+     * @brief Set the js debugging server Addr and port
+     * @param serverAddr:Server address.
+     * @param port:Server port.
+     * @param isWaitForConnect:Is Wait for connect.
+     */
+    virtual void setJsDebugIpAndPort(const std::string &serverAddr, uint32_t port, bool isWaitForConnect) = 0;
+    /**
+     @brief Set exception callback.
+     */
+    virtual void setExceptionCallback(const se::ScriptEngine::ExceptionCallback &cb) = 0;
+
     using SchedulerPtr = std::shared_ptr<Scheduler>;
     /**
      @brief Get engine scheduler.
      */
     virtual SchedulerPtr getScheduler() const = 0;
+
+    /**
+     @brief Game initialization complete.
+     */
+    virtual void onGameInited() = 0;
 };
 
 } // namespace cc

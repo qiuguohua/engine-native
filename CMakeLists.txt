@@ -336,6 +336,10 @@ cocos_source_files(
     cocos/engine/BaseEngine.h
     cocos/engine/Engine.cpp
     cocos/engine/Engine.h
+    cocos/engine/EngineObserver.cpp
+    cocos/engine/EngineObserver.h
+    cocos/engine/EngineObserverManager.cpp
+    cocos/engine/EngineObserverManager.h
 )
 
 ############ main
