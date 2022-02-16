@@ -33,7 +33,7 @@
 #include "cocos/bindings/jswrapper/SeApi.h"
 
 namespace cc {
-
+class EngineObserver;
 class BaseEngine : public std::enable_shared_from_this<BaseEngine> {
 public:
     virtual ~BaseEngine();
@@ -85,6 +85,14 @@ public:
      * @param fps The preferred frame rate for main loop callback.
      */
     virtual void setPreferredFramesPerSecond(int fps) = 0;
+    /**
+     * @brief Register an observer
+     */
+    virtual void registrObserver(EngineObserver* observer) = 0;
+    /**
+     * @brief Unregister an observer
+     */
+    virtual void unregistrObserver(EngineObserver* observer) = 0;
 
     using EventCb = std::function<void(const OSEvent&)>;
     /**
@@ -119,6 +127,11 @@ public:
      @brief Get engine scheduler.
      */
     virtual SchedulerPtr getScheduler() const = 0;
+
+    /**
+     @brief Game initialization complete.
+     */
+    virtual void onGameInited() = 0;
 };
 
 } // namespace cc

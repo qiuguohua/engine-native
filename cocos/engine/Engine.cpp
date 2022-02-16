@@ -50,6 +50,7 @@
 #include "cocos/network/HttpClient.h"
 #include "platform/interfaces/modules/ISystemWindow.h"
 #include "cocos/bindings/manual/jsb_module_register.h"
+#include "engine/EngineObserverManager.h"
 
 namespace {
 
@@ -86,6 +87,7 @@ Engine::Engine() {
     FileUtils::getInstance()->addSearchPath("Resources", true);
     EventDispatcher::init();
     se::ScriptEngine::getInstance();
+    _observers = std::make_unique<EngineObserverManager>();
 }
 
 Engine::~Engine() {
@@ -102,27 +104,6 @@ Engine::~Engine() {
 
     BasePlatform* platform = BasePlatform::getPlatform();
     platform->setHandleEventCallback(nullptr);
-}
-
-void Engine::setJsDebugIpAndPort(const std::string& serverAddr, uint32_t port, bool isWaitForConnect) {
-#if defined(CC_DEBUG) && (CC_DEBUG > 0)
-    // Enable debugger here
-    jsb_enable_debugger(serverAddr, port, isWaitForConnect);
-#endif
-}
-
-
-void Engine::setExceptionCallback(const se::ScriptEngine::ExceptionCallback& cb) {
-    se::ScriptEngine* se = se::ScriptEngine::getInstance();
-    se->setExceptionCallback(_seExceptionCallback);
-}
-
-void Engine::runJsScript(const std::string& filePath) {
-    jsb_run_script(filePath);
-}
-
-void Engine::setXXTeaKey(const std::string& key) {
-    jsb_set_xxtea_key(key);
 }
 
 int32_t Engine::init() {
@@ -158,6 +139,7 @@ int32_t Engine::run() {
     platform->runInPlatformThread([&]() {
         tick();
     });
+    onStart();
     return 0;
 }
 
@@ -213,6 +195,15 @@ void Engine::setPreferredFramesPerSecond(int fps) {
     _prefererredNanosecondsPerFrame = static_cast<long>(1.0 / fps * NANOSECONDS_PER_SECOND); //NOLINT(google-runtime-int)
 }
 
+
+void Engine::registrObserver(EngineObserver* observer) {
+    _observers->registrObserver(observer);
+}
+
+void Engine::unregistrObserver(EngineObserver* observer) {
+    _observers->unregistrObserver(observer);
+}
+
 void Engine::addEventCallback(OSEventType evType, const EventCb& cb) {
     _eventCallbacks.insert(std::make_pair(evType, cb));
 }
@@ -226,6 +217,27 @@ void Engine::removeEventCallback(OSEventType evType) {
 
     // For debugging.
     CCASSERT(false, "Interface does not exist");
+}
+
+
+void Engine::setJsDebugIpAndPort(const std::string& serverAddr, uint32_t port, bool isWaitForConnect) {
+#if defined(CC_DEBUG) && (CC_DEBUG > 0)
+    // Enable debugger here
+    jsb_enable_debugger(serverAddr, port, isWaitForConnect);
+#endif
+}
+
+void Engine::setExceptionCallback(const se::ScriptEngine::ExceptionCallback& cb) {
+    se::ScriptEngine* se = se::ScriptEngine::getInstance();
+    se->setExceptionCallback(_seExceptionCallback);
+}
+
+void Engine::runJsScript(const std::string& filePath) {
+    jsb_run_script(filePath);
+}
+
+void Engine::setXXTeaKey(const std::string& key) {
+    jsb_set_xxtea_key(key);
 }
 
 void Engine::tick() {
@@ -364,28 +376,28 @@ bool Engine::dispatchEventToApp(OSEventType type, const OSEvent& ev) {
     return false;
 }
 
-void Engine::onPause() {
-    AppEvent appEv;
-    appEv.type = AppEvent::Type::PAUSE;
-    dispatchEventToApp(OSEventType::APP_OSEVENT, appEv);
+void Engine::onGameInited() {
+    _observers->onGameInited();
+}
 
+void Engine::onStart() {
+    _observers->onStart();
+}
+
+void Engine::onPause() {
+    _observers->onPause();
     cc::EventDispatcher::dispatchEnterBackgroundEvent();
 }
 
 void Engine::onResume() {
-    AppEvent appEv;
-    appEv.type = AppEvent::Type::RESUME;
-    dispatchEventToApp(OSEventType::APP_OSEVENT, appEv);
-
+    _observers->onResume();
     cc::EventDispatcher::dispatchEnterForegroundEvent();
 }
 
 void Engine::onClose() {
-    AppEvent appEv;
-    appEv.type = AppEvent::Type::CLOSE;
-    dispatchEventToApp(OSEventType::APP_OSEVENT, appEv);
-
+    _observers->onClose();
     cc::EventDispatcher::dispatchCloseEvent();
 }
+
 
 } // namespace cc

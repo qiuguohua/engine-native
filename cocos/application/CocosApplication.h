@@ -28,11 +28,13 @@
 #include <iostream>
 #include "application/BaseApplication.h"
 #include "cocos/platform/interfaces/modules/ISystemWindow.h"
+#include "engine/EngineObserver.h"
 
 namespace cc {
 class BaseEngine;
 
-class CocosApplication : public BaseApplication {
+class CocosApplication : public BaseApplication,
+                         public EngineObserver {
 public:
     CocosApplication();
     ~CocosApplication() override;
@@ -66,18 +68,12 @@ public:
      */
     BaseEngine::Ptr getEngine() const override;
 
-    /**
-     * @brief Processing pause events..
-     */
-    virtual void onPause();
-    /**
-     * @brief Processing recovery events.
-     */
-    virtual void onResume();
-    /**
-     * @brief Processing close events.
-     */
-    virtual void onClose();
+    // EngineObserver overrides:
+    void onStart() override;
+    void onPause() override;
+    void onResume() override;
+    void onClose() override;
+
     /**
      * @brief Create window.
      * @param title: Window title
@@ -112,13 +108,6 @@ public:
     virtual void runJsScript(const std::string& filePath);
 
     virtual void setXXTeaKey(const std::string& key);
-
-protected:
-    /**
-     * @brief Handling app event requests.
-     * @param event.
-     */
-    void handleAppEvent(const OSEvent& ev);
 
 private:
 

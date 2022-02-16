@@ -38,6 +38,7 @@ namespace cc {
 
 CocosApplication::CocosApplication() {
     _engine = BaseEngine::createEngine();
+    _engine->registrObserver(this);
 }
 
 CocosApplication::~CocosApplication() = default;
@@ -49,8 +50,6 @@ int CocosApplication::init() {
 
     _engine->setExceptionCallback(std::bind(&CocosApplication::handleException, this, // NOLINT(modernize-avoid-bind)
                                             std::placeholders::_1, std::placeholders::_2, std::placeholders::_3));
-    _engine->addEventCallback(OSEventType::APP_OSEVENT,
-                              std::bind(&CocosApplication::handleAppEvent, this, std::placeholders::_1)); // NOLINT(modernize-avoid-bind)
     return 0;
 }
 
@@ -80,16 +79,20 @@ BaseEngine::Ptr CocosApplication::getEngine() const {
     return _engine;
 }
 
+void CocosApplication::onStart() {
+    // TODO(cc): Process engine start events
+}
+
 void CocosApplication::onPause() {
-    // TODO(cc): Handling pause events
+    // TODO(cc): Process engine pause events
 }
 
 void CocosApplication::onResume() {
-    // TODO(cc): Handling resume events
+    // TODO(cc): Process engine resume events
 }
 
 void CocosApplication::onClose() {
-    // TODO(cc): Handling close events
+    // TODO(cc): Process engine close events
 }
 
 void CocosApplication::createWindow(const char *title,
@@ -116,23 +119,6 @@ void CocosApplication::runJsScript(const std::string &filePath) {
 
 void CocosApplication::setXXTeaKey(const std::string &key) {
     _engine->setXXTeaKey(key);
-}
-
-void CocosApplication::handleAppEvent(const OSEvent &ev) {
-    const AppEvent &appEv = OSEvent::castEvent<AppEvent>(ev);
-    switch (appEv.type) {
-        case AppEvent::Type::RESUME:
-            onResume();
-            break;
-        case AppEvent::Type::PAUSE:
-            onPause();
-            break;
-        case AppEvent::Type::CLOSE:
-            onClose();
-            break;
-        default:
-            break;
-    }
 }
 
 } // namespace cc
