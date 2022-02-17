@@ -26,16 +26,44 @@
 #pragma once
 
 #include "base/Macros.h"
+#include "base/Ptr.h"
 #include "base/RefCounted.h"
 #include "core/Root.h"
 #include "core/assets/TextureCube.h"
-#include "pipeline/GlobalDescriptorSetManager.h"
-#include "renderer/gfx-base/GFXTexture.h"
-#include "scene/Model.h"
-
 namespace cc {
+namespace pipeline {
+class GlobalDSManager;
+}
 namespace scene {
 
+enum class EnvironmentLightingType {
+    /**
+     * @zh
+     * 半球漫反射
+     * @en
+     * hemisphere diffuse
+     * @readonly
+     */
+    HEMISPHERE_DIFFUSE = 0,
+    /**
+     * @zh
+     * 半球漫反射和环境反射
+     * @en
+     * hemisphere diffuse and Environment reflection
+     * @readonly
+     */
+    AUTOGEN_HEMISPHERE_DIFFUSE_WITH_REFLECTION = 1,
+    /**
+     * @zh
+     * 漫反射卷积图和环境反射
+     * @en
+     * diffuse convolution map and environment reflection
+     * @readonly
+     */
+    DIFFUSEMAP_WITH_REFLECTION = 2
+};
+
+class Model;
 class Skybox;
 
 /**
@@ -46,8 +74,8 @@ class Skybox;
 // @help('i18n:cc.Skybox')
 class SkyboxInfo : public RefCounted {
 public:
-    SkyboxInfo(/* args */) = default;
-    ~SkyboxInfo() override = default;
+    SkyboxInfo(/* args */);
+    ~SkyboxInfo() override;
 
     /**
      * @en Whether to use diffuse convolution map. Enabled -> Will use map specified. Disabled -> Will revert to hemispheric lighting
@@ -61,9 +89,15 @@ public:
     // })
     // @editable
     // @tooltip('i18n:skybox.applyDiffuseMap')
-    void setApplyDiffuseMap(bool val);
+    void setApplyDiffuseMap(bool val) const;
 
-    bool isApplyDiffuseMap() const { return _applyDiffuseMap; }
+    bool isApplyDiffuseMap() const {
+        return EnvironmentLightingType::DIFFUSEMAP_WITH_REFLECTION == _envLightingType;
+    }
+    void                    setEnvLightingType(EnvironmentLightingType val);
+    EnvironmentLightingType getEnvLightingType() const {
+        return _envLightingType;
+    }
 
     /**
      * @en Whether activate skybox in the scene
@@ -80,8 +114,10 @@ public:
      */
     // @editable
     // @tooltip('i18n:skybox.useIBL')
-    void        setUseIBL(bool val);
-    inline bool isUseIBL() const { return _useIBL; }
+    void        setUseIBL(bool val) const;
+    inline bool isUseIBL() const {
+        return EnvironmentLightingType::HEMISPHERE_DIFFUSE != _envLightingType;
+    }
 
     /**
      * @en Toggle HDR (TODO: This SHOULD be moved into it's own subgroup away from skybox)
@@ -89,12 +125,8 @@ public:
      */
     // @editable
     // @tooltip('i18n:skybox.useHDR')
-    void        setUseHDR(bool val);
-    inline bool isUseHDR() const {
-        const bool isHDR = Root::getInstance()->getPipeline()->getPipelineSceneData()->isHDR();
-        return _useHDR;
-    }
-
+    void setUseHDR(bool val);
+    bool isUseHDR() const;
     /**
      * @en The texture cube used for the skybox
      * @zh 使用的立方体贴图
@@ -102,17 +134,14 @@ public:
     // @editable
     // @type(TextureCube)
     // @tooltip('i18n:skybox.envmap')
-    void                setEnvmap(TextureCube *val);
+    void         setEnvmap(TextureCube *val);
+    TextureCube *getEnvmap() const;
+
     inline void setEnvmapForJS(TextureCube *val) {
         _envmapHDR = val;
     }
     inline TextureCube *getEnvmapForJS() const {
         return _envmapHDR;
-    }
-
-    inline TextureCube *getEnvmap() const {
-        const bool isHDR = Root::getInstance()->getPipeline()->getPipelineSceneData()->isHDR();
-        return isHDR ? _envmapHDR : _envmapLDR;
     }
 
     /**
@@ -128,18 +157,13 @@ public:
     // @editable
     // @readOnly
     // @type(TextureCube)
-    void                setDiffuseMap(TextureCube *val);
-    inline TextureCube *getDiffuseMap() const {
-        const bool isHDR = Root::getInstance()->getPipeline()->getPipelineSceneData()->isHDR();
-        return isHDR ? _diffuseMapHDR : _diffuseMapLDR;
-    }
+    void         setDiffuseMap(TextureCube *val);
+    TextureCube *getDiffuseMap() const;
 
     void activate(Skybox *resource);
 
     // cjh JSB need to bind the property, so need to make it public
     // private:
-    //  @serializable
-    bool _applyDiffuseMap{false};
     // @serializable
     // @type(TextureCube)
     // @formerlySerializedAs('_envmap')
@@ -156,11 +180,9 @@ public:
     // @serializable
     bool _enabled{false};
     // @serializable
-    bool _useIBL{false};
-    // @serializable
-    bool _useHDR{true};
-
-    Skybox *_resource{nullptr};
+    bool                    _useHDR{true};
+    EnvironmentLightingType _envLightingType{EnvironmentLightingType::HEMISPHERE_DIFFUSE};
+    Skybox *                _resource{nullptr};
 };
 
 class Skybox final {
@@ -227,37 +249,21 @@ public:
      * @en The texture cube used for the skybox
      * @zh 使用的立方体贴图
      */
-    inline TextureCube *getEnvmap() const {
-        const bool isHDR = Root::getInstance()->getPipeline()->getPipelineSceneData()->isHDR();
-        return isHDR ? _envmapHDR : _envmapLDR;
-    }
-    void setEnvmap(TextureCube *val);
+    TextureCube *getEnvmap() const;
+    void         setEnvmap(TextureCube *val);
 
     /**
      * @en Whether enable RGBE data support in skybox shader
      * @zh 是否需要开启 shader 内的 RGBE 数据支持？
      */
-    inline bool isRGBE() const {
-        auto *envmap = getEnvmap();
-        return envmap != nullptr ? envmap->isRGBE : false;
-    }
+    bool isRGBE() const;
 
     /**
      * @en The texture cube used diffuse convolution map
      * @zh 使用的漫反射卷积图
      */
-    inline TextureCube *getDiffuseMap() const {
-        const bool isHDR = Root::getInstance()->getPipeline()->getPipelineSceneData()->isHDR();
-        return isHDR ? _diffuseMapHDR.get() : _diffuseMapLDR.get();
-    }
-    inline void setDiffuseMap(TextureCube *val) {
-        const bool isHDR = Root::getInstance()->getPipeline()->getPipelineSceneData()->isHDR();
-        if (isHDR) {
-            setDiffuseMaps(val, _envmapLDR);
-        } else {
-            setDiffuseMaps(_envmapHDR, val);
-        }
-    }
+    TextureCube *getDiffuseMap() const;
+    void         setDiffuseMap(TextureCube *val);
 
 private:
     void updatePipeline() const;

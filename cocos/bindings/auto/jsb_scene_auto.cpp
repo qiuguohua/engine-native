@@ -1859,6 +1859,218 @@ bool js_register_scene_Node(se::Object* obj) // NOLINT(readability-identifier-na
     se::ScriptEngine::getInstance()->clearException();
     return true;
 }
+se::Object* __jsb_cc_Scene_proto = nullptr; // NOLINT
+se::Class* __jsb_cc_Scene_class = nullptr;  // NOLINT
+
+static bool js_scene_Scene_activate(se::State& s) // NOLINT(readability-identifier-naming)
+{
+    auto* cobj = SE_THIS_OBJECT<cc::Scene>(s);
+    SE_PRECONDITION2(cobj, false, "js_scene_Scene_activate : Invalid Native Object");
+    const auto& args = s.args();
+    size_t argc = args.size();
+    CC_UNUSED bool ok = true;
+    if (argc == 0) {
+        cobj->activate();
+        return true;
+    }
+    if (argc == 1) {
+        HolderType<bool, false> arg0 = {};
+        ok &= sevalue_to_native(args[0], &arg0, s.thisObject());
+        SE_PRECONDITION2(ok, false, "js_scene_Scene_activate : Error processing arguments");
+        cobj->activate(arg0.value());
+        return true;
+    }
+    SE_REPORT_ERROR("wrong number of arguments: %d, was expecting %d", (int)argc, 1);
+    return false;
+}
+SE_BIND_FUNC(js_scene_Scene_activate)
+
+static bool js_scene_Scene_getRenderScene(se::State& s) // NOLINT(readability-identifier-naming)
+{
+    auto* cobj = SE_THIS_OBJECT<cc::Scene>(s);
+    SE_PRECONDITION2(cobj, false, "js_scene_Scene_getRenderScene : Invalid Native Object");
+    const auto& args = s.args();
+    size_t argc = args.size();
+    CC_UNUSED bool ok = true;
+    if (argc == 0) {
+        cc::scene::RenderScene* result = cobj->getRenderScene();
+        ok &= nativevalue_to_se(result, s.rval(), nullptr /*ctx*/);
+        SE_PRECONDITION2(ok, false, "js_scene_Scene_getRenderScene : Error processing arguments");
+        SE_HOLD_RETURN_VALUE(result, s.thisObject(), s.rval());
+        return true;
+    }
+    SE_REPORT_ERROR("wrong number of arguments: %d, was expecting %d", (int)argc, 0);
+    return false;
+}
+SE_BIND_FUNC(js_scene_Scene_getRenderScene)
+
+static bool js_scene_Scene_getSceneGlobals(se::State& s) // NOLINT(readability-identifier-naming)
+{
+    auto* cobj = SE_THIS_OBJECT<cc::Scene>(s);
+    SE_PRECONDITION2(cobj, false, "js_scene_Scene_getSceneGlobals : Invalid Native Object");
+    const auto& args = s.args();
+    size_t argc = args.size();
+    CC_UNUSED bool ok = true;
+    if (argc == 0) {
+        cc::SceneGlobals* result = cobj->getSceneGlobals();
+        ok &= nativevalue_to_se(result, s.rval(), nullptr /*ctx*/);
+        SE_PRECONDITION2(ok, false, "js_scene_Scene_getSceneGlobals : Error processing arguments");
+        SE_HOLD_RETURN_VALUE(result, s.thisObject(), s.rval());
+        return true;
+    }
+    SE_REPORT_ERROR("wrong number of arguments: %d, was expecting %d", (int)argc, 0);
+    return false;
+}
+SE_BIND_FUNC(js_scene_Scene_getSceneGlobals)
+
+static bool js_scene_Scene_isAutoReleaseAssets(se::State& s) // NOLINT(readability-identifier-naming)
+{
+    auto* cobj = SE_THIS_OBJECT<cc::Scene>(s);
+    SE_PRECONDITION2(cobj, false, "js_scene_Scene_isAutoReleaseAssets : Invalid Native Object");
+    const auto& args = s.args();
+    size_t argc = args.size();
+    CC_UNUSED bool ok = true;
+    if (argc == 0) {
+        bool result = cobj->isAutoReleaseAssets();
+        ok &= nativevalue_to_se(result, s.rval(), nullptr /*ctx*/);
+        SE_PRECONDITION2(ok, false, "js_scene_Scene_isAutoReleaseAssets : Error processing arguments");
+        SE_HOLD_RETURN_VALUE(result, s.thisObject(), s.rval());
+        return true;
+    }
+    SE_REPORT_ERROR("wrong number of arguments: %d, was expecting %d", (int)argc, 0);
+    return false;
+}
+SE_BIND_FUNC_AS_PROP_GET(js_scene_Scene_isAutoReleaseAssets)
+
+static bool js_scene_Scene_load(se::State& s) // NOLINT(readability-identifier-naming)
+{
+    auto* cobj = SE_THIS_OBJECT<cc::Scene>(s);
+    SE_PRECONDITION2(cobj, false, "js_scene_Scene_load : Invalid Native Object");
+    const auto& args = s.args();
+    size_t argc = args.size();
+    if (argc == 0) {
+        cobj->load();
+        return true;
+    }
+    SE_REPORT_ERROR("wrong number of arguments: %d, was expecting %d", (int)argc, 0);
+    return false;
+}
+SE_BIND_FUNC(js_scene_Scene_load)
+
+static bool js_scene_Scene_onBatchCreated(se::State& s) // NOLINT(readability-identifier-naming)
+{
+    auto* cobj = SE_THIS_OBJECT<cc::Scene>(s);
+    SE_PRECONDITION2(cobj, false, "js_scene_Scene_onBatchCreated : Invalid Native Object");
+    const auto& args = s.args();
+    size_t argc = args.size();
+    CC_UNUSED bool ok = true;
+    if (argc == 1) {
+        HolderType<bool, false> arg0 = {};
+        ok &= sevalue_to_native(args[0], &arg0, s.thisObject());
+        SE_PRECONDITION2(ok, false, "js_scene_Scene_onBatchCreated : Error processing arguments");
+        cobj->onBatchCreated(arg0.value());
+        return true;
+    }
+    SE_REPORT_ERROR("wrong number of arguments: %d, was expecting %d", (int)argc, 1);
+    return false;
+}
+SE_BIND_FUNC(js_scene_Scene_onBatchCreated)
+
+static bool js_scene_Scene_setAutoReleaseAssets(se::State& s) // NOLINT(readability-identifier-naming)
+{
+    auto* cobj = SE_THIS_OBJECT<cc::Scene>(s);
+    SE_PRECONDITION2(cobj, false, "js_scene_Scene_setAutoReleaseAssets : Invalid Native Object");
+    const auto& args = s.args();
+    size_t argc = args.size();
+    CC_UNUSED bool ok = true;
+    if (argc == 1) {
+        HolderType<bool, false> arg0 = {};
+        ok &= sevalue_to_native(args[0], &arg0, s.thisObject());
+        SE_PRECONDITION2(ok, false, "js_scene_Scene_setAutoReleaseAssets : Error processing arguments");
+        cobj->setAutoReleaseAssets(arg0.value());
+        return true;
+    }
+    SE_REPORT_ERROR("wrong number of arguments: %d, was expecting %d", (int)argc, 1);
+    return false;
+}
+SE_BIND_FUNC_AS_PROP_SET(js_scene_Scene_setAutoReleaseAssets)
+
+static bool js_scene_Scene_setSceneGlobals(se::State& s) // NOLINT(readability-identifier-naming)
+{
+    auto* cobj = SE_THIS_OBJECT<cc::Scene>(s);
+    SE_PRECONDITION2(cobj, false, "js_scene_Scene_setSceneGlobals : Invalid Native Object");
+    const auto& args = s.args();
+    size_t argc = args.size();
+    CC_UNUSED bool ok = true;
+    if (argc == 1) {
+        HolderType<cc::SceneGlobals*, false> arg0 = {};
+        ok &= sevalue_to_native(args[0], &arg0, s.thisObject());
+        SE_PRECONDITION2(ok, false, "js_scene_Scene_setSceneGlobals : Error processing arguments");
+        cobj->setSceneGlobals(arg0.value());
+        return true;
+    }
+    SE_REPORT_ERROR("wrong number of arguments: %d, was expecting %d", (int)argc, 1);
+    return false;
+}
+SE_BIND_FUNC(js_scene_Scene_setSceneGlobals)
+
+SE_DECLARE_FINALIZE_FUNC(js_cc_Scene_finalize)
+
+static bool js_scene_Scene_constructor(se::State& s) // NOLINT(readability-identifier-naming) constructor_overloaded.c
+{
+    CC_UNUSED bool ok = true;
+    const auto& args = s.args();
+    size_t argc = args.size();
+    do {
+        if (argc == 0) {
+            auto *ptr = JSB_MAKE_PRIVATE_OBJECT(cc::Scene);
+            s.thisObject()->setPrivateObject(ptr);
+            return true;
+        }
+    } while(false);
+    do {
+        if (argc == 1) {
+            HolderType<std::string, true> arg0 = {};
+            ok &= sevalue_to_native(args[0], &arg0, s.thisObject());
+            if (!ok) { ok = true; break; }
+            auto *ptr = JSB_MAKE_PRIVATE_OBJECT(cc::Scene, arg0.value());
+            s.thisObject()->setPrivateObject(ptr);
+            return true;
+        }
+    } while(false);
+    SE_REPORT_ERROR("wrong number of arguments: %d", (int)argc);
+    return false;
+}
+SE_BIND_CTOR(js_scene_Scene_constructor, __jsb_cc_Scene_class, js_cc_Scene_finalize)
+
+static bool js_cc_Scene_finalize(se::State& s) // NOLINT(readability-identifier-naming)
+{
+    return true;
+}
+SE_BIND_FINALIZE_FUNC(js_cc_Scene_finalize)
+
+bool js_register_scene_Scene(se::Object* obj) // NOLINT(readability-identifier-naming)
+{
+    auto* cls = se::Class::create("Scene", obj, __jsb_cc_Node_proto, _SE(js_scene_Scene_constructor));
+
+    cls->defineProperty("autoReleaseAssets", _SE(js_scene_Scene_isAutoReleaseAssets_asGetter), _SE(js_scene_Scene_setAutoReleaseAssets_asSetter));
+    cls->defineFunction("_activate", _SE(js_scene_Scene_activate));
+    cls->defineFunction("getRenderScene", _SE(js_scene_Scene_getRenderScene));
+    cls->defineFunction("getSceneGlobals", _SE(js_scene_Scene_getSceneGlobals));
+    cls->defineFunction("_load", _SE(js_scene_Scene_load));
+    cls->defineFunction("onBatchCreated", _SE(js_scene_Scene_onBatchCreated));
+    cls->defineFunction("setSceneGlobals", _SE(js_scene_Scene_setSceneGlobals));
+    cls->defineFinalizeFunction(_SE(js_cc_Scene_finalize));
+    cls->install();
+    JSBClassType::registerClass<cc::Scene>(cls);
+
+    __jsb_cc_Scene_proto = cls->getProto();
+    __jsb_cc_Scene_class = cls;
+
+
+    se::ScriptEngine::getInstance()->clearException();
+    return true;
+}
 se::Object* __jsb_cc_SceneGlobals_proto = nullptr; // NOLINT
 se::Class* __jsb_cc_SceneGlobals_class = nullptr;  // NOLINT
 
@@ -2104,218 +2316,6 @@ bool js_register_scene_SceneGlobals(se::Object* obj) // NOLINT(readability-ident
 
     __jsb_cc_SceneGlobals_proto = cls->getProto();
     __jsb_cc_SceneGlobals_class = cls;
-
-
-    se::ScriptEngine::getInstance()->clearException();
-    return true;
-}
-se::Object* __jsb_cc_Scene_proto = nullptr; // NOLINT
-se::Class* __jsb_cc_Scene_class = nullptr;  // NOLINT
-
-static bool js_scene_Scene_activate(se::State& s) // NOLINT(readability-identifier-naming)
-{
-    auto* cobj = SE_THIS_OBJECT<cc::Scene>(s);
-    SE_PRECONDITION2(cobj, false, "js_scene_Scene_activate : Invalid Native Object");
-    const auto& args = s.args();
-    size_t argc = args.size();
-    CC_UNUSED bool ok = true;
-    if (argc == 0) {
-        cobj->activate();
-        return true;
-    }
-    if (argc == 1) {
-        HolderType<bool, false> arg0 = {};
-        ok &= sevalue_to_native(args[0], &arg0, s.thisObject());
-        SE_PRECONDITION2(ok, false, "js_scene_Scene_activate : Error processing arguments");
-        cobj->activate(arg0.value());
-        return true;
-    }
-    SE_REPORT_ERROR("wrong number of arguments: %d, was expecting %d", (int)argc, 1);
-    return false;
-}
-SE_BIND_FUNC(js_scene_Scene_activate)
-
-static bool js_scene_Scene_getRenderScene(se::State& s) // NOLINT(readability-identifier-naming)
-{
-    auto* cobj = SE_THIS_OBJECT<cc::Scene>(s);
-    SE_PRECONDITION2(cobj, false, "js_scene_Scene_getRenderScene : Invalid Native Object");
-    const auto& args = s.args();
-    size_t argc = args.size();
-    CC_UNUSED bool ok = true;
-    if (argc == 0) {
-        cc::scene::RenderScene* result = cobj->getRenderScene();
-        ok &= nativevalue_to_se(result, s.rval(), nullptr /*ctx*/);
-        SE_PRECONDITION2(ok, false, "js_scene_Scene_getRenderScene : Error processing arguments");
-        SE_HOLD_RETURN_VALUE(result, s.thisObject(), s.rval());
-        return true;
-    }
-    SE_REPORT_ERROR("wrong number of arguments: %d, was expecting %d", (int)argc, 0);
-    return false;
-}
-SE_BIND_FUNC(js_scene_Scene_getRenderScene)
-
-static bool js_scene_Scene_getSceneGlobals(se::State& s) // NOLINT(readability-identifier-naming)
-{
-    auto* cobj = SE_THIS_OBJECT<cc::Scene>(s);
-    SE_PRECONDITION2(cobj, false, "js_scene_Scene_getSceneGlobals : Invalid Native Object");
-    const auto& args = s.args();
-    size_t argc = args.size();
-    CC_UNUSED bool ok = true;
-    if (argc == 0) {
-        cc::SceneGlobals* result = cobj->getSceneGlobals();
-        ok &= nativevalue_to_se(result, s.rval(), nullptr /*ctx*/);
-        SE_PRECONDITION2(ok, false, "js_scene_Scene_getSceneGlobals : Error processing arguments");
-        SE_HOLD_RETURN_VALUE(result, s.thisObject(), s.rval());
-        return true;
-    }
-    SE_REPORT_ERROR("wrong number of arguments: %d, was expecting %d", (int)argc, 0);
-    return false;
-}
-SE_BIND_FUNC(js_scene_Scene_getSceneGlobals)
-
-static bool js_scene_Scene_isAutoReleaseAssets(se::State& s) // NOLINT(readability-identifier-naming)
-{
-    auto* cobj = SE_THIS_OBJECT<cc::Scene>(s);
-    SE_PRECONDITION2(cobj, false, "js_scene_Scene_isAutoReleaseAssets : Invalid Native Object");
-    const auto& args = s.args();
-    size_t argc = args.size();
-    CC_UNUSED bool ok = true;
-    if (argc == 0) {
-        bool result = cobj->isAutoReleaseAssets();
-        ok &= nativevalue_to_se(result, s.rval(), nullptr /*ctx*/);
-        SE_PRECONDITION2(ok, false, "js_scene_Scene_isAutoReleaseAssets : Error processing arguments");
-        SE_HOLD_RETURN_VALUE(result, s.thisObject(), s.rval());
-        return true;
-    }
-    SE_REPORT_ERROR("wrong number of arguments: %d, was expecting %d", (int)argc, 0);
-    return false;
-}
-SE_BIND_FUNC_AS_PROP_GET(js_scene_Scene_isAutoReleaseAssets)
-
-static bool js_scene_Scene_load(se::State& s) // NOLINT(readability-identifier-naming)
-{
-    auto* cobj = SE_THIS_OBJECT<cc::Scene>(s);
-    SE_PRECONDITION2(cobj, false, "js_scene_Scene_load : Invalid Native Object");
-    const auto& args = s.args();
-    size_t argc = args.size();
-    if (argc == 0) {
-        cobj->load();
-        return true;
-    }
-    SE_REPORT_ERROR("wrong number of arguments: %d, was expecting %d", (int)argc, 0);
-    return false;
-}
-SE_BIND_FUNC(js_scene_Scene_load)
-
-static bool js_scene_Scene_onBatchCreated(se::State& s) // NOLINT(readability-identifier-naming)
-{
-    auto* cobj = SE_THIS_OBJECT<cc::Scene>(s);
-    SE_PRECONDITION2(cobj, false, "js_scene_Scene_onBatchCreated : Invalid Native Object");
-    const auto& args = s.args();
-    size_t argc = args.size();
-    CC_UNUSED bool ok = true;
-    if (argc == 1) {
-        HolderType<bool, false> arg0 = {};
-        ok &= sevalue_to_native(args[0], &arg0, s.thisObject());
-        SE_PRECONDITION2(ok, false, "js_scene_Scene_onBatchCreated : Error processing arguments");
-        cobj->onBatchCreated(arg0.value());
-        return true;
-    }
-    SE_REPORT_ERROR("wrong number of arguments: %d, was expecting %d", (int)argc, 1);
-    return false;
-}
-SE_BIND_FUNC(js_scene_Scene_onBatchCreated)
-
-static bool js_scene_Scene_setAutoReleaseAssets(se::State& s) // NOLINT(readability-identifier-naming)
-{
-    auto* cobj = SE_THIS_OBJECT<cc::Scene>(s);
-    SE_PRECONDITION2(cobj, false, "js_scene_Scene_setAutoReleaseAssets : Invalid Native Object");
-    const auto& args = s.args();
-    size_t argc = args.size();
-    CC_UNUSED bool ok = true;
-    if (argc == 1) {
-        HolderType<bool, false> arg0 = {};
-        ok &= sevalue_to_native(args[0], &arg0, s.thisObject());
-        SE_PRECONDITION2(ok, false, "js_scene_Scene_setAutoReleaseAssets : Error processing arguments");
-        cobj->setAutoReleaseAssets(arg0.value());
-        return true;
-    }
-    SE_REPORT_ERROR("wrong number of arguments: %d, was expecting %d", (int)argc, 1);
-    return false;
-}
-SE_BIND_FUNC_AS_PROP_SET(js_scene_Scene_setAutoReleaseAssets)
-
-static bool js_scene_Scene_setSceneGlobals(se::State& s) // NOLINT(readability-identifier-naming)
-{
-    auto* cobj = SE_THIS_OBJECT<cc::Scene>(s);
-    SE_PRECONDITION2(cobj, false, "js_scene_Scene_setSceneGlobals : Invalid Native Object");
-    const auto& args = s.args();
-    size_t argc = args.size();
-    CC_UNUSED bool ok = true;
-    if (argc == 1) {
-        HolderType<cc::SceneGlobals*, false> arg0 = {};
-        ok &= sevalue_to_native(args[0], &arg0, s.thisObject());
-        SE_PRECONDITION2(ok, false, "js_scene_Scene_setSceneGlobals : Error processing arguments");
-        cobj->setSceneGlobals(arg0.value());
-        return true;
-    }
-    SE_REPORT_ERROR("wrong number of arguments: %d, was expecting %d", (int)argc, 1);
-    return false;
-}
-SE_BIND_FUNC(js_scene_Scene_setSceneGlobals)
-
-SE_DECLARE_FINALIZE_FUNC(js_cc_Scene_finalize)
-
-static bool js_scene_Scene_constructor(se::State& s) // NOLINT(readability-identifier-naming) constructor_overloaded.c
-{
-    CC_UNUSED bool ok = true;
-    const auto& args = s.args();
-    size_t argc = args.size();
-    do {
-        if (argc == 0) {
-            auto *ptr = JSB_MAKE_PRIVATE_OBJECT(cc::Scene);
-            s.thisObject()->setPrivateObject(ptr);
-            return true;
-        }
-    } while(false);
-    do {
-        if (argc == 1) {
-            HolderType<std::string, true> arg0 = {};
-            ok &= sevalue_to_native(args[0], &arg0, s.thisObject());
-            if (!ok) { ok = true; break; }
-            auto *ptr = JSB_MAKE_PRIVATE_OBJECT(cc::Scene, arg0.value());
-            s.thisObject()->setPrivateObject(ptr);
-            return true;
-        }
-    } while(false);
-    SE_REPORT_ERROR("wrong number of arguments: %d", (int)argc);
-    return false;
-}
-SE_BIND_CTOR(js_scene_Scene_constructor, __jsb_cc_Scene_class, js_cc_Scene_finalize)
-
-static bool js_cc_Scene_finalize(se::State& s) // NOLINT(readability-identifier-naming)
-{
-    return true;
-}
-SE_BIND_FINALIZE_FUNC(js_cc_Scene_finalize)
-
-bool js_register_scene_Scene(se::Object* obj) // NOLINT(readability-identifier-naming)
-{
-    auto* cls = se::Class::create("Scene", obj, __jsb_cc_Node_proto, _SE(js_scene_Scene_constructor));
-
-    cls->defineProperty("autoReleaseAssets", _SE(js_scene_Scene_isAutoReleaseAssets_asGetter), _SE(js_scene_Scene_setAutoReleaseAssets_asSetter));
-    cls->defineFunction("_activate", _SE(js_scene_Scene_activate));
-    cls->defineFunction("getRenderScene", _SE(js_scene_Scene_getRenderScene));
-    cls->defineFunction("getSceneGlobals", _SE(js_scene_Scene_getSceneGlobals));
-    cls->defineFunction("_load", _SE(js_scene_Scene_load));
-    cls->defineFunction("onBatchCreated", _SE(js_scene_Scene_onBatchCreated));
-    cls->defineFunction("setSceneGlobals", _SE(js_scene_Scene_setSceneGlobals));
-    cls->defineFinalizeFunction(_SE(js_cc_Scene_finalize));
-    cls->install();
-    JSBClassType::registerClass<cc::Scene>(cls);
-
-    __jsb_cc_Scene_proto = cls->getProto();
-    __jsb_cc_Scene_class = cls;
 
 
     se::ScriptEngine::getInstance()->clearException();
@@ -11923,264 +11923,6 @@ bool js_register_scene_Model(se::Object* obj) // NOLINT(readability-identifier-n
     se::ScriptEngine::getInstance()->clearException();
     return true;
 }
-se::Object* __jsb_cc_scene_DrawBatch2D_proto = nullptr; // NOLINT
-se::Class* __jsb_cc_scene_DrawBatch2D_class = nullptr;  // NOLINT
-
-static bool js_scene_DrawBatch2D_get_visFlags(se::State& s) // NOLINT(readability-identifier-naming)
-{
-    auto* cobj = SE_THIS_OBJECT<cc::scene::DrawBatch2D>(s);
-    SE_PRECONDITION2(cobj, false, "js_scene_DrawBatch2D_get_visFlags : Invalid Native Object");
-
-    CC_UNUSED bool ok = true;
-    se::Value jsret;
-    ok &= nativevalue_to_se(cobj->visFlags, jsret, s.thisObject() /*ctx*/);
-    s.rval() = jsret;
-    SE_HOLD_RETURN_VALUE(cobj->visFlags, s.thisObject(), s.rval());
-    return true;
-}
-SE_BIND_PROP_GET(js_scene_DrawBatch2D_get_visFlags)
-
-static bool js_scene_DrawBatch2D_set_visFlags(se::State& s) // NOLINT(readability-identifier-naming)
-{
-    const auto& args = s.args();
-    auto* cobj = SE_THIS_OBJECT<cc::scene::DrawBatch2D>(s);
-    SE_PRECONDITION2(cobj, false, "js_scene_DrawBatch2D_set_visFlags : Invalid Native Object");
-
-    CC_UNUSED bool ok = true;
-    ok &= sevalue_to_native(args[0], &cobj->visFlags, s.thisObject());
-    SE_PRECONDITION2(ok, false, "js_scene_DrawBatch2D_set_visFlags : Error processing new value");
-    return true;
-}
-SE_BIND_PROP_SET(js_scene_DrawBatch2D_set_visFlags)
-
-static bool js_scene_DrawBatch2D_get_descriptorSet(se::State& s) // NOLINT(readability-identifier-naming)
-{
-    auto* cobj = SE_THIS_OBJECT<cc::scene::DrawBatch2D>(s);
-    SE_PRECONDITION2(cobj, false, "js_scene_DrawBatch2D_get_descriptorSet : Invalid Native Object");
-
-    CC_UNUSED bool ok = true;
-    se::Value jsret;
-    ok &= nativevalue_to_se(cobj->descriptorSet, jsret, s.thisObject() /*ctx*/);
-    s.rval() = jsret;
-    SE_HOLD_RETURN_VALUE(cobj->descriptorSet, s.thisObject(), s.rval());
-    return true;
-}
-SE_BIND_PROP_GET(js_scene_DrawBatch2D_get_descriptorSet)
-
-static bool js_scene_DrawBatch2D_set_descriptorSet(se::State& s) // NOLINT(readability-identifier-naming)
-{
-    const auto& args = s.args();
-    auto* cobj = SE_THIS_OBJECT<cc::scene::DrawBatch2D>(s);
-    SE_PRECONDITION2(cobj, false, "js_scene_DrawBatch2D_set_descriptorSet : Invalid Native Object");
-
-    CC_UNUSED bool ok = true;
-    ok &= sevalue_to_native(args[0], &cobj->descriptorSet, s.thisObject());
-    SE_PRECONDITION2(ok, false, "js_scene_DrawBatch2D_set_descriptorSet : Error processing new value");
-    return true;
-}
-SE_BIND_PROP_SET(js_scene_DrawBatch2D_set_descriptorSet)
-
-static bool js_scene_DrawBatch2D_get_inputAssembler(se::State& s) // NOLINT(readability-identifier-naming)
-{
-    auto* cobj = SE_THIS_OBJECT<cc::scene::DrawBatch2D>(s);
-    SE_PRECONDITION2(cobj, false, "js_scene_DrawBatch2D_get_inputAssembler : Invalid Native Object");
-
-    CC_UNUSED bool ok = true;
-    se::Value jsret;
-    ok &= nativevalue_to_se(cobj->inputAssembler, jsret, s.thisObject() /*ctx*/);
-    s.rval() = jsret;
-    SE_HOLD_RETURN_VALUE(cobj->inputAssembler, s.thisObject(), s.rval());
-    return true;
-}
-SE_BIND_PROP_GET(js_scene_DrawBatch2D_get_inputAssembler)
-
-static bool js_scene_DrawBatch2D_set_inputAssembler(se::State& s) // NOLINT(readability-identifier-naming)
-{
-    const auto& args = s.args();
-    auto* cobj = SE_THIS_OBJECT<cc::scene::DrawBatch2D>(s);
-    SE_PRECONDITION2(cobj, false, "js_scene_DrawBatch2D_set_inputAssembler : Invalid Native Object");
-
-    CC_UNUSED bool ok = true;
-    ok &= sevalue_to_native(args[0], &cobj->inputAssembler, s.thisObject());
-    SE_PRECONDITION2(ok, false, "js_scene_DrawBatch2D_set_inputAssembler : Error processing new value");
-    return true;
-}
-SE_BIND_PROP_SET(js_scene_DrawBatch2D_set_inputAssembler)
-
-static bool js_scene_DrawBatch2D_get_passes(se::State& s) // NOLINT(readability-identifier-naming)
-{
-    auto* cobj = SE_THIS_OBJECT<cc::scene::DrawBatch2D>(s);
-    SE_PRECONDITION2(cobj, false, "js_scene_DrawBatch2D_get_passes : Invalid Native Object");
-
-    CC_UNUSED bool ok = true;
-    se::Value jsret;
-    ok &= nativevalue_to_se(cobj->passes, jsret, s.thisObject() /*ctx*/);
-    s.rval() = jsret;
-    SE_HOLD_RETURN_VALUE(cobj->passes, s.thisObject(), s.rval());
-    return true;
-}
-SE_BIND_PROP_GET(js_scene_DrawBatch2D_get_passes)
-
-static bool js_scene_DrawBatch2D_set_passes(se::State& s) // NOLINT(readability-identifier-naming)
-{
-    const auto& args = s.args();
-    auto* cobj = SE_THIS_OBJECT<cc::scene::DrawBatch2D>(s);
-    SE_PRECONDITION2(cobj, false, "js_scene_DrawBatch2D_set_passes : Invalid Native Object");
-
-    CC_UNUSED bool ok = true;
-    ok &= sevalue_to_native(args[0], &cobj->passes, s.thisObject());
-    SE_PRECONDITION2(ok, false, "js_scene_DrawBatch2D_set_passes : Error processing new value");
-    return true;
-}
-SE_BIND_PROP_SET(js_scene_DrawBatch2D_set_passes)
-
-static bool js_scene_DrawBatch2D_get_shaders(se::State& s) // NOLINT(readability-identifier-naming)
-{
-    auto* cobj = SE_THIS_OBJECT<cc::scene::DrawBatch2D>(s);
-    SE_PRECONDITION2(cobj, false, "js_scene_DrawBatch2D_get_shaders : Invalid Native Object");
-
-    CC_UNUSED bool ok = true;
-    se::Value jsret;
-    ok &= nativevalue_to_se(cobj->shaders, jsret, s.thisObject() /*ctx*/);
-    s.rval() = jsret;
-    SE_HOLD_RETURN_VALUE(cobj->shaders, s.thisObject(), s.rval());
-    return true;
-}
-SE_BIND_PROP_GET(js_scene_DrawBatch2D_get_shaders)
-
-static bool js_scene_DrawBatch2D_set_shaders(se::State& s) // NOLINT(readability-identifier-naming)
-{
-    const auto& args = s.args();
-    auto* cobj = SE_THIS_OBJECT<cc::scene::DrawBatch2D>(s);
-    SE_PRECONDITION2(cobj, false, "js_scene_DrawBatch2D_set_shaders : Invalid Native Object");
-
-    CC_UNUSED bool ok = true;
-    ok &= sevalue_to_native(args[0], &cobj->shaders, s.thisObject());
-    SE_PRECONDITION2(ok, false, "js_scene_DrawBatch2D_set_shaders : Error processing new value");
-    return true;
-}
-SE_BIND_PROP_SET(js_scene_DrawBatch2D_set_shaders)
-
-
-template<>
-bool sevalue_to_native(const se::Value &from, cc::scene::DrawBatch2D * to, se::Object *ctx)
-{
-    assert(from.isObject());
-    se::Object *json = from.toObject();
-    auto* data = reinterpret_cast<cc::scene::DrawBatch2D*>(json->getPrivateData());
-    if (data) {
-        *to = *data;
-        return true;
-    }
-    se::Value field;
-    bool ok = true;
-    json->getProperty("visFlags", &field, true);
-    if(!field.isNullOrUndefined()) {
-        ok &= sevalue_to_native(field, &(to->visFlags), ctx);
-    }
-    json->getProperty("descriptorSet", &field, true);
-    if(!field.isNullOrUndefined()) {
-        ok &= sevalue_to_native(field, &(to->descriptorSet), ctx);
-    }
-    json->getProperty("inputAssembler", &field, true);
-    if(!field.isNullOrUndefined()) {
-        ok &= sevalue_to_native(field, &(to->inputAssembler), ctx);
-    }
-    json->getProperty("passes", &field, true);
-    if(!field.isNullOrUndefined()) {
-        ok &= sevalue_to_native(field, &(to->passes), ctx);
-    }
-    json->getProperty("shaders", &field, true);
-    if(!field.isNullOrUndefined()) {
-        ok &= sevalue_to_native(field, &(to->shaders), ctx);
-    }
-    return ok;
-}
-
-SE_DECLARE_FINALIZE_FUNC(js_cc_scene_DrawBatch2D_finalize)
-
-static bool js_scene_DrawBatch2D_constructor(se::State& s) // NOLINT(readability-identifier-naming)
-{
-    CC_UNUSED bool ok = true;
-    const auto& args = s.args();
-    size_t argc = args.size();
-
-    if(argc == 0)
-    {
-        auto *ptr = JSB_MAKE_PRIVATE_OBJECT(cc::scene::DrawBatch2D);
-        s.thisObject()->setPrivateObject(ptr);
-        return true;
-    }
-
-    if(argc == 1 && args[0].isObject())
-    {
-        se::Object *json = args[0].toObject();
-        se::Value field;
-        auto *ptr = JSB_MAKE_PRIVATE_OBJECT(cc::scene::DrawBatch2D);
-        auto cobj = ptr->get<cc::scene::DrawBatch2D>();
-        ok &= sevalue_to_native(args[0], cobj, s.thisObject());
-        if(!ok) {
-            delete ptr;
-            SE_REPORT_ERROR("argument convertion error");
-            return false;
-        }
-        s.thisObject()->setPrivateObject(ptr);
-        return true;
-    }
-    auto *ptr = JSB_MAKE_PRIVATE_OBJECT(cc::scene::DrawBatch2D);
-    auto cobj = ptr->get<cc::scene::DrawBatch2D>();
-    if (argc > 0 && !args[0].isUndefined()) {
-        ok &= sevalue_to_native(args[0], &(cobj->visFlags), nullptr);
-    }
-    if (argc > 1 && !args[1].isUndefined()) {
-        ok &= sevalue_to_native(args[1], &(cobj->descriptorSet), nullptr);
-    }
-    if (argc > 2 && !args[2].isUndefined()) {
-        ok &= sevalue_to_native(args[2], &(cobj->inputAssembler), nullptr);
-    }
-    if (argc > 3 && !args[3].isUndefined()) {
-        ok &= sevalue_to_native(args[3], &(cobj->passes), nullptr);
-    }
-    if (argc > 4 && !args[4].isUndefined()) {
-        ok &= sevalue_to_native(args[4], &(cobj->shaders), nullptr);
-    }
-
-    if(!ok) {
-        delete ptr;
-        SE_REPORT_ERROR("Argument convertion error");
-        return false;
-    }
-    s.thisObject()->setPrivateObject(ptr);
-    return true;
-}
-SE_BIND_CTOR(js_scene_DrawBatch2D_constructor, __jsb_cc_scene_DrawBatch2D_class, js_cc_scene_DrawBatch2D_finalize)
-
-static bool js_cc_scene_DrawBatch2D_finalize(se::State& s) // NOLINT(readability-identifier-naming)
-{
-    return true;
-}
-SE_BIND_FINALIZE_FUNC(js_cc_scene_DrawBatch2D_finalize)
-
-bool js_register_scene_DrawBatch2D(se::Object* obj) // NOLINT(readability-identifier-naming)
-{
-    auto* cls = se::Class::create("DrawBatch2D", obj, nullptr, _SE(js_scene_DrawBatch2D_constructor));
-
-    cls->defineProperty("visFlags", _SE(js_scene_DrawBatch2D_get_visFlags), _SE(js_scene_DrawBatch2D_set_visFlags));
-    cls->defineProperty("descriptorSet", _SE(js_scene_DrawBatch2D_get_descriptorSet), _SE(js_scene_DrawBatch2D_set_descriptorSet));
-    cls->defineProperty("inputAssembler", _SE(js_scene_DrawBatch2D_get_inputAssembler), _SE(js_scene_DrawBatch2D_set_inputAssembler));
-    cls->defineProperty("passes", _SE(js_scene_DrawBatch2D_get_passes), _SE(js_scene_DrawBatch2D_set_passes));
-    cls->defineProperty("shaders", _SE(js_scene_DrawBatch2D_get_shaders), _SE(js_scene_DrawBatch2D_set_shaders));
-    cls->defineFinalizeFunction(_SE(js_cc_scene_DrawBatch2D_finalize));
-    cls->install();
-    JSBClassType::registerClass<cc::scene::DrawBatch2D>(cls);
-
-    __jsb_cc_scene_DrawBatch2D_proto = cls->getProto();
-    __jsb_cc_scene_DrawBatch2D_class = cls;
-
-
-    se::ScriptEngine::getInstance()->clearException();
-    return true;
-}
 se::Object* __jsb_cc_scene_IRenderSceneInfo_proto = nullptr; // NOLINT
 se::Class* __jsb_cc_scene_IRenderSceneInfo_class = nullptr;  // NOLINT
 
@@ -14640,7 +14382,26 @@ static bool js_scene_SkyboxInfo_getDiffuseMap(se::State& s) // NOLINT(readabilit
     SE_REPORT_ERROR("wrong number of arguments: %d, was expecting %d", (int)argc, 0);
     return false;
 }
-SE_BIND_FUNC_AS_PROP_GET(js_scene_SkyboxInfo_getDiffuseMap)
+SE_BIND_FUNC(js_scene_SkyboxInfo_getDiffuseMap)
+
+static bool js_scene_SkyboxInfo_getEnvLightingType(se::State& s) // NOLINT(readability-identifier-naming)
+{
+    auto* cobj = SE_THIS_OBJECT<cc::scene::SkyboxInfo>(s);
+    SE_PRECONDITION2(cobj, false, "js_scene_SkyboxInfo_getEnvLightingType : Invalid Native Object");
+    const auto& args = s.args();
+    size_t argc = args.size();
+    CC_UNUSED bool ok = true;
+    if (argc == 0) {
+        auto result = static_cast<int>(cobj->getEnvLightingType());
+        ok &= nativevalue_to_se(result, s.rval(), nullptr /*ctx*/);
+        SE_PRECONDITION2(ok, false, "js_scene_SkyboxInfo_getEnvLightingType : Error processing arguments");
+        SE_HOLD_RETURN_VALUE(result, s.thisObject(), s.rval());
+        return true;
+    }
+    SE_REPORT_ERROR("wrong number of arguments: %d, was expecting %d", (int)argc, 0);
+    return false;
+}
+SE_BIND_FUNC_AS_PROP_SET(js_scene_SkyboxInfo_getEnvLightingType)
 
 static bool js_scene_SkyboxInfo_getEnvmap(se::State& s) // NOLINT(readability-identifier-naming)
 {
@@ -14792,7 +14553,7 @@ static bool js_scene_SkyboxInfo_setDiffuseMap(se::State& s) // NOLINT(readabilit
     SE_REPORT_ERROR("wrong number of arguments: %d, was expecting %d", (int)argc, 1);
     return false;
 }
-SE_BIND_FUNC_AS_PROP_SET(js_scene_SkyboxInfo_setDiffuseMap)
+SE_BIND_FUNC(js_scene_SkyboxInfo_setDiffuseMap)
 
 static bool js_scene_SkyboxInfo_setEnabled(se::State& s) // NOLINT(readability-identifier-naming)
 {
@@ -14812,6 +14573,25 @@ static bool js_scene_SkyboxInfo_setEnabled(se::State& s) // NOLINT(readability-i
     return false;
 }
 SE_BIND_FUNC_AS_PROP_SET(js_scene_SkyboxInfo_setEnabled)
+
+static bool js_scene_SkyboxInfo_setEnvLightingType(se::State& s) // NOLINT(readability-identifier-naming)
+{
+    auto* cobj = SE_THIS_OBJECT<cc::scene::SkyboxInfo>(s);
+    SE_PRECONDITION2(cobj, false, "js_scene_SkyboxInfo_setEnvLightingType : Invalid Native Object");
+    const auto& args = s.args();
+    size_t argc = args.size();
+    CC_UNUSED bool ok = true;
+    if (argc == 1) {
+        HolderType<cc::scene::EnvironmentLightingType, false> arg0 = {};
+        ok &= sevalue_to_native(args[0], &arg0, s.thisObject());
+        SE_PRECONDITION2(ok, false, "js_scene_SkyboxInfo_setEnvLightingType : Error processing arguments");
+        cobj->setEnvLightingType(arg0.value());
+        return true;
+    }
+    SE_REPORT_ERROR("wrong number of arguments: %d, was expecting %d", (int)argc, 1);
+    return false;
+}
+SE_BIND_FUNC_AS_PROP_GET(js_scene_SkyboxInfo_setEnvLightingType)
 
 static bool js_scene_SkyboxInfo_setEnvmap(se::State& s) // NOLINT(readability-identifier-naming)
 {
@@ -14888,33 +14668,6 @@ static bool js_scene_SkyboxInfo_setUseIBL(se::State& s) // NOLINT(readability-id
     return false;
 }
 SE_BIND_FUNC_AS_PROP_SET(js_scene_SkyboxInfo_setUseIBL)
-
-static bool js_scene_SkyboxInfo_get__applyDiffuseMap(se::State& s) // NOLINT(readability-identifier-naming)
-{
-    auto* cobj = SE_THIS_OBJECT<cc::scene::SkyboxInfo>(s);
-    SE_PRECONDITION2(cobj, false, "js_scene_SkyboxInfo_get__applyDiffuseMap : Invalid Native Object");
-
-    CC_UNUSED bool ok = true;
-    se::Value jsret;
-    ok &= nativevalue_to_se(cobj->_applyDiffuseMap, jsret, s.thisObject() /*ctx*/);
-    s.rval() = jsret;
-    SE_HOLD_RETURN_VALUE(cobj->_applyDiffuseMap, s.thisObject(), s.rval());
-    return true;
-}
-SE_BIND_PROP_GET(js_scene_SkyboxInfo_get__applyDiffuseMap)
-
-static bool js_scene_SkyboxInfo_set__applyDiffuseMap(se::State& s) // NOLINT(readability-identifier-naming)
-{
-    const auto& args = s.args();
-    auto* cobj = SE_THIS_OBJECT<cc::scene::SkyboxInfo>(s);
-    SE_PRECONDITION2(cobj, false, "js_scene_SkyboxInfo_set__applyDiffuseMap : Invalid Native Object");
-
-    CC_UNUSED bool ok = true;
-    ok &= sevalue_to_native(args[0], &cobj->_applyDiffuseMap, s.thisObject());
-    SE_PRECONDITION2(ok, false, "js_scene_SkyboxInfo_set__applyDiffuseMap : Error processing new value");
-    return true;
-}
-SE_BIND_PROP_SET(js_scene_SkyboxInfo_set__applyDiffuseMap)
 
 static bool js_scene_SkyboxInfo_get__envmapHDR(se::State& s) // NOLINT(readability-identifier-naming)
 {
@@ -15051,33 +14804,6 @@ static bool js_scene_SkyboxInfo_set__enabled(se::State& s) // NOLINT(readability
 }
 SE_BIND_PROP_SET(js_scene_SkyboxInfo_set__enabled)
 
-static bool js_scene_SkyboxInfo_get__useIBL(se::State& s) // NOLINT(readability-identifier-naming)
-{
-    auto* cobj = SE_THIS_OBJECT<cc::scene::SkyboxInfo>(s);
-    SE_PRECONDITION2(cobj, false, "js_scene_SkyboxInfo_get__useIBL : Invalid Native Object");
-
-    CC_UNUSED bool ok = true;
-    se::Value jsret;
-    ok &= nativevalue_to_se(cobj->_useIBL, jsret, s.thisObject() /*ctx*/);
-    s.rval() = jsret;
-    SE_HOLD_RETURN_VALUE(cobj->_useIBL, s.thisObject(), s.rval());
-    return true;
-}
-SE_BIND_PROP_GET(js_scene_SkyboxInfo_get__useIBL)
-
-static bool js_scene_SkyboxInfo_set__useIBL(se::State& s) // NOLINT(readability-identifier-naming)
-{
-    const auto& args = s.args();
-    auto* cobj = SE_THIS_OBJECT<cc::scene::SkyboxInfo>(s);
-    SE_PRECONDITION2(cobj, false, "js_scene_SkyboxInfo_set__useIBL : Invalid Native Object");
-
-    CC_UNUSED bool ok = true;
-    ok &= sevalue_to_native(args[0], &cobj->_useIBL, s.thisObject());
-    SE_PRECONDITION2(ok, false, "js_scene_SkyboxInfo_set__useIBL : Error processing new value");
-    return true;
-}
-SE_BIND_PROP_SET(js_scene_SkyboxInfo_set__useIBL)
-
 static bool js_scene_SkyboxInfo_get__useHDR(se::State& s) // NOLINT(readability-identifier-naming)
 {
     auto* cobj = SE_THIS_OBJECT<cc::scene::SkyboxInfo>(s);
@@ -15105,6 +14831,33 @@ static bool js_scene_SkyboxInfo_set__useHDR(se::State& s) // NOLINT(readability-
 }
 SE_BIND_PROP_SET(js_scene_SkyboxInfo_set__useHDR)
 
+static bool js_scene_SkyboxInfo_get__envLightingType(se::State& s) // NOLINT(readability-identifier-naming)
+{
+    auto* cobj = SE_THIS_OBJECT<cc::scene::SkyboxInfo>(s);
+    SE_PRECONDITION2(cobj, false, "js_scene_SkyboxInfo_get__envLightingType : Invalid Native Object");
+
+    CC_UNUSED bool ok = true;
+    se::Value jsret;
+    ok &= nativevalue_to_se(cobj->_envLightingType, jsret, s.thisObject() /*ctx*/);
+    s.rval() = jsret;
+    SE_HOLD_RETURN_VALUE(cobj->_envLightingType, s.thisObject(), s.rval());
+    return true;
+}
+SE_BIND_PROP_GET(js_scene_SkyboxInfo_get__envLightingType)
+
+static bool js_scene_SkyboxInfo_set__envLightingType(se::State& s) // NOLINT(readability-identifier-naming)
+{
+    const auto& args = s.args();
+    auto* cobj = SE_THIS_OBJECT<cc::scene::SkyboxInfo>(s);
+    SE_PRECONDITION2(cobj, false, "js_scene_SkyboxInfo_set__envLightingType : Invalid Native Object");
+
+    CC_UNUSED bool ok = true;
+    ok &= sevalue_to_native(args[0], &cobj->_envLightingType, s.thisObject());
+    SE_PRECONDITION2(ok, false, "js_scene_SkyboxInfo_set__envLightingType : Error processing new value");
+    return true;
+}
+SE_BIND_PROP_SET(js_scene_SkyboxInfo_set__envLightingType)
+
 SE_DECLARE_FINALIZE_FUNC(js_cc_scene_SkyboxInfo_finalize)
 
 static bool js_scene_SkyboxInfo_constructor(se::State& s) // NOLINT(readability-identifier-naming) constructor.c
@@ -15125,22 +14878,23 @@ bool js_register_scene_SkyboxInfo(se::Object* obj) // NOLINT(readability-identif
 {
     auto* cls = se::Class::create("SkyboxInfo", obj, nullptr, _SE(js_scene_SkyboxInfo_constructor));
 
-    cls->defineProperty("_applyDiffuseMap", _SE(js_scene_SkyboxInfo_get__applyDiffuseMap), _SE(js_scene_SkyboxInfo_set__applyDiffuseMap));
     cls->defineProperty("_envmapHDR", _SE(js_scene_SkyboxInfo_get__envmapHDR), _SE(js_scene_SkyboxInfo_set__envmapHDR));
     cls->defineProperty("_envmapLDR", _SE(js_scene_SkyboxInfo_get__envmapLDR), _SE(js_scene_SkyboxInfo_set__envmapLDR));
     cls->defineProperty("_diffuseMapHDR", _SE(js_scene_SkyboxInfo_get__diffuseMapHDR), _SE(js_scene_SkyboxInfo_set__diffuseMapHDR));
     cls->defineProperty("_diffuseMapLDR", _SE(js_scene_SkyboxInfo_get__diffuseMapLDR), _SE(js_scene_SkyboxInfo_set__diffuseMapLDR));
     cls->defineProperty("_enabled", _SE(js_scene_SkyboxInfo_get__enabled), _SE(js_scene_SkyboxInfo_set__enabled));
-    cls->defineProperty("_useIBL", _SE(js_scene_SkyboxInfo_get__useIBL), _SE(js_scene_SkyboxInfo_set__useIBL));
     cls->defineProperty("_useHDR", _SE(js_scene_SkyboxInfo_get__useHDR), _SE(js_scene_SkyboxInfo_set__useHDR));
+    cls->defineProperty("_envLightingType", _SE(js_scene_SkyboxInfo_get__envLightingType), _SE(js_scene_SkyboxInfo_set__envLightingType));
     cls->defineProperty("_envmap", _SE(js_scene_SkyboxInfo_getEnvmapForJS_asGetter), _SE(js_scene_SkyboxInfo_setEnvmapForJS_asSetter));
     cls->defineProperty("applyDiffuseMap", _SE(js_scene_SkyboxInfo_isApplyDiffuseMap_asGetter), _SE(js_scene_SkyboxInfo_setApplyDiffuseMap_asSetter));
     cls->defineProperty("enabled", _SE(js_scene_SkyboxInfo_isEnabled_asGetter), _SE(js_scene_SkyboxInfo_setEnabled_asSetter));
     cls->defineProperty("useIBL", _SE(js_scene_SkyboxInfo_isUseIBL_asGetter), _SE(js_scene_SkyboxInfo_setUseIBL_asSetter));
     cls->defineProperty("useHDR", _SE(js_scene_SkyboxInfo_isUseHDR_asGetter), _SE(js_scene_SkyboxInfo_setUseHDR_asSetter));
     cls->defineProperty("envmap", _SE(js_scene_SkyboxInfo_getEnvmap_asGetter), _SE(js_scene_SkyboxInfo_setEnvmap_asSetter));
-    cls->defineProperty("diffuseMap", _SE(js_scene_SkyboxInfo_getDiffuseMap_asGetter), _SE(js_scene_SkyboxInfo_setDiffuseMap_asSetter));
+    cls->defineProperty("diffuseMap", _SE(js_scene_SkyboxInfo_setEnvLightingType_asGetter), _SE(js_scene_SkyboxInfo_getEnvLightingType_asSetter));
     cls->defineFunction("activate", _SE(js_scene_SkyboxInfo_activate));
+    cls->defineFunction("getDiffuseMap", _SE(js_scene_SkyboxInfo_getDiffuseMap));
+    cls->defineFunction("setDiffuseMap", _SE(js_scene_SkyboxInfo_setDiffuseMap));
     cls->defineFinalizeFunction(_SE(js_cc_scene_SkyboxInfo_finalize));
     cls->install();
     JSBClassType::registerClass<cc::scene::SkyboxInfo>(cls);
@@ -17535,6 +17289,264 @@ bool js_register_scene_SpotLight(se::Object* obj) // NOLINT(readability-identifi
 
     __jsb_cc_scene_SpotLight_proto = cls->getProto();
     __jsb_cc_scene_SpotLight_class = cls;
+
+
+    se::ScriptEngine::getInstance()->clearException();
+    return true;
+}
+se::Object* __jsb_cc_scene_DrawBatch2D_proto = nullptr; // NOLINT
+se::Class* __jsb_cc_scene_DrawBatch2D_class = nullptr;  // NOLINT
+
+static bool js_scene_DrawBatch2D_get_visFlags(se::State& s) // NOLINT(readability-identifier-naming)
+{
+    auto* cobj = SE_THIS_OBJECT<cc::scene::DrawBatch2D>(s);
+    SE_PRECONDITION2(cobj, false, "js_scene_DrawBatch2D_get_visFlags : Invalid Native Object");
+
+    CC_UNUSED bool ok = true;
+    se::Value jsret;
+    ok &= nativevalue_to_se(cobj->visFlags, jsret, s.thisObject() /*ctx*/);
+    s.rval() = jsret;
+    SE_HOLD_RETURN_VALUE(cobj->visFlags, s.thisObject(), s.rval());
+    return true;
+}
+SE_BIND_PROP_GET(js_scene_DrawBatch2D_get_visFlags)
+
+static bool js_scene_DrawBatch2D_set_visFlags(se::State& s) // NOLINT(readability-identifier-naming)
+{
+    const auto& args = s.args();
+    auto* cobj = SE_THIS_OBJECT<cc::scene::DrawBatch2D>(s);
+    SE_PRECONDITION2(cobj, false, "js_scene_DrawBatch2D_set_visFlags : Invalid Native Object");
+
+    CC_UNUSED bool ok = true;
+    ok &= sevalue_to_native(args[0], &cobj->visFlags, s.thisObject());
+    SE_PRECONDITION2(ok, false, "js_scene_DrawBatch2D_set_visFlags : Error processing new value");
+    return true;
+}
+SE_BIND_PROP_SET(js_scene_DrawBatch2D_set_visFlags)
+
+static bool js_scene_DrawBatch2D_get_descriptorSet(se::State& s) // NOLINT(readability-identifier-naming)
+{
+    auto* cobj = SE_THIS_OBJECT<cc::scene::DrawBatch2D>(s);
+    SE_PRECONDITION2(cobj, false, "js_scene_DrawBatch2D_get_descriptorSet : Invalid Native Object");
+
+    CC_UNUSED bool ok = true;
+    se::Value jsret;
+    ok &= nativevalue_to_se(cobj->descriptorSet, jsret, s.thisObject() /*ctx*/);
+    s.rval() = jsret;
+    SE_HOLD_RETURN_VALUE(cobj->descriptorSet, s.thisObject(), s.rval());
+    return true;
+}
+SE_BIND_PROP_GET(js_scene_DrawBatch2D_get_descriptorSet)
+
+static bool js_scene_DrawBatch2D_set_descriptorSet(se::State& s) // NOLINT(readability-identifier-naming)
+{
+    const auto& args = s.args();
+    auto* cobj = SE_THIS_OBJECT<cc::scene::DrawBatch2D>(s);
+    SE_PRECONDITION2(cobj, false, "js_scene_DrawBatch2D_set_descriptorSet : Invalid Native Object");
+
+    CC_UNUSED bool ok = true;
+    ok &= sevalue_to_native(args[0], &cobj->descriptorSet, s.thisObject());
+    SE_PRECONDITION2(ok, false, "js_scene_DrawBatch2D_set_descriptorSet : Error processing new value");
+    return true;
+}
+SE_BIND_PROP_SET(js_scene_DrawBatch2D_set_descriptorSet)
+
+static bool js_scene_DrawBatch2D_get_inputAssembler(se::State& s) // NOLINT(readability-identifier-naming)
+{
+    auto* cobj = SE_THIS_OBJECT<cc::scene::DrawBatch2D>(s);
+    SE_PRECONDITION2(cobj, false, "js_scene_DrawBatch2D_get_inputAssembler : Invalid Native Object");
+
+    CC_UNUSED bool ok = true;
+    se::Value jsret;
+    ok &= nativevalue_to_se(cobj->inputAssembler, jsret, s.thisObject() /*ctx*/);
+    s.rval() = jsret;
+    SE_HOLD_RETURN_VALUE(cobj->inputAssembler, s.thisObject(), s.rval());
+    return true;
+}
+SE_BIND_PROP_GET(js_scene_DrawBatch2D_get_inputAssembler)
+
+static bool js_scene_DrawBatch2D_set_inputAssembler(se::State& s) // NOLINT(readability-identifier-naming)
+{
+    const auto& args = s.args();
+    auto* cobj = SE_THIS_OBJECT<cc::scene::DrawBatch2D>(s);
+    SE_PRECONDITION2(cobj, false, "js_scene_DrawBatch2D_set_inputAssembler : Invalid Native Object");
+
+    CC_UNUSED bool ok = true;
+    ok &= sevalue_to_native(args[0], &cobj->inputAssembler, s.thisObject());
+    SE_PRECONDITION2(ok, false, "js_scene_DrawBatch2D_set_inputAssembler : Error processing new value");
+    return true;
+}
+SE_BIND_PROP_SET(js_scene_DrawBatch2D_set_inputAssembler)
+
+static bool js_scene_DrawBatch2D_get_passes(se::State& s) // NOLINT(readability-identifier-naming)
+{
+    auto* cobj = SE_THIS_OBJECT<cc::scene::DrawBatch2D>(s);
+    SE_PRECONDITION2(cobj, false, "js_scene_DrawBatch2D_get_passes : Invalid Native Object");
+
+    CC_UNUSED bool ok = true;
+    se::Value jsret;
+    ok &= nativevalue_to_se(cobj->passes, jsret, s.thisObject() /*ctx*/);
+    s.rval() = jsret;
+    SE_HOLD_RETURN_VALUE(cobj->passes, s.thisObject(), s.rval());
+    return true;
+}
+SE_BIND_PROP_GET(js_scene_DrawBatch2D_get_passes)
+
+static bool js_scene_DrawBatch2D_set_passes(se::State& s) // NOLINT(readability-identifier-naming)
+{
+    const auto& args = s.args();
+    auto* cobj = SE_THIS_OBJECT<cc::scene::DrawBatch2D>(s);
+    SE_PRECONDITION2(cobj, false, "js_scene_DrawBatch2D_set_passes : Invalid Native Object");
+
+    CC_UNUSED bool ok = true;
+    ok &= sevalue_to_native(args[0], &cobj->passes, s.thisObject());
+    SE_PRECONDITION2(ok, false, "js_scene_DrawBatch2D_set_passes : Error processing new value");
+    return true;
+}
+SE_BIND_PROP_SET(js_scene_DrawBatch2D_set_passes)
+
+static bool js_scene_DrawBatch2D_get_shaders(se::State& s) // NOLINT(readability-identifier-naming)
+{
+    auto* cobj = SE_THIS_OBJECT<cc::scene::DrawBatch2D>(s);
+    SE_PRECONDITION2(cobj, false, "js_scene_DrawBatch2D_get_shaders : Invalid Native Object");
+
+    CC_UNUSED bool ok = true;
+    se::Value jsret;
+    ok &= nativevalue_to_se(cobj->shaders, jsret, s.thisObject() /*ctx*/);
+    s.rval() = jsret;
+    SE_HOLD_RETURN_VALUE(cobj->shaders, s.thisObject(), s.rval());
+    return true;
+}
+SE_BIND_PROP_GET(js_scene_DrawBatch2D_get_shaders)
+
+static bool js_scene_DrawBatch2D_set_shaders(se::State& s) // NOLINT(readability-identifier-naming)
+{
+    const auto& args = s.args();
+    auto* cobj = SE_THIS_OBJECT<cc::scene::DrawBatch2D>(s);
+    SE_PRECONDITION2(cobj, false, "js_scene_DrawBatch2D_set_shaders : Invalid Native Object");
+
+    CC_UNUSED bool ok = true;
+    ok &= sevalue_to_native(args[0], &cobj->shaders, s.thisObject());
+    SE_PRECONDITION2(ok, false, "js_scene_DrawBatch2D_set_shaders : Error processing new value");
+    return true;
+}
+SE_BIND_PROP_SET(js_scene_DrawBatch2D_set_shaders)
+
+
+template<>
+bool sevalue_to_native(const se::Value &from, cc::scene::DrawBatch2D * to, se::Object *ctx)
+{
+    assert(from.isObject());
+    se::Object *json = from.toObject();
+    auto* data = reinterpret_cast<cc::scene::DrawBatch2D*>(json->getPrivateData());
+    if (data) {
+        *to = *data;
+        return true;
+    }
+    se::Value field;
+    bool ok = true;
+    json->getProperty("visFlags", &field, true);
+    if(!field.isNullOrUndefined()) {
+        ok &= sevalue_to_native(field, &(to->visFlags), ctx);
+    }
+    json->getProperty("descriptorSet", &field, true);
+    if(!field.isNullOrUndefined()) {
+        ok &= sevalue_to_native(field, &(to->descriptorSet), ctx);
+    }
+    json->getProperty("inputAssembler", &field, true);
+    if(!field.isNullOrUndefined()) {
+        ok &= sevalue_to_native(field, &(to->inputAssembler), ctx);
+    }
+    json->getProperty("passes", &field, true);
+    if(!field.isNullOrUndefined()) {
+        ok &= sevalue_to_native(field, &(to->passes), ctx);
+    }
+    json->getProperty("shaders", &field, true);
+    if(!field.isNullOrUndefined()) {
+        ok &= sevalue_to_native(field, &(to->shaders), ctx);
+    }
+    return ok;
+}
+
+SE_DECLARE_FINALIZE_FUNC(js_cc_scene_DrawBatch2D_finalize)
+
+static bool js_scene_DrawBatch2D_constructor(se::State& s) // NOLINT(readability-identifier-naming)
+{
+    CC_UNUSED bool ok = true;
+    const auto& args = s.args();
+    size_t argc = args.size();
+
+    if(argc == 0)
+    {
+        auto *ptr = JSB_MAKE_PRIVATE_OBJECT(cc::scene::DrawBatch2D);
+        s.thisObject()->setPrivateObject(ptr);
+        return true;
+    }
+
+    if(argc == 1 && args[0].isObject())
+    {
+        se::Object *json = args[0].toObject();
+        se::Value field;
+        auto *ptr = JSB_MAKE_PRIVATE_OBJECT(cc::scene::DrawBatch2D);
+        auto cobj = ptr->get<cc::scene::DrawBatch2D>();
+        ok &= sevalue_to_native(args[0], cobj, s.thisObject());
+        if(!ok) {
+            delete ptr;
+            SE_REPORT_ERROR("argument convertion error");
+            return false;
+        }
+        s.thisObject()->setPrivateObject(ptr);
+        return true;
+    }
+    auto *ptr = JSB_MAKE_PRIVATE_OBJECT(cc::scene::DrawBatch2D);
+    auto cobj = ptr->get<cc::scene::DrawBatch2D>();
+    if (argc > 0 && !args[0].isUndefined()) {
+        ok &= sevalue_to_native(args[0], &(cobj->visFlags), nullptr);
+    }
+    if (argc > 1 && !args[1].isUndefined()) {
+        ok &= sevalue_to_native(args[1], &(cobj->descriptorSet), nullptr);
+    }
+    if (argc > 2 && !args[2].isUndefined()) {
+        ok &= sevalue_to_native(args[2], &(cobj->inputAssembler), nullptr);
+    }
+    if (argc > 3 && !args[3].isUndefined()) {
+        ok &= sevalue_to_native(args[3], &(cobj->passes), nullptr);
+    }
+    if (argc > 4 && !args[4].isUndefined()) {
+        ok &= sevalue_to_native(args[4], &(cobj->shaders), nullptr);
+    }
+
+    if(!ok) {
+        delete ptr;
+        SE_REPORT_ERROR("Argument convertion error");
+        return false;
+    }
+    s.thisObject()->setPrivateObject(ptr);
+    return true;
+}
+SE_BIND_CTOR(js_scene_DrawBatch2D_constructor, __jsb_cc_scene_DrawBatch2D_class, js_cc_scene_DrawBatch2D_finalize)
+
+static bool js_cc_scene_DrawBatch2D_finalize(se::State& s) // NOLINT(readability-identifier-naming)
+{
+    return true;
+}
+SE_BIND_FINALIZE_FUNC(js_cc_scene_DrawBatch2D_finalize)
+
+bool js_register_scene_DrawBatch2D(se::Object* obj) // NOLINT(readability-identifier-naming)
+{
+    auto* cls = se::Class::create("DrawBatch2D", obj, nullptr, _SE(js_scene_DrawBatch2D_constructor));
+
+    cls->defineProperty("visFlags", _SE(js_scene_DrawBatch2D_get_visFlags), _SE(js_scene_DrawBatch2D_set_visFlags));
+    cls->defineProperty("descriptorSet", _SE(js_scene_DrawBatch2D_get_descriptorSet), _SE(js_scene_DrawBatch2D_set_descriptorSet));
+    cls->defineProperty("inputAssembler", _SE(js_scene_DrawBatch2D_get_inputAssembler), _SE(js_scene_DrawBatch2D_set_inputAssembler));
+    cls->defineProperty("passes", _SE(js_scene_DrawBatch2D_get_passes), _SE(js_scene_DrawBatch2D_set_passes));
+    cls->defineProperty("shaders", _SE(js_scene_DrawBatch2D_get_shaders), _SE(js_scene_DrawBatch2D_set_shaders));
+    cls->defineFinalizeFunction(_SE(js_cc_scene_DrawBatch2D_finalize));
+    cls->install();
+    JSBClassType::registerClass<cc::scene::DrawBatch2D>(cls);
+
+    __jsb_cc_scene_DrawBatch2D_proto = cls->getProto();
+    __jsb_cc_scene_DrawBatch2D_class = cls;
 
 
     se::ScriptEngine::getInstance()->clearException();
