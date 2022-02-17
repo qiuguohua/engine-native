@@ -24,9 +24,6 @@ public:
         napi_status status;
         NODE_API_CALL(status, env, napi_get_reference_value(env, _ref, &result));
         assert(status == napi_ok);
-        if (!result) {
-             return _obj;
-        }
         assert(result != nullptr);
         return result;
     }
@@ -52,9 +49,7 @@ public:
         if (_refCounts == 0) {
             uint32_t result = 0;
             _refCounts      = 1;
-            napi_delete_reference(_env, _ref);
-            _ref = nullptr;
-            initStrongRef(env, _obj);
+            napi_reference_ref(env, _ref, &result);
         }
     }
     void decRef(napi_env env) {
@@ -72,7 +67,6 @@ public:
         }
         napi_delete_reference(_env, _ref);
         _ref = nullptr;
-        _obj = nullptr;
     }
 };
 
