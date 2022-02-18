@@ -136,6 +136,7 @@ int32_t Engine::init() {
     float    pixelRatio = screen->getDevicePixelRatio();
     cc::EventDispatcher::dispatchResizeEvent(logicSize.x * pixelRatio, logicSize.y * pixelRatio);
 #endif
+    onEngineInit();
     return 0;
 }
 
