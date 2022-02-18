@@ -1,5 +1,5 @@
 /****************************************************************************
- Copyright (c) 2017-2022 Xiamen Yaji Software Co., Ltd.
+ Copyright (c) 2022 Xiamen Yaji Software Co., Ltd.
 
  http://www.cocos.com
 
@@ -23,45 +23,45 @@
  THE SOFTWARE.
 ****************************************************************************/
 
-#include "engine/EngineObserverManager.h"
+#include "application/ApplicationObserverManager.h"
 
 namespace cc {
 
-void EngineObserverManager::onEngineInit() {
+void ApplicationObserverManager::onAppInit() {
     for (auto &it : _observers) {
-        it->onEngineInit();
+        it->onAppInit();
     }
 }
 
-void EngineObserverManager::onEngineStart() {
+void ApplicationObserverManager::onAppStart() {
     for (auto &it : _observers) {
-        it->onEngineStart();
+        it->onAppStart();
     }
 }
 
-void EngineObserverManager::onEnginePause() {
+void ApplicationObserverManager::onAppPause() {
     for (auto &it : _observers) {
-        it->onEnginePause();
+        it->onAppPause();
     }
 }
 
-void EngineObserverManager::onEngineResume() {
+void ApplicationObserverManager::onAppResume() {
     for (auto &it : _observers) {
-        it->onEngineResume();
+        it->onAppResume();
     }
 }
 
-void EngineObserverManager::onEngineClose() {
+void ApplicationObserverManager::onAppClose() {
     for (auto &it : _observers) {
-        it->onEngineClose();
+        it->onAppClose();
     }
 }
 
-void EngineObserverManager::registrObserver(EngineObserver *observer) {
+void ApplicationObserverManager::registrObserver(ApplicationObserver *observer) {
     _observers.push_back(observer);
 }
 
-void EngineObserverManager::unregistrObserver(EngineObserver *observer) {
+void ApplicationObserverManager::unregistrObserver(ApplicationObserver *observer) {
     auto it = std::find(_observers.begin(), _observers.end(), observer);
     if (it != _observers.end()) {
         _observers.erase(it);

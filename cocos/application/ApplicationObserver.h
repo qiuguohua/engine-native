@@ -1,5 +1,5 @@
 /****************************************************************************
- Copyright (c) 2017-2022 Xiamen Yaji Software Co., Ltd.
+ Copyright (c) 2022 Xiamen Yaji Software Co., Ltd.
 
  http://www.cocos.com
 
@@ -25,52 +25,36 @@
 
 #pragma once
 
-#include <vector>
-#include "engine/EngineObserver.h"
-
 namespace cc {
 
-class EngineObserverManager {
+class ApplicationObserver {
 public:
-    EngineObserverManager()          = default;
-    virtual ~EngineObserverManager() = default;
+    ApplicationObserver()          = default;
+    virtual ~ApplicationObserver() = default;
+    /**
+     * @brief Application initialized.
+     */
+    virtual void onAppInit() {}
 
     /**
-     * @brief Engine initialized.
+     * @brief Application started.
      */
-    void onEngineInit();
+    virtual void onAppStart() {}
 
     /**
-     * @brief Engine started.
+     * @brief Application started.
      */
-    void onEngineStart();
+    virtual void onAppPause() {}
 
     /**
-     * @brief Engine started.
+     * @brief Application resumed.
      */
-    void onEnginePause();
+    virtual void onAppResume() {}
 
     /**
-     * @brief Engine resumed.
+     * @brief Application closed.
      */
-    void onEngineResume();
-
-    /**
-     * @brief Engine closed.
-     */
-    void onEngineClose();
-
-    /**
-     * @brief Register an observer
-     */
-    void registrObserver(EngineObserver *observer);
-    /**
-     * @brief Unregister an observer
-     */
-    void unregistrObserver(EngineObserver *observer);
-
-private:
-    std::vector<EngineObserver *> _observers;
+    virtual void onAppClose() {}
 };
 
 } // namespace cc

@@ -31,6 +31,7 @@
 #include "application/BaseApplication.h"
 
 namespace cc {
+
 class ApplicationManager {
 public:
     static ApplicationManager *getInstance();

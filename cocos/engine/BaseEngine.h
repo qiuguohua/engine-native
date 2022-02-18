@@ -127,11 +127,6 @@ public:
      @brief Get engine scheduler.
      */
     virtual SchedulerPtr getScheduler() const = 0;
-
-    /**
-     @brief Game initialization complete.
-     */
-    virtual void onGameInited() = 0;
 };
 
 } // namespace cc

@@ -27,6 +27,7 @@
 
 #include "base/Macros.h"
 
+#include "cocos/application/ApplicationObserverManager.h"
 #include "cocos/bindings/event/CustomEventTypes.h"
 #include "cocos/bindings/event/EventDispatcher.h"
 #include "cocos/engine/BaseEngine.h"
@@ -79,19 +80,27 @@ BaseEngine::Ptr CocosApplication::getEngine() const {
     return _engine;
 }
 
-void CocosApplication::onStart() {
+void CocosApplication::registrObserver(ApplicationObserver *observer) {
+    _observers->registrObserver(observer);
+}
+
+void CocosApplication::unregistrObserver(ApplicationObserver *observer) {
+    _observers->unregistrObserver(observer);
+}
+
+void CocosApplication::onEngineStart() {
     // TODO(cc): Process engine start events
 }
 
-void CocosApplication::onPause() {
+void CocosApplication::onEnginePause() {
     // TODO(cc): Process engine pause events
 }
 
-void CocosApplication::onResume() {
+void CocosApplication::onEngineResume() {
     // TODO(cc): Process engine resume events
 }
 
-void CocosApplication::onClose() {
+void CocosApplication::onEngineClose() {
     // TODO(cc): Process engine close events
 }
 

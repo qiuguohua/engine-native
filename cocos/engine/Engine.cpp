@@ -53,8 +53,8 @@
 #include "cocos/bindings/manual/jsb_global.h"
 #include "cocos/bindings/manual/jsb_module_register.h"
 #include "cocos/network/HttpClient.h"
-#include "platform/interfaces/modules/ISystemWindow.h"
 #include "engine/EngineObserverManager.h"
+#include "platform/interfaces/modules/ISystemWindow.h"
 
 namespace {
 
@@ -144,7 +144,7 @@ int32_t Engine::run() {
     platform->runInPlatformThread([&]() {
         tick();
     });
-    onStart();
+    onEngineStart();
     return 0;
 }
 
@@ -347,7 +347,7 @@ bool Engine::dispatchWindowEvent(const WindowEvent &ev) {
     bool isHandled = false;
     if (ev.type == WindowEvent::Type::SHOW ||
         ev.type == WindowEvent::Type::RESTORED) {
-        onResume();
+        onEngineResume();
         isHandled = true;
     } else if (ev.type == WindowEvent::Type::SIZE_CHANGED ||
                ev.type == WindowEvent::Type::RESIZED) {
@@ -355,10 +355,10 @@ bool Engine::dispatchWindowEvent(const WindowEvent &ev) {
         isHandled = true;
     } else if (ev.type == WindowEvent::Type::HIDDEN ||
                ev.type == WindowEvent::Type::MINIMIZED) {
-        onPause();
+        onEnginePause();
         isHandled = true;
     } else if (ev.type == WindowEvent::Type::CLOSE) {
-        onClose();
+        onEngineClose();
         isHandled = true;
     } else if (ev.type == WindowEvent::Type::QUIT) {
         // There is no need to process the quit message,
@@ -377,26 +377,26 @@ bool Engine::dispatchEventToApp(OSEventType type, const OSEvent &ev) {
     return false;
 }
 
-void Engine::onGameInited() {
-    _observers->onGameInited();
+void Engine::onEngineInit() {
+    _observers->onEngineInit();
 }
 
-void Engine::onStart() {
-    _observers->onStart();
+void Engine::onEngineStart() {
+    _observers->onEngineStart();
 }
 
-void Engine::onPause() {
-    _observers->onPause();
+void Engine::onEnginePause() {
+    _observers->onEnginePause();
     cc::EventDispatcher::dispatchEnterBackgroundEvent();
 }
 
-void Engine::onResume() {
-    _observers->onResume();
+void Engine::onEngineResume() {
+    _observers->onEngineResume();
     cc::EventDispatcher::dispatchEnterForegroundEvent();
 }
 
-void Engine::onClose() {
-    _observers->onClose();
+void Engine::onEngineClose() {
+    _observers->onEngineClose();
     cc::EventDispatcher::dispatchCloseEvent();
 }
 

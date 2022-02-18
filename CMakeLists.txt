@@ -323,6 +323,9 @@ cocos_source_files(
 
 ############ application
 cocos_source_files(
+    cocos/application/ApplicationObserver.h
+    cocos/application/ApplicationObserverManager.h
+    cocos/application/ApplicationObserverManager.cpp
     cocos/application/BaseApplication.h
     cocos/application/CocosApplication.h
     cocos/application/CocosApplication.cpp
@@ -336,7 +339,6 @@ cocos_source_files(
     cocos/engine/BaseEngine.h
     cocos/engine/Engine.cpp
     cocos/engine/Engine.h
-    cocos/engine/EngineObserver.cpp
     cocos/engine/EngineObserver.h
     cocos/engine/EngineObserverManager.cpp
     cocos/engine/EngineObserverManager.h

@@ -32,29 +32,29 @@ public:
     EngineObserver()          = default;
     virtual ~EngineObserver() = default;
     /**
-     * @brief engine started.
+     * @brief Engine initialized.
      */
-    virtual void onStart() {}
+    virtual void onEngineInit() {}
 
     /**
-     * @brief engine started.
+     * @brief Engine started.
      */
-    virtual void onPause() {}
+    virtual void onEngineStart() {}
 
     /**
-     * @brief engine resumed.
+     * @brief Engine started.
      */
-    virtual void onResume() {}
+    virtual void onEnginePause() {}
 
     /**
-     * @brief engine closed.
+     * @brief Engine resumed.
      */
-    virtual void onClose() {}
+    virtual void onEngineResume() {}
 
     /**
-     * @brief Game nitialized.
+     * @brief Engine closed.
      */
-    virtual void onGameInited() {}
+    virtual void onEngineClose() {}
 };
 
 } // namespace cc

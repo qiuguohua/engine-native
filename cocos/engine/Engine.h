@@ -130,20 +130,16 @@ public:
      */
     void setExceptionCallback(const se::ScriptEngine::ExceptionCallback &cb) override;
 
-    /**
-     @brief Set exception callback.
-     */
-    void onGameInited() override;
-
 private:
     void tick();
     bool dispatchWindowEvent(const WindowEvent &ev);
     bool dispatchDeviceEvent(const DeviceEvent &ev);
     bool dispatchEventToApp(OSEventType type, const OSEvent &ev);
-    void onStart();
-    void onPause();
-    void onResume();
-    void onClose();
+    void onEngineInit();
+    void onEngineStart();
+    void onEnginePause();
+    void onEngineResume();
+    void onEngineClose();
 
     int32_t restartVM();
 

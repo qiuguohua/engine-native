@@ -32,6 +32,7 @@
 
 namespace cc {
 class BaseEngine;
+class ApplicationObserverManager;
 
 class CocosApplication : public BaseApplication,
                          public EngineObserver {
@@ -68,11 +69,20 @@ public:
      */
     BaseEngine::Ptr getEngine() const override;
 
-    // EngineObserver overrides:
-    void onStart() override;
-    void onPause() override;
-    void onResume() override;
-    void onClose() override;
+    /**
+     * @brief Register an observer
+     */
+    void registrObserver(ApplicationObserver *observer) override;
+    /**
+     * @brief Unregister an observer
+     */
+    void unregistrObserver(ApplicationObserver *observer) override;
+
+    // Engine life cycle Observer overrides:
+    void onEngineStart() override;
+    void onEnginePause() override;
+    void onEngineResume() override;
+    void onEngineClose() override;
 
     /**
      * @brief Create window.
@@ -110,6 +120,7 @@ public:
     virtual void setXXTeaKey(const std::string &key);
 
 private:
-    BaseEngine::Ptr _engine{nullptr};
+    std::unique_ptr<ApplicationObserverManager> _observers;
+    BaseEngine::Ptr                             _engine{nullptr};
 };
 } // namespace cc
