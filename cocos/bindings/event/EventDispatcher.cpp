@@ -250,8 +250,9 @@ void EventDispatcher::dispatchTickEvent(float /*dt*/) {
     se::ValueArray args;
     int64_t        milliSeconds = std::chrono::duration_cast<std::chrono::milliseconds>(prevTime - se::ScriptEngine::getInstance()->getStartTime()).count();
     args.push_back(se::Value(static_cast<double>(milliSeconds)));
-
+    LOGE("qgh cocos tickVal.toObject()->call  1");
     tickVal.toObject()->call(args, nullptr);
+    LOGE("qgh cocos tickVal.toObject()->call  2");
 }
 
 void EventDispatcher::dispatchResizeEvent(int width, int height) {

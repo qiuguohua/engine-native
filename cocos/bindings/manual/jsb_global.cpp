@@ -570,19 +570,23 @@ bool jsb_global_load_image(const std::string &path, const se::Value &callbackVal
                 loadSucceed = img->initWithImageData(imageData, imageBytes);
                 free(imageData);
             } else {
+                LOGE("QQQQQQQQQQQQQQQQQQQQ1   %{public}s", fullPath.c_str());
                 loadSucceed = img->initWithImageFile(fullPath);
+                LOGE("QQQQQQQQQQQQQQQQQQQQ2   %{public}s  %{public}d", fullPath.c_str(), loadSucceed);
             }
 
             struct ImageInfo *imgInfo = nullptr;
             if (loadSucceed) {
+                LOGE("QQQQQQQQQQQQQQQQQQQQ3   %{public}s  %{public}d", fullPath.c_str(), loadSucceed);
                 imgInfo = createImageInfo(img);
+                LOGE("QQQQQQQQQQQQQQQQQQQQ33   %{public}s  %{public}d", fullPath.c_str(), loadSucceed);
             }
 
             CC_CURRENT_ENGINE()->getScheduler()->performFunctionInCocosThread([=]() {
                 se::AutoHandleScope hs;
                 se::ValueArray      seArgs;
                 se::Value           dataVal;
-
+                LOGE("load image callback start");
                 if (loadSucceed) {
                     se::HandleObject retObj(se::Object::createPlainObject());
                     dataVal.setUint64(reinterpret_cast<uintptr_t>(imgInfo->data));
@@ -591,13 +595,16 @@ bool jsb_global_load_image(const std::string &path, const se::Value &callbackVal
                     retObj->setProperty("height", se::Value(imgInfo->height));
 
                     seArgs.push_back(se::Value(retObj));
-
+                    LOGE("qgh cocos  width %{public}d  height %{public}d", imgInfo->width, imgInfo->height);
                     delete imgInfo;
                 } else {
                     SE_REPORT_ERROR("initWithImageFile: %s failed!", path.c_str());
                 }
+                LOGE("qgh cocos call1 %{public}s  %{public}d", fullPath.c_str(), loadSucceed);
                 callbackPtr->toObject()->call(seArgs, nullptr);
+                LOGE("qgh cocos call2 %{public}s  %{public}d", fullPath.c_str(), loadSucceed);
                 img->release();
+                LOGE("qgh cocos call2 finish");
             });
         });
     };

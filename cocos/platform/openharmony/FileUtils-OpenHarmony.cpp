@@ -16,9 +16,9 @@
 #include <unistd.h>
 #include "platform/openharmony/common/PluginCommon.h"
 
-#define ASSETS_FOLDER_NAME "/sdcard/cocos/xcsample/"
+#define ASSETS_FOLDER_NAME "/data/accounts/account_0/applications/ohos.example.xcomponent1/ohos.example.xcomponent1/"
 //#define ASSETS_FOLDER_NAME "/data/data/ohos.example.xcomponent1/files/"
-#define ASSETS_FOLDER_WRITEABLE_PATH "/data/data/ohos.example.xcomponent1/files/writeable_path"
+#define ASSETS_FOLDER_WRITEABLE_PATH "/data/accounts/account_0/applications/ohos.example.xcomponent1/ohos.example.xcomponent1/writeable_path"
 //#define ASSETS_FOLDER_WRITEABLE_PATH "/sdcard/cocos/writeable_path"
 
 #ifndef JCLS_HELPER
@@ -137,12 +137,12 @@ bool FileUtilsOpenHarmony::isFileExistInternal(const std::string &strFilePath) c
         strPath.insert(0, _defaultResRootPath);
     }
     FILE *fp = fopen(getSuitableFOpen(strPath).c_str(), "r");
-    LOGE("qgh cocos isFileExistInternal1 %s", getSuitableFOpen(strPath).c_str());
+    LOGE("qgh cocos isFileExistInternal1 %{public}s", getSuitableFOpen(strPath).c_str());
     if (!fp) {
-        LOGE("qgh cocos isFileExistInternal2 %s", getSuitableFOpen(strPath).c_str());
+        LOGE("qgh cocos isFileExistInternal2 %{public}s", getSuitableFOpen(strPath).c_str());
         return false;
     }
-    LOGE("qgh cocos isFileExistInternal3 %s", getSuitableFOpen(strPath).c_str());
+    LOGE("qgh cocos isFileExistInternal3 %{public}s", getSuitableFOpen(strPath).c_str());
     fclose(fp);
     return true;
 }

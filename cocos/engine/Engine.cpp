@@ -217,18 +217,22 @@ void Engine::tick() {
 #endif
 
     prevTime = std::chrono::steady_clock::now();
-
+    LOGE("qgh cocos Engine tick : scheduler update start");
     _scheduler->update(dt);
+    LOGE("qgh cocos Engine tick : scheduler update end");
     cc::EventDispatcher::dispatchTickEvent(dt);
+    LOGE("qgh cocos Engine tick : dispatchTickEvent");
 
     LegacyAutoreleasePool* currentPool = PoolManager::getInstance()->getCurrentPool();
     if (currentPool) {
         currentPool->clear();
     }
+    LOGE("qgh cocos Engine tick : currentPool clear");
 
     now  = std::chrono::steady_clock::now();
     dtNS = dtNS * 0.1 + 0.9 * static_cast<double>(std::chrono::duration_cast<std::chrono::nanoseconds>(now - prevTime).count());
     dt   = static_cast<float>(dtNS) / NANOSECONDS_PER_SECOND;
+    LOGE("qgh cocos Engine tick end");
 }
 
 int32_t Engine::restartVM() {

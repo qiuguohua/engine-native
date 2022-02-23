@@ -515,16 +515,16 @@ bool FileUtils::writeDataToFile(const Data &data, const std::string &fullPath) {
         // Read the file from hardware
         FILE *fp = fopen(fileutils->getSuitableFOpen(fullPath).c_str(), mode);
 #if (CC_PLATFORM == CC_PLATFORM_OPENHARMONY)
-        LOGE("qgh cocos writeDataToFile1 %s", fileutils->getSuitableFOpen(fullPath).c_str());
+        LOGE("qgh cocos writeDataToFile1 %{public}s", fileutils->getSuitableFOpen(fullPath).c_str());
 #endif
         if(!fp) {
 #if (CC_PLATFORM == CC_PLATFORM_OPENHARMONY)
-            LOGE("qgh cocos writeDataToFile2 %s", fileutils->getSuitableFOpen(fullPath).c_str());
+            LOGE("qgh cocos writeDataToFile2 %{public}s", fileutils->getSuitableFOpen(fullPath).c_str());
 #endif
             return false;
         }
 #if (CC_PLATFORM == CC_PLATFORM_OPENHARMONY)
-        LOGE("qgh cocos writeDataToFile3 %s", fileutils->getSuitableFOpen(fullPath).c_str());
+        LOGE("qgh cocos writeDataToFile3 %{public}s", fileutils->getSuitableFOpen(fullPath).c_str());
 #endif
         CC_BREAK_IF(!fp);
         size = data.getSize();
@@ -563,7 +563,7 @@ Data FileUtils::getDataFromFile(const std::string &filename) {
 FileUtils::Status FileUtils::getContents(const std::string &filename, ResizableBuffer *buffer) {
     if (filename.empty()) {
 #if (CC_PLATFORM == CC_PLATFORM_OPENHARMONY)
-        LOGE("qgh cocos getContents01 %s", filename.c_str());
+        LOGE("qgh cocos getContents01 %{public}s", filename.c_str());
 #endif
         return Status::NOT_EXISTS;
     }
@@ -573,23 +573,23 @@ FileUtils::Status FileUtils::getContents(const std::string &filename, ResizableB
     std::string fullPath = fs->fullPathForFilename(filename);
     if (fullPath.empty()) {
 #if (CC_PLATFORM == CC_PLATFORM_OPENHARMONY)
-        LOGE("qgh cocos getContents0 %s", fullPath.c_str());
+        LOGE("qgh cocos getContents0 %{public}s", fullPath.c_str());
 #endif
         return Status::NOT_EXISTS;
     }
 
     FILE *fp = fopen(fs->getSuitableFOpen(fullPath).c_str(), "rb");
 #if (CC_PLATFORM == CC_PLATFORM_OPENHARMONY)
-    LOGE("qgh cocos getContents1 %s", getSuitableFOpen(fullPath).c_str());
+    LOGE("qgh cocos getContents1 %{public}s", getSuitableFOpen(fullPath).c_str());
 #endif
     if (!fp) {
 #if (CC_PLATFORM == CC_PLATFORM_OPENHARMONY)
-        LOGE("qgh cocos getContents2 %s", getSuitableFOpen(fullPath).c_str());
+        LOGE("qgh cocos getContents2 %{public}s", getSuitableFOpen(fullPath).c_str());
 #endif
         return Status::OPEN_FAILED;
     }
 #if (CC_PLATFORM == CC_PLATFORM_OPENHARMONY)
-    LOGE("qgh cocos getContents3 %s", getSuitableFOpen(fullPath).c_str());
+    LOGE("qgh cocos getContents3 %{public}s", getSuitableFOpen(fullPath).c_str());
 #endif
 #if defined(_MSC_VER)
     auto descriptor = _fileno(fp);
@@ -672,6 +672,9 @@ std::string FileUtils::getPathForFilename(const std::string &filename, const std
 }
 
 std::string FileUtils::fullPathForFilename(const std::string &filename) const {
+#if (CC_PLATFORM == CC_PLATFORM_OPENHARMONY)
+        LOGE("qgh cocos fullPathForFilename1 %{public}s", filename.c_str());
+#endif
     if (filename.empty()) {
         return "";
     }
@@ -679,7 +682,9 @@ std::string FileUtils::fullPathForFilename(const std::string &filename) const {
     if (isAbsolutePath(filename)) {
         return normalizePath(filename);
     }
-
+#if (CC_PLATFORM == CC_PLATFORM_OPENHARMONY)
+        LOGE("qgh cocos fullPathForFilename2 %{public}s", filename.c_str());
+#endif
     // Already Cached ?
     auto cacheIter = _fullPathCache.find(filename);
     if (cacheIter != _fullPathCache.end()) {
@@ -690,14 +695,18 @@ std::string FileUtils::fullPathForFilename(const std::string &filename) const {
 
     for (const auto &searchIt : _searchPathArray) {
         fullpath = this->getPathForFilename(filename, searchIt);
-
+#if (CC_PLATFORM == CC_PLATFORM_OPENHARMONY)
+        LOGE("qgh cocos fullPathForFilename21 %{public}s", fullpath.c_str());
+#endif
         if (!fullpath.empty()) {
             // Using the filename passed in as key.
             _fullPathCache.insert(std::make_pair(filename, fullpath));
             return fullpath;
         }
     }
-
+#if (CC_PLATFORM == CC_PLATFORM_OPENHARMONY)
+        LOGE("qgh cocos fullPathForFilename3 %{public}s", fullpath.c_str());
+#endif
     // The file wasn't found, return empty string.
     return "";
 }

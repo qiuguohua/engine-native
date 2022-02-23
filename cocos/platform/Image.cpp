@@ -65,7 +65,7 @@ extern "C" {
 #if (CC_PLATFORM == CC_PLATFORM_ANDROID)
     #include "platform/android/FileUtils-android.h"
 #endif
-
+#include "platform/openharmony/common/PluginCommon.h"
 #include <map>
 
 namespace cc {
@@ -277,11 +277,13 @@ bool Image::initWithImageFile(const std::string &path) {
     //NOTE: fullPathForFilename isn't threadsafe. we should make sure the parameter is a full path.
     //    _filePath = FileUtils::getInstance()->fullPathForFilename(path);
     _filePath = path;
-
+    LOGE("qgh cocos initWithImageFile1 { %{public}s }", path.c_str());
     Data data = FileUtils::getInstance()->getDataFromFile(_filePath);
-
+    LOGE("qgh cocos initWithImageFile2 { %{public}s }", path.c_str());
     if (!data.isNull()) {
+        LOGE("qgh cocos initWithImageFile3 { %{public}s }", path.c_str());
         ret = initWithImageData(data.getBytes(), data.getSize());
+        LOGE("qgh cocos initWithImageFile31 { %{public}s }", path.c_str());
     }
 
     return ret;
@@ -291,45 +293,74 @@ bool Image::initWithImageData(const unsigned char *data, ssize_t dataLen) {
     bool ret = false;
 
     do {
+        LOGE("qgh cocos initWithImageData1 { %{public}d }", dataLen);
         CC_BREAK_IF(!data || dataLen <= 0);
-
+       
         unsigned char *unpackedData = nullptr;
         ssize_t        unpackedLen  = 0;
 
         //detect and unzip the compress file
+         LOGE("qgh cocos initWithImageData2   { %{public}d }", dataLen);
         if (ZipUtils::isCCZBuffer(data, dataLen)) {
+             LOGE("qgh cocos initWithImageData3   { %{public}d }", dataLen);
             unpackedLen = ZipUtils::inflateCCZBuffer(data, dataLen, &unpackedData);
+             LOGE("qgh cocos initWithImageData5   { %{public}d }", dataLen);
         } else if (ZipUtils::isGZipBuffer(data, dataLen)) {
+             LOGE("qgh cocos initWithImageData6   { %{public}d }", dataLen);
             unpackedLen = ZipUtils::inflateMemory(const_cast<unsigned char *>(data), dataLen, &unpackedData);
+             LOGE("qgh cocos initWithImageData7   { %{public}d }", dataLen);
         } else {
+            LOGE("qgh cocos initWithImageData71   { %{public}d }", dataLen);
             unpackedData = const_cast<unsigned char *>(data);
             unpackedLen  = dataLen;
+            LOGE("qgh cocos initWithImageData72   { %{public}d }", dataLen);
         }
-
+        LOGE("qgh cocos initWithImageData8   { %{public}d }", dataLen);
         _fileType = detectFormat(unpackedData, unpackedLen);
-
+        LOGE("qgh cocos initWithImageData9   { %{public}d }", _fileType);
         switch (_fileType) {
-            case Format::PNG:
+            case Format::PNG:{
+                LOGE("qgh cocos initWithImageData91   { %{public}d }", dataLen);
                 ret = initWithPngData(unpackedData, unpackedLen);
+                LOGE("qgh cocos initWithImageData92   { %{public}d }", dataLen);
                 break;
-            case Format::JPG:
+                }
+            case Format::JPG:{
+                LOGE("qgh cocos initWithImageData93   { %{public}d }", dataLen);
                 ret = initWithJpgData(unpackedData, unpackedLen);
+                LOGE("qgh cocos initWithImageData94   { %{public}d }", dataLen);
                 break;
-            case Format::WEBP:
+                }
+            case Format::WEBP:{
+            LOGE("qgh cocos initWithImageData95   { %{public}d }", dataLen);
                 ret = initWithWebpData(unpackedData, unpackedLen);
+                LOGE("qgh cocos initWithImageData96   { %{public}d }", dataLen);
                 break;
-            case Format::PVR:
+                }
+            case Format::PVR:{
+            LOGE("qgh cocos initWithImageData91   { %{public}d }", dataLen);
                 ret = initWithPVRData(unpackedData, unpackedLen);
+                LOGE("qgh cocos initWithImageData91   { %{public}d }", dataLen);
                 break;
-            case Format::ETC:
+                }
+            case Format::ETC:{
+            LOGE("qgh cocos initWithImageData91   { %{public}d }", dataLen);
                 ret = initWithETCData(unpackedData, unpackedLen);
+                LOGE("qgh cocos initWithImageData91   { %{public}d }", dataLen);
                 break;
-            case Format::ETC2:
+                }
+            case Format::ETC2:{
+            LOGE("qgh cocos initWithImageData91   { %{public}d }", dataLen);
                 ret = initWithETC2Data(unpackedData, unpackedLen);
+                LOGE("qgh cocos initWithImageData91   { %{public}d }", dataLen);
                 break;
-            case Format::ASTC:
+                }
+            case Format::ASTC:{
+            LOGE("qgh cocos initWithImageData91   { %{public}d }", dataLen);
                 ret = initWithASTCData(unpackedData, unpackedLen);
+                LOGE("qgh cocos initWithImageData91   { %{public}d }", dataLen);
                 break;
+                }
             default:
                 break;
         }
@@ -520,22 +551,26 @@ bool Image::initWithJpgData(const unsigned char *data, ssize_t dataLen) {
     bool ret = false;
     do {
         /* We set up the normal JPEG error routines, then override error_exit. */
+        LOGE("qgh cocos initWithJpgData1   { %{public}d }", dataLen);
         cinfo.err           = jpeg_std_error(&jerr.pub);
+        LOGE("qgh cocos initWithJpgData2   { %{public}d }", dataLen);
         jerr.pub.error_exit = myErrorExit;
         /* Establish the setjmp return context for MyErrorExit to use. */
         if (setjmp(jerr.setjmp_buffer)) {
             /* If we get here, the JPEG code has signaled an error.
              * We need to clean up the JPEG object, close the input file, and return.
              */
+             LOGE("qgh cocos initWithJpgData3   { %{public}d }", dataLen);
             jpeg_destroy_decompress(&cinfo);
             break;
         }
-
+        LOGE("qgh cocos initWithJpgData4   { %{public}d }", dataLen);
         /* setup decompression process and source, then read JPEG header */
         jpeg_create_decompress(&cinfo);
+        LOGE("qgh cocos initWithJpgData5   { %{public}d }", dataLen);
 
         jpeg_mem_src(&cinfo, const_cast<unsigned char *>(data), dataLen);
-
+        LOGE("qgh cocos initWithJpgData6  { %{public}d }", dataLen);
         /* reading the image header which contains image information */
     #if (JPEG_LIB_VERSION >= 90)
         // libjpeg 0.9 adds stricter types.
@@ -543,7 +578,7 @@ bool Image::initWithJpgData(const unsigned char *data, ssize_t dataLen) {
     #else
         jpeg_read_header(&cinfo, TRUE);
     #endif
-
+        LOGE("qgh cocos initWithJpgData7   { %{public}d }", dataLen);
         // we only support RGB or grayscale
         if (cinfo.jpeg_color_space == JCS_GRAYSCALE) {
             _renderFormat = gfx::Format::L8;
@@ -551,10 +586,10 @@ bool Image::initWithJpgData(const unsigned char *data, ssize_t dataLen) {
             cinfo.out_color_space = JCS_RGB;
             _renderFormat         = gfx::Format::RGB8;
         }
-
+        LOGE("qgh cocos initWithJpgData8   { %{public}d }", dataLen);
         /* Start decompression jpeg here */
         jpeg_start_decompress(&cinfo);
-
+        LOGE("qgh cocos initWithJpgData9   { %{public}d }", dataLen);
         /* init image info */
         _isCompressed = false;
         _width        = cinfo.output_width;
@@ -562,6 +597,8 @@ bool Image::initWithJpgData(const unsigned char *data, ssize_t dataLen) {
         _dataLen      = cinfo.output_width * cinfo.output_height * cinfo.output_components;
         _data         = static_cast<unsigned char *>(malloc(_dataLen * sizeof(unsigned char)));
         CC_BREAK_IF(!_data);
+        LOGE("qgh cocos initWithJpgData99  width = %{public}d height = %{public}d data_len = %{public}", 
+               _width, _height, _dataLen);
 
         /* now actually read the jpeg into the raw buffer */
         /* read one scan line at a time */
@@ -569,8 +606,10 @@ bool Image::initWithJpgData(const unsigned char *data, ssize_t dataLen) {
             rowPointer[0] = _data + location;
             location += cinfo.output_width * cinfo.output_components;
             jpeg_read_scanlines(&cinfo, rowPointer, 1);
+            LOGE("qgh cocos initWithJpgData99   { %{public}d }", location);
         }
 
+        LOGE("qgh cocos initWithJpgData end 1 { %{public}d }", _dataLen);
         /* When read image file with broken data, jpeg_finish_decompress() may cause error.
          * Besides, jpeg_destroy_decompress() shall deallocate and release all memory associated
          * with the decompression object.
@@ -578,6 +617,7 @@ bool Image::initWithJpgData(const unsigned char *data, ssize_t dataLen) {
          */
         //jpeg_finish_decompress( &cinfo );
         jpeg_destroy_decompress(&cinfo);
+        LOGE("qgh cocos initWithJpgDataend 2 { %{public}d }", _dataLen);
         /* wrap up decompression, destroy objects, free pointers and close open files */
         ret = true;
     } while (false);

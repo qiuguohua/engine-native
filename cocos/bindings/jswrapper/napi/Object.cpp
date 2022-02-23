@@ -335,11 +335,14 @@ bool Object::call(const ValueArray& args, Object* thisObject, Value* rval) {
     napi_status status;
     assert(isFunction());
     napi_value thisObj = thisObject ? thisObject->_getJSObject() : nullptr;
+    LOGE("qgh object::call start %{public}p", thisObj);
     status =
         napi_call_function(_env, thisObj, _getJSObject(), argc, argv.data(), &return_val);
+    LOGE("qgh object::call end thisObj %{public}p _getJSObject  %{public}p", thisObj, _getJSObject());
     if (rval) {
         internal::jsToSeValue(return_val, rval);
     }
+    LOGE("qgh object::call finish %{public}p", return_val);
     return true;
 }
 
