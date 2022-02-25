@@ -580,16 +580,16 @@ FileUtils::Status FileUtils::getContents(const std::string &filename, ResizableB
 
     FILE *fp = fopen(fs->getSuitableFOpen(fullPath).c_str(), "rb");
 #if (CC_PLATFORM == CC_PLATFORM_OPENHARMONY)
-    LOGE("qgh cocos getContents1 %{public}s", getSuitableFOpen(fullPath).c_str());
+    LOGE("qgh cocos fopen %{public}s", getSuitableFOpen(fullPath).c_str());
 #endif
     if (!fp) {
 #if (CC_PLATFORM == CC_PLATFORM_OPENHARMONY)
-        LOGE("qgh cocos getContents2 %{public}s", getSuitableFOpen(fullPath).c_str());
+        LOGE("qgh cocos fopen %{public}s failed", getSuitableFOpen(fullPath).c_str());
 #endif
         return Status::OPEN_FAILED;
     }
 #if (CC_PLATFORM == CC_PLATFORM_OPENHARMONY)
-    LOGE("qgh cocos getContents3 %{public}s", getSuitableFOpen(fullPath).c_str());
+    LOGE("qgh cocos open %{public}s success", getSuitableFOpen(fullPath).c_str());
 #endif
 #if defined(_MSC_VER)
     auto descriptor = _fileno(fp);
@@ -607,7 +607,19 @@ FileUtils::Status FileUtils::getContents(const std::string &filename, ResizableB
     size_t readsize = fread(buffer->buffer(), 1, size, fp);
     fclose(fp);
 
+#if (CC_PLATFORM == CC_PLATFORM_OPENHARMONY)
+    LOGE("qgh cocos read %{public}s file size %{public}d", getSuitableFOpen(fullPath).c_str(), readsize);
+#endif
+    char* buf = reinterpret_cast<char*>(buffer->buffer());
+    if(readsize > 15 && buf) {
+        for(int i = 0; i < 15; ++i) {
+        LOGE("qgh cocos readbyte buffer[%{public}d] = %{public}p", i, buf[i]);
+    }
+    }
     if (readsize < size) {
+        #if (CC_PLATFORM == CC_PLATFORM_OPENHARMONY)
+            LOGE("qgh cocos failed %{public}s file size %{public}d  %{public}d", getSuitableFOpen(fullPath).c_str(), readsize, size);
+        #endif
         buffer->resize(readsize);
         return Status::READ_FAILED;
     }
