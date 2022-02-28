@@ -191,7 +191,7 @@ napi_value OpenHarmonyPlatform::NapiNativeEngineInit(napi_env env, napi_callback
     NativeXComponent* nativexcomponet = reinterpret_cast<NativeXComponent*>(msgData.data);
     LOGE("kee cocos NapiNativeEngineInit nativexcomponent = %p", nativexcomponet);
     int32_t  ret;
-    ret = NativeXComponent_GetNativeWindow(nativexcomponet, &window);
+    ret = OH_NativeXComponent_GetNativeWindow(nativexcomponet, &window);
     if (ret != XCOMPONENT_RESULT_SUCCESS) {
         return nullptr;
     }
@@ -228,7 +228,7 @@ bool OpenHarmonyPlatform::Export(napi_env env, napi_value exports) {
         return false;
     }
 
-    ret = NativeXComponent_GetXComponentId(nativeXComponent, idStr, &idSize);
+    ret = OH_NativeXComponent_GetXComponentId(nativeXComponent, idStr, &idSize);
     if (ret != XCOMPONENT_RESULT_SUCCESS) {
         return false;
     }
@@ -251,7 +251,7 @@ void OpenHarmonyPlatform::WorkerOnMessage(const uv_async_t* /* req */) {
 
     NativeXComponent* nativexcomponet = reinterpret_cast<NativeXComponent*>(msgData.data);
     CCASSERT(nativexcomponet != nullptr, "nativexcomponent cannot be empty");
-    int32_t ret = NativeXComponent_GetNativeWindow(nativexcomponet, &window);
+    int32_t ret = OH_NativeXComponent_GetNativeWindow(nativexcomponet, &window);
     if (ret != XCOMPONENT_RESULT_SUCCESS) {
         return;
     }

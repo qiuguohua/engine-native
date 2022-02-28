@@ -92,7 +92,7 @@ bool SystemWindow::createWindow(const char* title,
 
 void SystemWindow::SetNativeXComponent(NativeXComponent* component) {
     component_ = component;
-    NativeXComponent_RegisterCallback(component_, &callback_);
+    OH_NativeXComponent_RegisterCallback(component_, &callback_);
 }
 
 void SystemWindow::setCursorEnabled(bool value) {
@@ -112,7 +112,7 @@ SystemWindow::Size SystemWindow::getViewSize() const {
 }
 
 void SystemWindow::OnSurfaceCreated(NativeXComponent* component, void* window) {
-    int32_t ret = NativeXComponent_GetXComponentSize(component, window, &width_, &height_);
+    int32_t ret = OH_NativeXComponent_GetXComponentSize(component, window, &width_, &height_);
     CCASSERT(ret == XCOMPONENT_RESULT_SUCCESS, "GetXComponentSize call failed");
     windowHandler_ = window;
 }
@@ -131,7 +131,7 @@ void SystemWindow::DispatchTouchEvent(NativeXComponent* component, void* window)
     //     return;
     // }
     struct ::TouchInfo touchInfo;
-    ret = NativeXComponent_GetTouchInfo(component, window, &touchInfo);
+    ret = OH_NativeXComponent_GetTouchInfo(component, window, &touchInfo);
     if (ret != XCOMPONENT_RESULT_SUCCESS) {
         return;
     }
