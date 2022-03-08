@@ -35,10 +35,9 @@ if(NX)
     cc_set_if_undefined(CC_USE_GLES2 OFF)
     set(USE_AUDIO OFF)
     set(USE_SOCKET OFF)
-    set(USE_SE_V8 OFF)
     set(USE_VIDEO OFF)
     set(USE_V8_DEBUGGER OFF)
-    set(USE_SE_V8 OFF)
+    set(USE_SE_V8 ON)
     set(USE_EDIT_BOX OFF)
 
     set(USE_VIDEO OFF)
@@ -116,7 +115,6 @@ cc_inspect_values(
     CC_USE_GLES3
     CC_USE_GLES2
     CC_USE_VULKAN
-    USE_SE_V8
     USE_V8_DEBUGGER
     USE_SOCKET
     USE_AUDIO
@@ -151,7 +149,7 @@ if(USE_AUDIO)
                      cocos/audio/include/AudioEngine.h
                      cocos/audio/include/Export.h
     )
-    if(WINDOWS OR NX_WINDOWS)
+    if(WINDOWS)
         cocos_source_files(
             cocos/audio/oalsoft/AudioCache.cpp
             cocos/audio/oalsoft/AudioCache.h
@@ -619,7 +617,7 @@ elseif(QNX)
 endif()
 
 ############ module log
-if(NX OR NX_WINDOWS)
+if(WINDOWS OR NX_WINDOWS)
 cocos_source_files(MODULE cclog
     cocos/base/Log.cpp
     cocos/base/Log.h
@@ -851,7 +849,7 @@ cocos_source_files(MODULE ccutils
 )
 
 ########## module ccfilesystem
-if(NX OR NX_WINDOWS)
+if(WINDOWS OR NX_WINDOWS)
     cocos_source_files(MODULE ccfilesystem
         cocos/platform/FileUtils.cpp
         cocos/platform/FileUtils.h
@@ -876,10 +874,6 @@ if(NX_WINDOWS)
                      cocos/platform/win32/compat/stdint.h
                      cocos/platform/win32/inet_pton_mingw.cpp
                      cocos/platform/win32/inet_pton_mingw.h
-    )
-    cocos_source_files(MODULE ccfilesystem
-        cocos/platform/win32/FileUtils-win32.cpp
-        cocos/platform/win32/FileUtils-win32.h
     )
 elseif(WINDOWS)
     cocos_source_files(
@@ -2428,10 +2422,6 @@ if(NX_WINDOWS)
         )
     endif()
 elseif(NX)
-    target_link_libraries(cocos2d PUBLIC
-        ws2_32 userenv psapi winmm Iphlpapi
-        ${CC_EXTERNAL_LIBS}
-    )
 
     include(${CMAKE_CURRENT_LIST_DIR}/platform-nx/setup.cmake)
 

@@ -81,16 +81,18 @@ namespace cc {
 
 Engine::Engine() {
     _scheduler = std::make_shared<Scheduler>();
+#if (CC_PLATFORM != CC_PLATFORM_NX)
     FileUtils::getInstance()->addSearchPath("Resources", true);
     EventDispatcher::init();
     se::ScriptEngine::getInstance();
+#endif
 }
 
 Engine::~Engine() {
 #if USE_AUDIO
     AudioEngine::end();
 #endif
-
+#if (CC_PLATFORM != CC_PLATFORM_NX)
     pipeline::RenderPipeline::getInstance()->destroy();
 
     EventDispatcher::destroy();
@@ -100,9 +102,11 @@ Engine::~Engine() {
 
     BasePlatform* platform = BasePlatform::getPlatform();
     platform->setHandleEventCallback(nullptr);
+#endif
 }
 
 int32_t Engine::init() {
+#if (CC_PLATFORM != CC_PLATFORM_NX)
     _scheduler->removeAllFunctionsToBePerformedInCocosThread();
     _scheduler->unscheduleAll();
 
@@ -113,6 +117,7 @@ int32_t Engine::init() {
         std::bind(&Engine::handleEvent, this, std::placeholders::_1)); // NOLINT(modernize-avoid-bind)
 
     se::ScriptEngine::getInstance()->addPermanentRegisterCallback(setCanvasCallback);
+#endif
     return 0;
 }
 
@@ -138,6 +143,7 @@ int Engine::restart() {
 }
 
 void Engine::close() { // NOLINT
+#if (CC_PLATFORM != CC_PLATFORM_NX)
     if (cc::EventDispatcher::initialized()) {
         cc::EventDispatcher::dispatchCloseEvent();
     }
@@ -161,6 +167,7 @@ void Engine::close() { // NOLINT
 
     // exit
     exit(0);
+#endif
 }
 
 uint Engine::getTotalFrames() const {
@@ -192,6 +199,7 @@ void Engine::removeEventCallback(OSEventType evType) {
 }
 
 void Engine::tick() {
+#if (CC_PLATFORM != CC_PLATFORM_NX)
     if (_needRestart) {
         restartVM();
         _needRestart = false;
@@ -226,9 +234,11 @@ void Engine::tick() {
     now  = std::chrono::steady_clock::now();
     dtNS = dtNS * 0.1 + 0.9 * static_cast<double>(std::chrono::duration_cast<std::chrono::nanoseconds>(now - prevTime).count());
     dt   = static_cast<float>(dtNS) / NANOSECONDS_PER_SECOND;
+#endif
 }
 
 int32_t Engine::restartVM() {
+#if (CC_PLATFORM != CC_PLATFORM_NX)
     cc::EventDispatcher::dispatchRestartVM();
 
     pipeline::RenderPipeline::getInstance()->destroy();
@@ -255,10 +265,12 @@ int32_t Engine::restartVM() {
     CC_CURRENT_APPLICATION()->init();
 
     cc::gfx::DeviceManager::addSurfaceEventListener();
+#endif
     return 0;
 }
 
 bool Engine::handleEvent(const OSEvent& ev) {
+#if (CC_PLATFORM != CC_PLATFORM_NX)
     bool        isHandled = false;
     OSEventType type      = ev.eventType();
     if (type == OSEventType::TOUCH_OSEVENT) {
@@ -280,6 +292,8 @@ bool Engine::handleEvent(const OSEvent& ev) {
     }
     isHandled = dispatchEventToApp(type, ev);
     return isHandled;
+#endif
+    return false;
 }
 
 Engine::SchedulerPtr Engine::getScheduler() const {
@@ -331,24 +345,27 @@ void Engine::onPause() {
     AppEvent appEv;
     appEv.type = AppEvent::Type::PAUSE;
     dispatchEventToApp(OSEventType::APP_OSEVENT, appEv);
-
+#if (CC_PLATFORM != CC_PLATFORM_NX)
     cc::EventDispatcher::dispatchEnterBackgroundEvent();
+#endif
 }
 
 void Engine::onResume() {
     AppEvent appEv;
     appEv.type = AppEvent::Type::RESUME;
     dispatchEventToApp(OSEventType::APP_OSEVENT, appEv);
-
+#if (CC_PLATFORM != CC_PLATFORM_NX)
     cc::EventDispatcher::dispatchEnterForegroundEvent();
+#endif
 }
 
 void Engine::onClose() {
     AppEvent appEv;
     appEv.type = AppEvent::Type::CLOSE;
     dispatchEventToApp(OSEventType::APP_OSEVENT, appEv);
-
+#if (CC_PLATFORM != CC_PLATFORM_NX)
     cc::EventDispatcher::dispatchCloseEvent();
+#endif
 }
 
 } // namespace cc

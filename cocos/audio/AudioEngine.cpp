@@ -547,7 +547,7 @@ void AudioEngine::preload(const std::string &filePath, const std::function<void(
             return;
         }
 
-        sAudioEngineImpl->preload(filePath, callback);
+        //sAudioEngineImpl->preload(filePath, callback);
     }
 }
 

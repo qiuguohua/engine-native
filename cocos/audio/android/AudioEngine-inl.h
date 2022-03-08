@@ -24,8 +24,8 @@
  ****************************************************************************/
 #pragma once
 
-#include <SLES/OpenSLES.h>
-#include <SLES/OpenSLES_Android.h>
+//#include <SLES/OpenSLES.h>
+//#include <SLES/OpenSLES_Android.h>
 #include <functional>
 #include <string>
 #include <unordered_map>
@@ -75,12 +75,12 @@ public:
     void setAudioFocusForAllPlayers(bool isFocus);
 
 private:
-    // engine interfaces
-    SLObjectItf _engineObject;
-    SLEngineItf _engineEngine;
+    //// engine interfaces
+    //SLObjectItf _engineObject;
+    //SLEngineItf _engineEngine;
 
-    // output mix interfaces
-    SLObjectItf _outputMixObject;
+    //// output mix interfaces
+    //SLObjectItf _outputMixObject;
 
     //audioID,AudioInfo
     std::unordered_map<int, IAudioPlayer *>                                _audioPlayers;
