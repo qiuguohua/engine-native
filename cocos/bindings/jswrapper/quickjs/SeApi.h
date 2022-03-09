@@ -1,6 +1,5 @@
 /****************************************************************************
- Copyright (c) 2016 Chukong Technologies Inc.
- Copyright (c) 2017-2022 Xiamen Yaji Software Co., Ltd.
+ Copyright (c) 2022 Xiamen Yaji Software Co., Ltd.
 
  http://www.cocos.com
 
@@ -26,30 +25,10 @@
 
 #pragma once
 
-#include "config.h"
-
-#if SCRIPT_ENGINE_TYPE == SCRIPT_ENGINE_SM
-    #include "sm/SeApi.h"
-#endif
-
-#if SCRIPT_ENGINE_TYPE == SCRIPT_ENGINE_V8
-    #include "v8/SeApi.h"
-#endif
-
-#if SCRIPT_ENGINE_TYPE == SCRIPT_ENGINE_JSC
-    #include "jsc/SeApi.h"
-#endif
-
-#if SCRIPT_ENGINE_TYPE == SCRIPT_ENGINE_CHAKRACORE
-    #include "chakracore/SeApi.h"
-#endif
-
-#if SCRIPT_ENGINE_TYPE == SCRIPT_ENGINE_QUICKJS
-    #include "quickjs/SeApi.h"
-#endif
-
-#include "HandleObject.h"
-#include "MappingUtils.h"
+#include "../State.h"
+#include "../Value.h"
+#include "Class.h"
+#include "HelperMacros.h"
 #include "Object.h"
-#include "State.h"
-#include "Value.h"
+#include "ScriptEngine.h"
+#include "Utils.h"

@@ -1,6 +1,5 @@
 /****************************************************************************
- Copyright (c) 2016 Chukong Technologies Inc.
- Copyright (c) 2017-2022 Xiamen Yaji Software Co., Ltd.
+ Copyright (c) 2022 Xiamen Yaji Software Co., Ltd.
 
  http://www.cocos.com
 
@@ -26,30 +25,18 @@
 
 #pragma once
 
-#include "config.h"
+#include "quickjs-libc.h"
+#include "quickjs.h"
 
-#if SCRIPT_ENGINE_TYPE == SCRIPT_ENGINE_SM
-    #include "sm/SeApi.h"
-#endif
+using JSPropGetter = JSValue (*)(JSContext *ctx, JSValueConst this_val);
+using JSPropSetter = JSValue (*)(JSContext *ctx, JSValueConst this_val, JSValueConst val);
 
-#if SCRIPT_ENGINE_TYPE == SCRIPT_ENGINE_V8
-    #include "v8/SeApi.h"
-#endif
+#include "HelperMacros.h"
 
-#if SCRIPT_ENGINE_TYPE == SCRIPT_ENGINE_JSC
-    #include "jsc/SeApi.h"
-#endif
-
-#if SCRIPT_ENGINE_TYPE == SCRIPT_ENGINE_CHAKRACORE
-    #include "chakracore/SeApi.h"
-#endif
-
-#if SCRIPT_ENGINE_TYPE == SCRIPT_ENGINE_QUICKJS
-    #include "quickjs/SeApi.h"
-#endif
-
-#include "HandleObject.h"
-#include "MappingUtils.h"
-#include "Object.h"
-#include "State.h"
-#include "Value.h"
+#include <assert.h>
+#include <chrono>
+#include <functional>
+#include <initializer_list>
+#include <string>
+#include <unordered_map>
+#include <vector>

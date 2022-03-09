@@ -9,8 +9,9 @@ set(TARGET_OSX_VERSION "10.14" CACHE STRING "Target MacOSX version" FORCE)
 set(TARGET_IOS_VERSION "10.0"  CACHE STRING "Target iOS version" FORCE)
 
 set(CMAKE_CXX_STANDARD 14)
-option(USE_SE_V8                "Use V8 JavaScript Engine"          ON)
-option(USE_V8_DEBUGGER          "Enable Chrome Remote inspector"    ON)
+option(USE_SE_V8                "Use V8 JavaScript Engine"          OFF)
+option(USE_SE_QUICKJS           "Use QuickJS JavaScript Engine"     ON)
+option(USE_V8_DEBUGGER          "Enable Chrome Remote inspector"    OFF)
 option(USE_SOCKET               "Enable WebSocket & SocketIO"       ON)
 option(USE_AUDIO                "Enable Audio"                      ON)     #Enable AudioEngine
 option(USE_EDIT_BOX             "Enable EditBox"                    ON)
