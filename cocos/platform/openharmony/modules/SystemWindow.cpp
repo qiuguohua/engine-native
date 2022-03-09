@@ -37,29 +37,29 @@
 
 namespace {
 
-void SendToWorker(const cc::WorkerMessageType& type, NativeXComponent* component) {
+void SendToWorker(const cc::MessageType& type, NativeXComponent* component, void* window) {
     cc::OpenHarmonyPlatform* platform = dynamic_cast<cc::OpenHarmonyPlatform*>(cc::BasePlatform::getPlatform());
     CCASSERT(platform != nullptr, "Only supports openharmony platform");
-    cc::WorkerMessageData data{type, static_cast<void*>(component)};
+    cc::WorkerMessageData data{type, static_cast<void*>(component), window};
     platform->workerMessageQ_.EnQueue(data);
-    if(type != cc::WorkerMessageType::WM_XCOMPONENT_SURFACE_CREATED)
+    if(type != cc::MessageType::WM_XCOMPONENT_SURFACE_CREATED)
         uv_async_send(&(cc::OpenHarmonyPlatform::getInstance()->workerOnMessageSignal_));
 }
 
 void OnSurfaceCreatedCB(NativeXComponent* component, void* window) {
-    SendToWorker(cc::WorkerMessageType::WM_XCOMPONENT_SURFACE_CREATED, component);
+    SendToWorker(cc::MessageType::WM_XCOMPONENT_SURFACE_CREATED, component, window);
 }
 
 void DispatchTouchEventCB(NativeXComponent* component, void* window) {
-    SendToWorker(cc::WorkerMessageType::WM_XCOMPONENT_TOUCH_EVENT, component);
+    SendToWorker(cc::MessageType::WM_XCOMPONENT_TOUCH_EVENT, component, window);
 }
 
 void OnSurfaceChangedCB(NativeXComponent* component, void* window) {
-    SendToWorker(cc::WorkerMessageType::WM_XCOMPONENT_SURFACE_CHANGED, component);
+    SendToWorker(cc::MessageType::WM_XCOMPONENT_SURFACE_CHANGED, component, window);
 }
 
 void OnSurfaceDestroyedCB(NativeXComponent* component, void* window) {
-    SendToWorker(cc::WorkerMessageType::WM_XCOMPONENT_SURFACE_DESTROY, component);
+    SendToWorker(cc::MessageType::WM_XCOMPONENT_SURFACE_DESTROY, component, window);
 }
 } // namespace
 

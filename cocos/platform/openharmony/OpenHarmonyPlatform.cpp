@@ -190,14 +190,9 @@ napi_value OpenHarmonyPlatform::NapiNativeEngineInit(napi_env env, napi_callback
     OpenHarmonyPlatform::getInstance()->workerMessageQ_.DeQueue(reinterpret_cast<WorkerMessageData*>(&msgData));
     NativeXComponent* nativexcomponet = reinterpret_cast<NativeXComponent*>(msgData.data);
     LOGE("kee cocos NapiNativeEngineInit nativexcomponent = %p", nativexcomponet);
-    int32_t  ret;
-    ret = OH_NativeXComponent_GetNativeWindow(nativexcomponet, &window);
-    if (ret != XCOMPONENT_RESULT_SUCCESS) {
-        return nullptr;
-    }
     SystemWindow* systemWindowIntf = getPlatform()->getInterface<SystemWindow>();
     CCASSERT(systemWindowIntf, "Invalid interface pointer");
-    systemWindowIntf->OnSurfaceCreated(nativexcomponet, window);
+    systemWindowIntf->OnSurfaceCreated(nativexcomponet, msgData.window);
 
     se::ScriptEngine::setEnv(env);
     OpenHarmonyPlatform::getInstance()->EnginInit(0, nullptr);
@@ -251,21 +246,17 @@ void OpenHarmonyPlatform::WorkerOnMessage(const uv_async_t* /* req */) {
 
     NativeXComponent* nativexcomponet = reinterpret_cast<NativeXComponent*>(msgData.data);
     CCASSERT(nativexcomponet != nullptr, "nativexcomponent cannot be empty");
-    int32_t ret = OH_NativeXComponent_GetNativeWindow(nativexcomponet, &window);
-    if (ret != XCOMPONENT_RESULT_SUCCESS) {
-        return;
-    }
 
     SystemWindow* systemWindowIntf = getPlatform()->getInterface<SystemWindow>();
-    if(msgData.type == WorkerMessageType::WM_XCOMPONENT_SURFACE_CREATED) {
+    if(msgData.type == MessageType::WM_XCOMPONENT_SURFACE_CREATED) {
         CCASSERT(systemWindowIntf, "Invalid interface pointer");
-        systemWindowIntf->OnSurfaceCreated(nativexcomponet, window);
-    } else if(msgData.type == WorkerMessageType::WM_XCOMPONENT_TOUCH_EVENT) {
-        systemWindowIntf->DispatchTouchEvent(nativexcomponet, window);
-    } else if(msgData.type == WorkerMessageType::WM_XCOMPONENT_SURFACE_CHANGED) {
-        systemWindowIntf->OnSurfaceChanged(nativexcomponet, window);
-    } else if(msgData.type == WorkerMessageType::WM_XCOMPONENT_SURFACE_DESTROY) {
-        systemWindowIntf->OnSurfaceDestroyed(nativexcomponet, window);
+        systemWindowIntf->OnSurfaceCreated(nativexcomponet, msgData.window);
+    } else if(msgData.type == MessageType::WM_XCOMPONENT_TOUCH_EVENT) {
+        systemWindowIntf->DispatchTouchEvent(nativexcomponet, msgData.window);
+    } else if(msgData.type == MessageType::WM_XCOMPONENT_SURFACE_CHANGED) {
+        systemWindowIntf->OnSurfaceChanged(nativexcomponet, msgData.window);
+    } else if(msgData.type == MessageType::WM_XCOMPONENT_SURFACE_DESTROY) {
+        systemWindowIntf->OnSurfaceDestroyed(nativexcomponet, msgData.window);
     }
     
 }

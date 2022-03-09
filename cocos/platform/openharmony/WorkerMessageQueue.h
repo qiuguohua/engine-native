@@ -32,7 +32,7 @@
 
 namespace cc {
 
-enum class WorkerMessageType {
+enum class MessageType {
     WM_XCOMPONENT_SURFACE_CREATED = 0,
     WM_XCOMPONENT_TOUCH_EVENT,
     WM_XCOMPONENT_SURFACE_CHANGED,
@@ -40,8 +40,9 @@ enum class WorkerMessageType {
 };
 
 struct WorkerMessageData {
-    WorkerMessageType type;
+    MessageType type;
     void* data;
+    void* window;
 };
 
 class WorkerMessageQueue final {
