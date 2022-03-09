@@ -350,6 +350,7 @@ bool Object::setProperty(const char *name, const Value &v) {
     }
 
     JS_SetPropertyStr(__cx, _obj, name, jsval);
+    return true;
 }
 
 bool Object::defineProperty(const char *name, JSPropGetter getter, JSPropSetter setter) {
@@ -553,7 +554,7 @@ bool Object::getArrayBufferData(uint8_t **ptr, size_t *length) const {
     if (length != nullptr) {
         *length = byteLength;
     }
-    return false;
+    return true;
 }
 
 bool Object::getAllKeys(std::vector<std::string> *allKeys) const {
