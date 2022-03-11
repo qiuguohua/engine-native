@@ -177,7 +177,6 @@ public:
          *  @param[in] setter The native callback for setter.
          *  @return true if succeed, otherwise false.
          */
-    #if (CC_PLATFORM != CC_PLATFORM_NX)
     bool defineProperty(const char *name, v8::AccessorNameGetterCallback getter, v8::AccessorNameSetterCallback setter);
 
     /**
@@ -187,7 +186,6 @@ public:
          *  @return true if succeed, otherwise false.
          */
     bool defineFunction(const char *funcName, v8::FunctionCallback func);
-    #endif
     /**
          *  @brief Tests whether an object can be called as a function.
          *  @return true if object can be called as a function, otherwise false.
@@ -383,11 +381,9 @@ public:
          *  @return The string for describing current object.
          */
     std::string toString() const;
-    #if (CC_PLATFORM != CC_PLATFORM_NX)
     // Private API used in wrapper
     static Object *       _createJSObject(Class *cls, v8::Local<v8::Object> obj); // NOLINT(readability-identifier-naming)
     v8::Local<v8::Object> _getJSObject() const;                                   // NOLINT(readability-identifier-naming)
-    #endif
     ObjectWrap &          _getWrap();                                             // NOLINT(readability-identifier-naming)
     Class *               _getClass() const;                                      // NOLINT(readability-identifier-naming)
 
@@ -401,17 +397,13 @@ public:
 
 private:
     static void nativeObjectFinalizeHook(void *nativeObj);
-    #if (CC_PLATFORM != CC_PLATFORM_NX)
     static void setIsolate(v8::Isolate *isolate);
-    #endif
     static void cleanup();
     static void setup();
 
     Object();
     ~Object() override;
-    #if (CC_PLATFORM != CC_PLATFORM_NX)
     bool init(Class *cls, v8::Local<v8::Object> obj);
-    #endif
 
     Class *    _cls;
     ObjectWrap _obj;

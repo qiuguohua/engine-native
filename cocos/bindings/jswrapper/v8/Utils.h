@@ -42,7 +42,6 @@ struct PrivateData {
     void *  data;
     Object *seObj;
 };
-#if (CC_PLATFORM != CC_PLATFORM_NX)
 void jsToSeArgs(const v8::FunctionCallbackInfo<v8::Value> &_v8args, ValueArray *outArr);
 void jsToSeValue(v8::Isolate *isolate, v8::Local<v8::Value> jsval, Value *v);
 void seToJsArgs(v8::Isolate *isolate, const ValueArray &args, std::vector<v8::Local<v8::Value>> *outArr);
@@ -55,7 +54,6 @@ bool  hasPrivate(v8::Isolate *isolate, v8::Local<v8::Value> value);
 void  setPrivate(v8::Isolate *isolate, ObjectWrap &wrap, void *data, PrivateData **outInternalData);
 void *getPrivate(v8::Isolate *isolate, v8::Local<v8::Value> value);
 void  clearPrivate(v8::Isolate *isolate, ObjectWrap &wrap);
-#endif
 
 } // namespace internal
 } // namespace se

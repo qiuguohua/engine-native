@@ -801,7 +801,7 @@ if(NOT APPLE AND USE_SOCKET)
     )
 endif()
 
-if(NX_WINDOWS)
+if(NX_WINDOWS OR NX)
     cocos_source_files(
         NO_WERROR    cocos/network/Downloader-curl.cpp
                     cocos/network/Downloader-curl.h
@@ -813,7 +813,7 @@ elseif(WINDOWS OR LINUX OR QNX)
     )
 endif()
 
-if(NX_WINDOWS)
+if(NX_WINDOWS OR NX)
     cocos_source_files(
         NO_WERROR    cocos/network/HttpClient.cpp
     )
@@ -849,7 +849,7 @@ cocos_source_files(MODULE ccutils
 )
 
 ########## module ccfilesystem
-if(WINDOWS OR NX_WINDOWS)
+if(WINDOWS OR NX_WINDOWS OR NX)
     cocos_source_files(MODULE ccfilesystem
         cocos/platform/FileUtils.cpp
         cocos/platform/FileUtils.h
@@ -1531,7 +1531,6 @@ if(USE_PHYSICS_PHYSX)
     )
 endif()
 
-if(NOT NX)
 ##### script bindings
 ######## dop
 cocos_source_files(
@@ -1579,7 +1578,6 @@ if(USE_WEBVIEW)
         NO_WERROR    cocos/bindings/auto/jsb_webview_auto.cpp
                      cocos/bindings/auto/jsb_webview_auto.h
     )
-endif()
 endif()
 
 if(USE_MIDDLEWARE)
@@ -1868,7 +1866,6 @@ if(USE_MIDDLEWARE)
     endif()
 endif()
 
-if(NOT NX)
 ######## manual
 cocos_source_files(
     NO_WERROR    cocos/bindings/manual/jsb_classtype.cpp
@@ -1937,7 +1934,7 @@ elseif(APPLE)
                     cocos/platform/apple/JsbBridgeWrapper.h
                     cocos/platform/apple/JsbBridgeWrapper.mm
     )
-elseif(WINDOWS OR NX_WINDOWS)
+elseif(WINDOWS OR NX_WINDOWS OR NX)
     cocos_source_files(
         NO_WERROR    cocos/bindings/manual/jsb_platfrom_win32.cpp
     )
@@ -2047,7 +2044,6 @@ cocos_source_files(
                  cocos/bindings/event/EventDispatcher.cpp
                  cocos/bindings/event/EventDispatcher.h
 )
-endif()
 
 #### storage
 cocos_source_files(

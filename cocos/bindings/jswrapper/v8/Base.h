@@ -25,16 +25,13 @@
 ****************************************************************************/
 
 #pragma once
-
-#if (CC_PLATFORM != CC_PLATFORM_NX)
 #include "libplatform/libplatform.h"
-#endif
 //#define V8_DEPRECATION_WARNINGS 1
 //#define V8_IMMINENT_DEPRECATION_WARNINGS 1
 //#define V8_HAS_ATTRIBUTE_DEPRECATED_MESSAGE 1
-#if (CC_PLATFORM != CC_PLATFORM_NX)
+
 #include "v8.h"
-#endif
+
 #include <assert.h>
 #include <string.h>  // Resolves that memset, memcpy aren't found while APP_PLATFORM >= 22 on Android
 #include <algorithm> // for std::find

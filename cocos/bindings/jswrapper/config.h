@@ -51,7 +51,7 @@
     #define SE_DEBUG            2
     #define HAVE_INSPECTOR      1
 #else
-    //#define SE_ENABLE_INSPECTOR 0
+    #define SE_ENABLE_INSPECTOR 0
     #define SE_DEBUG            0
     #define HAVE_INSPECTOR      0
 #endif

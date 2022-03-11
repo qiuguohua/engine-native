@@ -41,7 +41,6 @@ class Object;
      */
 class Class final {
 public:
-    #if (CC_PLATFORM != CC_PLATFORM_NX)
     /**
          *  @brief Creates a class used for creating relevant native binding objects.
          *  @param[in] className A null-terminated UTF8 string containing the class's name.
@@ -86,7 +85,6 @@ public:
          *  @return true if succeed, otherwise false.
          */
     bool defineStaticProperty(const char *name, v8::AccessorNameGetterCallback getter, v8::AccessorNameSetterCallback setter);
-    #endif
     /**
          *  @brief Defines the finalize function with a callback.
          *  @param[in] func The callback to invoke when a JavaScript object is garbage collected.
@@ -122,25 +120,19 @@ private:
     ~Class();
 
     void setCreateProto(bool createProto);
-    #if (CC_PLATFORM != CC_PLATFORM_NX)
     bool init(const std::string &clsName, Object *parent, Object *parentProto, v8::FunctionCallback ctor);
-    #endif
     void destroy();
 
     static void cleanup();
-    #if (CC_PLATFORM != CC_PLATFORM_NX)
     //        static v8::Local<v8::Object> _createJSObject(const std::string &clsName, Class** outCls);
     static v8::Local<v8::Object> _createJSObjectWithClass(Class *cls);
     static void                  setIsolate(v8::Isolate *isolate);
-    #endif
     std::string _name;
     Object *    _parent;
     Object *    _parentProto;
     Object *    _proto;
-    #if (CC_PLATFORM != CC_PLATFORM_NX)
     v8::FunctionCallback                       _ctor;
     v8::UniquePersistent<v8::FunctionTemplate> _ctorTemplate;
-    #endif
     V8FinalizeFunc                             _finalizeFunc;
     bool                                       _createProto;
     friend class ScriptEngine;
