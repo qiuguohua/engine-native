@@ -38,7 +38,6 @@ if(NX)
     set(USE_SOCKET OFF)
     set(USE_VIDEO OFF)
     set(USE_V8_DEBUGGER OFF)
-    set(USE_SE_V8 ON)
     set(USE_EDIT_BOX OFF)
 
     set(USE_VIDEO OFF)
