@@ -87,8 +87,8 @@ public:
     void WorkerInit(napi_env env, uv_loop_t* loop);
     /*************************************************************************/
 
-    NativeXComponent* GetNativeXComponent(std::string& id);
-    void SetNativeXComponent(std::string& id, NativeXComponent* nativeXComponent);
+    OH_NativeXComponent* GetNativeXComponent(std::string& id);
+    void SetNativeXComponent(std::string& id, OH_NativeXComponent* nativeXComponent);
     PluginRender* GetRender(std::string& id);
 
 public:
@@ -102,7 +102,7 @@ private:
     static PluginManager manager_;
 
     std::string id_;
-    std::unordered_map<std::string, NativeXComponent*> nativeXComponentMap_;
+    std::unordered_map<std::string, OH_NativeXComponent*> nativeXComponentMap_;
     std::unordered_map<std::string, PluginRender*> pluginRenderMap_;
 
 public:

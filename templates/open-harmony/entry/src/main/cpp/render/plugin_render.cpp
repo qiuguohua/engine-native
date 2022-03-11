@@ -25,15 +25,15 @@ extern "C" {
 
 std::unordered_map<std::string, PluginRender*> PluginRender::instance_;
 
-NativeXComponentCallback PluginRender::callback_;
+OH_NativeXComponent_Callback PluginRender::callback_;
 
-void OnSurfaceCreatedCB(NativeXComponent* component, void* window)
+void OnSurfaceCreatedCB(OH_NativeXComponent* component, void* window)
 {
 //    int32_t ret;
-//    char idStr[XCOMPONENT_ID_LEN_MAX + 1] = {};
-//    uint64_t idSize = XCOMPONENT_ID_LEN_MAX + 1;
-//    ret = NativeXComponent_GetXComponentId(component, idStr, &idSize);
-//    if (ret != XCOMPONENT_RESULT_SUCCESS) {
+//    char idStr[OH_XCOMPONENT_ID_LEN_MAX + 1] = {};
+//    uint64_t idSize = OH_XCOMPONENT_ID_LEN_MAX + 1;
+//    ret = OH_NativeXComponent_GetXComponentId(component, idStr, &idSize);
+//    if (ret != OH_NATIVEXCOMPONENT_RESULT_SUCCESS) {
 //        return;
 //    }
 //
@@ -45,13 +45,13 @@ void OnSurfaceCreatedCB(NativeXComponent* component, void* window)
     uv_async_send(&(PluginManager::GetInstance()->workerOnMessageSignal_));
 }
 
-void OnSurfaceChangedCB(NativeXComponent* component, void* window)
+void OnSurfaceChangedCB(OH_NativeXComponent* component, void* window)
 {
     int32_t ret;
-    char idStr[XCOMPONENT_ID_LEN_MAX + 1] = {};
-    uint64_t idSize = XCOMPONENT_ID_LEN_MAX + 1;
-    ret = NativeXComponent_GetXComponentId(component, idStr, &idSize);
-    if (ret != XCOMPONENT_RESULT_SUCCESS) {
+    char idStr[OH_XCOMPONENT_ID_LEN_MAX + 1] = {};
+    uint64_t idSize = OH_XCOMPONENT_ID_LEN_MAX + 1;
+    ret = OH_NativeXComponent_GetXComponentId(component, idStr, &idSize);
+    if (ret != OH_NATIVEXCOMPONENT_RESULT_SUCCESS) {
         return;
     }
 
@@ -60,13 +60,13 @@ void OnSurfaceChangedCB(NativeXComponent* component, void* window)
     render->OnSurfaceChanged(component, window);
 }
 
-void OnSurfaceDestroyedCB(NativeXComponent* component, void* window)
+void OnSurfaceDestroyedCB(OH_NativeXComponent* component, void* window)
 {
     int32_t ret;
-    char idStr[XCOMPONENT_ID_LEN_MAX + 1] = {};
-    uint64_t idSize = XCOMPONENT_ID_LEN_MAX + 1;
-    ret = NativeXComponent_GetXComponentId(component, idStr, &idSize);
-    if (ret != XCOMPONENT_RESULT_SUCCESS) {
+    char idStr[OH_XCOMPONENT_ID_LEN_MAX + 1] = {};
+    uint64_t idSize = OH_XCOMPONENT_ID_LEN_MAX + 1;
+    ret = OH_NativeXComponent_GetXComponentId(component, idStr, &idSize);
+    if (ret != OH_NATIVEXCOMPONENT_RESULT_SUCCESS) {
         return;
     }
 
@@ -75,13 +75,13 @@ void OnSurfaceDestroyedCB(NativeXComponent* component, void* window)
     render->OnSurfaceDestroyed(component, window);
 }
 
-void DispatchTouchEventCB(NativeXComponent* component, void* window)
+void DispatchTouchEventCB(OH_NativeXComponent* component, void* window)
 {
     int32_t ret;
-    char idStr[XCOMPONENT_ID_LEN_MAX + 1] = {};
-    uint64_t idSize = XCOMPONENT_ID_LEN_MAX + 1;
-    ret = NativeXComponent_GetXComponentId(component, idStr, &idSize);
-    if (ret != XCOMPONENT_RESULT_SUCCESS) {
+    char idStr[OH_XCOMPONENT_ID_LEN_MAX + 1] = {};
+    uint64_t idSize = OH_XCOMPONENT_ID_LEN_MAX + 1;
+    ret = OH_NativeXComponent_GetXComponentId(component, idStr, &idSize);
+    if (ret != OH_NATIVEXCOMPONENT_RESULT_SUCCESS) {
         return;
     }
 
@@ -112,40 +112,40 @@ PluginRender* PluginRender::GetInstance(std::string& id)
     }
 }
 
-NativeXComponentCallback* PluginRender::GetNXComponentCallback()
+OH_NativeXComponent_Callback* PluginRender::GetNXComponentCallback()
 {
     return &PluginRender::callback_;
 }
 
-void PluginRender::SetNativeXComponent(NativeXComponent* component)
+void PluginRender::SetNativeXComponent(OH_NativeXComponent* component)
 {
     component_ = component;
-    NativeXComponent_RegisterCallback(component_, &PluginRender::callback_);
+    OH_NativeXComponent_RegisterCallback(component_, &PluginRender::callback_);
 }
 
-void PluginRender::OnSurfaceCreated(NativeXComponent* component, void* window)
+void PluginRender::OnSurfaceCreated(OH_NativeXComponent* component, void* window)
 {
-    int32_t ret=NativeXComponent_GetXComponentSize(component, window, &width_, &height_);
-    if (ret == XCOMPONENT_RESULT_SUCCESS) {
+    int32_t ret=OH_NativeXComponent_GetXComponentSize(component, window, &width_, &height_);
+    if (ret == OH_NATIVEXCOMPONENT_RESULT_SUCCESS) {
         eglCore_->GLContextInit(window, width_, height_);
     }
 }
 
-void PluginRender::OnSurfaceChanged(NativeXComponent* component, void* window)
+void PluginRender::OnSurfaceChanged(OH_NativeXComponent* component, void* window)
 {
 }
 
-void PluginRender::OnSurfaceDestroyed(NativeXComponent* component, void* window)
+void PluginRender::OnSurfaceDestroyed(OH_NativeXComponent* component, void* window)
 {
 }
 
-void PluginRender::DispatchTouchEvent(NativeXComponent* component, void* window)
+void PluginRender::DispatchTouchEvent(OH_NativeXComponent* component, void* window)
 {
-    int32_t ret1 = NativeXComponent_GetXComponentOffset(component, window, &x_, &y_);
+    int32_t ret1 = OH_NativeXComponent_GetXComponentOffset(component, window, &x_, &y_);
 
-    int32_t ret = NativeXComponent_GetTouchInfo(component, window, &touchInfo_);
+    int32_t ret = OH_NativeXComponent_GetTouchEvent(component, window, &touchInfo_);
 
-    if (ret == XCOMPONENT_RESULT_SUCCESS) {
+    if (ret == OH_NATIVEXCOMPONENT_RESULT_SUCCESS) {
         // LOGE("kee cocos x = %f, y = %f", touchInfo_.x, touchInfo_.y);
     }
 
@@ -169,16 +169,16 @@ napi_value PluginRender::NapiChangeShape(napi_env env, napi_callback_info info)
     napi_value exportInstance;
     napi_value thisArg;
     napi_status status;
-    NativeXComponent *nativeXComponent = nullptr;
+    OH_NativeXComponent *nativeXComponent = nullptr;
 
     int32_t ret;
-    char idStr[XCOMPONENT_ID_LEN_MAX + 1] = {};
-    uint64_t idSize = XCOMPONENT_ID_LEN_MAX + 1;
+    char idStr[OH_XCOMPONENT_ID_LEN_MAX + 1] = {};
+    uint64_t idSize = OH_XCOMPONENT_ID_LEN_MAX + 1;
 
     // napi_value thisArg;
     NAPI_CALL(env, napi_get_cb_info(env, info, NULL, NULL, &thisArg, NULL));
 
-    status = napi_get_named_property(env, thisArg, NATIVE_XCOMPONENT_OBJ, &exportInstance);
+    status = napi_get_named_property(env, thisArg, OH_NATIVE_XCOMPONENT_OBJ, &exportInstance);
     if (status != napi_ok) {
         return nullptr;
     };
@@ -188,8 +188,8 @@ napi_value PluginRender::NapiChangeShape(napi_env env, napi_callback_info info)
         return nullptr;
     }
 
-    ret = NativeXComponent_GetXComponentId(nativeXComponent, idStr, &idSize);
-    if (ret != XCOMPONENT_RESULT_SUCCESS) {
+    ret = OH_NativeXComponent_GetXComponentId(nativeXComponent, idStr, &idSize);
+    if (ret != OH_NATIVEXCOMPONENT_RESULT_SUCCESS) {
         return nullptr;
     }
 
@@ -206,16 +206,16 @@ napi_value PluginRender::NapiDrawTriangle(napi_env env, napi_callback_info info)
     napi_value exportInstance;
     napi_value thisArg;
     napi_status status;
-    NativeXComponent *nativeXComponent = nullptr;
+    OH_NativeXComponent *nativeXComponent = nullptr;
 
     int32_t ret;
-    char idStr[XCOMPONENT_ID_LEN_MAX + 1] = {};
-    uint64_t idSize = XCOMPONENT_ID_LEN_MAX + 1;
+    char idStr[OH_XCOMPONENT_ID_LEN_MAX + 1] = {};
+    uint64_t idSize = OH_XCOMPONENT_ID_LEN_MAX + 1;
 
     // napi_value thisArg;
     NAPI_CALL(env, napi_get_cb_info(env, info, NULL, NULL, &thisArg, NULL));
 
-    status = napi_get_named_property(env, thisArg, NATIVE_XCOMPONENT_OBJ, &exportInstance);
+    status = napi_get_named_property(env, thisArg, OH_NATIVE_XCOMPONENT_OBJ, &exportInstance);
     if (status != napi_ok) {
         return nullptr;
     };
@@ -225,8 +225,8 @@ napi_value PluginRender::NapiDrawTriangle(napi_env env, napi_callback_info info)
         return nullptr;
     }
 
-    ret = NativeXComponent_GetXComponentId(nativeXComponent, idStr, &idSize);
-    if (ret != XCOMPONENT_RESULT_SUCCESS) {
+    ret = OH_NativeXComponent_GetXComponentId(nativeXComponent, idStr, &idSize);
+    if (ret != OH_NATIVEXCOMPONENT_RESULT_SUCCESS) {
         return nullptr;
     }
 
@@ -244,16 +244,16 @@ napi_value PluginRender::NapiChangeColor(napi_env env, napi_callback_info info)
     napi_value exportInstance;
     napi_value thisArg;
     napi_status status;
-    NativeXComponent *nativeXComponent = nullptr;
+    OH_NativeXComponent *nativeXComponent = nullptr;
 
     int32_t ret;
-    char idStr[XCOMPONENT_ID_LEN_MAX + 1] = {};
-    uint64_t idSize = XCOMPONENT_ID_LEN_MAX + 1;
+    char idStr[OH_XCOMPONENT_ID_LEN_MAX + 1] = {};
+    uint64_t idSize = OH_XCOMPONENT_ID_LEN_MAX + 1;
 
     // napi_value thisArg;
     NAPI_CALL(env, napi_get_cb_info(env, info, NULL, NULL, &thisArg, NULL));
 
-    status = napi_get_named_property(env, thisArg, NATIVE_XCOMPONENT_OBJ, &exportInstance);
+    status = napi_get_named_property(env, thisArg, OH_NATIVE_XCOMPONENT_OBJ, &exportInstance);
     if (status != napi_ok) {
         return nullptr;
     }
@@ -266,8 +266,8 @@ napi_value PluginRender::NapiChangeColor(napi_env env, napi_callback_info info)
     PluginManager::GetInstance()->workerMessageQ_.EnQueue(nativeXComponent);
     uv_async_send(&(PluginManager::GetInstance()->workerChangeColorSignal_));
 
-//    ret = NativeXComponent_GetXComponentId(nativeXComponent, idStr, &idSize);
-//    if (ret != XCOMPONENT_RESULT_SUCCESS) {
+//    ret = OH_NativeXComponent_GetXComponentId(nativeXComponent, idStr, &idSize);
+//    if (ret != OH_NATIVEXCOMPONENT_RESULT_SUCCESS) {
 //        return nullptr;
 //    }
 //

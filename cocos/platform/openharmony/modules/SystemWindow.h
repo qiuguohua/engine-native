@@ -39,7 +39,7 @@ public:
                       int x, int y, int w,
                       int h, int flags) override;
     static SystemWindow* GetInstance();
-    void SetNativeXComponent(NativeXComponent* component);
+    void SetNativeXComponent(OH_NativeXComponent* component);
     /**
      @brief enable/disable(lock) the cursor, default is enabled
      */
@@ -48,16 +48,16 @@ public:
     uintptr_t          getWindowHandler() const override;
     Size getViewSize() const override;
         // Callback, called by ACE XComponent
-    void OnSurfaceCreated(NativeXComponent* component, void* window);
-    void OnSurfaceChanged(NativeXComponent* component, void* window);
-    void OnSurfaceDestroyed(NativeXComponent* component, void* window);
-    void DispatchTouchEvent(NativeXComponent* component, void* window);
+    void OnSurfaceCreated(OH_NativeXComponent* component, void* window);
+    void OnSurfaceChanged(OH_NativeXComponent* component, void* window);
+    void OnSurfaceDestroyed(OH_NativeXComponent* component, void* window);
+    void DispatchTouchEvent(OH_NativeXComponent* component, void* window);
 
 private:
     static SystemWindow* instance_;
 
-    NativeXComponent* component_;
-    NativeXComponentCallback callback_;
+    OH_NativeXComponent* component_;
+    OH_NativeXComponent_Callback callback_;
     void* windowHandler_{nullptr};
     std::string id_{""};
     uint64_t width_{0};

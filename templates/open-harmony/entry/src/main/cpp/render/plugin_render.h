@@ -27,9 +27,9 @@ class PluginRender {
 public:
     PluginRender(std::string& id);
     static PluginRender* GetInstance(std::string& id);
-    static NativeXComponentCallback* GetNXComponentCallback();
+    static OH_NativeXComponent_Callback* GetNXComponentCallback();
 
-    void SetNativeXComponent(NativeXComponent* component);
+    void SetNativeXComponent(OH_NativeXComponent* component);
 
 public:
     // NAPI interface
@@ -42,19 +42,19 @@ public:
     static napi_value NapiChangeColorWorker(napi_env env, napi_callback_info info);
 
     // Callback, called by ACE XComponent
-    void OnSurfaceCreated(NativeXComponent* component, void* window);
+    void OnSurfaceCreated(OH_NativeXComponent* component, void* window);
 
-    void OnSurfaceChanged(NativeXComponent* component, void* window);
+    void OnSurfaceChanged(OH_NativeXComponent* component, void* window);
 
-    void OnSurfaceDestroyed(NativeXComponent* component, void* window);
+    void OnSurfaceDestroyed(OH_NativeXComponent* component, void* window);
 
-    void DispatchTouchEvent(NativeXComponent* component, void* window);
+    void DispatchTouchEvent(OH_NativeXComponent* component, void* window);
 
 public:
     static std::unordered_map<std::string, PluginRender*> instance_;
-    static NativeXComponentCallback callback_;
+    static OH_NativeXComponent_Callback callback_;
 
-    NativeXComponent* component_;
+    OH_NativeXComponent* component_;
     EGLCore* eglCore_;
 
     std::string id_;

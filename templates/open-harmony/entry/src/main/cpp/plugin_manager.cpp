@@ -150,12 +150,12 @@ bool PluginManager::Export(napi_env env, napi_value exports)
     LOGE("kee cocos PluginManager::Export");
     napi_status status;
     napi_value exportInstance = nullptr;
-    NativeXComponent *nativeXComponent = nullptr;
+    OH_NativeXComponent *nativeXComponent = nullptr;
     int32_t ret;
-    char idStr[XCOMPONENT_ID_LEN_MAX + 1] = { };
-    uint64_t idSize = XCOMPONENT_ID_LEN_MAX + 1;
+    char idStr[OH_XCOMPONENT_ID_LEN_MAX + 1] = { };
+    uint64_t idSize = OH_XCOMPONENT_ID_LEN_MAX + 1;
 
-    status = napi_get_named_property(env, exports, NATIVE_XCOMPONENT_OBJ, &exportInstance);
+    status = napi_get_named_property(env, exports, OH_NATIVE_XCOMPONENT_OBJ, &exportInstance);
     if (status != napi_ok) {
         return false;
     }
@@ -165,8 +165,8 @@ bool PluginManager::Export(napi_env env, napi_value exports)
         return false;
     }
     LOGE("kee cocos Export nativeXComponent = %p", nativeXComponent);
-    ret = NativeXComponent_GetXComponentId(nativeXComponent, idStr, &idSize);
-    if (ret != XCOMPONENT_RESULT_SUCCESS) {
+    ret = OH_NativeXComponent_GetXComponentId(nativeXComponent, idStr, &idSize);
+    if (ret != OH_NATIVEXCOMPONENT_RESULT_SUCCESS) {
         return false;
     }
 
@@ -183,7 +183,7 @@ bool PluginManager::Export(napi_env env, napi_value exports)
     return false;
 }
 
-void PluginManager::SetNativeXComponent(std::string& id, NativeXComponent* nativeXComponent)
+void PluginManager::SetNativeXComponent(std::string& id, OH_NativeXComponent* nativeXComponent)
 {
     if (nativeXComponentMap_.find(id) == nativeXComponentMap_.end()) {
         nativeXComponentMap_[id] = nativeXComponent;
@@ -194,7 +194,7 @@ void PluginManager::SetNativeXComponent(std::string& id, NativeXComponent* nativ
     }
 }
 
-NativeXComponent* PluginManager::GetNativeXComponent(std::string& id)
+OH_NativeXComponent* PluginManager::GetNativeXComponent(std::string& id)
 {
     if (nativeXComponentMap_.find(id) == nativeXComponentMap_.end()) {
         return nullptr;
@@ -222,19 +222,19 @@ void PluginManager::MainOnMessage(const uv_async_t* req)
 void PluginManager::WorkerOnMessage(const uv_async_t* req)
 {
     LOGE("kee cocos WorkerOnMessage Triggered");
-    NativeXComponent* nativexcomponet = nullptr;
+    OH_NativeXComponent* nativexcomponet = nullptr;
     void* window = nullptr;
     PluginManager::GetInstance()->workerMessageQ_.DeQueue(reinterpret_cast<MessageDataType*>(&nativexcomponet));
     LOGE("kee cocos WorkerOnMessage nativexcomponent = %p", nativexcomponet);
     int32_t ret;
-    char idStr[XCOMPONENT_ID_LEN_MAX + 1] = {};
-    uint64_t idSize = XCOMPONENT_ID_LEN_MAX + 1;
-    ret = NativeXComponent_GetXComponentId(nativexcomponet, idStr, &idSize);
-    if (ret != XCOMPONENT_RESULT_SUCCESS) {
+    char idStr[OH_XCOMPONENT_ID_LEN_MAX + 1] = {};
+    uint64_t idSize = OH_XCOMPONENT_ID_LEN_MAX + 1;
+    ret = OH_NativeXComponent_GetXComponentId(nativexcomponet, idStr, &idSize);
+    if (ret != OH_NATIVEXCOMPONENT_RESULT_SUCCESS) {
         return;
     }
-    ret = NativeXComponent_GetNativeWindow(nativexcomponet, &window);
-    if (ret != XCOMPONENT_RESULT_SUCCESS) {
+    ret = OH_NativeXComponent_GetNativeWindow(nativexcomponet, &window);
+    if (ret != OH_NATIVEXCOMPONENT_RESULT_SUCCESS) {
         return;
     }
     std::string id(idStr);
@@ -245,14 +245,14 @@ void PluginManager::WorkerOnMessage(const uv_async_t* req)
 void PluginManager::NapiChangeColorWorker(const uv_async_t* req)
 {
     LOGE("kee cocos NapiChangeColorWorker Triggered");
-    NativeXComponent* nativexcomponet = nullptr;
+    OH_NativeXComponent* nativexcomponet = nullptr;
     PluginManager::GetInstance()->workerMessageQ_.DeQueue(reinterpret_cast<MessageDataType*>(&nativexcomponet));
     LOGE("kee cocos NapiChangeColorWorker nativexcomponent = %p", nativexcomponet);
     int32_t ret;
-    char idStr[XCOMPONENT_ID_LEN_MAX + 1] = {};
-    uint64_t idSize = XCOMPONENT_ID_LEN_MAX + 1;
-    ret = NativeXComponent_GetXComponentId(nativexcomponet, idStr, &idSize);
-    if (ret != XCOMPONENT_RESULT_SUCCESS) {
+    char idStr[OH_XCOMPONENT_ID_LEN_MAX + 1] = {};
+    uint64_t idSize = OH_XCOMPONENT_ID_LEN_MAX + 1;
+    ret = OH_NativeXComponent_GetXComponentId(nativexcomponet, idStr, &idSize);
+    if (ret != OH_NATIVEXCOMPONENT_RESULT_SUCCESS) {
         return;
     }
     std::string id(idStr);
