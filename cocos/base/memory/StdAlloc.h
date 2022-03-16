@@ -143,7 +143,7 @@ public:
 
     #ifdef _MSC_VER
         _aligned_free(ptr);
-    #elif defined(__ANDROID__)
+    #elif defined(__ANDROID__) || defined(__NX__)
         if (ptr) {
             unsigned char *mem = (unsigned char *)ptr;
             mem = mem - mem[-1];
