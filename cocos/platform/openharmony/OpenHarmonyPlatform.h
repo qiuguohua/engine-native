@@ -90,7 +90,7 @@ public:
     static napi_value NapiASend(napi_env env, napi_callback_info info);
     static napi_value NapiNativeEngineInit(napi_env env, napi_callback_info info);
 
-    static napi_value NativeResourceManagerInit(napi_env env, napi_callback_info info)
+    static napi_value NativeResourceManagerInit(napi_env env, napi_callback_info info);
 
     void WorkerInit(napi_env env, uv_loop_t* loop);
     int EnginInit(int argc, const char **argv);
