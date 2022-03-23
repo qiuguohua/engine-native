@@ -48,6 +48,7 @@ enum ContextType {
     XCOMPONENT_REGISTER_LIFECYCLE_CALLBACK,
     NATIVE_RENDER_API,
     WORKER_INIT,
+    ENGINT_UTILS,
     UV_ASYNC_SEND
 };
 
@@ -135,6 +136,13 @@ napi_value OpenHarmonyPlatform::GetContext(napi_env env, napi_callback_info info
             };
             NAPI_CALL(env, napi_define_properties(env, exports, sizeof(desc) / sizeof(desc[0]), desc));
         } break;
+        case ENGINE_UTILS: {
+            LOGE("kee cocos GetContext ENGINE_UTILS");
+            napi_property_descriptor desc[] = {
+                DECLARE_NAPI_FUNCTION("resourceManagerInit", OpenHarmonyPlatform::NativeResourceManagerInit),
+            };
+            NAPI_CALL(env, napi_define_properties(env, exports, sizeof(desc) / sizeof(desc[0]), desc));
+        }
         case UV_ASYNC_SEND: {
             LOGE("kee cocos GetContext UV_ASYNC_SEND");
             napi_property_descriptor desc[] = {
@@ -171,6 +179,14 @@ int32_t OpenHarmonyPlatform::run(int argc, const char** argv) {
 }
 
 void OpenHarmonyPlatform::waitWindowInitialized() {
+}
+
+napi_value OpenHarmonyPlatform::NativeResourceManagerInit(napi_env env, napi_callback_info info) {
+    size_t      argc = 1;
+    napi_value  args[1];
+    NAPI_CALL(env, napi_get_cb_info(env, info, &argc, args, nullptr, nullptr));
+    FileUtilsOpenHarmony::initResourceManager(env, args[0]);
+    return nullptr;
 }
 
 napi_value OpenHarmonyPlatform::NapiWorkerInit(napi_env env, napi_callback_info info) {
@@ -265,11 +281,6 @@ void OpenHarmonyPlatform::WorkerOnMessage(const uv_async_t* /* req */) {
 }
 
 napi_value OpenHarmonyPlatform::NapiOnCreate(napi_env env, napi_callback_info info) {
-    size_t      argc = 1;
-    napi_value  args[1];
-    NAPI_CALL(env, napi_get_cb_info(env, info, &argc, args, nullptr, nullptr));
-    FileUtilsOpenHarmony::initResourceManager(env, args[0]);
-
     uv_loop_t* loop = nullptr;
     NAPI_CALL(env, napi_get_uv_event_loop(env, &loop));
     OpenHarmonyPlatform::getInstance()->OnCreateNative(env, loop);
