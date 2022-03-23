@@ -38,7 +38,7 @@
 #include "base/Scheduler.h"
 #include "base/UTF8.h"
 #include "application/ApplicationManager.h"
-#include "platform/openharmony/FileUtils-openharmony.h"
+#include "platform/openharmony/FileUtils-OpenHarmony.h"
 
 #include "audio/openharmony/AudioPlayerProvider.h"
 #include "audio/openharmony/IAudioPlayer.h"

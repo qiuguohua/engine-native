@@ -7,14 +7,17 @@
 #include <rawfile/raw_file_manager.h>
 #include "base/Macros.h"
 #include "cocos/platform/FileUtils.h"
+#include <napi/native_api.h>
+
+class NativeResourceManager;
 
 namespace cc {
 
 class CC_DLL FileUtilsOpenHarmony : public FileUtils {
 public:
     //        FileUtilsOpenHarmony();
-    //        virtual ~FileUtilsOpenHarmony();
-    static bool initResourceManager(NativeResourceManager *mgr, const std::string &assetPath, const std::string &moduleName);
+     ~FileUtilsOpenHarmony() override;
+    static bool initResourceManager(napi_env env, napi_value info);
 
     static void setRawfilePrefix(const std::string &prefix);
 
@@ -31,12 +34,16 @@ public:
     long getFileSize(const std::string &filepath) override;
 
     std::string getSuitableFOpen(const std::string &filenameUtf8) const override;
+
+    FileUtils::Status getContents(const std::string &filename, ResizableBuffer *buffer) override;
+
 private:
     bool isFileExistInternal(const std::string &strFilePath) const override;
 
     bool isDirectoryExistInternal(const std::string &dirPath) const override;
 
     friend class FileUtils;
+    static NativeResourceManager* _nativeResourceManager;
 };
 
 } // namespace cc

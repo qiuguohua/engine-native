@@ -16,14 +16,12 @@
 #include <unistd.h>
 #include "bindings/jswrapper/napi/HelperMacros.h"
 
-#define ASSETS_FOLDER_NAME "/data/accounts/account_0/applications/ohos.example.xcomponent1/ohos.example.xcomponent1/"
-//#define ASSETS_FOLDER_NAME "/data/data/ohos.example.xcomponent1/files/"
 #define ASSETS_FOLDER_WRITEABLE_PATH "/data/accounts/account_0/applications/ohos.example.xcomponent1/ohos.example.xcomponent1/writeable_path"
-//#define ASSETS_FOLDER_WRITEABLE_PATH "/sdcard/cocos/writeable_path"
 
 #ifndef JCLS_HELPER
     #define JCLS_HELPER "com/cocos/lib/CocosHelper"
 #endif
+#include "rawfile/raw_file_manager.h"
 
 namespace cc {
 
@@ -54,18 +52,54 @@ void printRawfiles(NativeResourceManager *mgr, const std::string &path) {
 }
 } // namespace
 
-bool FileUtilsOpenHarmony::initResourceManager(NativeResourceManager *mgr, const std::string &assetPath, const std::string &moduleName) {
-//    CCASSERT(mgr, "ResourceManager should not be empty!");
-//    ohosResourceMgr = mgr;
-//    if (!assetPath.empty() && assetPath[assetPath.length() - 1] != '/') {
-//        ohosAssetPath = assetPath + "/";
-//    } else {
-//        ohosAssetPath = assetPath;
-//    }
-//    if (!moduleName.empty()) {
-//        setRawfilePrefix(moduleName + "/resources/rawfile/");
-//    }
+NativeResourceManager* FileUtilsOpenHarmony::_nativeResourceManager = nullptr;
+
+bool FileUtilsOpenHarmony::initResourceManager(napi_env env, napi_value param) {
+    _nativeResourceManager = OH_ResourceManager_InitNativeResourceManager(env, param);
+    LOGE("cocos qgh  initResourceManager %{public}p", _nativeResourceManager);
     return true;
+}
+
+FileUtils::Status FileUtilsOpenHarmony::getContents(const std::string &filename, ResizableBuffer *buffer) {
+    if (filename.empty()) {
+        return FileUtils::Status::NOT_EXISTS;
+    }
+
+    std::string fullPath = fullPathForFilename(filename);
+    if (fullPath.empty()) {
+        return FileUtils::Status::NOT_EXISTS;
+    }
+
+    if (fullPath[0] == '/') {
+        return FileUtils::getContents(fullPath, buffer);
+    }
+
+    if (nullptr == _nativeResourceManager) {
+        LOGE("cocos qgh getContents _nativeResourceManager = nullptr");
+        return FileUtils::Status::NOT_INITIALIZED;
+    }
+
+    LOGE("cocos qgh getContents %{public}s", fullPath.c_str());
+    RawFile *asset = OH_ResourceManager_OpenRawFile(_nativeResourceManager, fullPath.c_str());
+    if (nullptr == asset) {
+        return FileUtils::Status::OPEN_FAILED;
+    }
+
+    auto size = OH_ResourceManager_GetRawFileSize(asset);
+    buffer->resize(size);
+
+    assert(buffer->buffer());
+
+    int readsize = OH_ResourceManager_ReadRawFile(asset, buffer->buffer(), size);
+    // TODO(unknown): read error
+    if (readsize < size) {
+        if (readsize >= 0) {
+            buffer->resize(readsize);
+        }
+        return FileUtils::Status::READ_FAILED;
+    }
+
+    return FileUtils::Status::OK;
 }
 
 void FileUtilsOpenHarmony::setRawfilePrefix(const std::string &prefix) {
@@ -85,13 +119,18 @@ FileUtils *FileUtils::getInstance() {
     return FileUtils::sharedFileUtils;
 }
 
+FileUtilsOpenHarmony::~FileUtilsOpenHarmony() {
+    if(_nativeResourceManager)
+        OH_ResourceManager_ReleaseNativeResourceManager(_nativeResourceManager);
+}
+
 bool FileUtilsOpenHarmony::init() {
-    _defaultResRootPath = ASSETS_FOLDER_NAME;
+    _defaultResRootPath = "";
     return FileUtils::init();
 }
 
 bool FileUtilsOpenHarmony::isAbsolutePath(const std::string &strPath) const {
-    return !strPath.empty() && (strPath[0] == '/' || strPath.find(ASSETS_FOLDER_NAME) == 0);
+    return !strPath.empty() && (strPath[0] == '/');
 }
 
 std::string FileUtilsOpenHarmony::getSuitableFOpen(const std::string &filenameUtf8) const {
@@ -109,19 +148,20 @@ long FileUtilsOpenHarmony::getFileSize(const std::string &filepath) {
     if (fullPath.empty()) {
         return 0;
     }
+    LOGE("cocos qgh getFileSize %{public}s", fullPath.c_str());
+    if (nullptr == _nativeResourceManager) {
+        LOGE("cocos qgh getContents _nativeResourceManager = nullptr");
+        return 0;
+    }
 
-    FILE *fp = fopen(getSuitableFOpen(fullPath).c_str(), "rb");
-    if (!fp) {
-        return 0;
+    long filesize = 0;
+    RawFile* rawFile = OH_ResourceManager_OpenRawFile(_nativeResourceManager, fullPath.c_str());
+    if(rawFile) {
+        filesize = OH_ResourceManager_GetRawFileSize(rawFile);
+        OH_ResourceManager_CloseRawFile(rawFile);
     }
-    struct stat statBuf;
-    auto descriptor = fileno(fp);
-    if (fstat(descriptor, &statBuf) == -1) {
-        fclose(fp);
-        return 0;
-    }
-    fclose(fp);
-    return statBuf.st_size;
+    LOGE("cocos qgh getFileSize %{public}s  size=%{public}d", fullPath.c_str(), (int)filesize);
+    return filesize;
 }
 
 std::string FileUtilsOpenHarmony::getWritablePath() const {
@@ -129,6 +169,7 @@ std::string FileUtilsOpenHarmony::getWritablePath() const {
 }
 
 bool FileUtilsOpenHarmony::isFileExistInternal(const std::string &strFilePath) const {
+    LOGE("cocos qgh getFileSize %{public}s", strFilePath.c_str());
     if (strFilePath.empty()) {
         return false;
     }
@@ -136,35 +177,46 @@ bool FileUtilsOpenHarmony::isFileExistInternal(const std::string &strFilePath) c
     if (!isAbsolutePath(strPath)) { // Not absolute path, add the default root path at the beginning.
         strPath.insert(0, _defaultResRootPath);
     }
-    FILE *fp = fopen(getSuitableFOpen(strPath).c_str(), "r");
-    LOGE("qgh cocos isFileExistInternal1 %{public}s", getSuitableFOpen(strPath).c_str());
-    if (!fp) {
-        LOGE("qgh cocos isFileExistInternal2 %{public}s", getSuitableFOpen(strPath).c_str());
+
+    if (nullptr == _nativeResourceManager) {
+        LOGE("cocos qgh getContents _nativeResourceManager = nullptr");
         return false;
     }
-    LOGE("qgh cocos isFileExistInternal3 %{public}s", getSuitableFOpen(strPath).c_str());
-    fclose(fp);
-    return true;
+
+    LOGE("cocos qgh getFileSize %{public}s", strPath.c_str());
+    RawFile* rawFile = OH_ResourceManager_OpenRawFile(_nativeResourceManager, strPath.c_str());
+    if(rawFile) {
+        LOGE("cocos qgh getFileSize %{public}s exist", strPath.c_str());
+        OH_ResourceManager_CloseRawFile(rawFile);
+        return true;
+    } 
+    LOGE("cocos qgh getFileSize %{public}s not exist", strPath.c_str());
+    return false;
 }
 
 bool FileUtilsOpenHarmony::isDirectoryExistInternal(const std::string &dirPath) const {
-//    if (dirPath.empty()) return false;
-//    std::string dirPathMf = dirPath[dirPath.length() - 1] == '/' ? dirPath.substr(0, dirPath.length() - 1) : dirPath;
-//
-//    if (dirPathMf[0] == '/') {
-//        struct stat st;
-//        return stat(dirPathMf.c_str(), &st) == 0 && S_ISDIR(st.st_mode);
-//    }
-//
-//    if (dirPathMf.find(_defaultResRootPath) == 0) {
-//        dirPathMf = rawfilePrefix + dirPathMf.substr(_defaultResRootPath.length(), dirPathMf.length());
-//    }
-//    assert(ohosResourceMgr);
-//    auto dir = OpenRawDir(ohosResourceMgr, dirPathMf.c_str());
-//    if (dir != nullptr) {
-//        CloseRawDir(dir);
-//        return true;
-//    }
+    if (dirPath.empty()) return false;
+    std::string dirPathMf = dirPath[dirPath.length() - 1] == '/' ? dirPath.substr(0, dirPath.length() - 1) : dirPath;
+
+    if (dirPathMf[0] == '/') {
+        struct stat st;
+        return stat(dirPathMf.c_str(), &st) == 0 && S_ISDIR(st.st_mode);
+    }
+
+    if (dirPathMf.find(_defaultResRootPath) == 0) {
+        dirPathMf = dirPathMf.substr(_defaultResRootPath.length(), dirPathMf.length());
+    }
+    
+    if (nullptr == _nativeResourceManager) {
+        LOGE("cocos qgh getContents _nativeResourceManager = nullptr");
+        return false;
+    }
+
+    RawDir* rawDir = OH_ResourceManager_OpenRawDir(_nativeResourceManager, dirPathMf.c_str());
+    if(rawDir) {
+        OH_ResourceManager_CloseRawDir(rawDir);
+        return true;
+    }
     return false;
 }
 

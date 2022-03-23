@@ -33,6 +33,8 @@
 #include "bindings/jswrapper/SeApi.h"
 #include "platform/UniversalPlatform.h"
 
+#include "platform/openharmony/FileUtils-OpenHarmony.h"
+
 #include "platform/openharmony/modules/SystemWindow.h"
 #include "bindings/jswrapper/napi/HelperMacros.h"
 
@@ -263,6 +265,11 @@ void OpenHarmonyPlatform::WorkerOnMessage(const uv_async_t* /* req */) {
 }
 
 napi_value OpenHarmonyPlatform::NapiOnCreate(napi_env env, napi_callback_info info) {
+    size_t      argc = 1;
+    napi_value  args[1];
+    NAPI_CALL(env, napi_get_cb_info(env, info, &argc, args, nullptr, nullptr));
+    FileUtilsOpenHarmony::initResourceManager(env, args[0]);
+
     uv_loop_t* loop = nullptr;
     NAPI_CALL(env, napi_get_uv_event_loop(env, &loop));
     OpenHarmonyPlatform::getInstance()->OnCreateNative(env, loop);
