@@ -33,11 +33,10 @@
 #include "base/Log.h"
 #include "base/Macros.h"
 #include "platform/openharmony/OpenHarmonyPlatform.h"
-#include "platform/openharmony/common/PluginCommon.h"
 
 namespace {
 
-void SendToWorker(const cc::MessageType& type, NativeXComponent* component, void* window) {
+void SendToWorker(const cc::MessageType& type, OH_NativeXComponent* component, void* window) {
     cc::OpenHarmonyPlatform* platform = dynamic_cast<cc::OpenHarmonyPlatform*>(cc::BasePlatform::getPlatform());
     CCASSERT(platform != nullptr, "Only supports openharmony platform");
     cc::WorkerMessageData data{type, static_cast<void*>(component), window};
@@ -46,19 +45,19 @@ void SendToWorker(const cc::MessageType& type, NativeXComponent* component, void
         uv_async_send(&(cc::OpenHarmonyPlatform::getInstance()->workerOnMessageSignal_));
 }
 
-void OnSurfaceCreatedCB(NativeXComponent* component, void* window) {
+void OnSurfaceCreatedCB(OH_NativeXComponent* component, void* window) {
     SendToWorker(cc::MessageType::WM_XCOMPONENT_SURFACE_CREATED, component, window);
 }
 
-void DispatchTouchEventCB(NativeXComponent* component, void* window) {
+void DispatchTouchEventCB(OH_NativeXComponent* component, void* window) {
     SendToWorker(cc::MessageType::WM_XCOMPONENT_TOUCH_EVENT, component, window);
 }
 
-void OnSurfaceChangedCB(NativeXComponent* component, void* window) {
+void OnSurfaceChangedCB(OH_NativeXComponent* component, void* window) {
     SendToWorker(cc::MessageType::WM_XCOMPONENT_SURFACE_CHANGED, component, window);
 }
 
-void OnSurfaceDestroyedCB(NativeXComponent* component, void* window) {
+void OnSurfaceDestroyedCB(OH_NativeXComponent* component, void* window) {
     SendToWorker(cc::MessageType::WM_XCOMPONENT_SURFACE_DESTROY, component, window);
 }
 } // namespace
@@ -90,7 +89,7 @@ bool SystemWindow::createWindow(const char* title,
     return true;
 }
 
-void SystemWindow::SetNativeXComponent(NativeXComponent* component) {
+void SystemWindow::SetNativeXComponent(OH_NativeXComponent* component) {
     component_ = component;
     OH_NativeXComponent_RegisterCallback(component_, &callback_);
 }
@@ -111,44 +110,42 @@ SystemWindow::Size SystemWindow::getViewSize() const {
                 static_cast<float>(height_)};
 }
 
-void SystemWindow::OnSurfaceCreated(NativeXComponent* component, void* window) {
+void SystemWindow::OnSurfaceCreated(OH_NativeXComponent* component, void* window) {
     int32_t ret = OH_NativeXComponent_GetXComponentSize(component, window, &width_, &height_);
-    CCASSERT(ret == XCOMPONENT_RESULT_SUCCESS, "GetXComponentSize call failed");
+    CCASSERT(ret == OH_NATIVEXCOMPONENT_RESULT_SUCCESS, "GetXComponentSize call failed");
     windowHandler_ = window;
 }
 
-void SystemWindow::OnSurfaceChanged(NativeXComponent* component, void* window) {
+void SystemWindow::OnSurfaceChanged(OH_NativeXComponent* component, void* window) {
 }
 
-void SystemWindow::OnSurfaceDestroyed(NativeXComponent* component, void* window) {
+void SystemWindow::OnSurfaceDestroyed(OH_NativeXComponent* component, void* window) {
     windowHandler_ = nullptr;
 }
 
-void SystemWindow::DispatchTouchEvent(NativeXComponent* component, void* window) {
-    int32_t ret;
-    // ret = NativeXComponent_GetXComponentOffset(component, window, &x_, &y_);
-    // if (ret != XCOMPONENT_RESULT_SUCCESS) {
-    //     return;
-    // }
-    struct ::TouchInfo touchInfo;
-    ret = OH_NativeXComponent_GetTouchInfo(component, window, &touchInfo);
-    if (ret != XCOMPONENT_RESULT_SUCCESS) {
+void SystemWindow::DispatchTouchEvent(OH_NativeXComponent* component, void* window) {
+    struct OH_NativeXComponent_TouchEvent touchEvent;
+    int32_t ret = OH_NativeXComponent_GetTouchEvent(component, window, &touchEvent);
+    if (ret != OH_NATIVEXCOMPONENT_RESULT_SUCCESS) {
         return;
     }
 
     OpenHarmonyPlatform* platform = dynamic_cast<OpenHarmonyPlatform*>(BasePlatform::getPlatform());
     CCASSERT(platform != nullptr, "Only supports openharmony platform");
     TouchEvent ev;
-    if (touchInfo.type == DOWN) {
+    if (touchEvent.type == OH_NATIVEXCOMPONENT_DOWN) {
         ev.type = cc::TouchEvent::Type::BEGAN;
-    } else if (touchInfo.type == MOVE) {
+    } else if (touchEvent.type == OH_NATIVEXCOMPONENT_MOVE) {
         ev.type = cc::TouchEvent::Type::MOVED;
-    } else if (touchInfo.type == UP) {
+    } else if (touchEvent.type == OH_NATIVEXCOMPONENT_UP) {
         ev.type = cc::TouchEvent::Type::ENDED;
-    } else if (touchInfo.type == CANCEL) {
+    } else if (touchEvent.type == OH_NATIVEXCOMPONENT_CANCEL) {
         ev.type = cc::TouchEvent::Type::CANCELLED;
     }
-    ev.touches.emplace_back(touchInfo.x, touchInfo.y, touchInfo.id);
+    for(int i = 0; i < touchEvent.numPoints; ++i) {
+        ev.touches.emplace_back(touchEvent.touchPoints[i].x, touchEvent.touchPoints[i].y, touchEvent.touchPoints[i].id);
+    }
+
     platform->dispatchEvent(ev);
 }
 

@@ -5,9 +5,9 @@
     #include <Hilog/log.h>
 
     #ifndef LOGI
-        #define LOGI(...) ((void)HiLogPrint(LOG_APP, LOG_INFO, LOG_DOMAIN, "HMG_LOG", __VA_ARGS__))
-        #define LOGW(...) ((void)HiLogPrint(LOG_APP, LOG_WARN, LOG_DOMAIN, "HMG_LOG", __VA_ARGS__))
-        #define LOGE(...) ((void)HiLogPrint(LOG_APP, LOG_ERROR, LOG_DOMAIN, "HMG_LOG", __VA_ARGS__))
+        #define LOGI(...) ((void) OH_LOG_Print(LOG_APP, LOG_INFO, LOG_DOMAIN, "HMG_LOG", __VA_ARGS__))
+        #define LOGW(...) ((void) OH_LOG_Print(LOG_APP, LOG_WARN, LOG_DOMAIN, "HMG_LOG", __VA_ARGS__))
+        #define LOGE(...) ((void) OH_LOG_Print(LOG_APP, LOG_ERROR, LOG_DOMAIN, "HMG_LOG", __VA_ARGS__))
     #endif
 #else
     #define LOGI

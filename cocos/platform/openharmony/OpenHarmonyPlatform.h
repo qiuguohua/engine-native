@@ -96,7 +96,7 @@ public:
 
     // Napi export
     bool Export(napi_env env, napi_value exports);
-    void SetNativeXComponent(NativeXComponent* component);
+    void SetNativeXComponent(OH_NativeXComponent* component);
 
     int32_t run(int argc, const char** argv) override;
     int     getSdkVersion() const override;

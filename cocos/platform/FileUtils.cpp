@@ -46,9 +46,7 @@
 #endif
 #include <sys/stat.h>
 #include <regex>
-#if (CC_PLATFORM == CC_PLATFORM_OPENHARMONY)
-#include "platform/openharmony/common/PluginCommon.h"
-#endif
+#include "bindings/jswrapper/napi/HelperMacros.h"
 
 namespace cc {
 

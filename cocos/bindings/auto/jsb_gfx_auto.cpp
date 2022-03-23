@@ -20574,6 +20574,7 @@ static bool js_gfx_Device_flushCommands(se::State& s) // NOLINT(readability-iden
     SE_PRECONDITION2( cobj, false, "js_gfx_Device_flushCommands : Invalid Native Object");
     const auto& args = s.args();
     size_t argc = args.size();
+    LOGE("qgh cocos %{public}d", argc);
     do {
         if (argc == 1) {
             HolderType<std::vector<cc::gfx::CommandBuffer *>, true> arg0 = {};
@@ -20968,7 +20969,9 @@ static bool js_gfx_Device_present(se::State& s) // NOLINT(readability-identifier
     const auto& args = s.args();
     size_t argc = args.size();
     if (argc == 0) {
+        LOGE("qgh cocos js_gfx_Device_present 0  %{public}p", cobj);
         cobj->present();
+        LOGE("qgh cocos js_gfx_Device_present 1");
         return true;
     }
     SE_REPORT_ERROR("wrong number of arguments: %d, was expecting %d", (int)argc, 0);

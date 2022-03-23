@@ -14,7 +14,7 @@
 
 #include <sys/syscall.h>
 #include <unistd.h>
-#include "platform/openharmony/common/PluginCommon.h"
+#include "bindings/jswrapper/napi/HelperMacros.h"
 
 #define ASSETS_FOLDER_NAME "/data/accounts/account_0/applications/ohos.example.xcomponent1/ohos.example.xcomponent1/"
 //#define ASSETS_FOLDER_NAME "/data/data/ohos.example.xcomponent1/files/"

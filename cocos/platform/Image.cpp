@@ -65,8 +65,8 @@ extern "C" {
 #if (CC_PLATFORM == CC_PLATFORM_ANDROID)
     #include "platform/android/FileUtils-android.h"
 #endif
-#include "platform/openharmony/common/PluginCommon.h"
 #include <map>
+#include "bindings/jswrapper/napi/HelperMacros.h"
 
 namespace cc {
 

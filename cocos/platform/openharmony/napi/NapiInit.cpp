@@ -15,7 +15,6 @@
 #include <ace/xcomponent/native_interface_xcomponent.h>
 #include "bindings/jswrapper/SeApi.h"
 #include "platform/openharmony/OpenHarmonyPlatform.h"
-#include "platform/openharmony/common/PluginCommon.h"
 
 /*
  * function for module exports

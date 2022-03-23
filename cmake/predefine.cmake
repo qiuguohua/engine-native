@@ -121,8 +121,8 @@ else()
 endif()
 
 if("${OHOS_ARCH}" STREQUAL "armeabi-v7a")
-    message("OHOS_ARCH : ${OHOS_ARCH}")
-    set(CMAKE_CXX_FLAGS "-march=armv7a ${CMAKE_CXX_FLAGS}")
+    message("OHOS_ARCH1 : ${OHOS_ARCH}")
+    set(CMAKE_CXX_FLAGS "-march=armv7a -fvisibility=hidden -fvisibility-inlines-hidden ${CMAKE_CXX_FLAGS}")
 endif()
 
 function(cc_enable_werror source_list)

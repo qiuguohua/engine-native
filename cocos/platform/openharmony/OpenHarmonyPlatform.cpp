@@ -24,8 +24,6 @@
 ****************************************************************************/
 #include "platform/openharmony/OpenHarmonyPlatform.h"
 #include "base/Macros.h"
-#include "platform/openharmony/common/PluginCommon.h"
-#include "platform/openharmony/render/PluginRender.h"
 
 #include <ace/xcomponent/native_interface_xcomponent.h>
 #include <napi/native_api.h>
@@ -34,7 +32,10 @@
 #include "application/CocosApplication.h"
 #include "bindings/jswrapper/SeApi.h"
 #include "platform/UniversalPlatform.h"
+
 #include "platform/openharmony/modules/SystemWindow.h"
+#include "bindings/jswrapper/napi/HelperMacros.h"
+
 #include <sstream>
 #include <chrono>
 
@@ -188,7 +189,7 @@ napi_value OpenHarmonyPlatform::NapiNativeEngineInit(napi_env env, napi_callback
     void*             window          = nullptr;
     WorkerMessageData msgData;
     OpenHarmonyPlatform::getInstance()->workerMessageQ_.DeQueue(reinterpret_cast<WorkerMessageData*>(&msgData));
-    NativeXComponent* nativexcomponet = reinterpret_cast<NativeXComponent*>(msgData.data);
+    OH_NativeXComponent* nativexcomponet = reinterpret_cast<OH_NativeXComponent*>(msgData.data);
     LOGE("kee cocos NapiNativeEngineInit nativexcomponent = %p", nativexcomponet);
     SystemWindow* systemWindowIntf = getPlatform()->getInterface<SystemWindow>();
     CCASSERT(systemWindowIntf, "Invalid interface pointer");
@@ -206,13 +207,13 @@ bool OpenHarmonyPlatform::Export(napi_env env, napi_value exports) {
     // Application/SDK etc. Init
     // XComponent Init:
     napi_value        exportInstance   = nullptr;
-    NativeXComponent* nativeXComponent = nullptr;
+    OH_NativeXComponent* nativeXComponent = nullptr;
     int32_t           ret;
 
-    char     idStr[XCOMPONENT_ID_LEN_MAX + 1] = {};
-    uint64_t idSize                           = XCOMPONENT_ID_LEN_MAX + 1;
+    char     idStr[OH_XCOMPONENT_ID_LEN_MAX + 1] = {};
+    uint64_t idSize                           = OH_XCOMPONENT_ID_LEN_MAX + 1;
 
-    status = napi_get_named_property(env, exports, NATIVE_XCOMPONENT_OBJ, &exportInstance);
+    status = napi_get_named_property(env, exports, OH_NATIVE_XCOMPONENT_OBJ, &exportInstance);
     if (status != napi_ok) {
         return false;
     }
@@ -224,7 +225,7 @@ bool OpenHarmonyPlatform::Export(napi_env env, napi_value exports) {
     }
 
     ret = OH_NativeXComponent_GetXComponentId(nativeXComponent, idStr, &idSize);
-    if (ret != XCOMPONENT_RESULT_SUCCESS) {
+    if (ret != OH_NATIVEXCOMPONENT_RESULT_SUCCESS) {
         return false;
     }
 
@@ -244,7 +245,7 @@ void OpenHarmonyPlatform::WorkerOnMessage(const uv_async_t* /* req */) {
     WorkerMessageData msgData;
     OpenHarmonyPlatform::getInstance()->workerMessageQ_.DeQueue(reinterpret_cast<WorkerMessageData*>(&msgData));
 
-    NativeXComponent* nativexcomponet = reinterpret_cast<NativeXComponent*>(msgData.data);
+    OH_NativeXComponent* nativexcomponet = reinterpret_cast<OH_NativeXComponent*>(msgData.data);
     CCASSERT(nativexcomponet != nullptr, "nativexcomponent cannot be empty");
 
     SystemWindow* systemWindowIntf = getPlatform()->getInterface<SystemWindow>();
