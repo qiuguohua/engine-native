@@ -273,7 +273,7 @@ void CanvasRenderingContext2D::setFont(const std::string &font) {
         //SE_LOGD("CanvasRenderingContext2D::set_font: %s, Size: %f, isBold: %b\n", fontName.c_str(), fontSize, !boldStr.empty());
         _delegate->updateFont(fontName, fontSize, !boldStr.empty(), false, false, false);
     }
-#elif CC_PLATFORM == CC_PLATFORM_NX_WINDOWS
+#elif CC_PLATFORM == CC_PLATFORM_NX_WINDOWS || CC_PLATFORM == CC_PLATFORM_NX
     if (_font != font) {
         _font = font;
 
