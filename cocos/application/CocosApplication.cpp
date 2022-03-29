@@ -54,7 +54,6 @@ int CocosApplication::init() {
     }
     auto callback = std::bind(&CocosApplication::handleAppEvent, this, std::placeholders::_1); // NOLINT(modernize-avoid-bind)
     _engine->addEventCallback(OSEventType::APP_OSEVENT, callback);
-#if (CC_PLATFORM != CC_PLATFORM_NX)
     se::ScriptEngine *se = se::ScriptEngine::getInstance();
 
     jsb_init_file_operation_delegate();
@@ -66,7 +65,6 @@ int CocosApplication::init() {
     jsb_register_all_modules();
 
     se->start();
-#endif
 
 #if (CC_PLATFORM == CC_PLATFORM_MAC_IOS)
     auto     logicSize  = _systemWidow->getViewSize();
@@ -116,20 +114,16 @@ void CocosApplication::onClose() {
 }
 
 void CocosApplication::setJsDebugIpAndPort(const std::string &serverAddr, uint32_t port, bool isWaitForConnect) {
-#if (CC_PLATFORM != CC_PLATFORM_NX)
 
 #if defined(CC_DEBUG) && (CC_DEBUG > 0)
     // Enable debugger here
     jsb_enable_debugger(serverAddr, port, isWaitForConnect);
 #endif
 
-#endif
 }
 
 void CocosApplication::runJsScript(const std::string &filePath) {
-#if (CC_PLATFORM != CC_PLATFORM_NX)
     jsb_run_script(filePath);
-#endif
 }
 
 void CocosApplication::handleException(const char *location, const char *message, const char *stack) {
@@ -138,9 +132,7 @@ void CocosApplication::handleException(const char *location, const char *message
 }
 
 void CocosApplication::setXXTeaKey(const std::string &key) {
-#if (CC_PLATFORM != CC_PLATFORM_NX)
     jsb_set_xxtea_key(key);
-#endif
 }
 
 void CocosApplication::createWindow(const char *title,

@@ -10,8 +10,9 @@ set(COCOS2D_SOURCE_LIST)
 
 ################################# options ############################################
 # default fallback options
-cc_set_if_undefined(USE_SE_V8                ON)
-cc_set_if_undefined(USE_V8_DEBUGGER          ON)
+cc_set_if_undefined(USE_SE_V8                OFF)
+cc_set_if_undefined(USE_SE_QUICKJS           ON)
+cc_set_if_undefined(USE_V8_DEBUGGER          OFF)
 cc_set_if_undefined(USE_SOCKET               ON)
 cc_set_if_undefined(USE_AUDIO                ON)
 cc_set_if_undefined(USE_EDIT_BOX             ON)
@@ -33,18 +34,17 @@ if(NX)
     cc_set_if_undefined(CC_USE_VULKAN ON)
     cc_set_if_undefined(CC_USE_GLES3 OFF)
     cc_set_if_undefined(CC_USE_GLES2 OFF)
-    set(USE_AUDIO OFF)
+    set(USE_AUDIO ON)
     set(USE_SOCKET OFF)
     set(USE_VIDEO OFF)
     set(USE_V8_DEBUGGER OFF)
-    set(USE_SE_V8 ON)
     set(USE_EDIT_BOX OFF)
 
     set(USE_VIDEO OFF)
     set(USE_WEBVIEW OFF)
     set(USE_MIDDLEWARE OFF)
-    set(USE_DRAGONBONES OFF)
-    set(USE_SPINE OFF)
+    set(USE_DRAGONBONES ON)
+    set(USE_SPINE ON)
 elseif(ANDROID OR WINDOWS OR OHOS)
     cc_set_if_undefined(CC_USE_GLES3 ON)
     cc_set_if_undefined(CC_USE_VULKAN OFF)
@@ -66,6 +66,14 @@ endif()
 if(USE_SE_JSC)
     set(USE_SE_V8 OFF)
     set(USE_V8_DEBUGGER OFF)
+    set(USE_SE_QUICKJS OFF)
+endif()
+
+if(USE_SE_QUICKJS)
+    set(USE_SE_V8 OFF)
+    set(USE_V8_DEBUGGER OFF)
+    set(USE_SE_SM OFF)
+    set(USE_SE_JSC OFF)
 endif()
 
 if(NOT USE_SOCKET)
@@ -801,7 +809,7 @@ if(NOT APPLE AND USE_SOCKET)
     )
 endif()
 
-if(NX_WINDOWS)
+if(NX_WINDOWS OR NX)
     cocos_source_files(
         NO_WERROR    cocos/network/Downloader-curl.cpp
                     cocos/network/Downloader-curl.h
@@ -813,7 +821,7 @@ elseif(WINDOWS OR LINUX OR QNX)
     )
 endif()
 
-if(NX_WINDOWS)
+if(NX_WINDOWS OR NX)
     cocos_source_files(
         NO_WERROR    cocos/network/HttpClient.cpp
     )
@@ -849,7 +857,7 @@ cocos_source_files(MODULE ccutils
 )
 
 ########## module ccfilesystem
-if(WINDOWS OR NX_WINDOWS)
+if(WINDOWS OR NX_WINDOWS OR NX)
     cocos_source_files(MODULE ccfilesystem
         cocos/platform/FileUtils.cpp
         cocos/platform/FileUtils.h
@@ -1531,7 +1539,6 @@ if(USE_PHYSICS_PHYSX)
     )
 endif()
 
-if(NOT NX)
 ##### script bindings
 ######## dop
 cocos_source_files(
@@ -1579,7 +1586,6 @@ if(USE_WEBVIEW)
         NO_WERROR    cocos/bindings/auto/jsb_webview_auto.cpp
                      cocos/bindings/auto/jsb_webview_auto.h
     )
-endif()
 endif()
 
 if(USE_MIDDLEWARE)
@@ -1868,7 +1874,6 @@ if(USE_MIDDLEWARE)
     endif()
 endif()
 
-if(NOT NX)
 ######## manual
 cocos_source_files(
     NO_WERROR    cocos/bindings/manual/jsb_classtype.cpp
@@ -1937,7 +1942,7 @@ elseif(APPLE)
                     cocos/platform/apple/JsbBridgeWrapper.h
                     cocos/platform/apple/JsbBridgeWrapper.mm
     )
-elseif(WINDOWS OR NX_WINDOWS)
+elseif(WINDOWS OR NX_WINDOWS OR NX)
     cocos_source_files(
         NO_WERROR    cocos/bindings/manual/jsb_platfrom_win32.cpp
     )
@@ -2023,6 +2028,24 @@ if(USE_SE_JSC)
     )
 endif()
 
+
+if(USE_SE_QUICKJS)
+    cocos_source_files(MODULE ccbindings
+                    cocos/bindings/jswrapper/quickjs/Base.h
+        NO_WERROR   cocos/bindings/jswrapper/quickjs/Class.cpp
+                    cocos/bindings/jswrapper/quickjs/Class.h
+                    cocos/bindings/jswrapper/quickjs/HelperMacros.h
+        NO_WERROR   cocos/bindings/jswrapper/quickjs/HelperMacros.cpp
+        NO_WERROR   cocos/bindings/jswrapper/quickjs/Object.cpp
+                    cocos/bindings/jswrapper/quickjs/Object.h
+        NO_WERROR   cocos/bindings/jswrapper/quickjs/ScriptEngine.cpp
+                    cocos/bindings/jswrapper/quickjs/ScriptEngine.h
+                    cocos/bindings/jswrapper/quickjs/SeApi.h
+        NO_WERROR   cocos/bindings/jswrapper/quickjs/Utils.cpp
+                    cocos/bindings/jswrapper/quickjs/Utils.h
+    )
+endif()
+
 cocos_source_files(MODULE ccbindings
                  cocos/bindings/jswrapper/config.cpp
                  cocos/bindings/jswrapper/config.h
@@ -2047,7 +2070,6 @@ cocos_source_files(
                  cocos/bindings/event/EventDispatcher.cpp
                  cocos/bindings/event/EventDispatcher.h
 )
-endif()
 
 #### storage
 cocos_source_files(
@@ -2310,6 +2332,7 @@ function(cc_apply_definations target)
         $<IF:$<BOOL:${USE_JOB_SYSTEM_TASKFLOW}>,USE_JOB_SYSTEM_TASKFLOW=1,USE_JOB_SYSTEM_TASKFLOW=0>
         $<IF:$<BOOL:${USE_PHYSICS_PHYSX}>,USE_PHYSICS_PHYSX=1,USE_PHYSICS_PHYSX=0>
         $<$<BOOL:${USE_SE_JSC}>:SCRIPT_ENGINE_TYPE=3>
+        $<$<BOOL:${USE_SE_QUICKJS}>:SCRIPT_ENGINE_TYPE=5>
         $<$<CONFIG:Debug>:CC_DEBUG=1>
     )
 endfunction()

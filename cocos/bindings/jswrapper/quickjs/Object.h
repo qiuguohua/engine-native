@@ -1,6 +1,5 @@
 /****************************************************************************
- Copyright (c) 2016 Chukong Technologies Inc.
- Copyright (c) 2017-2022 Xiamen Yaji Software Co., Ltd.
+ Copyright (c) 2022 Xiamen Yaji Software Co., Ltd.
 
  http://www.cocos.com
 
@@ -28,29 +27,15 @@
 
 #include "../config.h"
 
-#if SCRIPT_ENGINE_TYPE == SCRIPT_ENGINE_V8
+#if SCRIPT_ENGINE_TYPE == SCRIPT_ENGINE_QUICKJS
 
     #include "../RefCounter.h"
     #include "../Value.h"
     #include "Base.h"
-    #include "ObjectWrap.h"
-
-    #include <memory>
-
-    // DEBUG ONLY:
-    // Set `__object_id__` && `__native_class_name__` for js object
-    #ifndef CC_DEBUG_JS_OBJECT_ID
-        #define CC_DEBUG_JS_OBJECT_ID 0
-    #endif
 
 namespace se {
 
 class Class;
-class ScriptEngine;
-
-namespace internal {
-struct PrivateData;
-}
 
 /**
      * se::Object represents JavaScript Object.
@@ -80,7 +65,7 @@ public:
          *  @note The return value (non-null) has to be released manually.
          *  @deprecated This method is deprecated, please use `se::Object::createTypedArray` instead.
          */
-    SE_DEPRECATED_ATTRIBUTE static Object *createUint8TypedArray(uint8_t *bytes, size_t byteLength);
+    SE_DEPRECATED_ATTRIBUTE static Object *createUint8TypedArray(uint8_t *data, size_t byteLength);
 
     enum class TypedArrayType {
         NONE,
@@ -107,13 +92,30 @@ public:
     static Object *createTypedArray(TypedArrayType type, const void *data, size_t byteLength);
 
     /**
+         *  @brief Creates a JavaScript Typed Array Object with a se::Object, which is a ArrayBuffer,
+                   if provide a null pointer,then will create a empty JavaScript Typed Array Object.
+         *  @param[in] type The format of typed array.
+         *  @param[in] obj A ArrayBuffer to TypedArray.
+         *  @param[in] offset Offset of ArrayBuffer to create with.
+         *  @param[in] byteLength The number of bytes pointed to by the parameter bytes.
+         *  @return A JavaScript Typed Array Object which refers to the ArrayBuffer Object, or nullptr if there is an error.
+         *  @note The return value (non-null) has to be released manually.
+         */
+    static Object *createTypedArrayWithBuffer(TypedArrayType type, const Object *obj);
+    static Object *createTypedArrayWithBuffer(TypedArrayType type, const Object *obj, size_t offset);
+    static Object *createTypedArrayWithBuffer(TypedArrayType type, const Object *obj, size_t offset, size_t byteLength);
+
+    /**
          *  @brief Creates a JavaScript Array Buffer object from an existing pointer.
          *  @param[in] bytes A pointer to the byte buffer to be used as the backing store of the Typed Array object.
          *  @param[in] byteLength The number of bytes pointed to by the parameter bytes.
          *  @return A Array Buffer Object whose backing store is the same as the one pointed to data, or nullptr if there is an error.
          *  @note The return value (non-null) has to be released manually.
          */
-    static Object *createArrayBufferObject(void *data, size_t byteLength);
+    static Object *createArrayBufferObject(const void *data, size_t byteLength);
+
+    using BufferContentsFreeFunc = void (*)(void *contents, size_t byteLength, void *userData);
+    static Object *createExternalArrayBufferObject(void *contents, size_t nbytes, BufferContentsFreeFunc freeFunc, void *freeUserData = nullptr);
 
     /**
          *  @brief Creates a JavaScript Object from a JSON formatted string.
@@ -145,7 +147,11 @@ public:
          *  @param[out] value The property's value if object has the property, otherwise the undefined value.
          *  @return true if object has the property, otherwise false.
          */
-    bool getProperty(const char *name, Value *data);
+    inline bool getProperty(const char *name, Value *data) {
+        return getProperty(name, data, false);
+    }
+
+    bool getProperty(const char *name, Value *data, bool cachePropertyName);
 
     inline bool getProperty(const std::string &name, Value *value) {
         return getProperty(name.c_str(), value);
@@ -157,18 +163,11 @@ public:
          *  @param[in] value A value to be used as the property's value.
          *  @return true if the property is set successfully, otherwise false.
          */
-    bool setProperty(const char *name, const Value &data);
+    bool setProperty(const char *name, const Value &value);
 
     inline bool setProperty(const std::string &name, const Value &value) {
         return setProperty(name.c_str(), value);
     }
-
-    /**
-         *  @brief Delete a property of an object.
-         *  @param[in] name A utf-8 string containing the property's name.
-         *  @return true if the property is deleted successfully, otherwise false.
-         */
-    bool deleteProperty(const char *name);
 
     /**
          *  @brief Defines a property with native accessor callbacks for an object.
@@ -177,7 +176,9 @@ public:
          *  @param[in] setter The native callback for setter.
          *  @return true if succeed, otherwise false.
          */
-    bool defineProperty(const char *name, v8::AccessorNameGetterCallback getter, v8::AccessorNameSetterCallback setter);
+    bool defineProperty(const char *name, JSPropGetter getter, JSPropSetter setter);
+
+    bool defineOwnProperty(const char *name, const se::Value &value, bool writable = true, bool enumerable = true, bool configurable = true);
 
     /**
          *  @brief Defines a function with a native callback for an object.
@@ -185,7 +186,8 @@ public:
          *  @param[in] func The native callback triggered by JavaScript code.
          *  @return true if succeed, otherwise false.
          */
-    bool defineFunction(const char *funcName, v8::FunctionCallback func);
+    bool defineFunction(const char *funcName, JSCFunction *func);
+
     /**
          *  @brief Tests whether an object can be called as a function.
          *  @return true if object can be called as a function, otherwise false.
@@ -291,6 +293,12 @@ public:
     void clearPrivateData(bool clearMapping = true);
 
     /**
+     * @brief Sets whether to clear the mapping of native object & se::Object in finalizer
+     */
+    inline void setClearMappingInFinalizer(bool v) { _clearMappingInFinalizer = v; }
+    inline bool isClearMappingInFinalizer() const { return _clearMappingInFinalizer; }
+
+    /**
          *  @brief Roots an object from garbage collection.
          *  @note Use this method when you want to store an object in a global or on the heap, where the garbage collector will not be able to discover your reference to it.
          *        An object may be rooted multiple times and must be unrooted an equal number of times before becoming eligible for garbage collection.
@@ -381,46 +389,49 @@ public:
          *  @return The string for describing current object.
          */
     std::string toString() const;
-    // Private API used in wrapper
-    static Object *       _createJSObject(Class *cls, v8::Local<v8::Object> obj); // NOLINT(readability-identifier-naming)
-    v8::Local<v8::Object> _getJSObject() const;                                   // NOLINT(readability-identifier-naming)
-    ObjectWrap &          _getWrap();                                             // NOLINT(readability-identifier-naming)
-    Class *               _getClass() const;                                      // NOLINT(readability-identifier-naming)
 
-    void _setFinalizeCallback(V8FinalizeFunc finalizeCb); // NOLINT(readability-identifier-naming)
-    bool _isNativeFunction() const;                       // NOLINT(readability-identifier-naming)
+    // Private API used in wrapper
+    static Object *_createJSObject(Class *cls, JSValue obj);
+    void           _setFinalizeCallback(JSClassFinalizer finalizeCb);
+    JSValue        _getJSObject() const;
+    Class *        _getClass() const { return _cls; }
+    inline void    _setFirstSendToQuickAPI(bool v) { _isFirstSendToQuick = v; }
+    inline bool    _isFirstSendToQuickAPI() const { return _isFirstSendToQuick; }
     //
 
-    #if CC_DEBUG && CC_DEBUG_JS_OBJECT_ID
-    uint32_t getObjectId() const { return _objectId; }
-    #endif
-
 private:
-    static void nativeObjectFinalizeHook(void *nativeObj);
-    static void setIsolate(v8::Isolate *isolate);
-    static void cleanup();
-    static void setup();
-
     Object();
-    ~Object() override;
-    bool init(Class *cls, v8::Local<v8::Object> obj);
+    bool init(Class *cls, JSValue obj);
+    virtual ~Object();
 
-    Class *    _cls;
-    ObjectWrap _obj;
-    uint32_t   _rootCount;
+    static void setContext(JSContext *cx);
+    static void cleanup();
 
-    void *                 _privateData;
-    V8FinalizeFunc         _finalizeCb;
-    internal::PrivateData *_internalData;
+    void protect();
+    void unprotect();
+    void reset();
+    bool hasProperty(const char *name) const;
 
-    #if CC_DEBUG && CC_DEBUG_JS_OBJECT_ID
-    uint32_t _objectId = 0;
-    #endif
+    JSValue _obj{JS_UNDEFINED};
+
+    void *_privateData{nullptr};
+
+    Class *           _cls{nullptr};
+    JSClassFinalizer *_finalizeCb{nullptr};
+
+    uint32_t _rootCount{0};
+    uint32_t _currentVMId{0};
+
+    bool _clearMappingInFinalizer{true};
+    bool _isFirstSendToQuick{true};
+
     friend class ScriptEngine;
+    friend class Class;
+    friend class Value;
 };
-// NOLINTNEXTLINE
-extern std::unique_ptr<std::unordered_map<Object *, void *>> __objectMap; // Currently, the value `void*` is always nullptr
+
+extern std::unordered_map<Object *, void *> __objectMap; // Currently, the value `void*` is always nullptr
 
 } // namespace se
 
-#endif // #if SCRIPT_ENGINE_TYPE == SCRIPT_ENGINE_V8
+#endif // #if SCRIPT_ENGINE_TYPE == SCRIPT_ENGINE_QUICKJS

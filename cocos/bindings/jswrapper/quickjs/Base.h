@@ -1,6 +1,5 @@
 /****************************************************************************
- Copyright (c) 2016 Chukong Technologies Inc.
- Copyright (c) 2017-2022 Xiamen Yaji Software Co., Ltd.
+ Copyright (c) 2022 Xiamen Yaji Software Co., Ltd.
 
  http://www.cocos.com
 
@@ -25,24 +24,19 @@
 ****************************************************************************/
 
 #pragma once
-#include "libplatform/libplatform.h"
-//#define V8_DEPRECATION_WARNINGS 1
-//#define V8_IMMINENT_DEPRECATION_WARNINGS 1
-//#define V8_HAS_ATTRIBUTE_DEPRECATED_MESSAGE 1
 
-#include "v8.h"
+#include "quickjs-libc.h"
+#include "quickjs.h"
 
-#include <assert.h>
-#include <string.h>  // Resolves that memset, memcpy aren't found while APP_PLATFORM >= 22 on Android
-#include <algorithm> // for std::find
-#include <chrono>
-#include <functional>
-#include <string>
-#include <unordered_map>
-#include <vector>
+using JSPropGetter = JSValue (*)(JSContext *ctx, JSValueConst this_val);
+using JSPropSetter = JSValue (*)(JSContext *ctx, JSValueConst this_val, JSValueConst val);
 
 #include "HelperMacros.h"
 
-namespace se {
-using V8FinalizeFunc = void (*)(void *nativeObj);
-}
+#include <assert.h>
+#include <chrono>
+#include <functional>
+#include <initializer_list>
+#include <string>
+#include <unordered_map>
+#include <vector>

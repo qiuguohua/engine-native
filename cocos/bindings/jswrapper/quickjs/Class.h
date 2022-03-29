@@ -28,7 +28,7 @@
 
 #include "../config.h"
 
-#if SCRIPT_ENGINE_TYPE == SCRIPT_ENGINE_V8
+#if SCRIPT_ENGINE_TYPE == SCRIPT_ENGINE_QUICKJS
 
     #include "Base.h"
 
@@ -50,7 +50,8 @@ public:
          *  @return A class instance used for creating relevant native binding objects.
          *  @note Don't need to delete the pointer return by this method, it's managed internally.
          */
-    static Class *create(const std::string &className, Object *obj, Object *parentProto, v8::FunctionCallback ctor);
+    static Class *create(const char *className, Object *obj, Object *parentProto, JSCFunction *ctor);
+    static Class *create(const std::initializer_list<const char *> &classPath, se::Object *parent, Object *parentProto, JSCFunction *ctor);
 
     /**
          *  @brief Defines a member function with a callback. Each objects created by class will have this function property.
@@ -58,7 +59,7 @@ public:
          *  @param[in] func A callback to invoke when the property is called as a function.
          *  @return true if succeed, otherwise false.
          */
-    bool defineFunction(const char *name, v8::FunctionCallback func);
+    bool defineFunction(const char *name, JSCFunction *func);
 
     /**
          *  @brief Defines a property with accessor callbacks. Each objects created by class will have this property.
@@ -67,7 +68,8 @@ public:
          *  @param[in] setter A callback to invoke when the property is set.
          *  @return true if succeed, otherwise false.
          */
-    bool defineProperty(const char *name, v8::AccessorNameGetterCallback getter, v8::AccessorNameSetterCallback setter);
+    bool defineProperty(const char *name, JSPropGetter getter, JSPropSetter setter);
+    bool defineProperty(const std::initializer_list<const char *> &names, JSPropGetter getter, JSPropSetter setter);
 
     /**
          *  @brief Defines a static function with a callback. Only JavaScript constructor object will have this function.
@@ -75,7 +77,7 @@ public:
          *  @param[in] func A callback to invoke when the constructor's property is called as a function.
          *  @return true if succeed, otherwise false.
          */
-    bool defineStaticFunction(const char *name, v8::FunctionCallback func);
+    bool defineStaticFunction(const char *name, JSCFunction *func);
 
     /**
          *  @brief Defines a static property with accessor callbacks. Only JavaScript constructor object will have this property.
@@ -84,13 +86,14 @@ public:
          *  @param[in] setter A callback to invoke when the constructor's property is set.
          *  @return true if succeed, otherwise false.
          */
-    bool defineStaticProperty(const char *name, v8::AccessorNameGetterCallback getter, v8::AccessorNameSetterCallback setter);
+    bool defineStaticProperty(const char *name, JSPropGetter getter, JSPropSetter setter);
+
     /**
          *  @brief Defines the finalize function with a callback.
          *  @param[in] func The callback to invoke when a JavaScript object is garbage collected.
          *  @return true if succeed, otherwise false.
          */
-    bool defineFinalizeFunction(V8FinalizeFunc func);
+    bool defineFinalizeFunction(JSClassFinalizer func);
 
     /**
          *  @brief Installs class to JavaScript VM.
@@ -104,41 +107,48 @@ public:
          *  @return The proto object of this class.
          *  @note Don't need to be released in user code.
          */
-    Object *getProto() const;
+    Object *getProto();
 
     /**
          *  @brief Gets the class name.
          *  @return The class name.
          */
-    const char *getName() const { return _name.c_str(); }
+    const char *getName() const { return _name; }
 
     // Private API used in wrapper
-    V8FinalizeFunc _getFinalizeFunction() const;
-
+    JSClassFinalizer *_getFinalizeCb() const;
+    JSClassID         _getClassID() const { return _classId; };
+    //
 private:
     Class();
     ~Class();
 
-    void setCreateProto(bool createProto);
-    bool init(const std::string &clsName, Object *parent, Object *parentProto, v8::FunctionCallback ctor);
+    bool init(const char *clsName, Object *obj, Object *parentProto, JSCFunction *ctor);
     void destroy();
 
+    static JSValue _createJSObjectWithClass(Class *cls);
+
+    static void setContext(JSContext *cx);
     static void cleanup();
-    //        static v8::Local<v8::Object> _createJSObject(const std::string &clsName, Class** outCls);
-    static v8::Local<v8::Object> _createJSObjectWithClass(Class *cls);
-    static void                  setIsolate(v8::Isolate *isolate);
-    std::string _name;
-    Object *    _parent;
-    Object *    _parentProto;
-    Object *    _proto;
-    v8::FunctionCallback                       _ctor;
-    v8::UniquePersistent<v8::FunctionTemplate> _ctorTemplate;
-    V8FinalizeFunc                             _finalizeFunc;
-    bool                                       _createProto;
+
+    const char *_name{nullptr};
+    Object *    _parent{nullptr};
+    Object *    _proto{nullptr};
+    Object *    _parentProto{nullptr};
+
+    JSCFunction *     _ctor{nullptr};
+    JSClassFinalizer *_finalizeOp{nullptr};
+
+    JSClassDef _classOps;
+    JSClassID  _classId{0};
+
+    std::vector<JSCFunctionListEntry> _propertiesOrFuncs;
+    std::vector<JSCFunctionListEntry> _staticPropertiesOrStaticFuncs;
+
     friend class ScriptEngine;
     friend class Object;
 };
 
 } // namespace se
 
-#endif // #if SCRIPT_ENGINE_TYPE == SCRIPT_ENGINE_V8
+#endif // #if SCRIPT_ENGINE_TYPE == SCRIPT_ENGINE_QUICKJS

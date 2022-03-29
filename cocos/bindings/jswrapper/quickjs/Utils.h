@@ -1,6 +1,5 @@
 /****************************************************************************
- Copyright (c) 2016 Chukong Technologies Inc.
- Copyright (c) 2017-2022 Xiamen Yaji Software Co., Ltd.
+ Copyright (c) 2022 Xiamen Yaji Software Co., Ltd.
 
  http://www.cocos.com
 
@@ -25,24 +24,40 @@
 ****************************************************************************/
 
 #pragma once
-#include "libplatform/libplatform.h"
-//#define V8_DEPRECATION_WARNINGS 1
-//#define V8_IMMINENT_DEPRECATION_WARNINGS 1
-//#define V8_HAS_ATTRIBUTE_DEPRECATED_MESSAGE 1
 
-#include "v8.h"
+#include "../config.h"
 
-#include <assert.h>
-#include <string.h>  // Resolves that memset, memcpy aren't found while APP_PLATFORM >= 22 on Android
-#include <algorithm> // for std::find
-#include <chrono>
-#include <functional>
-#include <string>
-#include <unordered_map>
-#include <vector>
+#if SCRIPT_ENGINE_TYPE == SCRIPT_ENGINE_QUICKJS
 
-#include "HelperMacros.h"
+    #include "Base.h"
+
+    #include "../Value.h"
 
 namespace se {
-using V8FinalizeFunc = void (*)(void *nativeObj);
-}
+
+class Class;
+
+namespace internal {
+
+void forceConvertJsValueToStdString(JSContext *cx, JSValue jsval, std::string *ret);
+
+void jsToSeArgs(JSContext *cx, int argc, JSValueConst *argv, ValueArray &outArr);
+void jsToSeValue(JSContext *cx, JSValueConst jsval, Value *v);
+void seToJsArgs(JSContext *cx, int argc, const Value *args, JSValue *outArr);
+void seToJsValue(JSContext *cx, const Value &v, JSValue *outVal);
+void setReturnJSValue(JSContext *cx, const Value &arg, JSValue *outVal);
+
+bool  hasPrivate(JSValue obj);
+void *getPrivate(JSValue obj);
+void  setPrivate(JSValue obj, Object *seObj);
+void  clearPrivate(JSValue obj);
+
+bool isJSBClass(JSValue obj);
+
+void jsObjectToSeObject(JSValueConst jsval, Value *v);
+
+} // namespace internal
+
+} // namespace se
+
+#endif // #if SCRIPT_ENGINE_TYPE == SCRIPT_ENGINE_QUICKJS

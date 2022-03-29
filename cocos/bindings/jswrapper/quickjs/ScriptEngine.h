@@ -1,6 +1,5 @@
 /****************************************************************************
- Copyright (c) 2016 Chukong Technologies Inc.
- Copyright (c) 2017-2022 Xiamen Yaji Software Co., Ltd.
+ Copyright (c) 2022 Xiamen Yaji Software Co., Ltd.
 
  http://www.cocos.com
 
@@ -28,31 +27,15 @@
 
 #include "../config.h"
 
-#if SCRIPT_ENGINE_TYPE == SCRIPT_ENGINE_V8
+#if SCRIPT_ENGINE_TYPE == SCRIPT_ENGINE_QUICKJS
 
-    #include "../Value.h"
     #include "Base.h"
-
-    #include <thread>
-
-    #if SE_ENABLE_INSPECTOR
-namespace node {
-namespace inspector {
-class Agent;
-}
-
-class Environment;
-class IsolateData;
-} // namespace node
-    #endif
 
 namespace se {
 
 class Object;
 class Class;
 class Value;
-
-extern Class *__jsb_CCPrivateData_class; //NOLINT
 
 /**
      * A stack-allocated class that governs a number of local handles.
@@ -62,13 +45,8 @@ extern Class *__jsb_CCPrivateData_class; //NOLINT
      */
 class AutoHandleScope {
 public:
-    AutoHandleScope()
-    : _handleScope(v8::Isolate::GetCurrent()) {
-    }
-    ~AutoHandleScope() = default;
-
-private:
-    v8::HandleScope _handleScope;
+    AutoHandleScope();
+    ~AutoHandleScope();
 };
 
 /**
@@ -91,9 +69,9 @@ public:
          *  @brief Gets the global object of JavaScript VM.
          *  @return The se::Object stores the global JavaScript object.
          */
-    Object *getGlobalObject() const;
+    Object *getGlobalObject();
 
-    using RegisterCallback = bool (*)(Object *);
+    typedef bool (*RegisterCallback)(Object *);
 
     /**
          *  @brief Adds a callback for registering a native binding module.
@@ -103,10 +81,10 @@ public:
     void addRegisterCallback(RegisterCallback cb);
 
     /**
-         *  @brief Adds a callback for registering a native binding module, which will not be removed by ScriptEngine::cleanup.
-         *  @param[in] cb A callback for registering a native binding module.
-         *  @note This method just add a callback to a vector, callbacks is invoked in `start` method.
-         */
+     *  @brief Adds a callback for registering a native binding module, which will not be removed by ScriptEngine::cleanup.
+     *  @param[in] cb A callback for registering a native binding module.
+     *  @note This method just add a callback to a vector, callbacks is invoked in `start` method.
+     */
     void addPermanentRegisterCallback(RegisterCallback cb);
 
     /**
@@ -159,26 +137,29 @@ public:
 
     /**
          *  @brief Executes a utf-8 string buffer which contains JavaScript code.
-         *  @param[in] script A utf-8 string buffer, if it isn't null-terminated, parameter `length` should be assigned and > 0.
+         *  @param[in] scriptStr A utf-8 string buffer, if it isn't null-terminated, parameter `length` should be assigned and > 0.
          *  @param[in] length The length of parameter `scriptStr`, it will be set to string length internally if passing < 0 and parameter `scriptStr` is null-terminated.
-         *  @param[in] ret The se::Value that results from evaluating script. Passing nullptr if you don't care about the result.
+         *  @param[in] rval The se::Value that results from evaluating script. Passing nullptr if you don't care about the result.
          *  @param[in] fileName A string containing a URL for the script's source file. This is used by debuggers and when reporting exceptions. Pass NULL if you do not care to include source file information.
          *  @return true if succeed, otherwise false.
          */
-    bool evalString(const char *script, ssize_t length = -1, Value *ret = nullptr, const char *fileName = nullptr);
+    bool evalString(const char *scriptStr, ssize_t length = -1, Value *rval = nullptr, const char *fileName = nullptr);
 
     /**
-         *  @brief Compile script file into v8::ScriptCompiler::CachedData and save to file.
-         *  @param[in] path The path of script file.
-         *  @param[in] pathBc The location where bytecode file should be written to. The path should be ends with ".bc", which indicates a bytecode file.
-         *  @return true if succeed, otherwise false.
-         */
-    bool saveByteCodeToFile(const std::string &path, const std::string &pathBc);
+     *  @brief Compile script file into v8::ScriptCompiler::CachedData and save to file.
+     *  @param[in] path The path of script file.
+     *  @param[in] pathBc The location where bytecode file should be written to. The path should be ends with ".bc", which indicates a bytecode file.
+     *  @return true if succeed, otherwise false.
+     */
+    bool saveByteCodeToFile(const std::string &path, const std::string &pathBc) {
+        assert(false);
+        return false;
+    } //cjh
 
     /**
-         * @brief Grab a snapshot of the current JavaScript execution stack.
-         * @return current stack trace string
-         */
+     * @brief Grab a snapshot of the current JavaScript execution stack.
+     * @return current stack trace string
+     */
     std::string getCurrentStackTrace();
 
     /**
@@ -192,9 +173,6 @@ public:
           onCheckFileExist(nullptr),
           onGetFullPath(nullptr) {}
 
-        /**
-             *  @brief Tests whether delegate is valid.
-             */
         bool isValid() const {
             return onGetDataFromFile != nullptr && onGetStringFromFile != nullptr && onCheckFileExist != nullptr && onGetFullPath != nullptr;
         }
@@ -224,38 +202,38 @@ public:
     /**
          *  @brief Executes a file which contains JavaScript code.
          *  @param[in] path Script file path.
-         *  @param[in] ret The se::Value that results from evaluating script. Passing nullptr if you don't care about the result.
+         *  @param[in] rval The se::Value that results from evaluating script. Passing nullptr if you don't care about the result.
          *  @return true if succeed, otherwise false.
          */
-    bool runScript(const std::string &path, Value *ret = nullptr);
+    bool runScript(const std::string &path, Value *rval = nullptr);
 
     /**
          *  @brief Tests whether script engine is doing garbage collection.
          *  @return true if it's in garbage collection, otherwise false.
          */
-    bool isGarbageCollecting() const;
+    bool isGarbageCollecting();
 
     /**
          *  @brief Performs a JavaScript garbage collection.
          */
-    void garbageCollect();
+    void garbageCollect() { JS_RunGC(_rt); }
 
     /**
          *  @brief Tests whether script engine is being cleaned up.
          *  @return true if it's in cleaning up, otherwise false.
          */
-    bool isInCleanup() const { return _isInCleanup; }
+    bool isInCleanup() { return _isInCleanup; }
 
     /**
          *  @brief Tests whether script engine is valid.
          *  @return true if it's valid, otherwise false.
          */
-    bool isValid() const;
+    bool isValid() { return _isValid; }
 
     /**
      * @brief Throw JS exception
      */
-    void throwException(const std::string &errorMessage);
+    void throwException(const std::string &errorMessage) { assert(false); } //cjh
 
     /**
          *  @brief Clears all exceptions.
@@ -271,9 +249,9 @@ public:
     void setExceptionCallback(const ExceptionCallback &cb);
 
     /**
-         *  @brief Sets the callback function while an exception is fired in JS.
-         *  @param[in] cb The callback function to notify that an exception is fired.
-         */
+     *  @brief Sets the callback function while an exception is fired in JS.
+     *  @param[in] cb The callback function to notify that an exception is fired.
+     */
     void setJSExceptionCallback(const ExceptionCallback &cb);
 
     /**
@@ -285,6 +263,7 @@ public:
     /**
          *  @brief Enables JavaScript debugger
          *  @param[in] serverAddr The address of debugger server.
+         *  @param[in] port The port of debugger server will use.
          *  @param[in] isWait Whether wait debugger attach when loading.
          */
     void enableDebugger(const std::string &serverAddr, uint32_t port, bool isWait = false);
@@ -305,69 +284,54 @@ public:
          */
     uint32_t getVMId() const { return _vmId; }
 
+    /**
+     * @brief Fast version of call script function, faster than Object::call
+     */
+    bool callFunction(Object *targetObj, const char *funcName, uint32_t argc, Value *args, Value *rval = nullptr);
+
+    /**
+     * @brief Handle all exceptions throwed by promise
+     */
+    void handlePromiseExceptions();
+
     // Private API used in wrapper
-    void                   _retainScriptObject(void *owner, void *target);  //NOLINT(readability-identifier-naming)
-    void                   _releaseScriptObject(void *owner, void *target); //NOLINT(readability-identifier-naming)
-    v8::Local<v8::Context> _getContext() const;                             //NOLINT(readability-identifier-naming)
-    void                   _setGarbageCollecting(bool isGarbageCollecting); //NOLINT(readability-identifier-naming)
+    JSContext *_getContext() const { return _cx; }
+    JSRuntime *_getRuntime() const { return _rt; }
+    void       _setGarbageCollecting(bool isGarbageCollecting);
+    void       _debugProcessInput(const std::string &str);
     //
 private:
     ScriptEngine();
     ~ScriptEngine();
-    static void privateDataFinalize(void *nativeObj);
 
-    static void onFatalErrorCallback(const char *location, const char *message);
-    static void onOOMErrorCallback(const char *location, bool isHeapOom);
-    static void onMessageCallback(v8::Local<v8::Message> message, v8::Local<v8::Value> data);
-    static void onPromiseRejectCallback(v8::PromiseRejectMessage msg);
+    JSRuntime *_rt{nullptr};
+    JSContext *_cx{nullptr};
 
-    /**
-         *  @brief Load the bytecode file and set the return value
-         *  @param[in] path_bc The path of bytecode file.
-         *  @param[in] ret The se::Value that results from evaluating script. Passing nullptr if you don't care about the result.
-         *  @return true if succeed, otherwise false.
-         */
-    bool runByteCodeFile(const std::string &pathBc, Value *ret /* = nullptr */);
-    void callExceptionCallback(const char *, const char *, const char *);
-
-    std::chrono::steady_clock::time_point _startTime;
-    std::vector<RegisterCallback>         _registerCallbackArray;
-    std::vector<RegisterCallback>         _permRegisterCallbackArray;
-    std::vector<std::function<void()>>    _beforeInitHookArray;
-    std::vector<std::function<void()>>    _afterInitHookArray;
-    std::vector<std::function<void()>>    _beforeCleanupHookArray;
-    std::vector<std::function<void()>>    _afterCleanupHookArray;
-    v8::Persistent<v8::Context> _context;
-
-    v8::Isolate *    _isolate;
-    v8::HandleScope *_handleScope;
-    Object *         _globalObj;
-    Value            _gcFuncValue;
-    Object *         _gcFunc = nullptr;
+    Object *_globalObj{nullptr};
+    Object *_debugGlobalObj{nullptr};
 
     FileOperationDelegate _fileOperationDelegate;
-    ExceptionCallback     _nativeExceptionCallback = nullptr;
-    ExceptionCallback     _jsExceptionCallback     = nullptr;
 
-    #if SE_ENABLE_INSPECTOR
-    node::Environment *_env;
-    node::IsolateData *_isolateData;
-    #endif
+    std::vector<RegisterCallback>         _registerCallbackArray;
+    std::vector<RegisterCallback>         _permRegisterCallbackArray;
+    std::chrono::steady_clock::time_point _startTime;
 
-    std::thread::id _engineThreadId;
+    std::vector<std::function<void()>> _beforeInitHookArray;
+    std::vector<std::function<void()>> _afterInitHookArray;
 
-    std::string _debuggerServerAddr;
-    uint32_t    _debuggerServerPort;
-    bool        _isWaitForConnect;
+    std::vector<std::function<void()>> _beforeCleanupHookArray;
+    std::vector<std::function<void()>> _afterCleanupHookArray;
 
-    uint32_t _vmId;
+    ExceptionCallback _exceptionCallback{nullptr};
 
-    bool _isValid;
-    bool _isGarbageCollecting;
-    bool _isInCleanup;
-    bool _isErrorHandleWorking;
+    uint32_t _vmId{0};
+
+    bool _isGarbageCollecting{false};
+    bool _isValid{false};
+    bool _isInCleanup{false};
+    bool _isErrorHandleWorking{false};
 };
 
 } // namespace se
 
-#endif // #if SCRIPT_ENGINE_TYPE == SCRIPT_ENGINE_V8
+#endif // #if SCRIPT_ENGINE_TYPE == SCRIPT_ENGINE_QUICKJS
