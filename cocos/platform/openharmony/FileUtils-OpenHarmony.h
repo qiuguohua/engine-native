@@ -36,6 +36,8 @@ public:
     std::string getSuitableFOpen(const std::string &filenameUtf8) const override;
 
     FileUtils::Status getContents(const std::string &filename, ResizableBuffer *buffer) override;
+    
+    FileUtils::Status getRawFileDescriptor(const std::string &filename,RawFileDescriptor& descriptor);
 
 private:
     bool isFileExistInternal(const std::string &strFilePath) const override;

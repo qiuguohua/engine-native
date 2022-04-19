@@ -94,12 +94,18 @@ private:
     int32_t _lineJoin{0};
 
 private:
+    OH_Drawing_Bitmap* _bitmap{nullptr};
+    OH_Drawing_BitmapFormat _format {COLOR_FORMAT_RGBA_8888, ALPHA_FORMAT_OPAQUYE};
+    OH_Drawing_Canvas* _canvas{nullptr};
+    OH_Drawing_TypographyStyle* _typographyStyle{nullptr};
+   
     cc::Data    _imageData;
     std::string _curFontPath;
     int         _savedDC{0};
     float       _lineWidth{0.0F};
     float       _bufferWidth{0.0F};
     float       _bufferHeight{0.0F};
+    int32_t     _bufferSize{0};
 
     std::string        _fontName;
     int                _fontSize{0};

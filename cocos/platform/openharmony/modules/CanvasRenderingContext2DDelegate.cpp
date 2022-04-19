@@ -61,9 +61,35 @@ CanvasRenderingContext2DDelegate::CanvasRenderingContext2DDelegate() {
 }
 
 CanvasRenderingContext2DDelegate::~CanvasRenderingContext2DDelegate() {
+    if(_typographyStyle != nullptr) {
+        OH_Drawing_DestroyTypographyStyle(_typographyStyle);
+    }
 }
 
 void CanvasRenderingContext2DDelegate::recreateBuffer(float w, float h) {
+    _bufferWidth  = w;
+    _bufferHeight = h;
+    if (_bufferWidth < 1.0F || _bufferHeight < 1.0F) {
+        OH_Drawing_CanvasDestory(_canvas);
+        OH_Drawing_BitmapDestory(_bitmap);
+        return;
+    }
+
+    _bufferSize = static_cast<int>(_bufferWidth * _bufferHeight * 4);
+    auto *data        = static_cast<uint8_t *>(malloc(sizeof(uint8_t) * _bufferSize));
+    memset(data, 0x00, _bufferSize);
+    _imageData.fastSet(data, _bufferSize);
+
+    // 创建一个bitmap对象
+    _bitmap = OH_Drawing_BitmapCreate();
+    // 构造对应格式的bitmap
+    OH_Drawing_BitmapBuild(_bitmap, width, height, &_format);
+       // 创建一个canvas对象
+    _canvas = OH_Drawing_CanvasCreate();
+    // 将画布与bitmap绑定，画布画的内容会画到绑定的bitmap内存中
+    OH_Drawing_CanvasBind(_canvas, _bitmap);
+
+    _typographyStyle = OH_Drawing_CreateTypographyStyle();
 }
 
 void CanvasRenderingContext2DDelegate::beginPath() {
@@ -94,17 +120,27 @@ void CanvasRenderingContext2DDelegate::clearRect(float x, float y, float w, floa
 }
 
 void CanvasRenderingContext2DDelegate::fillRect(float x, float y, float w, float h) {
+    // 使用白色清除画布内容
+    OH_Drawing_CanvasClear(_canvas, OH_Drawing_ColorSetArgb(0xFF, 0xFF, 0xFF, 0xFF));
 }
 
 void CanvasRenderingContext2DDelegate::fillText(const std::string &text, float x, float y, float /*maxWidth*/) {
+    if (text.empty() || _bufferWidth < 1.0F || _bufferHeight < 1.0F) {
+        return;
+    }
+
+    SIZE  textSize    = {0, 0};
+    Point offsetPoint = convertDrawPoint(Point{x, y}, text);
+    drawText(text, (int)offsetPoint[0], (int)offsetPoint[1]);
 }
 
 void CanvasRenderingContext2DDelegate::strokeText(const std::string &text, float /*x*/, float /*y*/, float /*maxWidth*/) const {
 }
 
 CanvasRenderingContext2DDelegate::Size CanvasRenderingContext2DDelegate::measureText(const std::string &text) {
-    return std::array<float, 2>{static_cast<float>(0),
-                                static_cast<float>(0)};
+    
+    return std::array<float, 2>{static_cast<float>(OH_Drawing_TypographyGetMaxWidth(_typographyStyle)),
+                                static_cast<float>(OH_Drawing_TypographyGetHeight(_typographyStyle))};
 }
 
 void CanvasRenderingContext2DDelegate::updateFont(const std::string &fontName,
@@ -113,6 +149,27 @@ void CanvasRenderingContext2DDelegate::updateFont(const std::string &fontName,
                                                   bool               italic,
                                                   bool               oblique,
                                                   bool /* smallCaps */) {
+    _fontName = fontName;
+    _fontSize = static_cast<int>(fontSize);
+    std::string fontPath;
+    LOGFONTA    tFont = {0};
+    if (!_fontName.empty()) {
+         const char* fontFamilies[1];
+         fontFamilies[0] = fontName.c_str();
+        OH_Drawing_SetTextStyleFontFamilies((_typographyStyle, 1, fontFamilies);
+        OH_Drawing_SetTextStyleLocale(_typographyStyle, "en");
+    }
+    if (_fontSize)
+        OH_Drawing_SetTextStyleFontSize(_typographyStyle, _fontSize);
+    if (bold)
+        OH_Drawing_SetTextStyleFontWeight(_typographyStyle, FONT_WEIGHT_700);
+    else 
+        OH_Drawing_SetTextStyleFontWeight(_typographyStyle, FONT_WEIGHT_400);
+    if(italic) 
+        OH_Drawing_SetTextStyleFontStyle(_typographyStyle, FONT_STYLE_ITALIC);
+    else 
+        OH_Drawing_SetTextStyleFontStyle(_typographyStyle, FONT_STYLE_NORMAL);
+
 }
 
 void CanvasRenderingContext2DDelegate::setTextAlign(CanvasTextAlign align) {
@@ -136,6 +193,12 @@ void CanvasRenderingContext2DDelegate::setLineWidth(float lineWidth) {
 }
 
 const cc::Data &CanvasRenderingContext2DDelegate::getDataRef() const {
+     // 画完后获取Bitmap的地址，地址指向bitmap的内存，内存包含画布画的像素数据
+    void* bitmapAddr = OH_Drawing_BitmapGetPixels(_bitmap);
+    auto ret = memcpy_s(addr, _bufferSize, bitmapAddr, _bufferSize);
+    if (ret != EOK) {
+        LOGI("memcpy_s failed");
+    }
     return _imageData;
 }
 
@@ -144,6 +207,8 @@ void CanvasRenderingContext2DDelegate::removeCustomFont() {
 
 // x, y offset value
 int CanvasRenderingContext2DDelegate::drawText(const std::string &text, int x, int y) {
+    OH_Drawing_SetTextStyleColor(_typographyStyle, _fillStyle);
+    OH_Drawing_TypographyHandlerAddText(_typographyStyle, text.c_str());
     return 0;
 }
 
@@ -161,6 +226,26 @@ void CanvasRenderingContext2DDelegate::fillTextureData() {
 }
 
 std::array<float, 2> CanvasRenderingContext2DDelegate::convertDrawPoint(Point point, const std::string &text) {
+    Size textSize = measureText(text);
+    if (_textAlign == CanvasTextAlign::CENTER) {
+        point[0] -= textSize[0] / 2.0f;
+    } else if (_textAlign == CanvasTextAlign::RIGHT) {
+        point[0] -= textSize[0];
+    }
+
+    if (_textBaseLine == CanvasTextBaseline::TOP) {
+        // DrawText default
+        GetTextMetrics(_DC, &_tm);
+        point[1] += -_tm.tmInternalLeading;
+    } else if (_textBaseLine == CanvasTextBaseline::MIDDLE) {
+        point[1] += -textSize[1] / 2.0f;
+    } else if (_textBaseLine == CanvasTextBaseline::BOTTOM) {
+        point[1] += -textSize[1];
+    } else if (_textBaseLine == CanvasTextBaseline::ALPHABETIC) {
+        //GetTextMetrics(_DC, &_tm);
+        //point[1] -= _tm.tmAscent;
+    }
+
     return point;
 }
 

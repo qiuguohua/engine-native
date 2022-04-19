@@ -60,6 +60,36 @@ bool FileUtilsOpenHarmony::initResourceManager(napi_env env, napi_value param) {
     return true;
 }
 
+FileUtils::Status FileUtilsOpenHarmony::getRawFileDescriptor(const std::string &filename,RawFileDescriptor& descriptor) {
+    if (filename.empty()) {
+        return FileUtils::Status::NOT_EXISTS;
+    }
+
+    std::string fullPath = fullPathForFilename(filename);
+    if (fullPath.empty()) {
+        return FileUtils::Status::NOT_EXISTS;
+    }
+
+    if (nullptr == _nativeResourceManager) {
+        LOGE("cocos qgh getContents _nativeResourceManager = nullptr");
+        return FileUtils::Status::NOT_INITIALIZED;
+    }
+
+    RawFile *rawFile = OH_ResourceManager_OpenRawFile(_nativeResourceManager, fullPath.c_str());
+    if (nullptr == rawFile) {
+        return FileUtils::Status::OPEN_FAILED;
+    }
+
+    bool result = OH_ResourceManager_GetRawFileDescriptor(rawFile, descriptor);
+    if (!result) {
+         OH_ResourceManager_CloseRawFile(rawFile);
+        return FileUtils::Status::OPEN_FAILED;
+    }
+
+    OH_ResourceManager_CloseRawFile(rawFile);
+    return FileUtils::Status::OK;  
+}
+
 FileUtils::Status FileUtilsOpenHarmony::getContents(const std::string &filename, ResizableBuffer *buffer) {
     if (filename.empty()) {
         return FileUtils::Status::NOT_EXISTS;
@@ -80,25 +110,26 @@ FileUtils::Status FileUtilsOpenHarmony::getContents(const std::string &filename,
     }
 
     LOGE("cocos qgh getContents %{public}s", fullPath.c_str());
-    RawFile *asset = OH_ResourceManager_OpenRawFile(_nativeResourceManager, fullPath.c_str());
-    if (nullptr == asset) {
+    RawFile *rawFile = OH_ResourceManager_OpenRawFile(_nativeResourceManager, fullPath.c_str());
+    if (nullptr == rawFile) {
         return FileUtils::Status::OPEN_FAILED;
     }
 
-    auto size = OH_ResourceManager_GetRawFileSize(asset);
+    auto size = OH_ResourceManager_GetRawFileSize(rawFile);
     buffer->resize(size);
 
     assert(buffer->buffer());
 
-    int readsize = OH_ResourceManager_ReadRawFile(asset, buffer->buffer(), size);
+    int readsize = OH_ResourceManager_ReadRawFile(rawFile, buffer->buffer(), size);
     // TODO(unknown): read error
     if (readsize < size) {
         if (readsize >= 0) {
             buffer->resize(readsize);
         }
+        OH_ResourceManager_CloseRawFile(rawFile);
         return FileUtils::Status::READ_FAILED;
     }
-
+    OH_ResourceManager_CloseRawFile(rawFile);
     return FileUtils::Status::OK;
 }
 
