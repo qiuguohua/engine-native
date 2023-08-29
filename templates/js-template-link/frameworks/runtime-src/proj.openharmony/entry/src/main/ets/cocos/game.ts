@@ -84,7 +84,7 @@ function boot() {
 
 async function loadSysTemReady() {
   await import('./sys-ability-polyfill');
-  await import('cocos-lib');
+  await import('./index');
 }
 
 export async function launchEngine() {
