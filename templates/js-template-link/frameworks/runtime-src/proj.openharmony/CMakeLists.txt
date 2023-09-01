@@ -12,8 +12,10 @@ project(${APP_NAME} CXX)
 
 set(CMAKE_CXX_FLAGS_DEBUG  "-Werror=return-type -ferror-limit=0")
 
+enable_language(C ASM)
+set(CMAKE_CXX_STANDARD 17)
 
-include(${COMMON_DIR}/CMakeLists.txt)
+include(${COCOS_X_PATH}/CMakeLists.txt)
 
 list(APPEND CC_ALL_SOURCES ${CC_COCOS_SOURCES} ${CC_COMMON_SOURCES} ${CC_PROJ_SOURCES})
 add_library(${CC_LIB_NAME} SHARED ${CC_ALL_SOURCES})
