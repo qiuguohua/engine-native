@@ -4,7 +4,7 @@ require('./src/cocos2d-jsb.js');
 require('./src/physics.js');
 require('./jsb-adapter/jsb-engine.js');
 
-const commonJSModuleMap = {};
+<%commonJSModuleMap%>
 
 globalThis.oh.loadModule = (name) => {
     commonJSModuleMap[name]?.();
