@@ -12,5 +12,3 @@ globalThis.oh.loadModule = (name) => {
 globalThis.oh.loadJsList = (jsList, cb) => {
     globalThis.cc.assetManager.loadScript(jsList.map(function (x) { return x; }), cb);
 };
-
-export {}
