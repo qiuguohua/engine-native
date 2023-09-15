@@ -30,6 +30,10 @@ import sensor from '@ohos.sensor';
 import connection from '@ohos.net.connection'
 import vibrator from '@ohos.vibrator';
 import process from '@ohos.process';
+import { ContextType } from "../common/Constants"
+import cocos from "libcocos.so";
+
+const systemUtils = cocos.getContext(ContextType.SYSTEM_UTILS);
 
 let pro = new process.ProcessManager();
 globalThis.getSystemLanguage = function () {
@@ -58,6 +62,17 @@ globalThis.getPixelRation = function () {
     return displayClass.densityPixels;
 }
 
+let onDisplayChange = (data) => {
+    // Monitor changes in screen orientation.
+    systemUtils.onDisplayChange(globalThis.getDeviceOrientation());
+}
+
+try {
+    display.on("change", onDisplayChange);
+} catch (exception) {
+    console.log('Failed to register callback. Code: ' + JSON.stringify(exception));
+}
+
 globalThis.getDeviceOrientation = function () {
     var displayClass = display.getDefaultDisplaySync();
     return displayClass.rotation;
@@ -71,9 +86,9 @@ function radiansToDegrees(radians)  {
 let sDeviceMotionValues = [];
 try {
     sensor.on(sensor.SensorId.ACCELEROMETER, function (data) {
-        sDeviceMotionValues[0] = data.x * -1;
-        sDeviceMotionValues[1] = data.y * -1;
-        sDeviceMotionValues[2] = data.z;
+        sDeviceMotionValues[0] = data.x;
+        sDeviceMotionValues[1] = data.y;
+        sDeviceMotionValues[2] = -data.z;
     },
         { interval: 200000000 }
     );

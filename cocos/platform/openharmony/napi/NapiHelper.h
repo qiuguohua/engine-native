@@ -56,6 +56,8 @@ public:
     static napi_value napiWritablePathInit(napi_env env, napi_callback_info info);
     static napi_value napiResourceManagerInit(napi_env env, napi_callback_info info);
 
+    static napi_value napiOnDisplayChange(napi_env env, napi_callback_info info);
+
     template <class ReturnType>
     static napi_value napiCallFunction(const std::string& functionName, ReturnType* value) {
         if (!se::ScriptEngine::getInstance()->isValid()) {
