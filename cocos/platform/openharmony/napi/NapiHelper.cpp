@@ -48,6 +48,7 @@ enum ContextType {
     ENGINE_UTILS,
     EDITBOX_UTILS,
     WEBVIEW_UTILS,
+    DISPLAY_UTILS,
     UV_ASYNC_SEND,
 };
 NapiHelper::PostMessage2UIThreadCb NapiHelper::_postMsg2UIThreadCb;
@@ -208,6 +209,12 @@ napi_value NapiHelper::getContext(napi_env env, napi_callback_info info) {
             OpenHarmonyWebView::GetInterfaces(desc);
             NAPI_CALL(env, napi_define_properties(env, exports, desc.size(), desc.data()));
         } break;
+        case DISPLAY_UTILS: {
+            napi_property_descriptor desc[] = {
+                DECLARE_NAPI_FUNCTION("onDisplayChange", NapiHelper::napiOnDisplayChange),
+            };
+            NAPI_CALL(env, napi_define_properties(env, exports, sizeof(desc) / sizeof(desc[0]), desc));
+        }
         case UV_ASYNC_SEND: {
             napi_property_descriptor desc[] = {
                 DECLARE_NAPI_FUNCTION("send", NapiHelper::napiASend),
@@ -329,6 +336,30 @@ napi_value NapiHelper::napiWorkerInit(napi_env env, napi_callback_info info) {
     OpenHarmonyPlatform::getInstance()->workerInit(env, loop);
     return nullptr;
 }
+
+napi_value NapiHelper::napiOnDisplayChange(napi_env env, napi_callback_info info) {
+    size_t      argc = 1;
+    napi_value  args[1];
+    NAPI_CALL(env, napi_get_cb_info(env, info, &argc, args, nullptr, nullptr));
+    CC_ASSERT(argc > 0);
+    int32_t value;
+    NAPI_CALL(env, napi_get_value_int32(env, args[0], &value));
+    cocos2d::Device::Rotation rotation = cocos2d::Device::Rotation::_0;
+    if(value == 0) {
+        rotation = cocos2d::Device::Rotation::_0;
+    } else if(value == 1) {
+        // TODO(qgh): The openharmony platform is rotated clockwise.
+        rotation = cocos2d::Device::Rotation::_270;
+    } else if(value == 2) {
+        rotation = cocos2d::Device::Rotation::_180;
+    } else if(value == 3) {
+        // TODO(qgh): The openharmony platform is rotated clockwise.
+        rotation = cocos2d::Device::Rotation::_90;
+    }
+    EventDispatcher::dispatchOrientationChangeEvent((int)rotation);
+    return nullptr;
+}
+
 
 napi_value NapiHelper::napiResourceManagerInit(napi_env env, napi_callback_info info) {
     size_t      argc = 1;

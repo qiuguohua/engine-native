@@ -60,11 +60,13 @@ Device::Rotation Device::getDeviceRotation() {
     if(value == 0) {
         return cocos2d::Device::Rotation::_0;
     } else if(value == 1) {
-        return cocos2d::Device::Rotation::_90;
+        // TODO(qgh): The openharmony platform is rotated clockwise.
+        return cocos2d::Device::Rotation::_270;
     } else if(value == 2) {
         return cocos2d::Device::Rotation::_180;
     } else if(value == 3) {
-        return cocos2d::Device::Rotation::_270;
+        // TODO(qgh): The openharmony platform is rotated clockwise.
+        return cocos2d::Device::Rotation::_90;
     }
     CC_ASSERT(false);
     return cocos2d::Device::Rotation::_0;
