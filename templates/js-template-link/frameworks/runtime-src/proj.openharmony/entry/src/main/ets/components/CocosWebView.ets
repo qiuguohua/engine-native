@@ -65,7 +65,7 @@ export struct CocosWebView {
   @ObjectLink viewInfo: WebViewInfo;
   public workPort: PortProxy;
   build() {
-    Web({ src: "", controller: this.viewInfo.controller })
+    Web({ src: this.viewInfo.url, controller: this.viewInfo.controller })
       .position({ x: this.viewInfo.x, y: this.viewInfo.y })
       .width(this.viewInfo.w)
       .height(this.viewInfo.h)
