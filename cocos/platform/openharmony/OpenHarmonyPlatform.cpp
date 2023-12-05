@@ -291,8 +291,6 @@ void OpenHarmonyPlatform::tick() {
         dtNS = static_cast<double>(_prefererredNanosecondsPerFrame);
     }
     prevTime = std::chrono::steady_clock::now();
-    static uint32_t jsbInvocationTotalCount = 0;
-    static uint32_t jsbInvocationTotalFrames = 0;
     std::shared_ptr<Scheduler> scheduler = g_app->getScheduler();
     scheduler->update(dt);
     EventDispatcher::dispatchTickEvent(dt);
