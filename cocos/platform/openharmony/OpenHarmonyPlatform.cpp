@@ -76,7 +76,7 @@ void dispatchTouchEventCB(OH_NativeXComponent* component, void* window) {
         touchInfo.index = touchEvent.touchPoints[i].id;
         touchInfo.x = touchEvent.touchPoints[i].x;
         touchInfo.y = touchEvent.touchPoints[i].y;
-        ev->type = touchEventTransform(touchEvent.touchPoints[i].type);
+        ev->type = touchTypeTransform(touchEvent.touchPoints[i].type);
         ev->touches.push_back(touchInfo);
     }
     sendMsgToWorker(cocos2d::MessageType::WM_XCOMPONENT_TOUCH_EVENT, reinterpret_cast<void*>(ev), window);

@@ -26,7 +26,6 @@
 #include "EditBox.h"
 #include "EditBox-openharmony.h"
 
-#include "CommonHeader.h"
 #include "cocos/platform/CCApplication.h"
 #include "cocos/scripting/js-bindings/jswrapper/SeApi.h"
 #include "platform/openharmony/napi/NapiHelper.h"

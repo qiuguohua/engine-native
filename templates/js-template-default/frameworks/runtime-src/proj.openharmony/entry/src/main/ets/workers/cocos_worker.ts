@@ -26,8 +26,18 @@ import hilog from '@ohos.hilog';
 import worker from '@ohos.worker';
 import cocos from 'libcocos.so';
 import { ContextType } from '../common/Constants';
+<% if(!useV8) { %>
 import { launchEngine } from '../cocos/game';
+<% } %>
 import { PortProxy } from '../common/PortProxy';
+
+<% if(useV8) { %>
+  globalThis.importPolyfill = async function () {
+    await import('../cocos/sys-ability-polyfill.js');
+  }
+  globalThis.importPolyfill();
+  globalThis.oh = {};
+<% } %>
 
 const nativeContext = cocos.getContext(ContextType.WORKER_INIT);
 nativeContext.workerInit();
@@ -59,11 +69,13 @@ uiPort._messageHandle = function (e) {
     case "onXCLoad":
       const renderContext = cocos.getContext(ContextType.NATIVE_RENDER_API);
       renderContext.nativeEngineInit();
-      launchEngine().then(() => {
-        console.info('launch CC engine finished');
-      }).catch(e => {
-        console.error('launch CC engine failed');
-      });
+      <% if(!useV8) { %>
+        launchEngine().then(() => {
+          console.info('launch CC engine finished');
+        }).catch(e => {
+          console.error('launch CC engine failed');
+        });
+      <% } %>
       // @ts-ignore
       globalThis.oh.postMessage = nativeContext.postMessage;
       // @ts-ignore

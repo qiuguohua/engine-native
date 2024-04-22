@@ -7,6 +7,9 @@ set(CC_COCOS_SOURCES)
 set(CC_COMMON_SOURCES)
 set(CC_ALL_SOURCES)
 
+set(CC_USE_SE_V8 ON)
+set(CC_USE_SE_NAPI OFF)
+
 option(APP_NAME "Project Name" "test-cases")
 project(${APP_NAME} CXX)
 
