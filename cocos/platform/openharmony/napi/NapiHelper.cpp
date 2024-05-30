@@ -50,6 +50,7 @@ enum ContextType {
     WEBVIEW_UTILS,
     DISPLAY_UTILS,
     UV_ASYNC_SEND,
+    VIDEO_UTILS
 };
 
 static Napi::Env gWorkerEnv(nullptr);
