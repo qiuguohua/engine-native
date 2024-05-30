@@ -736,6 +736,8 @@
         "cocos/ui/edit-box/EditBox-openharmony.h", 
         "cocos/ui/edit-box/EditBox-win32.cpp", 
         "cocos/ui/edit-box/EditBox.h", 
+        "cocos/ui/videoplayer/VideoPlayer-openharmony.cpp", 
+        "cocos/ui/videoplayer/VideoPlayer-openharmony.h", 
         "cocos/ui/videoplayer/VideoPlayer-android.cpp", 
         "cocos/ui/videoplayer/VideoPlayer-ios.mm", 
         "cocos/ui/videoplayer/VideoPlayer.h", 
