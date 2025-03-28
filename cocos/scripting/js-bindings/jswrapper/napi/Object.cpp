@@ -517,8 +517,10 @@ void Object::setPrivateData(void* data){
     NODE_API_CALL(status, _env,
                   napi_wrap(_env, tmpThis, data, weakCallback,
                             (void*)this /* finalize_hint */, nullptr));
-    // See comments related to JSVM.
+    // Similar to the JSVM engine, see comments related to JSVM.
     _objRef.decRef(_env);
+
+    setProperty("__native_ptr__", se::Value(static_cast<long>(reinterpret_cast<uintptr_t>(data))));
 }
 
 void* Object::getPrivateData() const{
